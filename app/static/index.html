@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TwoDo">
+  <meta name="theme-color" content="#f43f5e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>TwoDo — Couple Adventure & Date Planner</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💑</text></svg>">
+  
+  <!-- Modern Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- App Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand" onclick="app.navigate('discover')">
+        <span class="brand-icon">💑</span>
+        <div class="brand-text">
+          <span class="brand-title">TwoDo</span>
+          <span class="brand-subtitle">Couple Adventures</span>
+        </div>
+      </div>
+
+      <!-- Location Selector Pill -->
+      <div class="location-badge" onclick="app.openLocationModal()">
+        <span class="loc-icon">📍</span>
+        <span id="current-location-display">Brisbane, QLD</span>
+        <span class="badge-source">Internet Sync 🌐</span>
+      </div>
+
+      <!-- Voter Mode Selector -->
+      <div class="voter-switch">
+        <span class="voter-label">Voting as:</span>
+        <button id="btn-voter-1" class="voter-pill active" onclick="app.setVoter(1)">
+          <span class="voter-dot" id="voter1-dot"></span>
+          <span id="voter1-display">Emma</span>
+        </button>
+        <button id="btn-voter-2" class="voter-pill" onclick="app.setVoter(2)">
+          <span class="voter-dot" id="voter2-dot"></span>
+          <span id="voter2-display">Jordan</span>
+        </button>
+        <button id="btn-voter-both" class="voter-pill" onclick="app.setVoter('both')">
+          <span>👥 Together</span>
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-btn active" data-tab="discover" onclick="app.navigate('discover')">
+          <span class="nav-icon">✨</span>
+          <span>Discover</span>
+        </button>
+        <button class="nav-btn" data-tab="swiper" onclick="app.navigate('swiper')">
+          <span class="nav-icon">🔥</span>
+          <span>Date Swiper</span>
+          <span class="tab-badge" id="swiper-badge">New</span>
+        </button>
+        <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
+          <span class="nav-icon">📅</span>
+          <span>Shared Planner</span>
+          <span class="planner-count" id="planner-count-badge">0</span>
+        </button>
+        <button class="nav-btn" data-tab="map" onclick="app.navigate('map')">
+          <span class="nav-icon">🗺️</span>
+          <span>Map</span>
+        </button>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="app.openAddModal()" title="Add Custom Event">
+          <span>➕ Add Activity</span>
+        </button>
+        <button class="btn-icon" onclick="app.openSettingsModal()" title="Couple Settings">
+          <span>⚙️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Areas -->
+  <main class="main-content">
+
+    <!-- TAB 1: DISCOVER VIEW -->
+    <section id="view-discover" class="view-panel active">
+      <!-- Search & Category Header -->
+      <div class="discover-controls">
+        <div class="search-bar-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search concerts, exhibitions, Reddit gems, food markets, pottery, comedy, sports..." oninput="discover.debounceSearch()">
+          <button class="btn btn-sm btn-refresh" onclick="discover.refreshLiveSources()" id="btn-refresh-sources">
+            <span class="spin-icon">🔄</span> Pull Internet Feeds
+          </button>
+        </div>
+
+        <!-- Date Range Filter Selector -->
+        <div class="date-filter-row">
+          <span class="filter-label">📅 Date Range:</span>
+          <div class="date-range-pills" id="date-range-pills">
+            <button class="date-pill active" data-range="all" onclick="discover.setDateRange('all')">✨ All Dates</button>
+            <button class="date-pill" data-range="today" onclick="discover.setDateRange('today')">Tonight / Today</button>
+            <button class="date-pill" data-range="tomorrow" onclick="discover.setDateRange('tomorrow')">Tomorrow</button>
+            <button class="date-pill" data-range="this_weekend" onclick="discover.setDateRange('this_weekend')">🥂 This Weekend</button>
+            <button class="date-pill" data-range="next_7_days" onclick="discover.setDateRange('next_7_days')">Next 7 Days</button>
+            <button class="date-pill" data-range="this_month" onclick="discover.setDateRange('this_month')">This Month</button>
+            <button class="date-pill" data-range="custom" onclick="discover.toggleCustomDatePicker()">🎯 Custom Date Range</button>
+          </div>
+          <div id="custom-date-picker-wrap" class="custom-date-wrap hidden">
+            <input type="date" id="custom-date-start" onchange="discover.applyCustomDate()">
+            <span>to</span>
+            <input type="date" id="custom-date-end" onchange="discover.applyCustomDate()">
+          </div>
+        </div>
+
+        <!-- Suburb Filter Row -->
+        <div class="suburb-filter-row">
+          <span class="filter-label">📍 Suburb / Precinct:</span>
+          <div class="suburb-scroll" id="suburb-pills">
+            <button class="suburb-pill active" data-suburb="All" onclick="discover.setSuburb('All')">🗺️ All Suburbs</button>
+            <button class="suburb-pill" data-suburb="Fortitude Valley" onclick="discover.setSuburb('Fortitude Valley')">🍸 Fortitude Valley & James St</button>
+            <button class="suburb-pill" data-suburb="Sunnybank" onclick="discover.setSuburb('Sunnybank')">🥟 Sunnybank Asian Food Hub</button>
+            <button class="suburb-pill" data-suburb="West End" onclick="discover.setSuburb('West End')">🎨 West End & South Brisbane</button>
+            <button class="suburb-pill" data-suburb="Brisbane CBD" onclick="discover.setSuburb('Brisbane CBD')">🏙️ CBD & Queen's Wharf</button>
+            <button class="suburb-pill" data-suburb="New Farm" onclick="discover.setSuburb('New Farm')">🥐 New Farm & Teneriffe</button>
+            <button class="suburb-pill" data-suburb="Paddington" onclick="discover.setSuburb('Paddington')">🛍️ Paddington & Milton</button>
+            <button class="suburb-pill" data-suburb="Woolloongabba" onclick="discover.setSuburb('Woolloongabba')">🏏 Woolloongabba & Kangaroo Point</button>
+            <button class="suburb-pill" data-suburb="Bulimba" onclick="discover.setSuburb('Bulimba')">⛵ Bulimba & Hawthorne</button>
+            <button class="suburb-pill" data-suburb="Hamilton" onclick="discover.setSuburb('Hamilton')">🎪 Hamilton & Eat Street</button>
+            <button class="suburb-pill" data-suburb="Mount Coot-tha" onclick="discover.setSuburb('Mount Coot-tha')">🌄 Mount Coot-tha & Lookouts</button>
+            <button class="suburb-pill" data-suburb="Day Trips" onclick="discover.setSuburb('Day Trips')">🏝️ Moreton, Straddie & Day Escapes</button>
+          </div>
+        </div>
+
+        <!-- Vibe & Experience Filter Row -->
+        <div class="vibe-filter-row">
+          <span class="filter-label">✨ Vibe & Style:</span>
+          <div class="vibe-scroll" id="vibe-pills">
+            <button class="vibe-pill active" data-vibe="All" onclick="discover.setVibe('All')">💫 All Vibes</button>
+            <button class="vibe-pill" data-vibe="TikTok" onclick="discover.setVibe('TikTok')">🔥 TikTok & Viral Sensation</button>
+            <button class="vibe-pill" data-vibe="Bakery" onclick="discover.setVibe('Bakery')">🥐 Bakeries & Pastry Crawl</button>
+            <button class="vibe-pill" data-vibe="Rooftop" onclick="discover.setVibe('Rooftop')">🍸 Rooftops & Skyline Bars</button>
+            <button class="vibe-pill" data-vibe="Sunnybank" onclick="discover.setVibe('Sunnybank')">🍜 Late Night Dumplings & Hotpot</button>
+            <button class="vibe-pill" data-vibe="Romantic" onclick="discover.setVibe('Romantic')">🕯️ Romantic Date Night</button>
+            <button class="vibe-pill" data-vibe="Hidden" onclick="discover.setVibe('Hidden')">🤫 Reddit Hidden Gems</button>
+            <button class="vibe-pill" data-vibe="Active" onclick="discover.setVibe('Active')">🛶 Kayak & Outdoor Adventure</button>
+            <button class="vibe-pill" data-vibe="Workshop" onclick="discover.setVibe('Workshop')">🏺 Pottery & Creative Classes</button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-row">
+          <!-- Category Pills -->
+          <div class="category-scroll" id="category-pills">
+            <button class="cat-pill active" data-cat="All" onclick="discover.setCategory('All')">🌟 All Activities</button>
+            <button class="cat-pill" data-cat="Arts & Culture" onclick="discover.setCategory('Arts & Culture')">🏛️ Museums & Galleries</button>
+            <button class="cat-pill" data-cat="Date Night Specials" onclick="discover.setCategory('Date Night Specials')">🍷 Date Night & Hidden Gems</button>
+            <button class="cat-pill" data-cat="Food & Drink" onclick="discover.setCategory('Food & Drink')">🍕 Food, Wine & Distilleries</button>
+            <button class="cat-pill" data-cat="Music & Concerts" onclick="discover.setCategory('Music & Concerts')">🎵 Live Music & Gigs</button>
+            <button class="cat-pill" data-cat="Outdoor & Adventure" onclick="discover.setCategory('Outdoor & Adventure')">🛶 Outdoor, Sports & Kayaking</button>
+            <button class="cat-pill" data-cat="Markets & Pop-ups" onclick="discover.setCategory('Markets & Pop-ups')">🎪 Farmers & Night Markets</button>
+            <button class="cat-pill" data-cat="Comedy & Shows" onclick="discover.setCategory('Comedy & Shows')">🎭 Comedy, Theatre & Shows</button>
+            <button class="cat-pill" data-cat="Sightseeing & Nature" onclick="discover.setCategory('Sightseeing & Nature')">🌿 Parks, Botanic & Council</button>
+          </div>
+
+          <!-- Match / Voter Filter Dropdown -->
+          <div class="filter-dropdowns">
+            <select id="vote-filter-select" onchange="discover.setFilter(this.value)" class="custom-select">
+              <option value="all">👀 Show All Activities</option>
+              <option value="matches">❤️ Mutual Matches (Both Want To Do)</option>
+              <option value="user1_likes">💖 Emma's Favorites</option>
+              <option value="user2_likes">💜 Jordan's Favorites</option>
+              <option value="in_planner">📌 Already in Planner</option>
+              <option value="unvoted">❓ Not Voted Yet</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Match Banner (if matches exist) -->
+      <div id="matches-callout-banner" class="matches-banner hidden">
+        <div class="matches-content">
+          <span class="banner-heart">🎉</span>
+          <div class="banner-text">
+            <strong id="matches-banner-title">You have 0 Mutual Matches!</strong>
+            <p>Both of you expressed excitement about these activities. Time to put them on your calendar!</p>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-white" onclick="discover.setFilter('matches')">View Matches ✨</button>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="events-grid-container">
+        <div class="results-meta">
+          <span id="results-count-text">Showing activities in Brisbane...</span>
+          <span class="source-pills">
+            <span class="source-tag">Ticketmaster</span>
+            <span class="source-tag">Eventbrite</span>
+            <span class="source-tag">OpenStreetMap</span>
+            <span class="source-tag">Local Guides</span>
+          </span>
+        </div>
+
+        <div id="events-grid" class="events-grid">
+          <!-- Dynamic event cards injected here -->
+        </div>
+
+        <!-- Load More Pagination Button -->
+        <div id="load-more-wrap" class="load-more-wrap hidden" style="text-align: center; margin: 2.5rem 0;">
+          <button id="btn-load-more" class="btn btn-secondary btn-lg" onclick="discover.loadMore()" style="padding: 0.9rem 2.2rem; font-size: 1rem; border-radius: 50px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); font-weight: 600;">
+            ⚡ Load More Activities (<span id="load-more-remaining">0</span> left)
+          </button>
+        </div>
+
+        <div id="events-empty" class="empty-state hidden">
+          <span class="empty-emoji">🔍</span>
+          <h3>No activities found</h3>
+          <p>Try clearing your search filters or pull fresh internet events for your area.</p>
+          <button class="btn btn-primary" onclick="discover.resetFilters()">Reset Filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: DATE SWIPER (TINDER STYLE) -->
+    <section id="view-swiper" class="view-panel">
+      <div class="swiper-container">
+        <div class="swiper-header">
+          <h2>Couple Date Swiper</h2>
+          <p>Swipe right if you want to do it, swipe left to pass. When you both swipe right, it's a date match!</p>
+          <div class="swiper-voter-indicator">
+            Currently Swiping: <strong id="swiper-current-user">Emma</strong>
+          </div>
+        </div>
+
+        <!-- The Card Stack -->
+        <div class="card-deck-wrapper">
+          <div id="card-deck" class="card-deck">
+            <!-- Dynamic swipe cards -->
+          </div>
+          
+          <div id="deck-empty" class="deck-empty-state hidden">
+            <span class="empty-emoji">🥳</span>
+            <h3>You've reviewed all activities!</h3>
+            <p>Switch to your partner's profile to see what matches you unlocked, or check your planner.</p>
+            <div class="deck-empty-actions">
+              <button class="btn btn-secondary" onclick="app.setVoter(app.currentVoter === 1 ? 2 : 1)">
+                Switch to <span id="other-partner-name">Partner</span>
+              </button>
+              <button class="btn btn-primary" onclick="app.navigate('planner')">Go to Shared Planner</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="swipe-controls">
+          <button class="swipe-btn btn-pass" onclick="swiper.handleSwipe('pass')" title="Pass">
+            <span>❌</span>
+          </button>
+          <button class="swipe-btn btn-maybe" onclick="swiper.handleSwipe('maybe')" title="Maybe / Save">
+            <span>🤔</span>
+          </button>
+          <button class="swipe-btn btn-love" onclick="swiper.handleSwipe('love')" title="Love it! Add to Planner">
+            <span>❤️</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: SHARED PLANNER & ITINERARY -->
+    <section id="view-planner" class="view-panel">
+      <div class="planner-layout">
+        <!-- Main Itinerary / Calendar Schedule -->
+        <div class="planner-main">
+          <div class="planner-header">
+            <div>
+              <h2>Shared Date Planner & Itinerary</h2>
+              <p>Turn your mutual favorites into scheduled dates, weekend adventures, and day trips.</p>
+            </div>
+            <div class="planner-actions">
+              <button class="btn btn-outline" onclick="planner.exportCalendar()" title="Download .ics file for Apple/Google Calendar">
+                <span>🗓️ Export to Calendar (.ics)</span>
+              </button>
+              <button class="btn btn-outline" onclick="planner.copySummary()" title="Copy formatted date summary for iMessage/WhatsApp">
+                <span>📋 Copy Date Summary</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Schedule Timeline (Upcoming Dates) -->
+          <div class="schedule-section">
+            <div class="section-title-row">
+              <h3>📅 Scheduled Date Dates</h3>
+              <span class="badge" id="scheduled-count-badge">0 Scheduled</span>
+            </div>
+            
+            <div id="scheduled-timeline" class="scheduled-timeline">
+              <!-- Dynamically rendered scheduled items -->
+            </div>
+            
+            <div id="scheduled-empty" class="empty-state">
+              <span class="empty-emoji">📆</span>
+              <h4>No dates scheduled yet</h4>
+              <p>Pick items from your Bucket List on the right or Discover feed to schedule your next date night!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Ideas Vault & Bucket List -->
+        <aside class="planner-sidebar">
+          <div class="sidebar-header">
+            <h3>💡 Date Ideas & Bucket List</h3>
+            <span class="badge" id="bucket-count-badge">0 Ideas</span>
+          </div>
+          <p class="sidebar-sub">All things both of you loved or saved. Schedule them anytime:</p>
+          
+          <div id="bucket-list" class="bucket-list-scroll">
+            <!-- Bucket list items -->
+          </div>
+
+          <div id="bucket-empty" class="empty-state">
+            <p>Swipe or vote ❤️ on activities in Discover to fill your bucket list!</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TAB 4: INTERACTIVE MAP -->
+    <section id="view-map" class="view-panel">
+      <div class="map-container-wrap">
+        <div class="map-sidebar">
+          <h3>Local Activities Map</h3>
+          <p id="map-subtext">Visualizing all activities around your area.</p>
+          <div class="map-legend">
+            <div class="legend-item"><span class="dot-legend" style="background:#ec4899"></span> Date Night & Romance</div>
+            <div class="legend-item"><span class="dot-legend" style="background:#f59e0b"></span> Food & Dining</div>
+            <div class="legend-item"><span class="dot-legend" style="background:#10b981"></span> Outdoor & Parks</div>
+            <div class="legend-item"><span class="dot-legend" style="background:#8b5cf6"></span> Music & Shows</div>
+          </div>
+          <div id="map-events-list" class="map-events-list">
+            <!-- List of events with jump-to-pin -->
+          </div>
+        </div>
+        <div id="leaflet-map" class="map-canvas"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MATCH CELEBRATION MODAL -->
+  <div id="match-modal" class="modal-overlay hidden">
+    <div class="modal-card match-card">
+      <div class="confetti-burst">🎉 💖 🍾 ✨</div>
+      <h2 class="match-title">It's a Match!</h2>
+      <p class="match-desc">Both you and <span id="match-partner-name">your partner</span> want to do this!</p>
+      
+      <div class="match-preview" id="match-preview-card">
+        <!-- Render event preview -->
+      </div>
+
+      <div class="match-actions">
+        <button class="btn btn-secondary" onclick="collaborative.closeMatchModal()">Keep Browsing</button>
+        <button class="btn btn-primary" id="btn-match-schedule" onclick="collaborative.scheduleMatchNow()">
+          📅 Schedule for this Weekend
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE DATE MODAL -->
+  <div id="schedule-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Schedule Activity</h3>
+        <button class="close-btn" onclick="planner.closeScheduleModal()">&times;</button>
+      </div>
+      <form id="schedule-form" onsubmit="planner.submitSchedule(event)">
+        <input type="hidden" id="sched-event-id">
+        <input type="hidden" id="sched-planner-id">
+
+        <div class="form-group">
+          <label>Activity</label>
+          <div id="sched-event-title" class="static-field"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="sched-date">Date</label>
+            <input type="date" id="sched-date" required>
+          </div>
+          <div class="form-group flex-1">
+            <label for="sched-slot">Time / Slot</label>
+            <select id="sched-slot">
+              <option value="morning">🌅 Morning (10:00 AM)</option>
+              <option value="afternoon">☀️ Afternoon (2:00 PM)</option>
+              <option value="evening" selected>🍷 Evening (6:30 PM)</option>
+              <option value="night">🌙 Late Night (8:30 PM)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sched-notes">Couple Notes / Reservations</label>
+          <input type="text" id="sched-notes" placeholder="e.g. Book table under Emma, dress smart-casual">
+        </div>
+
+        <div class="form-group">
+          <label for="sched-budget">Estimated Budget ($)</label>
+          <input type="number" id="sched-budget" placeholder="0" min="0" step="5">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="planner.closeScheduleModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save to Itinerary</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- LOCATION CHANGE MODAL -->
+  <div id="location-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Change Location & Search Area</h3>
+        <button class="close-btn" onclick="app.closeLocationModal()">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="loc-input">City, Neighborhood, or Region</label>
+        <input type="text" id="loc-input" placeholder="e.g. Brisbane, Sydney, Melbourne, Gold Coast, London, NYC...">
+      </div>
+
+      <div class="quick-cities">
+        <label>Quick Suggestions:</label>
+        <div class="city-tags">
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Brisbane')">Brisbane</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Gold Coast')">Gold Coast</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Sunshine Coast')">Sunshine Coast</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Sydney')">Sydney</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Melbourne')">Melbourne</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('Perth')">Perth</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('London')">London</button>
+          <button type="button" class="city-tag" onclick="app.selectQuickCity('New York')">New York</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="app.closeLocationModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="app.applyLocation()">Pull Events for this Location 🌐</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD CUSTOM EVENT MODAL -->
+  <div id="add-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Custom Activity or Recommendation</h3>
+        <button class="close-btn" onclick="app.closeAddModal()">&times;</button>
+      </div>
+      <form id="custom-event-form" onsubmit="discover.submitCustomEvent(event)">
+        <div class="form-group">
+          <label for="cust-title">Title / Name *</label>
+          <input type="text" id="cust-title" placeholder="e.g. Wine Tasting at Sirromet or Instagram Pasta Bar" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="cust-category">Category</label>
+            <select id="cust-category">
+              <option value="Date Night Specials">🍷 Date Night Specials</option>
+              <option value="Food & Drink">🍕 Food & Drink</option>
+              <option value="Outdoor & Adventure">🛶 Outdoor & Adventure</option>
+              <option value="Music & Concerts">🎵 Music & Concerts</option>
+              <option value="Arts & Culture">🎨 Arts & Culture</option>
+              <option value="Markets & Pop-ups">🎪 Markets & Pop-ups</option>
+              <option value="Sightseeing & Nature">🌿 Sightseeing & Nature</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="cust-price">Price Level</label>
+            <select id="cust-price">
+              <option value="Free">Free</option>
+              <option value="$">$ (Under $25)</option>
+              <option value="$$" selected>$$ ($25 - $75)</option>
+              <option value="$$$">$$$ (Splurge $75+)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cust-location">Location / Venue</label>
+          <input type="text" id="cust-location" placeholder="e.g. West End, Brisbane">
+        </div>
+
+        <div class="form-group">
+          <label for="cust-desc">Description</label>
+          <textarea id="cust-desc" rows="2" placeholder="What makes this exciting to do together?"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cust-tip">Couple Insider Tip</label>
+          <input type="text" id="cust-tip" placeholder="e.g. Make a reservation for the balcony at 7pm">
+        </div>
+
+        <div class="form-group">
+          <label for="cust-url">Link (Instagram, TikTok, or Website)</label>
+          <input type="url" id="cust-url" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="cust-add-planner" checked>
+            <span>Automatically add to our Bucket List</span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="app.closeAddModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Activity</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- COUPLE SETTINGS MODAL -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Couple Profile & Settings</h3>
+        <button class="close-btn" onclick="app.closeSettingsModal()">&times;</button>
+      </div>
+      <form id="settings-form" onsubmit="app.saveSettings(event)">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="set-user1-name">Partner 1 Name</label>
+            <input type="text" id="set-user1-name" required>
+          </div>
+          <div class="form-group flex-1">
+            <label for="set-user2-name">Partner 2 Name</label>
+            <input type="text" id="set-user2-name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="set-default-city">Default City</label>
+          <input type="text" id="set-default-city" required>
+        </div>
+
+        <details class="advanced-settings">
+          <summary>🔑 API Keys & Live Web Connectors (Optional)</summary>
+          <div class="details-body">
+            <p class="small-text">TwoDo already searches public feeds, open street directories, and seed catalogs without keys. Add personal API keys below to unlock unlimited direct Ticketmaster/Eventbrite quotas:</p>
+            <div class="form-group">
+              <label for="set-tm-key">Ticketmaster API Key</label>
+              <input type="text" id="set-tm-key" placeholder="Ticketmaster Developer Key">
+            </div>
+            <div class="form-group">
+              <label for="set-eb-key">Eventbrite Personal Token</label>
+              <input type="text" id="set-eb-key" placeholder="Eventbrite Private Token">
+            </div>
+          </div>
+        </details>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="app.closeSettingsModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Fixed Mobile Bottom Navigation Bar (iPhone & Android) -->
+  <nav class="mobile-bottom-bar" id="mobile-bottom-nav">
+    <button class="mobile-nav-item active" data-tab="discover" onclick="app.navigate('discover')">
+      <span class="m-icon">✨</span>
+      <span class="m-label">Discover</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="swiper" onclick="app.navigate('swiper')">
+      <span class="m-icon">🔥</span>
+      <span class="m-label">Swiper</span>
+      <span class="m-badge" id="m-swiper-badge">New</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="planner" onclick="app.navigate('planner')">
+      <span class="m-icon">📅</span>
+      <span class="m-label">Planner</span>
+      <span class="m-badge count" id="m-planner-badge">0</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="map" onclick="app.navigate('map')">
+      <span class="m-icon">🗺️</span>
+      <span class="m-label">Map</span>
+    </button>
+  </nav>
+
+  <!-- Leaflet JS (with fallback handling) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- App Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/collaborative.js"></script>
+  <script src="/js/discover.js"></script>
+  <script src="/js/swiper.js"></script>
+  <script src="/js/planner.js"></script>
+  <script src="/js/map.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
