@@ -44,8 +44,20 @@ const discover = {
       swiper.initDeck();
       mapView.renderMarkers();
     } catch (e) {
-      console.error('Failed to load events:', e);
-      app.showToast('Error connecting to events server.');
+      console.warn('API fetch warning, using offline activities vault:', e);
+      const fallbackData = api.getLocalEnrichedEvents({
+        category: this.activeCategory,
+        suburb: this.activeSuburb,
+        vibe: this.activeVibe,
+        date_range: this.activeDateRange,
+        custom_start: this.customStart,
+        custom_end: this.customEnd
+      });
+      app.events = fallbackData.events || [];
+      this.renderEvents();
+      this.updateMatchBanner();
+      swiper.initDeck();
+      mapView.renderMarkers();
     }
   },
 

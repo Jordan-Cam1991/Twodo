@@ -223,7 +223,13 @@ const planner = {
   },
 
   exportCalendar() {
-    window.location.href = api.exportCalendarUrl();
+    const url = api.exportCalendarUrl();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'twodo-itinerary.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   },
 
   async copySummary() {
