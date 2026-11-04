@@ -51,6 +51,10 @@
             <span>Date Swiper</span>
             <span class="tab-badge" id="swiper-badge">New</span>
           </button>
+          <button class="nav-btn" data-tab="chat" onclick="app.navigate('chat')">
+            <span class="nav-icon">💬</span>
+            <span>Chat</span>
+          </button>
           <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
             <span class="nav-icon">📅</span>
             <span>Shared Planner</span>
@@ -62,8 +66,11 @@
           </button>
         </nav>
 
-        <!-- Header Actions: + Add Custom, 📍 Location, ⚙️ Settings -->
+        <!-- Header Actions: 💬 Chat, ➕ Add Custom, 📍 Location, ⚙️ Settings -->
         <div class="header-actions">
+          <button type="button" class="btn-icon header-icon-btn" onclick="app.navigate('chat')" title="Couple Chat" aria-label="Couple Chat">
+            <span>💬</span>
+          </button>
           <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Activity" aria-label="Add Custom Activity">
             <span>➕</span>
           </button>
@@ -190,16 +197,16 @@
         </div>
       </div>
 
-      <!-- Live Match Banner (if matches exist) -->
+      <!-- Live Match Banner (if matches exist) - Compact Ribbon -->
       <div id="matches-callout-banner" class="matches-banner hidden">
         <div class="matches-content">
           <span class="banner-heart">🎉</span>
           <div class="banner-text">
-            <strong id="matches-banner-title">You have 0 Mutual Matches!</strong>
-            <p>Both of you expressed excitement about these activities. Time to put them on your calendar!</p>
+            <strong id="matches-banner-title">2 Mutual Date Matches!</strong>
+            <span class="banner-subtext">Both love these ideas</span>
           </div>
         </div>
-        <button class="btn btn-sm btn-white" onclick="discover.setFilter('matches')">View Matches ✨</button>
+        <button class="btn btn-sm btn-white banner-btn" onclick="discover.setFilter('matches')">View Matches ✨</button>
       </div>
 
       <!-- Events Grid -->
@@ -339,7 +346,58 @@
       </div>
     </section>
 
-    <!-- TAB 3: SHARED PLANNER & ITINERARY -->
+    <!-- TAB 3: COUPLE CHAT -->
+    <section id="view-chat" class="view-panel">
+      <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header-bar">
+          <div class="chat-header-info">
+            <span class="chat-header-avatar">💑</span>
+            <div>
+              <h2 class="chat-header-title">Emma & Jordan's Chat</h2>
+              <span class="chat-header-status">🟢 Connected • Discuss date plans</span>
+            </div>
+          </div>
+          <div class="chat-voter-toggle">
+            <span class="chat-sending-as">Sending as:</span>
+            <button type="button" class="chat-voter-chip active" id="chat-voter-1" onclick="chatView.setChatVoter(1)">Emma</button>
+            <button type="button" class="chat-voter-chip" id="chat-voter-2" onclick="chatView.setChatVoter(2)">Jordan</button>
+          </div>
+        </div>
+
+        <!-- Sharing Event Banner (Visible when sharing an activity) -->
+        <div id="chat-share-banner" class="chat-share-banner hidden">
+          <div class="chat-share-info">
+            <span class="chat-share-icon">📍</span>
+            <span id="chat-share-title" class="chat-share-text">Sharing Date Idea</span>
+          </div>
+          <button type="button" class="chat-share-cancel" onclick="chatView.hideShareBanner()" title="Cancel share">✕</button>
+        </div>
+
+        <!-- Messages Thread -->
+        <div id="chat-messages-container" class="chat-messages-container">
+          <!-- Messages rendered dynamically -->
+        </div>
+
+        <!-- Quick Idea Suggestion Chips -->
+        <div class="chat-quick-chips">
+          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Are you free this Saturday? ❤️')">📅 Free this Saturday?</button>
+          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Let\'s do this date! ✨')">✨ Let's do this date!</button>
+          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('What time suits you? ⏰')">⏰ What time suits you?</button>
+          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Dinner before or after? 🍷')">🍷 Dinner before/after?</button>
+        </div>
+
+        <!-- Message Composer Form -->
+        <form class="chat-composer-form" onsubmit="chatView.handleFormSubmit(event)">
+          <input type="text" id="chat-input-text" class="chat-input" placeholder="Message partner..." autocomplete="off" maxlength="500">
+          <button type="submit" class="chat-send-btn" aria-label="Send message">
+            <span>🚀</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 4: SHARED PLANNER & ITINERARY -->
     <section id="view-planner" class="view-panel">
       <div class="planner-layout">
         <!-- Main Itinerary / Calendar Schedule -->
@@ -397,8 +455,71 @@
       </div>
     </section>
 
-    <!-- TAB 4: INTERACTIVE MAP -->
+    <!-- TAB 5: INTERACTIVE MAP -->
     <section id="view-map" class="view-panel">
+      <!-- Four Clean Filter Trigger Headers for Map (Matching Swiper & Discover) -->
+      <div class="filter-headers-grid map-filter-grid">
+        <!-- 1: Date Range -->
+        <button type="button" class="filter-header-card" id="map-f-hdr-date" onclick="discover.openFilterModal('date')">
+          <div class="f-hdr-top">
+            <span class="f-hdr-icon">📅</span>
+            <span class="f-hdr-title">Date Range</span>
+            <span class="f-hdr-badge hidden" id="map-f-badge-date">Active</span>
+          </div>
+          <div class="f-hdr-bottom">
+            <span class="f-hdr-val" id="map-f-val-date">✨ All Dates</span>
+            <span class="f-hdr-chevron">▾</span>
+          </div>
+        </button>
+
+        <!-- 2: Suburb / Precinct -->
+        <button type="button" class="filter-header-card" id="map-f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
+          <div class="f-hdr-top">
+            <span class="f-hdr-icon">📍</span>
+            <span class="f-hdr-title">Suburb / Precinct</span>
+            <span class="f-hdr-badge hidden" id="map-f-badge-suburb">0</span>
+          </div>
+          <div class="f-hdr-bottom">
+            <span class="f-hdr-val" id="map-f-val-suburb">🗺️ All Suburbs</span>
+            <span class="f-hdr-chevron">▾</span>
+          </div>
+        </button>
+
+        <!-- 3: Vibe & Style -->
+        <button type="button" class="filter-header-card" id="map-f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
+          <div class="f-hdr-top">
+            <span class="f-hdr-icon">✨</span>
+            <span class="f-hdr-title">Vibe & Style</span>
+            <span class="f-hdr-badge hidden" id="map-f-badge-vibe">0</span>
+          </div>
+          <div class="f-hdr-bottom">
+            <span class="f-hdr-val" id="map-f-val-vibe">💫 All Vibes</span>
+            <span class="f-hdr-chevron">▾</span>
+          </div>
+        </button>
+
+        <!-- 4: Activities / Categories -->
+        <button type="button" class="filter-header-card" id="map-f-hdr-category" onclick="discover.openFilterModal('category')">
+          <div class="f-hdr-top">
+            <span class="f-hdr-icon">🌟</span>
+            <span class="f-hdr-title">Activities</span>
+            <span class="f-hdr-badge hidden" id="map-f-badge-category">0</span>
+          </div>
+          <div class="f-hdr-bottom">
+            <span class="f-hdr-val" id="map-f-val-category">🌟 All Activities</span>
+            <span class="f-hdr-chevron">▾</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Map Filter Meta Status -->
+      <div class="swiper-filter-meta map-filter-meta">
+        <span class="swiper-filter-status" id="map-filter-status">📍 Showing activities on map</span>
+        <button type="button" class="btn-clear-filters-mini hidden" id="map-btn-clear-filters" onclick="discover.resetFilters()">
+          ✕ Clear Filters
+        </button>
+      </div>
+
       <div class="map-container-wrap">
         <div class="map-sidebar">
           <h3>Local Activities Map</h3>
@@ -722,6 +843,46 @@
     </div>
   </div>
 
+  <!-- LOVE NOTE MODAL -->
+  <div id="love-note-modal" class="modal-overlay hidden" onclick="collaborative.closeLoveNoteModal()">
+    <div class="modal-card love-note-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-icon-wrap" style="background: rgba(244, 63, 94, 0.12); color: #f43f5e; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">💬</div>
+        <div>
+          <h3 style="margin:0; font-size:1.2rem;">Why do you love this?</h3>
+          <p class="modal-sub" style="margin:2px 0 0; font-size:0.85rem; color:var(--text-muted);">Leave a note so <strong id="love-note-partner">Emma</strong> sees why you picked this!</p>
+        </div>
+        <button type="button" class="close-btn" onclick="collaborative.closeLoveNoteModal()" title="Close">✕</button>
+      </div>
+
+      <div class="love-note-body" style="padding:1rem 0;">
+        <input type="hidden" id="love-note-event-id">
+        <div class="love-note-event-preview" style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:0.75rem 1rem; margin-bottom:1rem;">
+          <span class="preview-tag" style="display:block; font-size:0.72rem; font-weight:700; color:var(--primary); text-transform:uppercase;">📍 Date Idea</span>
+          <strong id="love-note-title" class="preview-title" style="font-size:0.95rem; color:var(--text-main);">Activity Title</strong>
+        </div>
+
+        <label class="love-note-label" for="love-note-text" style="display:block; font-size:0.88rem; font-weight:600; margin-bottom:0.4rem;">
+          <span>Note from <strong id="love-note-sender">Jordan</strong>:</span>
+        </label>
+        <textarea id="love-note-text" class="love-note-textarea" rows="3" placeholder="Tell your partner why you'd love to do this..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:0.75rem; font-family:inherit; font-size:0.92rem; box-sizing:border-box; outline:none; resize:vertical;"></textarea>
+
+        <!-- Quick Idea Chips for Notes -->
+        <div class="love-note-chips" style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem;">
+          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'You have been wanting to do this forever! 💕'">💕 You've wanted to do this!</button>
+          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Perfect for our next weekend date! ✨'">✨ Perfect weekend date!</button>
+          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Let\'s definitely dress up for this! 🥂'">🥂 Let's dress up for this!</button>
+          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'This would be so fun together! 🎉'">🎉 So fun together!</button>
+        </div>
+      </div>
+
+      <div class="love-note-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">
+        <button type="button" class="btn btn-secondary" onclick="collaborative.closeLoveNoteModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="collaborative.saveLoveNote()">Save Love Note ❤️</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -735,6 +896,10 @@
       <span class="m-icon">🔥</span>
       <span class="m-label">Swiper</span>
       <span class="m-badge" id="m-swiper-badge">New</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="chat" onclick="app.navigate('chat')">
+      <span class="m-icon">💬</span>
+      <span class="m-label">Chat</span>
     </button>
     <button class="mobile-nav-item" data-tab="planner" onclick="app.navigate('planner')">
       <span class="m-icon">📅</span>
@@ -753,6 +918,7 @@
   <!-- App Scripts -->
   <script src="js/events_data.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/chat.js"></script>
   <script src="js/collaborative.js"></script>
   <script src="js/discover.js"></script>
   <script src="js/swiper.js"></script>

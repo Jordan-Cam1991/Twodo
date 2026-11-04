@@ -4,7 +4,7 @@
 const collaborative = {
   currentMatchEvent: null,
 
-  async handleVote(eventId, voteType) {
+  async handleVote(eventId, voteType, note = null) {
     const isTogether = app.currentVoter === 'both';
     const u1 = app.profile?.user1_name || 'Emma';
     const u2 = app.profile?.user2_name || 'Jordan';
@@ -16,16 +16,22 @@ const collaborative = {
       let res;
       if (isTogether) {
         // Together Mode: record the vote for both partners
-        await api.vote(eventId, u1, voteType);
-        res = await api.vote(eventId, u2, voteType);
+        await api.vote(eventId, u1, voteType, note);
+        res = await api.vote(eventId, u2, voteType, note);
         event.u1_vote = voteType;
         event.u2_vote = voteType;
+        if (note !== null) {
+          event.u1_note = note;
+          event.u2_note = note;
+        }
       } else {
-        res = await api.vote(eventId, activeVoter, voteType);
+        res = await api.vote(eventId, activeVoter, voteType, note);
         if (activeVoter === u1) {
           event.u1_vote = voteType;
+          if (note !== null) event.u1_note = note;
         } else {
           event.u2_vote = voteType;
+          if (note !== null) event.u2_note = note;
         }
       }
 
@@ -40,19 +46,60 @@ const collaborative = {
       if (isStrictMatch && voteType === 'love') {
         this.triggerMatchCelebration(event);
       } else {
-        app.showToast(voteType === 'love' ? '❤️ Saved to Bucket List!' : (voteType === 'maybe' ? '🤔 Noted as maybe' : 'Passed'));
+        app.showToast(voteType === 'love' ? (note ? '💬 Note & ❤️ Love saved!' : '❤️ Saved to Bucket List!') : (voteType === 'maybe' ? '🤔 Noted as maybe' : 'Passed'));
       }
 
       // Re-render views
       discover.renderEvents();
       planner.loadPlanner();
       discover.updateMatchBanner();
+      if (window.mapView) mapView.renderMarkers();
 
       return res;
     } catch (e) {
       console.error('Failed to vote:', e);
       app.showToast('Could not save vote. Check connection.');
     }
+  },
+
+  openNoteModal(eventId) {
+    const event = app.events.find(e => e.id === eventId);
+    if (!event) return;
+    const voter = app.getActiveVoterName();
+    const isU1 = voter === (app.profile?.user1_name || 'Emma');
+    const existingNote = isU1 ? (event.u1_note || '') : (event.u2_note || '');
+    const partner = isU1 ? (app.profile?.user2_name || 'Jordan') : (app.profile?.user1_name || 'Emma');
+
+    const modal = document.getElementById('love-note-modal');
+    if (!modal) return;
+
+    document.getElementById('love-note-event-id').value = eventId;
+    document.getElementById('love-note-title').textContent = event.title;
+    document.getElementById('love-note-sender').textContent = voter;
+    document.getElementById('love-note-partner').textContent = partner;
+    
+    const textarea = document.getElementById('love-note-text');
+    if (textarea) {
+      textarea.value = existingNote;
+      textarea.placeholder = `Tell ${partner} why you love this date idea... (e.g. "Their matcha croissants look unreal!" or "Let's do this Saturday!")`;
+    }
+
+    modal.classList.remove('hidden');
+    setTimeout(() => textarea?.focus(), 100);
+  },
+
+  async saveLoveNote() {
+    const eventId = document.getElementById('love-note-event-id').value;
+    const text = document.getElementById('love-note-text').value.trim();
+    this.closeLoveNoteModal();
+    if (!eventId) return;
+
+    await this.handleVote(eventId, 'love', text);
+    app.showToast('💬 Love note saved for your partner!');
+  },
+
+  closeLoveNoteModal() {
+    document.getElementById('love-note-modal')?.classList.add('hidden');
   },
 
   triggerMatchCelebration(event) {

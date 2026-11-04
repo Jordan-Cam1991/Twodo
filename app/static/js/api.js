@@ -129,10 +129,12 @@ const api = {
     const u1 = profile.user1_name || 'Emma';
     const u2 = profile.user2_name || 'Jordan';
 
-    // Load votes
+    // Load votes & notes
     let votes = {};
+    let notes = {};
     try {
       votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
+      notes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
     } catch (e) {}
 
     // Load planner items
@@ -278,6 +280,8 @@ const api = {
       const v2 = votes[`${ev.id}_${u2}`] || null;
       ev.u1_vote = v1;
       ev.u2_vote = v2;
+      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || '';
+      ev.u2_note = ev.u2_note || notes[`${ev.id}_${u2}`] || '';
       ev.user1_name = u1;
       ev.user2_name = u2;
 
@@ -1224,17 +1228,22 @@ const api = {
   },
 
   // ---------------------------------------------------------------------------
-  // VOTING API
+  // VOTING API (Supports Love Notes!)
   // ---------------------------------------------------------------------------
-  async vote(eventId, userName, vote) {
-    // Always persist to localStorage for instant offline responsiveness
+  async vote(eventId, userName, vote, note = null) {
     let votes = {};
+    let notes = {};
     try {
       votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
+      notes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
     } catch (e) {}
 
     votes[`${eventId}_${userName}`] = vote;
     localStorage.setItem('twodo_votes', JSON.stringify(votes));
+    if (note !== null) {
+      notes[`${eventId}_${userName}`] = note;
+      localStorage.setItem('twodo_notes', JSON.stringify(notes));
+    }
 
     const profile = JSON.parse(localStorage.getItem('twodo_profile') || '{"user1_name":"Emma","user2_name":"Jordan"}');
     const u1 = profile.user1_name || 'Emma';
@@ -1242,6 +1251,8 @@ const api = {
 
     const v1 = votes[`${eventId}_${u1}`];
     const v2 = votes[`${eventId}_${u2}`];
+    const n1 = notes[`${eventId}_${u1}`] || '';
+    const n2 = notes[`${eventId}_${u2}`] || '';
 
     // STRICT MATCH RULE: Only both voting 'love' is a match!
     const isMatch = Boolean(v1 === 'love' && v2 === 'love');
@@ -1251,7 +1262,7 @@ const api = {
       const res = await this.safeFetch(`${this.baseUrl}/api/votes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event_id: eventId, user_name: userName, vote })
+        body: JSON.stringify({ event_id: eventId, user_name: userName, vote, note })
       });
       return await res.json();
     } catch (e) {
@@ -1260,11 +1271,81 @@ const api = {
         event_id: eventId,
         user_name: userName,
         vote: vote,
+        note: note,
         u1_vote: v1,
         u2_vote: v2,
+        u1_note: n1,
+        u2_note: n2,
         is_match: isMatch,
         match_level: matchLevel
       };
+    }
+  },
+
+  // ---------------------------------------------------------------------------
+  // COUPLE CHAT API (Emma & Jordan Private Chat)
+  // ---------------------------------------------------------------------------
+  async getChatMessages() {
+    try {
+      const res = await this.safeFetch(`${this.baseUrl}/api/chat`);
+      const data = await res.json();
+      if (data && Array.isArray(data.messages)) {
+        localStorage.setItem('twodo_chat_messages', JSON.stringify(data.messages));
+        return data.messages;
+      }
+      throw new Error('Invalid chat payload');
+    } catch (e) {
+      try {
+        return JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
+      } catch (err) {
+        return [];
+      }
+    }
+  },
+
+  async sendChatMessage(senderName, text, activity = null) {
+    const payload = {
+      sender_name: senderName,
+      text: text,
+      activity_id: activity ? activity.id : null,
+      activity_title: activity ? activity.title : null,
+      activity_image: activity ? activity.image_url : null
+    };
+
+    try {
+      const res = await this.safeFetch(`${this.baseUrl}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data && data.message) {
+        let msgs = [];
+        try {
+          msgs = JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
+        } catch (err) {}
+        msgs.push(data.message);
+        localStorage.setItem('twodo_chat_messages', JSON.stringify(msgs));
+        return data.message;
+      }
+      throw new Error('Message send failed');
+    } catch (e) {
+      const localMsg = {
+        id: Date.now(),
+        sender_name: senderName,
+        text: text,
+        activity_id: payload.activity_id,
+        activity_title: payload.activity_title,
+        activity_image: payload.activity_image,
+        created_at: new Date().toISOString()
+      };
+      let msgs = [];
+      try {
+        msgs = JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
+      } catch (err) {}
+      msgs.push(localMsg);
+      localStorage.setItem('twodo_chat_messages', JSON.stringify(msgs));
+      return localMsg;
     }
   },
 

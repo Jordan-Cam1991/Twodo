@@ -53,11 +53,41 @@ def init_db():
         event_id TEXT NOT NULL,
         user_name TEXT NOT NULL,
         vote TEXT NOT NULL, -- 'love', 'maybe', 'pass'
+        note TEXT,          -- Love note explaining why partner loved the idea
         updated_at TEXT,
         PRIMARY KEY (event_id, user_name),
         FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
     );
     """)
+
+    # Ensure note column exists in votes table for existing DBs
+    try:
+        cursor.execute("ALTER TABLE votes ADD COLUMN note TEXT")
+    except Exception:
+        pass
+
+    # Messages table (Emma & Jordan Private Couple Chat)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_name TEXT NOT NULL,
+        text TEXT NOT NULL,
+        activity_id TEXT,
+        activity_title TEXT,
+        activity_image TEXT,
+        created_at TEXT NOT NULL
+    );
+    """)
+
+    # Seed friendly initial couple messages if table is empty
+    cursor.execute("SELECT COUNT(*) as count FROM messages")
+    if cursor.fetchone()["count"] == 0:
+        cursor.execute("""
+        INSERT INTO messages (sender_name, text, activity_id, activity_title, activity_image, created_at)
+        VALUES 
+        ('Emma', 'Hey Jordan! Found any cute date ideas for this weekend? 💕', NULL, NULL, NULL, datetime('now', '-2 hours')),
+        ('Jordan', 'Check out the new matches on Discover! Adding a note on the ones I loved so you can see why 🎉', NULL, NULL, NULL, datetime('now', '-1 hours'))
+        """)
 
     # Planner items table
     cursor.execute("""
@@ -144,3 +174,35 @@ def update_couple_profile(data):
     conn.commit()
     conn.close()
     return get_couple_profile()
+
+def get_chat_messages(limit=200):
+    conn = get_connection()
+    rows = conn.execute("""
+    SELECT id, sender_name, text, activity_id, activity_title, activity_image, created_at
+    FROM messages
+    ORDER BY id ASC
+    LIMIT ?
+    """, (limit,)).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def add_chat_message(sender_name, text, activity_id=None, activity_title=None, activity_image=None):
+    from datetime import datetime
+    now_str = datetime.now().isoformat()
+    conn = get_connection()
+    with conn:
+        cursor = conn.execute("""
+        INSERT INTO messages (sender_name, text, activity_id, activity_title, activity_image, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """, (sender_name, text, activity_id, activity_title, activity_image, now_str))
+        msg_id = cursor.lastrowid
+    conn.close()
+    return {
+        "id": msg_id,
+        "sender_name": sender_name,
+        "text": text,
+        "activity_id": activity_id,
+        "activity_title": activity_title,
+        "activity_image": activity_image,
+        "created_at": now_str
+    }

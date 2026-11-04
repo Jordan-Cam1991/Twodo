@@ -231,6 +231,44 @@ const discover = {
         ? `<div class="card-tip"><strong>💡 Couple Tip:</strong> ${ev.insider_tip}</div>`
         : '';
 
+      // Love Notes HTML
+      let loveNotesHtml = '';
+      const notesList = [];
+      if (ev.u1_vote === 'love' && ev.u1_note) {
+        notesList.push(`
+          <div class="card-love-note u1-note">
+            <span class="note-author-pill u1">❤️ ${u1}</span>
+            <span class="note-quote-text">"${discover.escapeHtml(ev.u1_note)}"</span>
+          </div>
+        `);
+      }
+      if (ev.u2_vote === 'love' && ev.u2_note) {
+        notesList.push(`
+          <div class="card-love-note u2-note">
+            <span class="note-author-pill u2">💜 ${u2}</span>
+            <span class="note-quote-text">"${discover.escapeHtml(ev.u2_note)}"</span>
+          </div>
+        `);
+      }
+      if (notesList.length > 0) {
+        loveNotesHtml = `<div class="card-love-notes-box">${notesList.join('')}</div>`;
+      }
+
+      // Add/Edit Note button for active user
+      const myExistingNote = (activeVoter === u1) ? ev.u1_note : ev.u2_note;
+      const isMyLove = (currentVote === 'love');
+      const noteBtnHtml = isMyLove
+        ? `<button type="button" class="btn-card-extra btn-card-note ${myExistingNote ? 'has-note' : ''}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note for partner' : 'Add a note explaining why you love this'}">
+             <span>💬 ${myExistingNote ? 'Edit Note' : '+ Note'}</span>
+           </button>`
+        : `<button type="button" class="btn-card-extra btn-card-note-prompt" onclick="collaborative.openNoteModal('${ev.id}')" title="Love this date and add a note for your partner">
+             <span>💬 Love & Note</span>
+           </button>`;
+
+      const chatShareBtnHtml = `<button type="button" class="btn-card-extra btn-card-chat" onclick="chatView.shareEventToChat('${ev.id}')" title="Chat about this date idea">
+        <span>💬 Chat</span>
+      </button>`;
+
       // Planner action button
       const isInPlanner = !!ev.planner_id;
       const scheduleBtnHtml = isInPlanner
@@ -238,7 +276,7 @@ const discover = {
         : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)">+ Plan Date</button>`;
 
       return `
-        <article class="event-card ${isMatch ? 'is-match-card' : ''}">
+        <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
           <div class="card-media">
             <img class="card-img" src="${ev.image_url}" alt="${ev.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${ev.source}</span>
@@ -277,6 +315,8 @@ const discover = {
               </div>
             </div>
 
+            ${loveNotesHtml}
+
             <!-- Voting & Planning Action Bar -->
             <div class="card-actions">
               <div class="vote-btn-group">
@@ -290,7 +330,11 @@ const discover = {
                   <span>❌</span>
                 </button>
               </div>
-              ${scheduleBtnHtml}
+              <div class="card-secondary-actions">
+                ${noteBtnHtml}
+                ${chatShareBtnHtml}
+                ${scheduleBtnHtml}
+              </div>
             </div>
           </div>
         </article>
@@ -306,7 +350,7 @@ const discover = {
     const matches = app.events.filter(e => e.is_match);
     if (matches.length > 0) {
       banner.classList.remove('hidden');
-      title.textContent = `You have ${matches.length} Mutual Date ${matches.length === 1 ? 'Match' : 'Matches'}!`;
+      title.textContent = `${matches.length} Mutual Date ${matches.length === 1 ? 'Match' : 'Matches'}!`;
     } else {
       banner.classList.add('hidden');
     }
@@ -558,7 +602,7 @@ const discover = {
     // 1. Date
     const isDateFiltered = this.activeDateRange !== 'all';
     const dateLabel = this.getDateRangeLabel();
-    ['f', 'sw-f'].forEach(prefix => {
+    ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const dateVal = document.getElementById(`${prefix}-val-date`);
       const dateBadge = document.getElementById(`${prefix}-badge-date`);
       const dateCard = document.getElementById(`${prefix}-hdr-date`);
@@ -579,7 +623,7 @@ const discover = {
       subLabel = `${subCount} Suburbs`;
     }
 
-    ['f', 'sw-f'].forEach(prefix => {
+    ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const subVal = document.getElementById(`${prefix}-val-suburb`);
       const subBadge = document.getElementById(`${prefix}-badge-suburb`);
       const subCard = document.getElementById(`${prefix}-hdr-suburb`);
@@ -603,7 +647,7 @@ const discover = {
       vibeLabel = `${vibeCount} Vibes`;
     }
 
-    ['f', 'sw-f'].forEach(prefix => {
+    ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const vibeVal = document.getElementById(`${prefix}-val-vibe`);
       const vibeBadge = document.getElementById(`${prefix}-badge-vibe`);
       const vibeCard = document.getElementById(`${prefix}-hdr-vibe`);
@@ -627,7 +671,7 @@ const discover = {
       catLabel = `${catCount} Activities`;
     }
 
-    ['f', 'sw-f'].forEach(prefix => {
+    ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const catVal = document.getElementById(`${prefix}-val-category`);
       const catBadge = document.getElementById(`${prefix}-badge-category`);
       const catCard = document.getElementById(`${prefix}-hdr-category`);
@@ -639,16 +683,22 @@ const discover = {
       if (catCard) catCard.classList.toggle('filter-active', catCount > 0);
     });
 
-    // Show/hide clear all filters buttons on both views
+    // Show/hide clear all filters buttons on discover, swiper, and map views
     const anyActive = isDateFiltered || subCount > 0 || vibeCount > 0 || catCount > 0 || this.activeFilter !== 'all';
     const clearBtn = document.getElementById('btn-clear-all-filters');
     if (clearBtn) clearBtn.classList.toggle('hidden', !anyActive);
     const swClearBtn = document.getElementById('sw-btn-clear-filters');
     if (swClearBtn) swClearBtn.classList.toggle('hidden', !anyActive);
+    const mapClearBtn = document.getElementById('map-btn-clear-filters');
+    if (mapClearBtn) mapClearBtn.classList.toggle('hidden', !anyActive);
 
     // Synchronize Swiper filter counter if available
     if (typeof swiper !== 'undefined' && swiper.updateSwiperFilterStatus) {
       swiper.updateSwiperFilterStatus();
+    }
+    // Synchronize Map filter markers if map initialized
+    if (typeof mapView !== 'undefined' && mapView.renderMarkers) {
+      mapView.renderMarkers();
     }
   },
 
@@ -870,5 +920,26 @@ const discover = {
       console.error(err);
       app.showToast('Failed to add custom activity.');
     }
+  },
+
+  escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+
+  highlightCard(eventId) {
+    setTimeout(() => {
+      const card = document.querySelector(`[data-event-id="${eventId}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('card-highlight-pulse');
+        setTimeout(() => card.classList.remove('card-highlight-pulse'), 2500);
+      }
+    }, 180);
   }
 };

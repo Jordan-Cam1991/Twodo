@@ -81,6 +81,22 @@ const swiper = {
       const scale = 1 - (idx * 0.04);
       const translateY = idx * 10;
 
+      // Partner note on swiper card
+      const activeVoter = app.getActiveVoterName();
+      const u1 = app.profile?.user1_name || 'Emma';
+      const u2 = app.profile?.user2_name || 'Jordan';
+      const partnerName = (activeVoter === u1) ? u2 : u1;
+      const partnerVote = (activeVoter === u1) ? ev.u2_vote : ev.u1_vote;
+      const partnerNote = (activeVoter === u1) ? ev.u2_note : ev.u1_note;
+      let partnerNoteHtml = '';
+      if (partnerVote === 'love' && partnerNote) {
+        partnerNoteHtml = `
+          <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; padding:6px 10px; margin-bottom:8px; font-size:0.82rem; color:#be123c;">
+            💬 <strong>${partnerName}'s Note:</strong> "${partnerNote}"
+          </div>
+        `;
+      }
+
       return `
         <div class="swipe-card" id="swipe-card-${idx}" style="z-index: ${zIndex}; transform: scale(${scale}) translateY(${translateY}px);">
           <div class="swipe-badge swipe-badge-love" style="position:absolute; top:20px; left:20px; z-index:20; border:3px solid #10b981; color:#10b981; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(-15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">LOVE ❤️</div>
@@ -96,6 +112,7 @@ const swiper = {
             <div class="card-location" style="margin-bottom:6px;">
               <span>📍</span> <span>${ev.location_name || ev.city}</span>
             </div>
+            ${partnerNoteHtml}
             <p style="font-size:0.88rem; color:#475569; margin-bottom:10px; line-height:1.4;">${ev.description}</p>
             ${ev.insider_tip ? `<div class="card-tip"><strong>💡 Tip:</strong> ${ev.insider_tip}</div>` : ''}
           </div>

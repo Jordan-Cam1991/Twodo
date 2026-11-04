@@ -70,6 +70,9 @@ const app = {
 
     discover.renderEvents();
     swiper.initDeck();
+    if (window.chatView && chatView.updateVoterToggleUI) {
+      chatView.updateVoterToggleUI();
+    }
   },
 
   navigate(tabName) {
@@ -88,6 +91,8 @@ const app = {
 
     if (tabName === 'swiper') {
       swiper.initDeck();
+    } else if (tabName === 'chat') {
+      if (window.chatView) chatView.init();
     } else if (tabName === 'map') {
       setTimeout(() => {
         mapView.init();

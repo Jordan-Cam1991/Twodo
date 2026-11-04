@@ -173,6 +173,18 @@ class TwoDoHandler(BaseHTTPRequestHandler):
             self.send_json({"summary": summary})
             return
 
+        if path == "/api/chat":
+            conn = get_connection()
+            rows = conn.execute("""
+            SELECT id, sender_name, text, activity_id, activity_title, activity_image, created_at
+            FROM messages
+            ORDER BY id ASC
+            LIMIT 200
+            """).fetchall()
+            conn.close()
+            self.send_json({"success": True, "messages": [dict(r) for r in rows]})
+            return
+
         self.serve_static(path)
 
     def do_POST(self):
@@ -285,10 +297,46 @@ class TwoDoHandler(BaseHTTPRequestHandler):
             self.send_json({"success": True, "event": custom_event})
             return
 
+        if path == "/api/chat":
+            sender_name = body.get("sender_name") or "Jordan"
+            text = (body.get("text") or "").strip()
+            activity_id = body.get("activity_id")
+            activity_title = body.get("activity_title")
+            activity_image = body.get("activity_image")
+
+            if not text and not activity_id:
+                self.send_error_json("Text or shared activity is required")
+                return
+
+            now_str = datetime.now().isoformat()
+            conn = get_connection()
+            with conn:
+                cursor = conn.execute("""
+                INSERT INTO messages (sender_name, text, activity_id, activity_title, activity_image, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """, (sender_name, text, activity_id, activity_title, activity_image, now_str))
+                msg_id = cursor.lastrowid
+            conn.close()
+
+            self.send_json({
+                "success": True,
+                "message": {
+                    "id": msg_id,
+                    "sender_name": sender_name,
+                    "text": text,
+                    "activity_id": activity_id,
+                    "activity_title": activity_title,
+                    "activity_image": activity_image,
+                    "created_at": now_str
+                }
+            })
+            return
+
         if path == "/api/votes":
             event_id = body.get("event_id")
             user_name = body.get("user_name")
             vote = body.get("vote")
+            note = body.get("note")
 
             if not event_id or not user_name:
                 self.send_error_json("event_id and user_name are required")
@@ -306,12 +354,13 @@ class TwoDoHandler(BaseHTTPRequestHandler):
                         conn.execute("DELETE FROM votes WHERE event_id = ? AND user_name = ?", (event_id, v_user))
                     else:
                         conn.execute("""
-                        INSERT INTO votes (event_id, user_name, vote, updated_at)
-                        VALUES (?, ?, ?, ?)
+                        INSERT INTO votes (event_id, user_name, vote, note, updated_at)
+                        VALUES (?, ?, ?, ?, ?)
                         ON CONFLICT(event_id, user_name) DO UPDATE SET
                             vote = excluded.vote,
+                            note = COALESCE(excluded.note, votes.note),
                             updated_at = excluded.updated_at
-                        """, (event_id, v_user, vote, datetime.now().isoformat()))
+                        """, (event_id, v_user, vote, note, datetime.now().isoformat()))
 
                 if vote == "love":
                     existing = conn.execute("SELECT id FROM planner_items WHERE event_id = ?", (event_id,)).fetchone()
@@ -321,12 +370,14 @@ class TwoDoHandler(BaseHTTPRequestHandler):
                         VALUES (?, 'bucket_list', ?)
                         """, (event_id, datetime.now().isoformat()))
 
-            v1_row = conn.execute("SELECT vote FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u1)).fetchone()
-            v2_row = conn.execute("SELECT vote FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u2)).fetchone()
+            v1_row = conn.execute("SELECT vote, note FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u1)).fetchone()
+            v2_row = conn.execute("SELECT vote, note FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u2)).fetchone()
             conn.close()
 
             v1 = v1_row["vote"] if v1_row else None
             v2 = v2_row["vote"] if v2_row else None
+            u1_note = v1_row["note"] if v1_row else None
+            u2_note = v2_row["note"] if v2_row else None
 
             # STRICT MATCH: Only when BOTH partners vote 'love' is it a match!
             is_match = bool(v1 == "love" and v2 == "love")
@@ -337,6 +388,8 @@ class TwoDoHandler(BaseHTTPRequestHandler):
                 "event_id": event_id,
                 "u1_vote": v1,
                 "u2_vote": v2,
+                "u1_note": u1_note,
+                "u2_note": u2_note,
                 "is_match": is_match,
                 "match_level": match_level
             })
