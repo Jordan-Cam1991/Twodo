@@ -1,5 +1,6 @@
 /**
  * TwoDo Date Swiper (Tinder-style card deck)
+ * Supports dynamic filtering by Date Range, Suburb/Precinct, Vibe, and Activity.
  */
 const swiper = {
   deckQueue: [],
@@ -22,6 +23,7 @@ const swiper = {
 
     this.currentIndex = 0;
     this.renderDeck();
+    this.updateSwiperFilterStatus();
   },
 
   renderDeck() {
@@ -45,6 +47,28 @@ const swiper = {
     if (!this.deckQueue || this.deckQueue.length === 0 || this.currentIndex >= this.deckQueue.length) {
       deck.innerHTML = '';
       empty?.classList.remove('hidden');
+
+      const emptyMsg = document.getElementById('deck-empty-msg');
+      const resetBtn = document.getElementById('deck-empty-reset-filter');
+      const anyActive = (typeof discover !== 'undefined') && (
+        discover.activeDateRange !== 'all' ||
+        discover.selectedSuburbs.length > 0 ||
+        discover.selectedVibes.length > 0 ||
+        discover.selectedCategories.length > 0
+      );
+
+      if (emptyMsg) {
+        if (anyActive) {
+          emptyMsg.textContent = 'No un-swiped activities match your current filters. Try resetting filters or switching voter to review more dates!';
+        } else {
+          emptyMsg.textContent = "Switch to your partner's profile to see what matches you unlocked, or check your planner.";
+        }
+      }
+      if (resetBtn) {
+        resetBtn.classList.toggle('hidden', !anyActive);
+      }
+
+      this.updateSwiperFilterStatus();
       return;
     }
 
@@ -82,6 +106,33 @@ const swiper = {
     const topCardEl = document.getElementById('swipe-card-0');
     if (topCardEl) {
       this.attachTouch(topCardEl);
+    }
+
+    this.updateSwiperFilterStatus();
+  },
+
+  updateSwiperFilterStatus() {
+    const statusEl = document.getElementById('sw-filter-status');
+    if (!statusEl) return;
+    const remaining = Math.max(0, this.deckQueue.length - this.currentIndex);
+    const filterParts = [];
+    if (typeof discover !== 'undefined') {
+      if (discover.activeDateRange !== 'all') filterParts.push(discover.getDateRangeLabel());
+      if (discover.selectedSuburbs && discover.selectedSuburbs.length > 0) {
+        filterParts.push(discover.selectedSuburbs.length === 1 ? discover.selectedSuburbs[0] : `${discover.selectedSuburbs.length} Suburbs`);
+      }
+      if (discover.selectedVibes && discover.selectedVibes.length > 0) {
+        filterParts.push(discover.selectedVibes.length === 1 ? discover.selectedVibes[0] : `${discover.selectedVibes.length} Vibes`);
+      }
+      if (discover.selectedCategories && discover.selectedCategories.length > 0) {
+        filterParts.push(discover.selectedCategories.length === 1 ? discover.selectedCategories[0] : `${discover.selectedCategories.length} Categories`);
+      }
+    }
+
+    if (filterParts.length > 0) {
+      statusEl.textContent = `🎯 ${remaining} activities matching: ${filterParts.join(' • ')}`;
+    } else {
+      statusEl.textContent = `⚡ ${remaining} activities ready to swipe`;
     }
   },
 
@@ -180,6 +231,7 @@ const swiper = {
       await collaborative.handleVote(currentEvent.id, direction);
       this.currentIndex++;
       this.renderDeck();
+      this.updateSwiperFilterStatus();
     }, 200);
   }
 };

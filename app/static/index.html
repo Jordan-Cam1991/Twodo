@@ -245,6 +245,69 @@
           </div>
         </div>
 
+        <!-- Four Clean Filter Trigger Headers for Swiper (Matching Discover View) -->
+        <div class="filter-headers-grid swiper-filter-grid">
+          <!-- 1: Date Range -->
+          <button type="button" class="filter-header-card" id="sw-f-hdr-date" onclick="discover.openFilterModal('date')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">📅</span>
+              <span class="f-hdr-title">Date Range</span>
+              <span class="f-hdr-badge hidden" id="sw-f-badge-date">Active</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="sw-f-val-date">✨ All Dates</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 2: Suburb / Precinct -->
+          <button type="button" class="filter-header-card" id="sw-f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">📍</span>
+              <span class="f-hdr-title">Suburb / Precinct</span>
+              <span class="f-hdr-badge hidden" id="sw-f-badge-suburb">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="sw-f-val-suburb">🗺️ All Suburbs</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 3: Vibe & Style -->
+          <button type="button" class="filter-header-card" id="sw-f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">✨</span>
+              <span class="f-hdr-title">Vibe & Style</span>
+              <span class="f-hdr-badge hidden" id="sw-f-badge-vibe">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="sw-f-val-vibe">💫 All Vibes</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 4: Activities / Categories -->
+          <button type="button" class="filter-header-card" id="sw-f-hdr-category" onclick="discover.openFilterModal('category')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">🌟</span>
+              <span class="f-hdr-title">Activities</span>
+              <span class="f-hdr-badge hidden" id="sw-f-badge-category">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="sw-f-val-category">🌟 All Activities</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Swiper Filter Meta Status -->
+        <div class="swiper-filter-meta">
+          <span class="swiper-filter-status" id="sw-filter-status">⚡ Swiping through activities</span>
+          <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
+            ✕ Clear Filters
+          </button>
+        </div>
+
         <!-- The Card Stack -->
         <div class="card-deck-wrapper">
           <div id="card-deck" class="card-deck">
@@ -254,10 +317,13 @@
           <div id="deck-empty" class="deck-empty-state hidden">
             <span class="empty-emoji">🥳</span>
             <h3>You've reviewed all activities!</h3>
-            <p>Switch to your partner's profile to see what matches you unlocked, or check your planner.</p>
+            <p id="deck-empty-msg">Switch to your partner's profile to see what matches you unlocked, or check your planner.</p>
             <div class="deck-empty-actions">
               <button class="btn btn-secondary" onclick="app.setVoter(app.currentVoter === 1 ? 2 : 1)">
                 Switch to <span id="other-partner-name">Partner</span>
+              </button>
+              <button class="btn btn-secondary" id="deck-empty-reset-filter" onclick="discover.resetFilters()">
+                Reset Active Filters
               </button>
               <button class="btn btn-primary" onclick="app.navigate('planner')">Go to Shared Planner</button>
             </div>

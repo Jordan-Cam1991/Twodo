@@ -556,89 +556,100 @@ const discover = {
 
   updateFilterHeaderBadges() {
     // 1. Date
-    const dateVal = document.getElementById('f-val-date');
-    const dateBadge = document.getElementById('f-badge-date');
-    const dateCard = document.getElementById('f-hdr-date');
-    if (dateVal) {
-      dateVal.textContent = this.getDateRangeLabel();
-    }
     const isDateFiltered = this.activeDateRange !== 'all';
-    if (dateBadge) dateBadge.classList.toggle('hidden', !isDateFiltered);
-    if (dateCard) dateCard.classList.toggle('filter-active', isDateFiltered);
+    const dateLabel = this.getDateRangeLabel();
+    ['f', 'sw-f'].forEach(prefix => {
+      const dateVal = document.getElementById(`${prefix}-val-date`);
+      const dateBadge = document.getElementById(`${prefix}-badge-date`);
+      const dateCard = document.getElementById(`${prefix}-hdr-date`);
+      if (dateVal) dateVal.textContent = dateLabel;
+      if (dateBadge) dateBadge.classList.toggle('hidden', !isDateFiltered);
+      if (dateCard) dateCard.classList.toggle('filter-active', isDateFiltered);
+    });
 
     // 2. Suburb
-    const subVal = document.getElementById('f-val-suburb');
-    const subBadge = document.getElementById('f-badge-suburb');
-    const subCard = document.getElementById('f-hdr-suburb');
     const subCount = this.selectedSuburbs.length;
-    if (subVal) {
-      if (subCount === 0) {
-        subVal.textContent = '🗺️ All Suburbs';
-      } else if (subCount === 1) {
-        const found = this.filterDefinitions.suburb.options.find(o => o.id === this.selectedSuburbs[0]);
-        subVal.textContent = found ? found.label.split(' ')[1] || this.selectedSuburbs[0] : this.selectedSuburbs[0];
-      } else if (subCount === 2) {
-        subVal.textContent = `${this.selectedSuburbs[0]} + 1`;
-      } else {
-        subVal.textContent = `${subCount} Suburbs Selected`;
+    let subLabel = '🗺️ All Suburbs';
+    if (subCount === 1) {
+      const found = this.filterDefinitions.suburb.options.find(o => o.id === this.selectedSuburbs[0]);
+      subLabel = found ? found.label.split(' ')[1] || this.selectedSuburbs[0] : this.selectedSuburbs[0];
+    } else if (subCount === 2) {
+      subLabel = `${this.selectedSuburbs[0]} + 1`;
+    } else if (subCount > 2) {
+      subLabel = `${subCount} Suburbs`;
+    }
+
+    ['f', 'sw-f'].forEach(prefix => {
+      const subVal = document.getElementById(`${prefix}-val-suburb`);
+      const subBadge = document.getElementById(`${prefix}-badge-suburb`);
+      const subCard = document.getElementById(`${prefix}-hdr-suburb`);
+      if (subVal) subVal.textContent = subLabel;
+      if (subBadge) {
+        subBadge.textContent = subCount;
+        subBadge.classList.toggle('hidden', subCount === 0);
       }
-    }
-    if (subBadge) {
-      subBadge.textContent = subCount;
-      subBadge.classList.toggle('hidden', subCount === 0);
-    }
-    if (subCard) subCard.classList.toggle('filter-active', subCount > 0);
+      if (subCard) subCard.classList.toggle('filter-active', subCount > 0);
+    });
 
     // 3. Vibe
-    const vibeVal = document.getElementById('f-val-vibe');
-    const vibeBadge = document.getElementById('f-badge-vibe');
-    const vibeCard = document.getElementById('f-hdr-vibe');
     const vibeCount = this.selectedVibes.length;
-    if (vibeVal) {
-      if (vibeCount === 0) {
-        vibeVal.textContent = '💫 All Vibes';
-      } else if (vibeCount === 1) {
-        const found = this.filterDefinitions.vibe.options.find(o => o.id === this.selectedVibes[0]);
-        subVal && (vibeVal.textContent = found ? found.label.split(' ')[1] || this.selectedVibes[0] : this.selectedVibes[0]);
-      } else if (vibeCount === 2) {
-        vibeVal.textContent = `${this.selectedVibes[0]} + 1`;
-      } else {
-        vibeVal.textContent = `${vibeCount} Vibes Selected`;
+    let vibeLabel = '💫 All Vibes';
+    if (vibeCount === 1) {
+      const found = this.filterDefinitions.vibe.options.find(o => o.id === this.selectedVibes[0]);
+      vibeLabel = found ? found.label.split(' ')[1] || this.selectedVibes[0] : this.selectedVibes[0];
+    } else if (vibeCount === 2) {
+      vibeLabel = `${this.selectedVibes[0]} + 1`;
+    } else if (vibeCount > 2) {
+      vibeLabel = `${vibeCount} Vibes`;
+    }
+
+    ['f', 'sw-f'].forEach(prefix => {
+      const vibeVal = document.getElementById(`${prefix}-val-vibe`);
+      const vibeBadge = document.getElementById(`${prefix}-badge-vibe`);
+      const vibeCard = document.getElementById(`${prefix}-hdr-vibe`);
+      if (vibeVal) vibeVal.textContent = vibeLabel;
+      if (vibeBadge) {
+        vibeBadge.textContent = vibeCount;
+        vibeBadge.classList.toggle('hidden', vibeCount === 0);
       }
-    }
-    if (vibeBadge) {
-      vibeBadge.textContent = vibeCount;
-      vibeBadge.classList.toggle('hidden', vibeCount === 0);
-    }
-    if (vibeCard) vibeCard.classList.toggle('filter-active', vibeCount > 0);
+      if (vibeCard) vibeCard.classList.toggle('filter-active', vibeCount > 0);
+    });
 
     // 4. Category
-    const catVal = document.getElementById('f-val-category');
-    const catBadge = document.getElementById('f-badge-category');
-    const catCard = document.getElementById('f-hdr-category');
     const catCount = this.selectedCategories.length;
-    if (catVal) {
-      if (catCount === 0) {
-        catVal.textContent = '🌟 All Activities';
-      } else if (catCount === 1) {
-        const found = this.filterDefinitions.category.options.find(o => o.id === this.selectedCategories[0]);
-        catVal.textContent = found ? found.label.split(' ')[1] || this.selectedCategories[0] : this.selectedCategories[0];
-      } else if (catCount === 2) {
-        catVal.textContent = `${this.selectedCategories[0]} + 1`;
-      } else {
-        catVal.textContent = `${catCount} Activities Selected`;
-      }
+    let catLabel = '🌟 All Activities';
+    if (catCount === 1) {
+      const found = this.filterDefinitions.category.options.find(o => o.id === this.selectedCategories[0]);
+      catLabel = found ? found.label.split(' ')[1] || this.selectedCategories[0] : this.selectedCategories[0];
+    } else if (catCount === 2) {
+      catLabel = `${this.selectedCategories[0]} + 1`;
+    } else if (catCount > 2) {
+      catLabel = `${catCount} Activities`;
     }
-    if (catBadge) {
-      catBadge.textContent = catCount;
-      catBadge.classList.toggle('hidden', catCount === 0);
-    }
-    if (catCard) catCard.classList.toggle('filter-active', catCount > 0);
 
-    // Show/hide clear all filters button
+    ['f', 'sw-f'].forEach(prefix => {
+      const catVal = document.getElementById(`${prefix}-val-category`);
+      const catBadge = document.getElementById(`${prefix}-badge-category`);
+      const catCard = document.getElementById(`${prefix}-hdr-category`);
+      if (catVal) catVal.textContent = catLabel;
+      if (catBadge) {
+        catBadge.textContent = catCount;
+        catBadge.classList.toggle('hidden', catCount === 0);
+      }
+      if (catCard) catCard.classList.toggle('filter-active', catCount > 0);
+    });
+
+    // Show/hide clear all filters buttons on both views
     const anyActive = isDateFiltered || subCount > 0 || vibeCount > 0 || catCount > 0 || this.activeFilter !== 'all';
     const clearBtn = document.getElementById('btn-clear-all-filters');
     if (clearBtn) clearBtn.classList.toggle('hidden', !anyActive);
+    const swClearBtn = document.getElementById('sw-btn-clear-filters');
+    if (swClearBtn) swClearBtn.classList.toggle('hidden', !anyActive);
+
+    // Synchronize Swiper filter counter if available
+    if (typeof swiper !== 'undefined' && swiper.updateSwiperFilterStatus) {
+      swiper.updateSwiperFilterStatus();
+    }
   },
 
   getDateRangeLabel() {

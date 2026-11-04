@@ -1491,7 +1491,61 @@ body {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.8rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.65rem;
+}
+
+/* Swiper Filter Headers Grid */
+.swiper-filter-grid {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.5rem !important;
+  width: 100% !important;
+}
+
+.swiper-filter-grid .filter-header-card {
+  min-height: 52px !important;
+  padding: 0.45rem 0.65rem !important;
+}
+
+.swiper-filter-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  padding: 0 0.2rem;
+  font-size: 0.8rem;
+}
+
+.swiper-filter-status {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #6366f1;
+  text-align: left;
+  line-height: 1.35;
+  flex: 1;
+}
+
+.btn-clear-filters-mini {
+  background: #fee2e2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 9999px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-clear-filters-mini:hover {
+  background: #fca5a5;
+  color: white;
+}
+
+.btn-clear-filters-mini.hidden {
+  display: none !important;
 }
 
 .card-deck-wrapper {
