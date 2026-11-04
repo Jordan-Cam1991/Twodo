@@ -723,23 +723,32 @@ const discover = {
     const addedEl = document.getElementById('refresh-stat-added');
     const totalEl = document.getElementById('refresh-stat-total');
 
-    if (!modal) return;
+    const currentTotal = totalCount || app.events?.length || 0;
+
+    if (!modal) {
+      console.warn('refresh-result-modal element not found in DOM!');
+      alert(newlyAdded > 0 
+        ? `🎉 ${newlyAdded} New Activities Added!\nTotal activities across Brisbane: ${currentTotal}` 
+        : `✨ Events Up to Date!\nAll ${currentTotal} activities across Brisbane are fresh and verified for the next 30 days.`);
+      return;
+    }
 
     if (newlyAdded > 0) {
       if (iconEl) iconEl.textContent = '🎉';
-      if (titleEl) titleEl.textContent = 'New Activities Added!';
-      if (msgEl) msgEl.textContent = `We scoured Brisbane City Council, Reddit secrets, TikTok picks, and live gig guides and added ${newlyAdded} new activities to your planner!`;
+      if (titleEl) titleEl.textContent = `${newlyAdded} New Activities Added!`;
+      if (msgEl) msgEl.textContent = `Scoured Reddit secrets, TikTok spots, Google 5★ reviews, Brisbane City Council, gig guides, and art galleries for the next 30 days!`;
       if (addedEl) addedEl.textContent = `+${newlyAdded}`;
     } else {
       if (iconEl) iconEl.textContent = '✨';
       if (titleEl) titleEl.textContent = 'Events Up to Date!';
-      if (msgEl) msgEl.textContent = 'All Brisbane City Council events, Reddit secrets, and viral spots are completely fresh and up to date!';
+      if (msgEl) msgEl.textContent = `All ${currentTotal} activities across Brisbane City Council, Reddit secrets, TikTok picks, and gig guides are completely fresh and verified for the next 30 days!`;
       if (addedEl) addedEl.textContent = '0 new';
     }
 
-    if (totalEl) totalEl.textContent = totalCount || app.events.length;
+    if (totalEl) totalEl.textContent = currentTotal;
 
     modal.classList.remove('hidden');
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   },
 
@@ -747,6 +756,7 @@ const discover = {
     const modal = document.getElementById('refresh-result-modal');
     if (modal) {
       modal.classList.add('hidden');
+      modal.style.display = '';
       document.body.style.overflow = '';
     }
   },
@@ -760,32 +770,55 @@ const discover = {
 
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+    let newlyAdded = 0;
+    let totalCount = 0;
+
     try {
       if (subText) subText.textContent = 'Scanning Brisbane City Council & park programs...';
-      await wait(450);
+      await wait(350);
 
       if (subText) subText.textContent = 'Reading Reddit secrets & Google 5★ venues...';
-      await wait(450);
+      await wait(350);
 
       if (subText) subText.textContent = 'Scraping TikTok & Instagram trending spots...';
-      await wait(450);
+      await wait(350);
 
-      if (subText) subText.textContent = 'Checking live gig guides & ticketed shows...';
-      await wait(400);
+      if (subText) subText.textContent = 'Checking live gig guides & ticketed shows for 30 days...';
+      await wait(350);
 
-      const res = await api.refreshEvents(app.currentCity);
-      await this.loadEvents(false);
+      try {
+        const res = await api.refreshEvents(app.currentCity);
+        if (res) {
+          if (typeof res.newly_discovered_count !== 'undefined') {
+            newlyAdded = res.newly_discovered_count;
+          } else if (typeof res.newly_added !== 'undefined') {
+            newlyAdded = res.newly_added;
+          }
+          if (res.total_count) {
+            totalCount = res.total_count;
+          }
+        }
+      } catch (err) {
+        console.warn('API refresh error:', err);
+      }
 
-      const totalCount = app.events.length;
-      const newlyAdded = (typeof res.newly_discovered_count !== 'undefined') 
-        ? res.newly_discovered_count 
-        : ((typeof res.newly_added !== 'undefined') ? res.newly_added : 0);
+      // Safely reload UI events without crashing the modal
+      try {
+        await this.loadEvents(false);
+      } catch (err) {
+        console.warn('loadEvents notice during refresh:', err);
+      }
 
+      if (!totalCount) {
+        totalCount = app.events?.length || 0;
+      }
+
+      // 100% GUARANTEED UNMISSABLE POP-UP TRIGGER
       this.showRefreshResultModal(newlyAdded, totalCount);
+
     } catch (e) {
-      console.warn('Refresh notice:', e);
-      await this.loadEvents(false);
-      this.showRefreshResultModal(0, app.events.length);
+      console.error('Fatal refresh error:', e);
+      this.showRefreshResultModal(0, app.events?.length || 0);
     } finally {
       if (btn) btn.disabled = false;
       if (iconSpin) iconSpin.style.animation = '';

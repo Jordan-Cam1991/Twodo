@@ -640,6 +640,7 @@
   <!-- REFRESH FEEDBACK POP-UP MODAL -->
   <div id="refresh-result-modal" class="modal-overlay hidden" onclick="discover.closeRefreshModal()">
     <div class="modal-card refresh-result-card" onclick="event.stopPropagation()">
+      <button type="button" class="close-btn" style="position:absolute; top:16px; right:18px; font-size:1.4rem; color:var(--text-muted); cursor:pointer; background:none; border:none; padding:4px;" onclick="discover.closeRefreshModal()" aria-label="Close">✕</button>
       <div class="refresh-result-icon" id="refresh-result-icon">🎉</div>
       <h3 class="refresh-result-title" id="refresh-result-title">New Activities Added!</h3>
       <p class="refresh-result-message" id="refresh-result-message">We scoured Brisbane City Council, Reddit secrets, TikTok picks, and live gig guides!</p>
@@ -655,7 +656,7 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary btn-block" onclick="discover.closeRefreshModal()">
+      <button type="button" class="btn btn-primary btn-block" style="padding: 0.9rem; font-size: 1.05rem; font-weight: 700; border-radius: 9999px;" onclick="discover.closeRefreshModal()">
         Explore Activities ✨
       </button>
     </div>
