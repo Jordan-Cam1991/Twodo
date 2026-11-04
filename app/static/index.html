@@ -21,9 +21,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Leaflet CSS for Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  
   <!-- App Styles -->
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -40,7 +37,7 @@
           </div>
         </div>
 
-        <!-- Desktop Navigation Tabs (Hidden on mobile) -->
+        <!-- Desktop Navigation Tabs (4 Core Tabs) -->
         <nav class="nav-tabs">
           <button class="nav-btn active" data-tab="discover" onclick="app.navigate('discover')">
             <span class="nav-icon">✨</span>
@@ -53,32 +50,21 @@
           </button>
           <button class="nav-btn" data-tab="chat" onclick="app.navigate('chat')">
             <span class="nav-icon">💬</span>
-            <span>Chat</span>
+            <span>Couple Chat</span>
           </button>
           <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
             <span class="nav-icon">📅</span>
             <span>Shared Planner</span>
             <span class="planner-count" id="planner-count-badge">0</span>
           </button>
-          <button class="nav-btn" data-tab="map" onclick="app.navigate('map')">
-            <span class="nav-icon">🗺️</span>
-            <span>Map</span>
-          </button>
         </nav>
 
-        <!-- Header Actions: 💬 Chat, ➕ Add Custom, 📍 Location, ⚙️ Settings -->
+        <!-- Header Actions: ➕ Add Custom Date, ⚙️ Settings -->
         <div class="header-actions">
-          <button type="button" class="btn-icon header-icon-btn" onclick="app.navigate('chat')" title="Couple Chat" aria-label="Couple Chat">
-            <span>💬</span>
-          </button>
-          <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Activity" aria-label="Add Custom Activity">
+          <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Date Activity" aria-label="Add Custom Activity">
             <span>➕</span>
           </button>
-          <button type="button" class="btn-icon header-icon-btn" onclick="app.openLocationModal()" title="Change Location" aria-label="Change Location">
-            <span>📍</span>
-            <span id="current-location-display" style="display:none;">Brisbane, QLD</span>
-          </button>
-          <button type="button" class="btn-icon header-icon-btn btn-settings-corner" onclick="app.openSettingsModal()" title="Couple Settings" aria-label="Couple Settings">
+          <button type="button" class="btn-icon header-icon-btn btn-settings-corner" onclick="app.openSettingsModal()" title="Settings & Sync" aria-label="Couple Settings">
             <span>⚙️</span>
           </button>
         </div>
@@ -107,94 +93,26 @@
 
     <!-- TAB 1: DISCOVER VIEW -->
     <section id="view-discover" class="view-panel active">
-      <!-- Pull Internet Feeds Action Box (Replacing Search Bar) -->
-      <div class="discover-controls">
-        <button type="button" class="pull-feeds-card" id="btn-refresh-sources" onclick="discover.refreshLiveSources()" title="Click to pull fresh Brisbane events">
-          <div class="pull-feeds-card-left">
-            <div class="pull-feeds-card-icon">
-              <span class="spin-icon">🔄</span>
-            </div>
-            <div class="pull-feeds-card-text">
-              <span class="pull-feeds-card-title">Pull Internet Feeds</span>
-              <span class="pull-feeds-card-sub" id="pull-feeds-sub-text">Tap to scan Brisbane City Council, Reddit, TikTok, venues & live feeds</span>
-            </div>
-          </div>
-          <div class="pull-feeds-card-action">
-            <span class="pull-feeds-btn-pill">Sync Now ✨</span>
-          </div>
-        </button>
-
-        <!-- Four Clean Filter Trigger Headers (Tap any to open selection pop-up) -->
-        <div class="filter-headers-grid">
-          <!-- 1: Date Range -->
-          <button type="button" class="filter-header-card" id="f-hdr-date" onclick="discover.openFilterModal('date')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">📅</span>
-              <span class="f-hdr-title">Date Range</span>
-              <span class="f-hdr-badge hidden" id="f-badge-date">Active</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="f-val-date">✨ All Dates</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 2: Suburb / Precinct -->
-          <button type="button" class="filter-header-card" id="f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">📍</span>
-              <span class="f-hdr-title">Suburb / Precinct</span>
-              <span class="f-hdr-badge hidden" id="f-badge-suburb">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="f-val-suburb">🗺️ All Suburbs</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 3: Vibe & Style -->
-          <button type="button" class="filter-header-card" id="f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">✨</span>
-              <span class="f-hdr-title">Vibe & Style</span>
-              <span class="f-hdr-badge hidden" id="f-badge-vibe">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="f-val-vibe">💫 All Vibes</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 4: Activities / Categories -->
-          <button type="button" class="filter-header-card" id="f-hdr-category" onclick="discover.openFilterModal('category')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">🌟</span>
-              <span class="f-hdr-title">Activities</span>
-              <span class="f-hdr-badge hidden" id="f-badge-category">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="f-val-category">🌟 All Activities</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
+      <!-- Chic Horizontal Mood & Filter Pills (Zero Clutter) -->
+      <div class="mood-chips-bar">
+        <div class="mood-chips-scroll" id="mood-chips-scroll">
+          <button type="button" class="mood-chip active" data-mood="all" onclick="discover.setMoodFilter('all')">✨ All</button>
+          <button type="button" class="mood-chip" data-mood="matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
+          <button type="button" class="mood-chip" data-mood="weekend" onclick="discover.setMoodFilter('weekend')">🥂 This Weekend</button>
+          <button type="button" class="mood-chip" data-mood="tonight" onclick="discover.setMoodFilter('tonight')">🔥 Tonight</button>
+          <button type="button" class="mood-chip" data-mood="dinner" onclick="discover.setMoodFilter('dinner')">🍷 Romantic Dinner</button>
+          <button type="button" class="mood-chip" data-mood="drinks" onclick="discover.setMoodFilter('drinks')">🍹 Rooftops & Drinks</button>
+          <button type="button" class="mood-chip" data-mood="outdoor" onclick="discover.setMoodFilter('outdoor')">🌿 Outdoors & Sun</button>
+          <button type="button" class="mood-chip" data-mood="shows" onclick="discover.setMoodFilter('shows')">🎭 Comedy & Shows</button>
+          <button type="button" class="mood-chip" data-mood="budget" onclick="discover.setMoodFilter('budget')">⚡ Budget & Free</button>
+          <button type="button" class="mood-chip mood-chip-filter-btn" onclick="discover.openFilterModal('suburb')">🎯 Filter ▾</button>
         </div>
+      </div>
 
-        <!-- Filter Sub-bar: Match / Voter Filter Dropdown & Clear Filters -->
-        <div class="filter-sub-bar">
-          <div class="filter-dropdowns">
-            <select id="vote-filter-select" onchange="discover.setFilter(this.value)" class="custom-select">
-              <option value="all">👀 Show All Activities</option>
-              <option value="matches">❤️ Mutual Matches (Both Want To Do)</option>
-              <option value="user1_likes">💖 Emma's Favorites</option>
-              <option value="user2_likes">💜 Jordan's Favorites</option>
-              <option value="in_planner">📌 Already in Planner</option>
-              <option value="unvoted">❓ Not Voted Yet</option>
-            </select>
-          </div>
-          <button type="button" id="btn-clear-all-filters" class="btn-clear-filters hidden" onclick="discover.resetFilters()">
-            ✕ Reset All Filters
-          </button>
-        </div>
+      <!-- Active Filter Status Pill (Visible only when deep custom filters active) -->
+      <div id="active-filter-pill-bar" class="active-filter-pill-bar hidden">
+        <span class="active-filter-summary" id="active-filter-summary">🎯 Filtered by: South Bank</span>
+        <button type="button" class="btn-clear-filter-pill" onclick="discover.resetFilters()" title="Reset to all">✕ Clear</button>
       </div>
 
       <!-- Live Match Banner (if matches exist) - Compact Ribbon -->
@@ -246,67 +164,17 @@
           </div>
         </div>
 
-        <!-- Four Clean Filter Trigger Headers for Swiper (Matching Discover View) -->
-        <div class="filter-headers-grid swiper-filter-grid">
-          <!-- 1: Date Range -->
-          <button type="button" class="filter-header-card" id="sw-f-hdr-date" onclick="discover.openFilterModal('date')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">📅</span>
-              <span class="f-hdr-title">Date Range</span>
-              <span class="f-hdr-badge hidden" id="sw-f-badge-date">Active</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="sw-f-val-date">✨ All Dates</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 2: Suburb / Precinct -->
-          <button type="button" class="filter-header-card" id="sw-f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">📍</span>
-              <span class="f-hdr-title">Suburb / Precinct</span>
-              <span class="f-hdr-badge hidden" id="sw-f-badge-suburb">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="sw-f-val-suburb">🗺️ All Suburbs</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 3: Vibe & Style -->
-          <button type="button" class="filter-header-card" id="sw-f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">✨</span>
-              <span class="f-hdr-title">Vibe & Style</span>
-              <span class="f-hdr-badge hidden" id="sw-f-badge-vibe">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="sw-f-val-vibe">💫 All Vibes</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-
-          <!-- 4: Activities / Categories -->
-          <button type="button" class="filter-header-card" id="sw-f-hdr-category" onclick="discover.openFilterModal('category')">
-            <div class="f-hdr-top">
-              <span class="f-hdr-icon">🌟</span>
-              <span class="f-hdr-title">Activities</span>
-              <span class="f-hdr-badge hidden" id="sw-f-badge-category">0</span>
-            </div>
-            <div class="f-hdr-bottom">
-              <span class="f-hdr-val" id="sw-f-val-category">🌟 All Activities</span>
-              <span class="f-hdr-chevron">▾</span>
-            </div>
-          </button>
-        </div>
-
-        <!-- Swiper Filter Meta Status -->
-        <div class="swiper-filter-meta">
-          <span class="swiper-filter-status" id="sw-filter-status">⚡ Swiping through activities</span>
-          <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
-            ✕ Clear Filters
-          </button>
+        <!-- Compact Swiper Mood & Filter Bar (Keeps Cards Tall & Uncluttered) -->
+        <div class="swiper-filter-compact-bar">
+          <span class="swiper-filter-status-pill" id="sw-filter-status">⚡ Swiping activities in Brisbane</span>
+          <div class="swiper-filter-actions">
+            <button type="button" class="btn-swiper-filter-pill" onclick="discover.openFilterModal('suburb')">
+              <span>🎯 Filter ▾</span>
+            </button>
+            <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
+              ✕ Clear
+            </button>
+          </div>
         </div>
 
         <!-- The Card Stack -->
@@ -399,142 +267,59 @@
 
     <!-- TAB 4: SHARED PLANNER & ITINERARY -->
     <section id="view-planner" class="view-panel">
-      <div class="planner-layout">
-        <!-- Main Itinerary / Calendar Schedule -->
-        <div class="planner-main">
-          <div class="planner-header">
-            <div>
-              <h2>Shared Date Planner & Itinerary</h2>
-              <p>Turn your mutual favorites into scheduled dates, weekend adventures, and day trips.</p>
-            </div>
-            <div class="planner-actions">
-              <button class="btn btn-outline" onclick="planner.exportCalendar()" title="Download .ics file for Apple/Google Calendar">
-                <span>🗓️ Export to Calendar (.ics)</span>
-              </button>
-              <button class="btn btn-outline" onclick="planner.copySummary()" title="Copy formatted date summary for iMessage/WhatsApp">
-                <span>📋 Copy Date Summary</span>
-              </button>
-            </div>
-          </div>
+      <!-- Hero Next Date Countdown Card (Rendered if any upcoming date exists) -->
+      <div id="planner-hero-card" class="planner-hero-card hidden">
+        <!-- Dynamically injected hero card for the next upcoming date night -->
+      </div>
 
-          <!-- Schedule Timeline (Upcoming Dates) -->
-          <div class="schedule-section">
-            <div class="section-title-row">
-              <h3>📅 Scheduled Date Dates</h3>
-              <span class="badge" id="scheduled-count-badge">0 Scheduled</span>
-            </div>
-            
-            <div id="scheduled-timeline" class="scheduled-timeline">
-              <!-- Dynamically rendered scheduled items -->
-            </div>
-            
-            <div id="scheduled-empty" class="empty-state">
-              <span class="empty-emoji">📆</span>
-              <h4>No dates scheduled yet</h4>
-              <p>Pick items from your Bucket List on the right or Discover feed to schedule your next date night!</p>
-            </div>
-          </div>
+      <!-- Segmented Toggle: [🗓️ Scheduled Dates (2)] | [💡 Mutual Bucket List (8)] -->
+      <div class="planner-segmented-bar">
+        <button type="button" class="planner-tab-btn active" id="tab-btn-scheduled" onclick="planner.switchView('scheduled')">
+          <span>🗓️ Scheduled Dates</span>
+          <span class="planner-pill-count" id="scheduled-count-badge">0</span>
+        </button>
+        <button type="button" class="planner-tab-btn" id="tab-btn-bucket" onclick="planner.switchView('bucket')">
+          <span>💡 Mutual Bucket List</span>
+          <span class="planner-pill-count" id="bucket-count-badge">0</span>
+        </button>
+      </div>
+
+      <!-- Quick Action Utilities (Export / Copy Summary) as clean inline pills -->
+      <div class="planner-sub-actions">
+        <button type="button" class="btn-planner-util" onclick="planner.exportCalendar()" title="Download .ics file for Apple/Google Calendar">
+          <span>🗓️ Add to Calendar (.ics)</span>
+        </button>
+        <button type="button" class="btn-planner-util" onclick="planner.copySummary()" title="Copy formatted date summary">
+          <span>📋 Copy Date Summary</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Scheduled Dates Timeline -->
+      <div id="planner-section-scheduled" class="planner-sub-section">
+        <div id="scheduled-timeline" class="scheduled-timeline">
+          <!-- Dynamically rendered scheduled items -->
         </div>
 
-        <!-- Right Side: Ideas Vault & Bucket List -->
-        <aside class="planner-sidebar">
-          <div class="sidebar-header">
-            <h3>💡 Date Ideas & Bucket List</h3>
-            <span class="badge" id="bucket-count-badge">0 Ideas</span>
-          </div>
-          <p class="sidebar-sub">All things both of you loved or saved. Schedule them anytime:</p>
-          
-          <div id="bucket-list" class="bucket-list-scroll">
-            <!-- Bucket list items -->
-          </div>
-
-          <div id="bucket-empty" class="empty-state">
-            <p>Swipe or vote ❤️ on activities in Discover to fill your bucket list!</p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- TAB 5: INTERACTIVE MAP -->
-    <section id="view-map" class="view-panel">
-      <!-- Four Clean Filter Trigger Headers for Map (Matching Swiper & Discover) -->
-      <div class="filter-headers-grid map-filter-grid">
-        <!-- 1: Date Range -->
-        <button type="button" class="filter-header-card" id="map-f-hdr-date" onclick="discover.openFilterModal('date')">
-          <div class="f-hdr-top">
-            <span class="f-hdr-icon">📅</span>
-            <span class="f-hdr-title">Date Range</span>
-            <span class="f-hdr-badge hidden" id="map-f-badge-date">Active</span>
-          </div>
-          <div class="f-hdr-bottom">
-            <span class="f-hdr-val" id="map-f-val-date">✨ All Dates</span>
-            <span class="f-hdr-chevron">▾</span>
-          </div>
-        </button>
-
-        <!-- 2: Suburb / Precinct -->
-        <button type="button" class="filter-header-card" id="map-f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
-          <div class="f-hdr-top">
-            <span class="f-hdr-icon">📍</span>
-            <span class="f-hdr-title">Suburb / Precinct</span>
-            <span class="f-hdr-badge hidden" id="map-f-badge-suburb">0</span>
-          </div>
-          <div class="f-hdr-bottom">
-            <span class="f-hdr-val" id="map-f-val-suburb">🗺️ All Suburbs</span>
-            <span class="f-hdr-chevron">▾</span>
-          </div>
-        </button>
-
-        <!-- 3: Vibe & Style -->
-        <button type="button" class="filter-header-card" id="map-f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
-          <div class="f-hdr-top">
-            <span class="f-hdr-icon">✨</span>
-            <span class="f-hdr-title">Vibe & Style</span>
-            <span class="f-hdr-badge hidden" id="map-f-badge-vibe">0</span>
-          </div>
-          <div class="f-hdr-bottom">
-            <span class="f-hdr-val" id="map-f-val-vibe">💫 All Vibes</span>
-            <span class="f-hdr-chevron">▾</span>
-          </div>
-        </button>
-
-        <!-- 4: Activities / Categories -->
-        <button type="button" class="filter-header-card" id="map-f-hdr-category" onclick="discover.openFilterModal('category')">
-          <div class="f-hdr-top">
-            <span class="f-hdr-icon">🌟</span>
-            <span class="f-hdr-title">Activities</span>
-            <span class="f-hdr-badge hidden" id="map-f-badge-category">0</span>
-          </div>
-          <div class="f-hdr-bottom">
-            <span class="f-hdr-val" id="map-f-val-category">🌟 All Activities</span>
-            <span class="f-hdr-chevron">▾</span>
-          </div>
-        </button>
-      </div>
-
-      <!-- Map Filter Meta Status -->
-      <div class="swiper-filter-meta map-filter-meta">
-        <span class="swiper-filter-status" id="map-filter-status">📍 Showing activities on map</span>
-        <button type="button" class="btn-clear-filters-mini hidden" id="map-btn-clear-filters" onclick="discover.resetFilters()">
-          ✕ Clear Filters
-        </button>
-      </div>
-
-      <div class="map-container-wrap">
-        <div class="map-sidebar">
-          <h3>Local Activities Map</h3>
-          <p id="map-subtext">Visualizing all activities around your area.</p>
-          <div class="map-legend">
-            <div class="legend-item"><span class="dot-legend" style="background:#ec4899"></span> Date Night & Romance</div>
-            <div class="legend-item"><span class="dot-legend" style="background:#f59e0b"></span> Food & Dining</div>
-            <div class="legend-item"><span class="dot-legend" style="background:#10b981"></span> Outdoor & Parks</div>
-            <div class="legend-item"><span class="dot-legend" style="background:#8b5cf6"></span> Music & Shows</div>
-          </div>
-          <div id="map-events-list" class="map-events-list">
-            <!-- List of events with jump-to-pin -->
-          </div>
+        <div id="scheduled-empty" class="empty-state">
+          <span class="empty-emoji">📆</span>
+          <h4>No dates scheduled yet</h4>
+          <p>Pick items from your Mutual Bucket List or Discover feed to lock in your next date night!</p>
+          <button class="btn btn-primary btn-sm" onclick="planner.switchView('bucket')">Browse Bucket List 💡</button>
         </div>
-        <div id="leaflet-map" class="map-canvas"></div>
+      </div>
+
+      <!-- Tab Content 2: Mutual Bucket List -->
+      <div id="planner-section-bucket" class="planner-sub-section hidden">
+        <div id="bucket-list" class="bucket-list-cards-grid">
+          <!-- Bucket list items -->
+        </div>
+
+        <div id="bucket-empty" class="empty-state hidden">
+          <span class="empty-emoji">✨</span>
+          <h4>Your bucket list is empty</h4>
+          <p>Swipe right ❤️ in Date Swiper or tap Love on activities to save dates here for later!</p>
+          <button class="btn btn-primary btn-sm" onclick="app.navigate('swiper')">Start Swiping 🔥</button>
+        </div>
       </div>
     </section>
 
@@ -739,6 +524,20 @@
           <input type="text" id="set-default-city" required>
         </div>
 
+        <!-- Live Internet Sync Section inside Settings -->
+        <div class="settings-sync-box" style="background:#f8fafc; border:1px solid var(--border); border-radius:14px; padding:0.9rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <span style="font-size:1.5rem;">🔄</span>
+            <div>
+              <strong style="font-size:0.92rem; display:block; color:var(--text-main);">Pull Live Internet Feeds</strong>
+              <span style="font-size:0.78rem; color:var(--text-muted); display:block;">Scan Reddit, TikTok, council & live gig feeds</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-refresh-sources" onclick="app.closeSettingsModal(); discover.refreshLiveSources();" style="padding:0.45rem 0.9rem; font-weight:700; white-space:nowrap; border-radius:9999px;">
+            Sync Now ✨
+          </button>
+        </div>
+
         <details class="advanced-settings">
           <summary>🔑 API Keys & Live Web Connectors (Optional)</summary>
           <div class="details-body">
@@ -886,7 +685,7 @@
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
-  <!-- Fixed Mobile Bottom Navigation Bar (iPhone & Android) -->
+  <!-- Fixed Mobile Bottom Navigation Bar (4 Clean Core Tabs) -->
   <nav class="mobile-bottom-bar" id="mobile-bottom-nav">
     <button class="mobile-nav-item active" data-tab="discover" onclick="app.navigate('discover')">
       <span class="m-icon">✨</span>
@@ -906,14 +705,7 @@
       <span class="m-label">Planner</span>
       <span class="m-badge count" id="m-planner-badge">0</span>
     </button>
-    <button class="mobile-nav-item" data-tab="map" onclick="app.navigate('map')">
-      <span class="m-icon">🗺️</span>
-      <span class="m-label">Map</span>
-    </button>
   </nav>
-
-  <!-- Leaflet JS (with fallback handling) -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- App Scripts -->
   <script src="js/events_data.js"></script>
@@ -923,7 +715,6 @@
   <script src="js/discover.js"></script>
   <script src="js/swiper.js"></script>
   <script src="js/planner.js"></script>
-  <script src="js/map.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

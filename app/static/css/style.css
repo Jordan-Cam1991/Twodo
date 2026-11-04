@@ -3374,3 +3374,502 @@ body {
     margin: 0;
   }
 }
+
+/* ==========================================================================
+   CHIC MOOD & FILTER CHIPS (DISCOVER VIEW)
+   ========================================================================== */
+.mood-chips-bar {
+  margin-top: 0.15rem;
+  margin-bottom: 0.85rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mood-chips-scroll {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.1rem 0.5rem 0.1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mood-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mood-chip {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.18s ease;
+}
+
+.mood-chip:hover {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: var(--primary);
+}
+
+.mood-chip.active {
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.35);
+}
+
+.mood-chip-badge {
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
+.mood-chip.active .mood-chip-badge.has-matches {
+  background: white;
+  color: #e11d48;
+}
+
+.mood-chip-filter-btn {
+  background: #f8fafc;
+  color: #64748b;
+  border-style: dashed;
+}
+
+/* Active Filter Dismissible Pill Bar */
+.active-filter-pill-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 12px;
+  padding: 0.45rem 0.85rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.82rem;
+  color: #be123c;
+  font-weight: 600;
+}
+
+.btn-clear-filter-pill {
+  background: white;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  border-radius: 9999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Double-Tap Heart Burst Animation */
+.card-media {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.heart-burst-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.3);
+  font-size: 4rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 15;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));
+  transition: opacity 0.2s ease;
+}
+
+.heart-burst-overlay.animate-burst {
+  animation: heartBurst 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes heartBurst {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+/* 1-Tap Location Maps Link */
+.card-map-link, .itin-map-link, .bucket-map-link {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.card-map-link:hover, .itin-map-link:hover, .bucket-map-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.map-link-arrow {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+/* Streamlined Card Actions */
+.card-actions-streamlined {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.vote-btn-row {
+  display: flex;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.btn-vote-pill {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.btn-vote-love:hover {
+  background: #fee2e2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+.btn-vote-love.active-love {
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.35);
+}
+
+.btn-vote-maybe:hover {
+  background: #fef3c7;
+  border-color: #fde68a;
+  color: #d97706;
+}
+
+.btn-vote-maybe.active-maybe {
+  background: #f59e0b;
+  color: white;
+  border-color: transparent;
+}
+
+.btn-vote-pass:hover {
+  background: #fee2e2;
+  border-color: #fecdd3;
+  color: #ef4444;
+}
+
+.btn-vote-pass.active-pass {
+  background: #64748b;
+  color: white;
+  border-color: transparent;
+}
+
+.card-utility-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.pill-chat-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.38rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #ddd6fe;
+  background: #f5f3ff;
+  color: #7c3aed;
+  transition: all 0.15s;
+}
+
+.pill-chat-share:hover {
+  background: #ede9fe;
+}
+
+/* Swiper Compact Bar */
+.swiper-filter-compact-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.swiper-filter-status-pill {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-swiper-filter-pill {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   UPGRADED PLANNER & HERO COUNTDOWN CARD
+   ========================================================================== */
+.planner-hero-card {
+  margin-bottom: 1.25rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #8b5cf6 100%);
+  color: white;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 8px 24px -4px rgba(244, 63, 94, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.planner-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hero-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.hero-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.hero-countdown-pill {
+  background: white;
+  color: #e11d48;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.hero-title {
+  margin: 0.2rem 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.hero-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.hero-map-link {
+  color: white;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.hero-notes {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.82rem;
+  margin-top: 0.2rem;
+}
+
+.hero-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btn-hero-subtle {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Planner Segmented Toggle Bar */
+.planner-segmented-bar {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 14px;
+  padding: 0.3rem;
+  margin-bottom: 0.85rem;
+  gap: 0.25rem;
+}
+
+.planner-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.planner-tab-btn.active {
+  background: white;
+  color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.planner-pill-count {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 9999px;
+}
+
+.planner-tab-btn.active .planner-pill-count {
+  background: #fdf2f8;
+  color: var(--primary);
+}
+
+.planner-sub-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.btn-planner-util {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-planner-util:hover {
+  background: #f8fafc;
+  color: var(--text-main);
+}
+
+/* Bucket List Cards Grid */
+.bucket-list-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.bucket-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.bucket-card .bucket-thumb {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.bucket-card-body {
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.bucket-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.bucket-card-header .bucket-cat {
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.bucket-card-body .bucket-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.bucket-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.bucket-card-actions .btn-sched-bucket {
+  flex: 1;
+}

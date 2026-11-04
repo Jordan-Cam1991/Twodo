@@ -93,11 +93,6 @@ const app = {
       swiper.initDeck();
     } else if (tabName === 'chat') {
       if (window.chatView) chatView.init();
-    } else if (tabName === 'map') {
-      setTimeout(() => {
-        mapView.init();
-        mapView.renderMarkers();
-      }, 100);
     } else if (tabName === 'planner') {
       planner.loadPlanner();
     }

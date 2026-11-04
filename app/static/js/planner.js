@@ -3,6 +3,7 @@
  */
 const planner = {
   items: [],
+  currentView: 'scheduled',
 
   async loadPlanner() {
     try {
@@ -13,6 +14,14 @@ const planner = {
     } catch (e) {
       console.error('Failed to load planner items:', e);
     }
+  },
+
+  switchView(view) {
+    this.currentView = view;
+    document.getElementById('tab-btn-scheduled')?.classList.toggle('active', view === 'scheduled');
+    document.getElementById('tab-btn-bucket')?.classList.toggle('active', view === 'bucket');
+    document.getElementById('planner-section-scheduled')?.classList.toggle('hidden', view !== 'scheduled');
+    document.getElementById('planner-section-bucket')?.classList.toggle('hidden', view !== 'bucket');
   },
 
   updateBadges() {
@@ -26,21 +35,82 @@ const planner = {
 
     if (badge) badge.textContent = this.items.length;
     if (mBadge) mBadge.textContent = this.items.length;
-    if (scheduledBadge) scheduledBadge.textContent = `${scheduled.length} Scheduled`;
-    if (bucketBadge) bucketBadge.textContent = `${bucket.length} Ideas`;
+    if (scheduledBadge) scheduledBadge.textContent = scheduled.length;
+    if (bucketBadge) bucketBadge.textContent = bucket.length;
   },
 
   renderPlanner() {
-    this.renderScheduled();
+    const scheduled = this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
+    this.renderHeroNextDate(scheduled);
+    this.renderScheduled(scheduled);
     this.renderBucketList();
   },
 
-  renderScheduled() {
+  renderHeroNextDate(scheduled) {
+    const heroEl = document.getElementById('planner-hero-card');
+    if (!heroEl) return;
+
+    if (!scheduled || scheduled.length === 0) {
+      heroEl.classList.add('hidden');
+      return;
+    }
+
+    // Sort by date ascending to find nearest date
+    const sorted = [...scheduled].sort((a, b) => new Date(a.scheduled_date) - new Date(b.scheduled_date));
+    const nextDate = sorted[0];
+
+    // Calculate countdown
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(nextDate.scheduled_date + 'T00:00:00');
+    const diffDays = Math.round((target - today) / (1000 * 60 * 60 * 24));
+
+    let countdownStr = '';
+    if (diffDays === 0) countdownStr = 'Tonight! 🥂';
+    else if (diffDays === 1) countdownStr = 'Tomorrow! 🌅';
+    else if (diffDays > 1) countdownStr = `In ${diffDays} days! 🎉`;
+    else countdownStr = 'Locked in ❤️';
+
+    const dayName = target.toLocaleDateString('en-US', { weekday: 'long' });
+    const monthName = target.toLocaleDateString('en-US', { month: 'short' });
+    const dayNum = target.getDate();
+
+    const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((nextDate.location_name || nextDate.city || 'Brisbane') + ', Brisbane')}`;
+
+    heroEl.innerHTML = `
+      <div class="planner-hero-inner">
+        <div class="hero-top-row">
+          <span class="hero-tag">💖 NEXT UPCOMING DATE</span>
+          <span class="hero-countdown-pill">${countdownStr}</span>
+        </div>
+        <h3 class="hero-title">${nextDate.title}</h3>
+        <div class="hero-meta-row">
+          <span>📅 ${dayName}, ${dayNum} ${monthName} • ${nextDate.time_slot || 'Evening'}</span>
+          <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="hero-map-link">${nextDate.location_name || nextDate.city} ↗</a></span>
+        </div>
+        ${nextDate.notes ? `<div class="hero-notes"><strong>💌 Date Notes:</strong> "${nextDate.notes}"</div>` : ''}
+        <div class="hero-actions-row">
+          <a href="${mapsUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-white">
+            🗺️ Open in Apple Maps
+          </a>
+          <button type="button" class="btn btn-sm btn-white" onclick="planner.exportCalendar()">
+            🗓️ Add to Calendar
+          </button>
+          <button type="button" class="btn btn-sm btn-hero-subtle" onclick="planner.openScheduleModal('${nextDate.event_id}', '${nextDate.title.replace(/'/g, "\\'")}', ${nextDate.id})">
+            ✏️ Reschedule
+          </button>
+        </div>
+      </div>
+    `;
+    heroEl.classList.remove('hidden');
+  },
+
+  renderScheduled(scheduledList = null) {
     const timeline = document.getElementById('scheduled-timeline');
     const empty = document.getElementById('scheduled-empty');
     if (!timeline) return;
 
-    const scheduled = this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
+    const scheduled = scheduledList || this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
 
     if (scheduled.length === 0) {
       timeline.innerHTML = '';
@@ -64,6 +134,8 @@ const planner = {
         ? `<span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700;">💰 Budget: $${item.budget}</span>` 
         : '';
 
+      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((item.location_name || item.city || 'Brisbane') + ', Brisbane')}`;
+
       return `
         <div class="itinerary-item">
           <div class="itinerary-date-col">
@@ -79,7 +151,7 @@ const planner = {
                 ${budgetHtml}
               </div>
               <div class="itin-meta">
-                <span>📍 ${item.location_name || item.city}</span> • 
+                <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="itin-map-link">${item.location_name || item.city} ↗</a></span> • 
                 <span>🎟️ ${item.price_str || 'See details'}</span>
               </div>
               ${notesHtml}
@@ -92,7 +164,7 @@ const planner = {
               <button class="btn btn-sm btn-secondary" onclick="planner.moveToBucketList(${item.id})">
                 📦 To Bucket List
               </button>
-              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem(${item.id})">
+              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem(${item.id})" title="Delete from itinerary">
                 🗑️
               </button>
             </div>
@@ -118,16 +190,26 @@ const planner = {
     empty?.classList.add('hidden');
 
     list.innerHTML = bucket.map(item => {
+      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((item.location_name || item.city || 'Brisbane') + ', Brisbane')}`;
+
       return `
-        <div class="bucket-item">
-          <img class="bucket-thumb" src="${item.image_url}" alt="" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80'">
-          <div class="bucket-info">
+        <div class="bucket-card">
+          <img class="bucket-thumb" src="${item.image_url}" alt="" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=300&q=80'">
+          <div class="bucket-card-body">
+            <div class="bucket-card-header">
+              <span class="bucket-cat">${item.category}</span>
+              <a href="${mapsUrl}" target="_blank" rel="noopener" class="bucket-map-link">📍 ${item.location_name || item.city} ↗</a>
+            </div>
             <h5 class="bucket-title">${item.title}</h5>
-            <span class="bucket-cat">${item.category} • ${item.location_name}</span>
+            <div class="bucket-card-actions">
+              <button class="btn btn-primary btn-sm btn-sched-bucket" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', ${item.id})">
+                📅 Plan Date Night
+              </button>
+              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem(${item.id})" title="Remove">
+                🗑️
+              </button>
+            </div>
           </div>
-          <button class="btn-sched-bucket" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', ${item.id})">
-            📅 Plan
-          </button>
         </div>
       `;
     }).join('');

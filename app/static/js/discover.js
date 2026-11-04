@@ -129,9 +129,8 @@ const discover = {
       this.updateMatchBanner();
       this.updateFilterHeaderBadges();
       
-      // Also update Swiper deck and Map if available
+      // Also update Swiper deck if available
       swiper.initDeck();
-      mapView.renderMarkers();
     } catch (e) {
       console.warn('API fetch warning, using offline activities vault:', e);
       const catParam = this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All';
@@ -154,7 +153,6 @@ const discover = {
       this.updateMatchBanner();
       this.updateFilterHeaderBadges();
       swiper.initDeck();
-      mapView.renderMarkers();
     }
   },
 
@@ -274,11 +272,12 @@ const discover = {
 
       return `
         <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
-          <div class="card-media">
+          <div class="card-media" ondblclick="discover.handleDoubleTap('${ev.id}')" title="Double-tap photo to Love ❤️">
             <img class="card-img" src="${ev.image_url}" alt="${ev.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${ev.source}</span>
             <span class="card-price-badge">${ev.price_str || ev.price_level}</span>
             ${matchBannerHtml}
+            <div class="heart-burst-overlay" id="burst-${ev.id}">❤️</div>
           </div>
 
           <div class="card-body">
@@ -286,7 +285,10 @@ const discover = {
             <h3 class="card-title">${ev.title}</h3>
             
             <div class="card-location">
-              <span>📍</span> <span>${ev.location_name || ev.city}</span>
+              <span>📍</span> 
+              <a href="https://maps.apple.com/?q=${encodeURIComponent((ev.location_name || ev.city || 'Brisbane') + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open directions in Apple / Google Maps">
+                ${ev.location_name || ev.city} <span class="map-link-arrow">↗</span>
+              </a>
             </div>
             
             <div class="card-time">
@@ -309,20 +311,20 @@ const discover = {
 
             ${loveNotesHtml}
 
-            <!-- Voting & Planning Action Bar -->
-            <div class="card-actions">
-              <div class="vote-btn-group">
-                <button class="btn-vote ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
-                  <span>❤️ Love</span>
+            <!-- Streamlined Voting & Planning Action Bar -->
+            <div class="card-actions-streamlined">
+              <div class="vote-btn-row">
+                <button class="btn-vote-pill btn-vote-love ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
+                  <span>❤️ ${loveActive ? 'Loved' : 'Love'}</span>
                 </button>
-                <button class="btn-vote ${maybeActive}" onclick="collaborative.handleVote('${ev.id}', 'maybe')" title="Maybe">
-                  <span>🤔</span>
+                <button class="btn-vote-pill btn-vote-maybe ${maybeActive}" onclick="collaborative.handleVote('${ev.id}', 'maybe')" title="Maybe">
+                  <span>🤔 Maybe</span>
                 </button>
-                <button class="btn-vote ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
-                  <span>❌</span>
+                <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
+                  <span>✕</span>
                 </button>
               </div>
-              <div class="card-secondary-actions">
+              <div class="card-utility-row">
                 ${noteBtnHtml}
                 ${chatShareBtnHtml}
                 ${scheduleBtnHtml}
@@ -334,12 +336,102 @@ const discover = {
     }).join('');
   },
 
+  currentMood: 'all',
+
+  handleDoubleTap(eventId) {
+    collaborative.handleVote(eventId, 'love');
+    const burst = document.getElementById(`burst-${eventId}`);
+    if (burst) {
+      burst.classList.add('animate-burst');
+      setTimeout(() => burst.classList.remove('animate-burst'), 850);
+    }
+    app.showToast('❤️ Loved! Double-tap saved');
+  },
+
+  setMoodFilter(mood) {
+    this.currentMood = mood;
+    this.currentPage = 1;
+
+    // Highlight active chip
+    document.querySelectorAll('.mood-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.mood === mood);
+    });
+
+    // Reset custom parameters
+    this.selectedCategories = [];
+    this.selectedVibes = [];
+    this.activeDateRange = 'all';
+
+    if (mood === 'all') {
+      this.activeFilter = 'all';
+    } else if (mood === 'matches') {
+      this.activeFilter = 'matches';
+    } else if (mood === 'weekend') {
+      this.activeFilter = 'all';
+      this.activeDateRange = 'this_weekend';
+    } else if (mood === 'tonight') {
+      this.activeFilter = 'all';
+      this.activeDateRange = 'today';
+    } else if (mood === 'dinner') {
+      this.activeFilter = 'all';
+      this.selectedCategories = ['Food & Drink'];
+    } else if (mood === 'drinks') {
+      this.activeFilter = 'all';
+      this.selectedVibes = ['Rooftop & Views', 'Cocktails & Wine'];
+    } else if (mood === 'outdoor') {
+      this.activeFilter = 'all';
+      this.selectedCategories = ['Outdoor & Adventure', 'Sightseeing & Nature'];
+    } else if (mood === 'shows') {
+      this.activeFilter = 'all';
+      this.selectedCategories = ['Comedy & Shows', 'Music & Concerts'];
+    } else if (mood === 'budget') {
+      this.activeFilter = 'all';
+      this.selectedVibes = ['Free / Low Cost', 'Casual & Fun'];
+    }
+
+    this.updateActiveFilterPillBar();
+    this.loadEvents(true);
+  },
+
+  updateActiveFilterPillBar() {
+    const bar = document.getElementById('active-filter-pill-bar');
+    const summary = document.getElementById('active-filter-summary');
+    if (!bar || !summary) return;
+
+    const parts = [];
+    if (this.selectedSuburbs && this.selectedSuburbs.length > 0) {
+      parts.push(`📍 ${this.selectedSuburbs.join(', ')}`);
+    }
+    if (this.selectedCategories && this.selectedCategories.length > 0 && this.currentMood === 'all') {
+      parts.push(`🌟 ${this.selectedCategories.join(', ')}`);
+    }
+    if (this.selectedVibes && this.selectedVibes.length > 0 && this.currentMood === 'all') {
+      parts.push(`✨ ${this.selectedVibes.join(', ')}`);
+    }
+    if (this.activeDateRange !== 'all' && this.currentMood === 'all') {
+      parts.push(`📅 ${this.getDateRangeLabel()}`);
+    }
+
+    if (parts.length > 0) {
+      summary.textContent = `🎯 Filtered by: ${parts.join(' • ')}`;
+      bar.classList.remove('hidden');
+    } else {
+      bar.classList.add('hidden');
+    }
+  },
+
   updateMatchBanner() {
     const banner = document.getElementById('matches-callout-banner');
     const title = document.getElementById('matches-banner-title');
-    if (!banner || !title) return;
+    const moodBadge = document.getElementById('mood-matches-count');
 
-    const matches = app.events.filter(e => e.is_match);
+    const matches = (app.events || []).filter(e => e.is_match);
+    if (moodBadge) {
+      moodBadge.textContent = matches.length;
+      moodBadge.classList.toggle('has-matches', matches.length > 0);
+    }
+
+    if (!banner || !title) return;
     if (matches.length > 0) {
       banner.classList.remove('hidden');
       title.textContent = `${matches.length} Mutual Date ${matches.length === 1 ? 'Match' : 'Matches'}!`;
@@ -726,12 +818,18 @@ const discover = {
     this.customStart = null;
     this.customEnd = null;
     this.activeFilter = 'all';
+    this.currentMood = 'all';
     
+    document.querySelectorAll('.mood-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.mood === 'all');
+    });
+
     const sInput = document.getElementById('search-input');
     if (sInput) sInput.value = '';
     const sel = document.getElementById('vote-filter-select');
     if (sel) sel.value = 'all';
 
+    this.updateActiveFilterPillBar();
     this.updateFilterHeaderBadges();
     this.loadEvents(true);
   },
