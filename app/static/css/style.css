@@ -1179,28 +1179,27 @@ body {
   opacity: 0.9;
 }
 
-/* Results Meta */
+/* Results Meta Count Header */
 .results-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.source-pills {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.source-tag {
-  background: #f1f5f9;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+  margin-bottom: 1.1rem;
+  padding: 0.6rem 0.95rem;
+  background: #f8fafc;
   border: 1px solid var(--border);
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-  font-size: 0.72rem;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#results-count-text {
+  font-size: 0.86rem;
   font-weight: 600;
+  color: #475569;
+  line-height: 1.4;
+  width: 100%;
 }
 
 /* Event Grid Cards */
