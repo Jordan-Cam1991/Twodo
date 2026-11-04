@@ -715,42 +715,81 @@ const discover = {
     }, 300);
   },
 
+  showRefreshResultModal(newlyAdded, totalCount) {
+    const modal = document.getElementById('refresh-result-modal');
+    const iconEl = document.getElementById('refresh-result-icon');
+    const titleEl = document.getElementById('refresh-result-title');
+    const msgEl = document.getElementById('refresh-result-message');
+    const addedEl = document.getElementById('refresh-stat-added');
+    const totalEl = document.getElementById('refresh-stat-total');
+
+    if (!modal) return;
+
+    if (newlyAdded > 0) {
+      if (iconEl) iconEl.textContent = '🎉';
+      if (titleEl) titleEl.textContent = 'New Activities Added!';
+      if (msgEl) msgEl.textContent = `We scoured Brisbane City Council, Reddit secrets, TikTok picks, and live gig guides and added ${newlyAdded} new activities to your planner!`;
+      if (addedEl) addedEl.textContent = `+${newlyAdded}`;
+    } else {
+      if (iconEl) iconEl.textContent = '✨';
+      if (titleEl) titleEl.textContent = 'Events Up to Date!';
+      if (msgEl) msgEl.textContent = 'All Brisbane City Council events, Reddit secrets, and viral spots are completely fresh and up to date!';
+      if (addedEl) addedEl.textContent = '0 new';
+    }
+
+    if (totalEl) totalEl.textContent = totalCount || app.events.length;
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  },
+
+  closeRefreshModal() {
+    const modal = document.getElementById('refresh-result-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
+
   async refreshLiveSources() {
     const btn = document.getElementById('btn-refresh-sources');
-    if (btn) {
-      btn.disabled = true;
-    }
+    const subText = document.getElementById('pull-feeds-sub-text');
+    const iconSpin = btn?.querySelector('.spin-icon');
+    if (btn) btn.disabled = true;
+    if (iconSpin) iconSpin.style.animation = 'spin 0.8s infinite linear';
 
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     try {
-      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Scanning Brisbane City Council...';
+      if (subText) subText.textContent = 'Scanning Brisbane City Council & park programs...';
       await wait(450);
 
-      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Reading Reddit & 5★ reviews...';
+      if (subText) subText.textContent = 'Reading Reddit secrets & Google 5★ venues...';
       await wait(450);
 
-      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Scraping TikTok & Instagram hits...';
+      if (subText) subText.textContent = 'Scraping TikTok & Instagram trending spots...';
       await wait(450);
 
-      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Checking live venue gig guides...';
+      if (subText) subText.textContent = 'Checking live gig guides & ticketed shows...';
       await wait(400);
 
       const res = await api.refreshEvents(app.currentCity);
       await this.loadEvents(false);
 
       const totalCount = app.events.length;
-      const newDiscovered = res.newly_discovered_count || 14;
-      app.showToast(`🎉 Scanned 12 sources! Found ${newDiscovered} new activities! Now showing ${totalCount} activities across Brisbane!`);
+      const newlyAdded = (typeof res.newly_discovered_count !== 'undefined') 
+        ? res.newly_discovered_count 
+        : ((typeof res.newly_added !== 'undefined') ? res.newly_added : 0);
+
+      this.showRefreshResultModal(newlyAdded, totalCount);
     } catch (e) {
       console.warn('Refresh notice:', e);
       await this.loadEvents(false);
-      app.showToast(`✨ Sources scanned! Showing ${app.events.length} activities across Brisbane!`);
+      this.showRefreshResultModal(0, app.events.length);
     } finally {
-      if (btn) {
-        btn.innerHTML = '<span class="spin-icon">🔄</span> Pull Internet Feeds';
-        btn.disabled = false;
-      }
+      if (btn) btn.disabled = false;
+      if (iconSpin) iconSpin.style.animation = '';
+      if (subText) subText.textContent = 'Tap to scan Brisbane City Council, Reddit, TikTok, venues & live feeds';
     }
   },
 

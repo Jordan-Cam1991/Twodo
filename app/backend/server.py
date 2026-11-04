@@ -189,9 +189,25 @@ class TwoDoHandler(BaseHTTPRequestHandler):
             city = body.get("city") or "Brisbane"
             lat = body.get("lat")
             lng = body.get("lng")
+
+            conn = get_connection()
+            before_count = conn.execute("SELECT COUNT(*) FROM events").fetchone()[0]
+            conn.close()
+
             events = fetch_all_sources(city=city, lat=lat, lng=lng)
             enriched = get_enriched_events(city=city)
-            self.send_json({"message": f"Successfully pulled {len(events)} events for {city}", "events": enriched})
+
+            conn = get_connection()
+            after_count = conn.execute("SELECT COUNT(*) FROM events").fetchone()[0]
+            conn.close()
+
+            newly_added = max(0, after_count - before_count)
+            self.send_json({
+                "message": f"Successfully pulled events for {city}",
+                "newly_discovered_count": newly_added,
+                "total_count": len(enriched),
+                "events": enriched
+            })
             return
 
         if path == "/api/events/custom":

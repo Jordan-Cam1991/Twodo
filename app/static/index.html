@@ -26,19 +26,41 @@
   <!-- Header / Navigation -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="brand" onclick="app.navigate('discover')">
-        <span class="brand-icon">💑</span>
-        <div class="brand-text">
-          <span class="brand-title">TwoDo</span>
-          <span class="brand-subtitle">Couple Adventures</span>
+      <div class="nav-top-row">
+        <div class="brand" onclick="app.navigate('discover')">
+          <span class="brand-icon">💑</span>
+          <div class="brand-text">
+            <span class="brand-title">TwoDo</span>
+            <span class="brand-subtitle">Couple Adventures</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Location Selector Pill -->
-      <div class="location-badge" onclick="app.openLocationModal()">
-        <span class="loc-icon">📍</span>
-        <span id="current-location-display">Brisbane, QLD</span>
-        <span class="badge-source">Internet Sync 🌐</span>
+        <!-- Desktop Navigation Tabs (Hidden on mobile) -->
+        <nav class="nav-tabs">
+          <button class="nav-btn active" data-tab="discover" onclick="app.navigate('discover')">
+            <span class="nav-icon">✨</span>
+            <span>Discover</span>
+          </button>
+          <button class="nav-btn" data-tab="swiper" onclick="app.navigate('swiper')">
+            <span class="nav-icon">🔥</span>
+            <span>Date Swiper</span>
+            <span class="tab-badge" id="swiper-badge">New</span>
+          </button>
+          <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
+            <span class="nav-icon">📅</span>
+            <span>Shared Planner</span>
+            <span class="planner-count" id="planner-count-badge">0</span>
+          </button>
+          <button class="nav-btn" data-tab="map" onclick="app.navigate('map')">
+            <span class="nav-icon">🗺️</span>
+            <span>Map</span>
+          </button>
+        </nav>
+
+        <!-- Settings Icon (Docked at Top Right Hand Corner) -->
+        <button class="btn-icon btn-settings-corner" onclick="app.openSettingsModal()" title="Couple Settings">
+          <span>⚙️</span>
+        </button>
       </div>
 
       <!-- Voter Mode Selector -->
@@ -57,36 +79,18 @@
         </button>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="nav-tabs">
-        <button class="nav-btn active" data-tab="discover" onclick="app.navigate('discover')">
-          <span class="nav-icon">✨</span>
-          <span>Discover</span>
+      <!-- Action Pills Row: + Button Extended to same size as Brisbane Button -->
+      <div class="header-pills-row">
+        <button type="button" class="action-pill add-activity-pill" onclick="app.openAddModal()" title="Add Custom Activity">
+          <span class="pill-icon">➕</span>
+          <span class="pill-text">Add Custom Activity</span>
         </button>
-        <button class="nav-btn" data-tab="swiper" onclick="app.navigate('swiper')">
-          <span class="nav-icon">🔥</span>
-          <span>Date Swiper</span>
-          <span class="tab-badge" id="swiper-badge">New</span>
-        </button>
-        <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
-          <span class="nav-icon">📅</span>
-          <span>Shared Planner</span>
-          <span class="planner-count" id="planner-count-badge">0</span>
-        </button>
-        <button class="nav-btn" data-tab="map" onclick="app.navigate('map')">
-          <span class="nav-icon">🗺️</span>
-          <span>Map</span>
-        </button>
-      </nav>
 
-      <!-- Action Buttons -->
-      <div class="header-actions">
-        <button class="btn btn-outline" onclick="app.openAddModal()" title="Add Custom Event">
-          <span>➕ Add Activity</span>
-        </button>
-        <button class="btn-icon" onclick="app.openSettingsModal()" title="Couple Settings">
-          <span>⚙️</span>
-        </button>
+        <div class="action-pill location-badge" onclick="app.openLocationModal()" title="Change Location">
+          <span class="pill-icon">📍</span>
+          <span id="current-location-display">Brisbane, QLD</span>
+          <span class="badge-source">Internet Sync 🌐</span>
+        </div>
       </div>
     </div>
   </header>
@@ -96,15 +100,22 @@
 
     <!-- TAB 1: DISCOVER VIEW -->
     <section id="view-discover" class="view-panel active">
-      <!-- Search & Category Header -->
+      <!-- Pull Internet Feeds Action Box (Replacing Search Bar) -->
       <div class="discover-controls">
-        <div class="search-bar-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-input" placeholder="Search concerts, exhibitions, Reddit gems, food markets, pottery, comedy, sports..." oninput="discover.debounceSearch()">
-          <button class="btn btn-sm btn-refresh" onclick="discover.refreshLiveSources()" id="btn-refresh-sources">
-            <span class="spin-icon">🔄</span> Pull Internet Feeds
-          </button>
-        </div>
+        <button type="button" class="pull-feeds-card" id="btn-refresh-sources" onclick="discover.refreshLiveSources()" title="Click to pull fresh Brisbane events">
+          <div class="pull-feeds-card-left">
+            <div class="pull-feeds-card-icon">
+              <span class="spin-icon">🔄</span>
+            </div>
+            <div class="pull-feeds-card-text">
+              <span class="pull-feeds-card-title">Pull Internet Feeds</span>
+              <span class="pull-feeds-card-sub" id="pull-feeds-sub-text">Tap to scan Brisbane City Council, Reddit, TikTok, venues & live feeds</span>
+            </div>
+          </div>
+          <div class="pull-feeds-card-action">
+            <span class="pull-feeds-btn-pill">Sync Now ✨</span>
+          </div>
+        </button>
 
         <!-- Four Clean Filter Trigger Headers (Tap any to open selection pop-up) -->
         <div class="filter-headers-grid">
@@ -623,6 +634,30 @@
           <button type="button" class="btn btn-primary" onclick="discover.applyModalFilter()">Apply Filter ✨</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- REFRESH FEEDBACK POP-UP MODAL -->
+  <div id="refresh-result-modal" class="modal-overlay hidden" onclick="discover.closeRefreshModal()">
+    <div class="modal-card refresh-result-card" onclick="event.stopPropagation()">
+      <div class="refresh-result-icon" id="refresh-result-icon">🎉</div>
+      <h3 class="refresh-result-title" id="refresh-result-title">New Activities Added!</h3>
+      <p class="refresh-result-message" id="refresh-result-message">We scoured Brisbane City Council, Reddit secrets, TikTok picks, and live gig guides!</p>
+      
+      <div class="refresh-result-stats">
+        <div class="refresh-result-stat-box">
+          <span class="stat-big-num" id="refresh-stat-added">+14</span>
+          <span class="stat-sub-label">Newly Added</span>
+        </div>
+        <div class="refresh-result-stat-box">
+          <span class="stat-big-num" id="refresh-stat-total">779</span>
+          <span class="stat-sub-label">Total Activities</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block" onclick="discover.closeRefreshModal()">
+        Explore Activities ✨
+      </button>
     </div>
   </div>
 

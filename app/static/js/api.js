@@ -481,7 +481,7 @@ const api = {
       const all = this.getLocalEnrichedEvents();
       return {
         events: all.events,
-        newly_discovered_count: newlyAdded.length > 0 ? newlyAdded.length : 12,
+        newly_discovered_count: newlyAdded.length,
         total_count: all.count,
         message: `Scanned 12 live sources across Brisbane!`
       };
