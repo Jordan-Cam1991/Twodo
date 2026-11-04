@@ -90,9 +90,6 @@ const planner = {
         </div>
         ${nextDate.notes ? `<div class="hero-notes"><strong>💌 Date Notes:</strong> "${nextDate.notes}"</div>` : ''}
         <div class="hero-actions-row">
-          <a href="${mapsUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-white">
-            🗺️ Open in Apple Maps
-          </a>
           <button type="button" class="btn btn-sm btn-white" onclick="planner.exportCalendar()">
             🗓️ Add to Calendar
           </button>

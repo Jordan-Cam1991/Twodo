@@ -1353,10 +1353,23 @@ const api = {
   // PLANNER API
   // ---------------------------------------------------------------------------
   async getPlanner() {
+    // One-time client purge of hardcoded legacy demo plans (Eat Street & Rooftop Cinema)
+    if (!localStorage.getItem('twodo_purged_demo_plans_v2')) {
+      try {
+        let cached = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+        cached = cached.filter(i => i.event_id !== 'bne-eat-street' && i.event_id !== 'bne-rooftop-cinema' && i.id !== 1 && i.id !== 2);
+        localStorage.setItem('twodo_planner', JSON.stringify(cached));
+      } catch (err) {}
+      localStorage.setItem('twodo_purged_demo_plans_v2', 'true');
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/planner`);
       const data = await res.json();
       if (data && Array.isArray(data.items)) {
+        // Strip any residual demo events
+        data.items = data.items.filter(i => i.event_id !== 'bne-eat-street' && i.event_id !== 'bne-rooftop-cinema');
+        data.count = data.items.length;
         localStorage.setItem('twodo_planner', JSON.stringify(data.items));
         return data;
       }
@@ -1365,6 +1378,7 @@ const api = {
       let items = [];
       try {
         items = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+        items = items.filter(i => i.event_id !== 'bne-eat-street' && i.event_id !== 'bne-rooftop-cinema');
       } catch (err) {}
       return { items: items, count: items.length };
     }

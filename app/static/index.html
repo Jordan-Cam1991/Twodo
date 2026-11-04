@@ -59,8 +59,12 @@
           </button>
         </nav>
 
-        <!-- Header Actions: ➕ Add Custom Date, ⚙️ Settings -->
+        <!-- Header Actions: 📅 Date Filter, ➕ Add Custom Date, ⚙️ Settings -->
         <div class="header-actions">
+          <button type="button" class="btn-icon header-icon-btn" id="btn-header-date" onclick="discover.openFilterModal('date')" title="Filter by Date" aria-label="Filter by Date">
+            <span>📅</span>
+            <span class="header-date-active-dot hidden" id="header-date-dot"></span>
+          </button>
           <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Date Activity" aria-label="Add Custom Activity">
             <span>➕</span>
           </button>

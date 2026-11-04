@@ -95,6 +95,24 @@ body {
   flex-shrink: 0;
   color: var(--text-main);
   padding: 0;
+  position: relative;
+}
+
+.header-icon-btn.filter-active {
+  background: #fff1f2 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.25) !important;
+}
+
+.header-date-active-dot {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f43f5e;
+  border: 2px solid white;
 }
 
 .header-icon-btn:hover {
@@ -1321,7 +1339,7 @@ body {
 .card-media {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 145px;
   background: #cbd5e1;
   overflow: hidden;
 }
@@ -1339,14 +1357,14 @@ body {
 
 .card-source-badge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 0.5rem;
+  left: 0.5rem;
   background: rgba(15, 23, 42, 0.82);
   backdrop-filter: blur(8px);
   color: white;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  padding: 0.25rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -1354,14 +1372,14 @@ body {
 
 .card-price-badge {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.5rem;
+  right: 0.5rem;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(8px);
   color: var(--text-main);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  padding: 0.25rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 6px;
   box-shadow: var(--shadow-sm);
 }
@@ -1373,102 +1391,113 @@ body {
   right: 0;
   background: linear-gradient(90deg, #f43f5e, #8b5cf6);
   color: white;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
   text-align: center;
-  padding: 0.35rem;
+  padding: 0.25rem 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 /* Card Body */
 .card-body {
-  padding: 1.15rem;
+  padding: 0.75rem 0.95rem 0.85rem 0.95rem;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 .card-category {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.15rem;
 }
 
 .card-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1.35;
-  margin-bottom: 0.45rem;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
   color: var(--text-main);
 }
 
+.card-meta-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.card-meta-line .meta-dot {
+  color: #cbd5e1;
+  font-size: 0.7rem;
+}
+
 .card-location, .card-time {
-  font-size: 0.83rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-bottom: 0.25rem;
-}
-
-.card-time {
-  margin-bottom: 0.65rem;
+  gap: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .card-desc {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #475569;
-  margin-top: 0.5rem;
-  margin-bottom: 0.75rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .card-tip {
   background: #fdf2f8;
-  border-left: 3px solid var(--primary);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0 6px 6px 0;
-  font-size: 0.78rem;
+  border-left: 2.5px solid var(--primary);
+  padding: 0.35rem 0.6rem;
+  border-radius: 0 5px 5px 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
   color: #9d174d;
-  margin-top: 0.4rem;
-  margin-bottom: 0.75rem;
+  margin: 0.25rem 0 0.45rem 0;
 }
 
 .card-tags {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .card-tag {
   background: #f1f5f9;
   color: #475569;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  padding: 0.2rem 0.5rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
 }
 
 /* Couple Voting Status Row */
 .card-couple-status {
   background: #f8fafc;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 0.65rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.78rem;
-  margin: 0 -1.15rem 1rem -1.15rem;
+  font-size: 0.74rem;
+  margin: 0.25rem 0 0.45rem 0;
 }
 
 .vote-partner-tag {
@@ -2608,39 +2637,79 @@ body {
   }
 
   .event-card {
-    border-radius: 20px !important;
+    border-radius: 16px !important;
     width: 100% !important;
     box-sizing: border-box;
   }
 
   .card-media {
-    height: 200px !important;
+    height: 140px !important;
   }
 
-  .card-actions {
-    flex-direction: column !important;
-    gap: 0.65rem !important;
-    width: 100% !important;
+  .card-body {
+    padding: 0.75rem 0.85rem !important;
   }
 
-  .vote-btn-group {
-    width: 100% !important;
-    display: flex !important;
+  .card-title {
+    font-size: 1.02rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .card-meta-line {
+    font-size: 0.76rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .card-tip {
+    padding: 0.25rem 0.5rem !important;
+    margin: 0.2rem 0 0.35rem 0 !important;
+    font-size: 0.72rem !important;
+  }
+
+  .card-couple-status {
+    padding: 0.3rem 0.55rem !important;
+    margin: 0.2rem 0 0.35rem 0 !important;
+    font-size: 0.72rem !important;
+  }
+
+  .card-actions-streamlined {
     gap: 0.35rem !important;
+    padding-top: 0.4rem !important;
   }
 
-  .btn-vote {
+  .vote-btn-row {
+    gap: 0.25rem !important;
+  }
+
+  .btn-vote-pill {
+    height: 36px !important;
+    font-size: 0.8rem !important;
+    padding: 0.3rem 0.35rem !important;
+  }
+
+  .card-utility-row {
+    gap: 0.3rem !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .card-utility-row .btn-card-extra {
     flex: 1 !important;
-    height: 46px !important;
-    font-size: 0.92rem !important;
+    height: 32px !important;
+    font-size: 0.75rem !important;
+    padding: 0.2rem 0.4rem !important;
     justify-content: center !important;
+    white-space: nowrap !important;
   }
 
-  .btn-schedule-pill {
-    width: 100% !important;
-    height: 44px !important;
+  .card-utility-row .btn-schedule-pill {
+    flex: 1.3 !important;
+    width: auto !important;
+    height: 32px !important;
+    font-size: 0.75rem !important;
+    padding: 0.2rem 0.45rem !important;
     justify-content: center !important;
-    font-size: 0.9rem !important;
+    white-space: nowrap !important;
   }
 
   /* Tinder Swiper View Mobile */
@@ -3525,15 +3594,15 @@ body {
 .card-actions-streamlined {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
   border-top: 1px solid var(--border);
 }
 
 .vote-btn-row {
   display: flex;
-  gap: 0.45rem;
+  gap: 0.35rem;
   width: 100%;
 }
 
@@ -3542,10 +3611,10 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
-  padding: 0.55rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.86rem;
+  gap: 0.25rem;
+  padding: 0.42rem 0.4rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   border: 1px solid var(--border);
@@ -3594,17 +3663,36 @@ body {
 .card-utility-row {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.card-utility-row .btn-card-extra {
+  flex: 1;
+  justify-content: center;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.card-utility-row .btn-schedule-pill {
+  flex: 1.3;
+  justify-content: center;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  white-space: nowrap;
 }
 
 .pill-chat-share {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.38rem 0.75rem;
+  padding: 0.32rem 0.65rem;
   border-radius: 9999px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid #ddd6fe;

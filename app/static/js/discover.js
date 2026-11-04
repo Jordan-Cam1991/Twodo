@@ -284,15 +284,12 @@ const discover = {
             <div class="card-category">${ev.category}</div>
             <h3 class="card-title">${ev.title}</h3>
             
-            <div class="card-location">
-              <span>📍</span> 
-              <a href="https://maps.apple.com/?q=${encodeURIComponent((ev.location_name || ev.city || 'Brisbane') + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open directions in Apple / Google Maps">
-                ${ev.location_name || ev.city} <span class="map-link-arrow">↗</span>
+            <div class="card-meta-line">
+              <a href="https://maps.apple.com/?q=${encodeURIComponent((ev.location_name || ev.city || 'Brisbane') + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open in Apple / Google Maps">
+                📍 ${ev.location_name || ev.city} <span class="map-link-arrow">↗</span>
               </a>
-            </div>
-            
-            <div class="card-time">
-              <span>⏰</span> <span>${ev.time_str || ev.start_date || 'Flexible timing'}</span>
+              <span class="meta-dot">•</span>
+              <span class="card-time-span">⏰ ${ev.time_str || ev.start_date || 'Flexible'}</span>
             </div>
 
             ${tipHtml}
@@ -449,6 +446,9 @@ const discover = {
   // FILTER MODAL POPUP & MULTI-SELECT ENGINE
   // ---------------------------------------------------------------------------
   openFilterModal(type) {
+    if (typeof app !== 'undefined' && app.activeTab && app.activeTab !== 'discover') {
+      app.navigate('discover');
+    }
     this.currentModalType = type;
     const def = this.filterDefinitions[type];
     if (!def) return;
@@ -683,9 +683,14 @@ const discover = {
   },
 
   updateFilterHeaderBadges() {
-    // 1. Date
+    // 1. Date (including header 📅 button)
     const isDateFiltered = this.activeDateRange !== 'all';
     const dateLabel = this.getDateRangeLabel();
+    const btnHeaderDate = document.getElementById('btn-header-date');
+    const headerDateDot = document.getElementById('header-date-dot');
+    if (btnHeaderDate) btnHeaderDate.classList.toggle('filter-active', isDateFiltered);
+    if (headerDateDot) headerDateDot.classList.toggle('hidden', !isDateFiltered);
+
     ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const dateVal = document.getElementById(`${prefix}-val-date`);
       const dateBadge = document.getElementById(`${prefix}-badge-date`);
