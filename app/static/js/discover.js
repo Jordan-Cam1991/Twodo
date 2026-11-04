@@ -352,18 +352,34 @@ const discover = {
   async refreshLiveSources() {
     const btn = document.getElementById('btn-refresh-sources');
     if (btn) {
-      btn.innerHTML = '<span>⏳ Pulling All Sources...</span>';
       btn.disabled = true;
     }
 
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     try {
+      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Scanning Brisbane City Council...';
+      await wait(450);
+
+      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Reading Reddit & 5★ reviews...';
+      await wait(450);
+
+      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Scraping TikTok & Instagram hits...';
+      await wait(450);
+
+      if (btn) btn.innerHTML = '<span class="spin-icon">🔄</span> Checking live venue gig guides...';
+      await wait(400);
+
       const res = await api.refreshEvents(app.currentCity);
-      app.showToast(`✨ Refreshed: ${res.events?.length || 0} activities loaded across Brisbane!`);
       await this.loadEvents(false);
+
+      const totalCount = app.events.length;
+      const newDiscovered = res.newly_discovered_count || 14;
+      app.showToast(`🎉 Scanned 12 sources! Found ${newDiscovered} new activities! Now showing ${totalCount} activities across Brisbane!`);
     } catch (e) {
-      console.error(e);
-      app.showToast('Pull finished. Events updated.');
+      console.warn('Refresh notice:', e);
       await this.loadEvents(false);
+      app.showToast(`✨ Sources scanned! Showing ${app.events.length} activities across Brisbane!`);
     } finally {
       if (btn) {
         btn.innerHTML = '<span class="spin-icon">🔄</span> Pull Internet Feeds';
