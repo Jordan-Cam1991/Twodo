@@ -412,9 +412,9 @@ const discover = {
     }
 
     if (this.currentMood === 'emma-loves') {
-      parts.push(`❤️ Emma's Loved Ideas`);
+      parts.push(`❤️ Emma's Loves`);
     } else if (this.currentMood === 'jordan-loves') {
-      parts.push(`💜 Jordan's Loved Ideas`);
+      parts.push(`💜 Jordan's Loves`);
     } else if (this.currentMood === 'matches') {
       parts.push(`💖 Mutual Date Matches`);
     }
