@@ -281,15 +281,9 @@ const api = {
       ev.user1_name = u1;
       ev.user2_name = u2;
 
-      let isMatch = false;
-      let matchLevel = 'none';
-      if (v1 === 'love' && v2 === 'love') {
-        isMatch = true;
-        matchLevel = 'double_love';
-      } else if (['love', 'maybe'].includes(v1) && ['love', 'maybe'].includes(v2)) {
-        isMatch = true;
-        matchLevel = 'mutual_interest';
-      }
+      // STRICT MATCH RULE: Only both voting 'love' is a match!
+      const isMatch = Boolean(v1 === 'love' && v2 === 'love');
+      const matchLevel = isMatch ? 'double_love' : ((['love', 'maybe'].includes(v1) && ['love', 'maybe'].includes(v2)) ? 'mutual_interest' : 'none');
       ev.is_match = isMatch;
       ev.match_level = matchLevel;
 
@@ -1249,15 +1243,9 @@ const api = {
     const v1 = votes[`${eventId}_${u1}`];
     const v2 = votes[`${eventId}_${u2}`];
 
-    let isMatch = false;
-    let matchLevel = 'none';
-    if (v1 === 'love' && v2 === 'love') {
-      isMatch = true;
-      matchLevel = 'double_love';
-    } else if (['love', 'maybe'].includes(v1) && ['love', 'maybe'].includes(v2)) {
-      isMatch = true;
-      matchLevel = 'mutual_interest';
-    }
+    // STRICT MATCH RULE: Only both voting 'love' is a match!
+    const isMatch = Boolean(v1 === 'love' && v2 === 'love');
+    const matchLevel = isMatch ? 'double_love' : ((['love', 'maybe'].includes(v1) && ['love', 'maybe'].includes(v2)) ? 'mutual_interest' : 'none');
 
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/votes`, {

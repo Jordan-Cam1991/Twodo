@@ -260,14 +260,9 @@ def get_enriched_events(city=None, category=None, search=None, vote_filter=None,
         v1 = item.get("u1_vote")
         v2 = item.get("u2_vote")
         
-        is_match = False
-        match_level = "none"
-        if v1 == "love" and v2 == "love":
-            is_match = True
-            match_level = "double_love"
-        elif (v1 in ["love", "maybe"]) and (v2 in ["love", "maybe"]):
-            is_match = True
-            match_level = "mutual_interest"
+        # STRICT MATCH: Only when BOTH partners vote 'love' is it a match
+        is_match = bool(v1 == "love" and v2 == "love")
+        match_level = "double_love" if is_match else ("mutual_interest" if (v1 in ["love", "maybe"] and v2 in ["love", "maybe"]) else "none")
             
         item["is_match"] = is_match
         item["match_level"] = match_level

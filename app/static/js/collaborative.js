@@ -5,26 +5,39 @@ const collaborative = {
   currentMatchEvent: null,
 
   async handleVote(eventId, voteType) {
+    const isTogether = app.currentVoter === 'both';
+    const u1 = app.profile?.user1_name || 'Emma';
+    const u2 = app.profile?.user2_name || 'Jordan';
     const activeVoter = app.getActiveVoterName();
     const event = app.events.find(e => e.id === eventId);
     if (!event) return;
 
-    // If 'together' mode is active, vote for current primary or both
     try {
-      const res = await api.vote(eventId, activeVoter, voteType);
-      
-      // Update local state
-      if (activeVoter === app.profile.user1_name) {
+      let res;
+      if (isTogether) {
+        // Together Mode: record the vote for both partners
+        await api.vote(eventId, u1, voteType);
+        res = await api.vote(eventId, u2, voteType);
         event.u1_vote = voteType;
-      } else {
         event.u2_vote = voteType;
+      } else {
+        res = await api.vote(eventId, activeVoter, voteType);
+        if (activeVoter === u1) {
+          event.u1_vote = voteType;
+        } else {
+          event.u2_vote = voteType;
+        }
       }
 
-      event.is_match = res.is_match;
-      event.match_level = res.match_level;
+      // STRICT MATCH RULE: Only double love (both partners voted 'love') is a match!
+      const isStrictMatch = Boolean(event.u1_vote === 'love' && event.u2_vote === 'love');
+      event.is_match = isStrictMatch;
+      event.match_level = isStrictMatch ? 'double_love' : 'none';
 
-      // Celebrate if new match!
-      if (res.is_match && (voteType === 'love' || voteType === 'maybe')) {
+      // Celebrate ONLY if:
+      // 1. Both partners loved the event (isStrictMatch is true)
+      // 2. The vote action itself was 'love' (NEVER celebrate a maybe or a pass!)
+      if (isStrictMatch && voteType === 'love') {
         this.triggerMatchCelebration(event);
       } else {
         app.showToast(voteType === 'love' ? '❤️ Saved to Bucket List!' : (voteType === 'maybe' ? '🤔 Noted as maybe' : 'Passed'));
@@ -49,10 +62,14 @@ const collaborative = {
     const preview = document.getElementById('match-preview-card');
 
     if (partnerName) {
-      const other = app.getActiveVoterName() === app.profile.user1_name 
-        ? app.profile.user2_name 
-        : app.profile.user1_name;
-      partnerName.textContent = other;
+      if (app.currentVoter === 'both') {
+        partnerName.textContent = `${app.profile?.user1_name || 'Emma'} and ${app.profile?.user2_name || 'Jordan'}`;
+      } else {
+        const other = app.getActiveVoterName() === app.profile.user1_name 
+          ? (app.profile.user2_name || 'Jordan')
+          : (app.profile.user1_name || 'Emma');
+        partnerName.textContent = other;
+      }
     }
 
     if (preview && event) {

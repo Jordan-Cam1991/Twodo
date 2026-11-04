@@ -294,18 +294,24 @@ class TwoDoHandler(BaseHTTPRequestHandler):
                 self.send_error_json("event_id and user_name are required")
                 return
 
+            profile = get_couple_profile()
+            u1 = profile.get("user1_name", "Emma")
+            u2 = profile.get("user2_name", "Jordan")
+
             conn = get_connection()
             with conn:
-                if vote == "clear":
-                    conn.execute("DELETE FROM votes WHERE event_id = ? AND user_name = ?", (event_id, user_name))
-                else:
-                    conn.execute("""
-                    INSERT INTO votes (event_id, user_name, vote, updated_at)
-                    VALUES (?, ?, ?, ?)
-                    ON CONFLICT(event_id, user_name) DO UPDATE SET
-                        vote = excluded.vote,
-                        updated_at = excluded.updated_at
-                    """, (event_id, user_name, vote, datetime.now().isoformat()))
+                voters_to_update = [u1, u2] if user_name.lower() in ["together", "both"] else [user_name]
+                for v_user in voters_to_update:
+                    if vote == "clear":
+                        conn.execute("DELETE FROM votes WHERE event_id = ? AND user_name = ?", (event_id, v_user))
+                    else:
+                        conn.execute("""
+                        INSERT INTO votes (event_id, user_name, vote, updated_at)
+                        VALUES (?, ?, ?, ?)
+                        ON CONFLICT(event_id, user_name) DO UPDATE SET
+                            vote = excluded.vote,
+                            updated_at = excluded.updated_at
+                        """, (event_id, v_user, vote, datetime.now().isoformat()))
 
                 if vote == "love":
                     existing = conn.execute("SELECT id FROM planner_items WHERE event_id = ?", (event_id,)).fetchone()
@@ -315,9 +321,6 @@ class TwoDoHandler(BaseHTTPRequestHandler):
                         VALUES (?, 'bucket_list', ?)
                         """, (event_id, datetime.now().isoformat()))
 
-            profile = get_couple_profile()
-            u1 = profile.get("user1_name", "Emma")
-            u2 = profile.get("user2_name", "Partner")
             v1_row = conn.execute("SELECT vote FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u1)).fetchone()
             v2_row = conn.execute("SELECT vote FROM votes WHERE event_id = ? AND user_name = ?", (event_id, u2)).fetchone()
             conn.close()
@@ -325,14 +328,9 @@ class TwoDoHandler(BaseHTTPRequestHandler):
             v1 = v1_row["vote"] if v1_row else None
             v2 = v2_row["vote"] if v2_row else None
 
-            is_match = False
-            match_level = "none"
-            if v1 == "love" and v2 == "love":
-                is_match = True
-                match_level = "double_love"
-            elif (v1 in ["love", "maybe"]) and (v2 in ["love", "maybe"]):
-                is_match = True
-                match_level = "mutual_interest"
+            # STRICT MATCH: Only when BOTH partners vote 'love' is it a match!
+            is_match = bool(v1 == "love" and v2 == "love")
+            match_level = "double_love" if is_match else ("mutual_interest" if (v1 in ["love", "maybe"] and v2 in ["love", "maybe"]) else "none")
 
             self.send_json({
                 "success": True,
