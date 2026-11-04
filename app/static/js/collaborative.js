@@ -14,6 +14,15 @@ const collaborative = {
 
     try {
       let res;
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        if (isTogether) {
+          await firebaseService.saveVote(eventId, u1, voteType, note);
+          res = await firebaseService.saveVote(eventId, u2, voteType, note);
+        } else {
+          res = await firebaseService.saveVote(eventId, activeVoter, voteType, note);
+        }
+      }
+
       if (isTogether) {
         // Together Mode: record the vote for both partners
         await api.vote(eventId, u1, voteType, note);

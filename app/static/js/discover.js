@@ -460,6 +460,44 @@ const discover = {
     }
   },
 
+  refreshWithLatestVotes() {
+    if (!app.events || app.events.length === 0) return;
+
+    const u1 = app.profile?.user1_name || 'Partner 1';
+    const u2 = app.profile?.user2_name || 'Partner 2';
+    const votes = (typeof firebaseService !== 'undefined' && firebaseService.votesMap) ? firebaseService.votesMap : {};
+    const notes = (typeof firebaseService !== 'undefined' && firebaseService.notesMap) ? firebaseService.notesMap : {};
+
+    let newlyMatchedEvent = null;
+
+    app.events.forEach(ev => {
+      const prevMatch = ev.is_match;
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
+      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote;
+      ev.u1_vote = v1;
+      ev.u2_vote = v2;
+      if (notes[`${ev.id}_${u1}`] !== undefined) ev.u1_note = notes[`${ev.id}_${u1}`];
+      if (notes[`${ev.id}_${u2}`] !== undefined) ev.u2_note = notes[`${ev.id}_${u2}`];
+
+      const isMatch = Boolean(v1 === 'love' && v2 === 'love');
+      ev.is_match = isMatch;
+      ev.match_level = isMatch ? 'double_love' : 'none';
+
+      // Detect if an event just became a match from partner's real-time vote
+      if (!prevMatch && isMatch) {
+        newlyMatchedEvent = ev;
+      }
+    });
+
+    this.renderEvents();
+    this.updateMatchBanner();
+    if (window.swiper) swiper.initDeck();
+
+    if (newlyMatchedEvent && collaborative.triggerMatchCelebration) {
+      collaborative.triggerMatchCelebration(newlyMatchedEvent);
+    }
+  },
+
   loadMore() {
     this.currentPage++;
     this.renderEvents();

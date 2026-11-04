@@ -7,8 +7,12 @@ const planner = {
 
   async loadPlanner() {
     try {
-      const data = await api.getPlanner();
-      this.items = data.items || [];
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        this.items = firebaseService.plannerItems || [];
+      } else {
+        const data = await api.getPlanner();
+        this.items = data.items || [];
+      }
       this.renderPlanner();
       this.updateBadges();
     } catch (e) {
@@ -247,7 +251,19 @@ const planner = {
     const budget = document.getElementById('sched-budget').value;
 
     try {
+      const isFb = Boolean(typeof firebaseService !== 'undefined' && firebaseService.coupleId);
+      const ev = (app.events || []).find(e => e.id === eventId) || {};
+
       if (plannerId) {
+        if (isFb) {
+          await firebaseService.updatePlannerItem(plannerId, {
+            status: 'scheduled',
+            scheduled_date: scheduledDate,
+            time_slot: timeSlot,
+            notes,
+            budget: parseFloat(budget) || 0
+          });
+        }
         await api.updatePlanner(plannerId, {
           status: 'scheduled',
           scheduled_date: scheduledDate,
@@ -256,6 +272,22 @@ const planner = {
           budget
         });
       } else {
+        if (isFb) {
+          await firebaseService.addPlannerItem({
+            event_id: eventId,
+            status: 'scheduled',
+            scheduled_date: scheduledDate,
+            time_slot: timeSlot,
+            notes,
+            budget: parseFloat(budget) || 0,
+            title: ev.title || 'Couple Date',
+            category: ev.category || 'Date Night',
+            location_name: ev.location_name || '',
+            city: ev.city || app.currentCity || 'Brisbane',
+            image_url: ev.image_url || '',
+            price_str: ev.price_str || '$$'
+          });
+        }
         await api.addToPlanner({
           event_id: eventId,
           status: 'scheduled',
@@ -278,6 +310,12 @@ const planner = {
 
   async moveToBucketList(plannerId) {
     try {
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        await firebaseService.updatePlannerItem(plannerId, {
+          status: 'bucket_list',
+          scheduled_date: null
+        });
+      }
       await api.updatePlanner(plannerId, {
         status: 'bucket_list',
         scheduled_date: null
@@ -292,6 +330,9 @@ const planner = {
   async deleteItem(plannerId) {
     if (!confirm('Remove this activity from your planner?')) return;
     try {
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        await firebaseService.deletePlannerItem(plannerId);
+      }
       await api.deletePlannerItem(plannerId);
       app.showToast('Removed from planner.');
       await this.loadPlanner();

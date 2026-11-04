@@ -559,6 +559,18 @@
           </div>
         </details>
 
+        <!-- Couple Account & Log Out Section -->
+        <div class="settings-account-card">
+          <div class="settings-account-info">
+            <span class="settings-account-badge">💑 Active Couple</span>
+            <strong id="settings-account-names">Emma & Jordan</strong>
+            <span class="settings-account-email" id="settings-account-email">Signed In</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm btn-logout" onclick="authUI.handleLogout()">
+            🚪 Log Out
+          </button>
+        </div>
+
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="app.closeSettingsModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Settings</button>
@@ -688,6 +700,119 @@
     </div>
   </div>
 
+  <!-- COUPLE AUTHENTICATION & WELCOME MODAL -->
+  <div id="auth-modal" class="modal-overlay hidden">
+    <div class="modal-card auth-card">
+      <div class="auth-header">
+        <div class="auth-logo-badge">💑</div>
+        <h2 class="auth-title">TwoDo</h2>
+        <p class="auth-sub">Your Private Couple Adventure & Date Space</p>
+      </div>
+
+      <!-- Segmented Tab Switcher: Sign In vs Create Space -->
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab-btn active" id="auth-tab-btn-login" onclick="authUI.switchTab('login')">
+          Sign In
+        </button>
+        <button type="button" class="auth-tab-btn" id="auth-tab-btn-register" onclick="authUI.switchTab('register')">
+          New Couple? Sign Up ✨
+        </button>
+      </div>
+
+      <!-- TAB 1: SIGN IN -->
+      <div id="auth-section-login" class="auth-section">
+        <form id="auth-login-form">
+          <div class="auth-error-box hidden" id="auth-login-error"></div>
+          
+          <div class="form-group">
+            <label for="login-email">Shared Couple Email</label>
+            <input type="email" id="login-email" placeholder="e.g. callumandkaitlin@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-login-submit">
+            💖 Sign In as Couple
+          </button>
+
+          <div class="auth-helper-row">
+            <button type="button" class="btn-text-link" onclick="authUI.switchTab('forgot')">Forgot Password?</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 2: REGISTER NEW COUPLE -->
+      <div id="auth-section-register" class="auth-section hidden">
+        <form id="auth-register-form">
+          <div class="auth-error-box hidden" id="auth-register-error"></div>
+
+          <p class="auth-hint">Create one shared login for both of you to use on your phones:</p>
+
+          <div class="form-group">
+            <label for="reg-email">Couple Email</label>
+            <input type="email" id="reg-email" placeholder="e.g. callumandkaitlin@gmail.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password (min 6 characters)</label>
+            <input type="password" id="reg-password" placeholder="Create a password" minlength="6" required autocomplete="new-password">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="reg-user1">Partner 1 Name</label>
+              <input type="text" id="reg-user1" placeholder="e.g. Callum" required>
+            </div>
+            <div class="form-group flex-1">
+              <label for="reg-user2">Partner 2 Name</label>
+              <input type="text" id="reg-user2" placeholder="e.g. Kaitlin" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-city">Home City</label>
+            <select id="reg-city" class="auth-select">
+              <option value="Brisbane" selected>Brisbane</option>
+              <option value="Gold Coast">Gold Coast</option>
+              <option value="Sunshine Coast">Sunshine Coast</option>
+              <option value="Sydney">Sydney</option>
+              <option value="Melbourne">Melbourne</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-register-submit">
+            ✨ Create Our Couple Space
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 3: FORGOT PASSWORD -->
+      <div id="auth-section-forgot" class="auth-section hidden">
+        <form id="auth-forgot-form">
+          <div class="auth-error-box hidden" id="auth-forgot-error"></div>
+
+          <p class="auth-hint">Enter your account email and we'll send a password reset link:</p>
+
+          <div class="form-group">
+            <label for="forgot-email">Account Email</label>
+            <input type="email" id="forgot-email" placeholder="e.g. callumandkaitlin@gmail.com" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-forgot-submit">
+            Send Reset Link 📬
+          </button>
+
+          <div class="auth-helper-row" style="margin-top:1rem; text-align:center;">
+            <button type="button" class="btn-text-link" onclick="authUI.switchTab('login')">← Back to Sign In</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -713,7 +838,15 @@
     </button>
   </nav>
 
+  <!-- Firebase SDKs (Compat v10.12.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
   <!-- App Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-service.js"></script>
+  <script src="js/auth-ui.js"></script>
   <script src="js/events_data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/chat.js"></script>

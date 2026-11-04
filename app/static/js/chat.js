@@ -41,7 +41,11 @@ const chatView = {
 
   async loadMessages() {
     try {
-      this.messages = await api.getChatMessages();
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        this.messages = firebaseService.messages || [];
+      } else {
+        this.messages = await api.getChatMessages();
+      }
       this.renderMessages();
     } catch (e) {
       console.warn('Chat load error:', e);
@@ -142,6 +146,9 @@ const chatView = {
     this.renderMessages();
 
     try {
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        await firebaseService.sendChatMessage(sender, text, this.activeSharingEvent);
+      }
       const saved = await api.sendChatMessage(sender, text, this.activeSharingEvent);
       this.activeSharingEvent = null;
       this.hideShareBanner();

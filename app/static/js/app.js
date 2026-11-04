@@ -10,6 +10,11 @@ const app = {
   async init() {
     console.log('Initializing TwoDo Couple App...');
     try {
+      // Initialize Firebase Multi-Couple Service
+      if (typeof firebaseService !== 'undefined') {
+        firebaseService.init();
+      }
+
       this.profile = await api.getProfile();
       this.currentCity = this.profile.default_city || 'Brisbane';
       this.updateProfileUI();
@@ -29,8 +34,16 @@ const app = {
     const u1 = this.profile.user1_name || 'Emma';
     const u2 = this.profile.user2_name || 'Jordan';
 
-    document.getElementById('voter1-display').textContent = u1;
-    document.getElementById('voter2-display').textContent = u2;
+    const v1Disp = document.getElementById('voter1-display');
+    const v2Disp = document.getElementById('voter2-display');
+    if (v1Disp) v1Disp.textContent = u1;
+    if (v2Disp) v2Disp.textContent = u2;
+
+    const emmaLabel = document.getElementById('mood-chip-emma-label');
+    const jordanLabel = document.getElementById('mood-chip-jordan-label');
+    if (emmaLabel) emmaLabel.textContent = `${u1}'s Loves`;
+    if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
+
     const locDisp = document.getElementById('current-location-display');
     if (locDisp) {
       locDisp.textContent = this.currentCity;
@@ -155,7 +168,7 @@ const app = {
     const ebKey = document.getElementById('set-eb-key')?.value.trim();
 
     try {
-      this.profile = await api.updateProfile({
+      const updateData = {
         user1_name: u1,
         user2_name: u2,
         default_city: city,
@@ -163,7 +176,13 @@ const app = {
           ticketmaster: tmKey,
           eventbrite: ebKey
         }
-      });
+      };
+
+      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+        await firebaseService.updateCoupleProfile(updateData);
+      }
+
+      this.profile = await api.updateProfile(updateData);
 
       this.currentCity = city;
       this.updateProfileUI();

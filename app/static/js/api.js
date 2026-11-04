@@ -122,26 +122,39 @@ const api = {
       customEvents = JSON.parse(localStorage.getItem('twodo_custom_events') || '[]');
     } catch (e) {}
 
-    const allEvents = [...customEvents, ...rawSeeds];
+    const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
+    const allEvents = [...fbCustoms, ...customEvents, ...rawSeeds];
 
     // Load couple profile
-    const profile = JSON.parse(localStorage.getItem('twodo_profile') || '{"user1_name":"Emma","user2_name":"Jordan"}');
-    const u1 = profile.user1_name || 'Emma';
-    const u2 = profile.user2_name || 'Jordan';
+    const profile = (typeof firebaseService !== 'undefined' && firebaseService.profile)
+      ? firebaseService.profile
+      : JSON.parse(localStorage.getItem('twodo_profile') || '{"user1_name":"Emma","user2_name":"Jordan"}');
+    const u1 = profile.user1_name || 'Partner 1';
+    const u2 = profile.user2_name || 'Partner 2';
 
-    // Load votes & notes
+    // Load votes & notes (merge Firebase real-time votes with local storage)
     let votes = {};
     let notes = {};
     try {
       votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
       notes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
     } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+      votes = { ...votes, ...firebaseService.votesMap };
+    }
+    if (typeof firebaseService !== 'undefined' && firebaseService.notesMap) {
+      notes = { ...notes, ...firebaseService.notesMap };
+    }
 
     // Load planner items
     let planner = [];
-    try {
-      planner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
-    } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.plannerItems && firebaseService.plannerItems.length > 0) {
+      planner = firebaseService.plannerItems;
+    } else {
+      try {
+        planner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+      } catch (e) {}
+    }
     const plannerMap = new Map();
     planner.forEach(p => plannerMap.set(p.event_id, p));
 
