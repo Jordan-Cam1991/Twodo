@@ -249,26 +249,23 @@ const discover = {
         loveNotesHtml = `<div class="card-love-notes-box">${notesList.join('')}</div>`;
       }
 
-      // Add/Edit Note button for active user
+      // Add/Edit Note button for active user (compact label to fit 3-col grid)
       const myExistingNote = (activeVoter === u1) ? ev.u1_note : ev.u2_note;
       const isMyLove = (currentVote === 'love');
-      const noteBtnHtml = isMyLove
-        ? `<button type="button" class="btn-card-extra btn-card-note ${myExistingNote ? 'has-note' : ''}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note for partner' : 'Add a note explaining why you love this'}">
-             <span>💬 ${myExistingNote ? 'Edit Note' : '+ Note'}</span>
-           </button>`
-        : `<button type="button" class="btn-card-extra btn-card-note-prompt" onclick="collaborative.openNoteModal('${ev.id}')" title="Love this date and add a note for your partner">
-             <span>💬 Love & Note</span>
-           </button>`;
+      const noteLabel = myExistingNote ? 'Edit Note' : '+ Note';
+      const noteBtnHtml = `<button type="button" class="btn-card-extra btn-card-note ${myExistingNote ? 'has-note' : (isMyLove ? 'is-love-note' : '')}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note for partner' : 'Add a note explaining why you love this'}">
+        <span>💬 ${noteLabel}</span>
+      </button>`;
 
       const chatShareBtnHtml = `<button type="button" class="btn-card-extra btn-card-chat" onclick="chatView.shareEventToChat('${ev.id}')" title="Chat about this date idea">
         <span>💬 Chat</span>
       </button>`;
 
-      // Planner action button
+      // Planner action button (compact label to fit 3-col grid)
       const isInPlanner = !!ev.planner_id;
       const scheduleBtnHtml = isInPlanner
-        ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', ${ev.planner_id})">✓ In Planner</button>`
-        : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)">+ Plan Date</button>`;
+        ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', ${ev.planner_id})"><span>✓ Planned</span></button>`
+        : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)"><span>+ Plan Date</span></button>`;
 
       return `
         <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
@@ -317,8 +314,9 @@ const discover = {
                 <button class="btn-vote-pill btn-vote-maybe ${maybeActive}" onclick="collaborative.handleVote('${ev.id}', 'maybe')" title="Maybe">
                   <span>🤔 Maybe</span>
                 </button>
-                <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
-                  <span>✕</span>
+                <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass on this idea">
+                  <span class="pass-icon">✕</span>
+                  <span>${passActive ? 'Passed' : 'Pass'}</span>
                 </button>
               </div>
               <div class="card-utility-row">

@@ -2677,39 +2677,22 @@ body {
     padding-top: 0.4rem !important;
   }
 
-  .vote-btn-row {
-    gap: 0.25rem !important;
-  }
-
-  .btn-vote-pill {
-    height: 36px !important;
-    font-size: 0.8rem !important;
-    padding: 0.3rem 0.35rem !important;
-  }
-
+  .vote-btn-row,
   .card-utility-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 0.3rem !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
+    width: 100% !important;
   }
 
-  .card-utility-row .btn-card-extra {
-    flex: 1 !important;
-    height: 32px !important;
-    font-size: 0.75rem !important;
-    padding: 0.2rem 0.4rem !important;
-    justify-content: center !important;
-    white-space: nowrap !important;
-  }
-
+  .btn-vote-pill,
+  .card-utility-row .btn-card-extra,
   .card-utility-row .btn-schedule-pill {
-    flex: 1.3 !important;
-    width: auto !important;
-    height: 32px !important;
-    font-size: 0.75rem !important;
-    padding: 0.2rem 0.45rem !important;
+    width: 100% !important;
+    height: 36px !important;
+    font-size: 0.74rem !important;
+    padding: 0 0.25rem !important;
     justify-content: center !important;
-    white-space: nowrap !important;
   }
 
   /* Tinder Swiper View Mobile */
@@ -3590,7 +3573,7 @@ body {
   opacity: 0.7;
 }
 
-/* Streamlined Card Actions */
+/* Streamlined Card Actions (Perfect 3x2 Aligned Grid) */
 .card-actions-streamlined {
   display: flex;
   flex-direction: column;
@@ -3600,90 +3583,185 @@ body {
   border-top: 1px solid var(--border);
 }
 
-.vote-btn-row {
-  display: flex;
-  gap: 0.35rem;
-  width: 100%;
+.vote-btn-row,
+.card-utility-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.35rem !important;
+  width: 100% !important;
+  align-items: stretch !important;
 }
 
-.btn-vote-pill {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  padding: 0.42rem 0.4rem;
-  border-radius: 9999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  border: 1px solid var(--border);
+/* Base button properties shared across all 6 buttons */
+.btn-vote-pill,
+.card-utility-row .btn-card-extra,
+.card-utility-row .btn-schedule-pill {
+  width: 100% !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+  padding: 0 0.35rem !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: pointer !important;
+  border: 1.5px solid var(--border);
   background: #f8fafc;
   color: #475569;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+.btn-vote-pill span,
+.card-utility-row .btn-card-extra span,
+.card-utility-row .btn-schedule-pill span {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Row 1: Love Button */
 .btn-vote-love:hover {
-  background: #fee2e2;
-  border-color: #fecdd3;
-  color: #e11d48;
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
 }
 
 .btn-vote-love.active-love {
-  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.35);
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.32) !important;
 }
 
+/* Row 1: Maybe Button */
 .btn-vote-maybe:hover {
-  background: #fef3c7;
-  border-color: #fde68a;
-  color: #d97706;
+  background: #fef3c7 !important;
+  border-color: #fde68a !important;
+  color: #d97706 !important;
 }
 
 .btn-vote-maybe.active-maybe {
-  background: #f59e0b;
-  color: white;
-  border-color: transparent;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.32) !important;
+}
+
+/* Row 1: Pass (✕) Button - Enhanced Design */
+.btn-vote-pass {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+.btn-vote-pass .pass-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 17px !important;
+  height: 17px !important;
+  border-radius: 50% !important;
+  background: #fee2e2 !important;
+  color: #ef4444 !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  margin-right: 0.2rem !important;
+  flex-shrink: 0 !important;
+  transition: all 0.2s ease !important;
 }
 
 .btn-vote-pass:hover {
-  background: #fee2e2;
-  border-color: #fecdd3;
-  color: #ef4444;
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+}
+
+.btn-vote-pass:hover .pass-icon {
+  background: #ef4444 !important;
+  color: white !important;
+  transform: scale(1.1) rotate(90deg);
 }
 
 .btn-vote-pass.active-pass {
-  background: #64748b;
-  color: white;
-  border-color: transparent;
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.28) !important;
 }
 
-.card-utility-row {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  width: 100%;
+.btn-vote-pass.active-pass .pass-icon {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
 }
 
-.card-utility-row .btn-card-extra {
-  flex: 1;
-  justify-content: center;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 9999px;
-  white-space: nowrap;
+/* Row 2: Note Button */
+.card-utility-row .btn-card-note {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #475569 !important;
 }
 
+.card-utility-row .btn-card-note:hover {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+}
+
+.card-utility-row .btn-card-note.has-note {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+}
+
+.card-utility-row .btn-card-note.is-love-note {
+  background: #fff5f5 !important;
+  border-color: #fed7d7 !important;
+  color: #c53030 !important;
+}
+
+/* Row 2: Chat Button */
+.card-utility-row .btn-card-chat {
+  background: #f5f3ff !important;
+  border: 1.5px solid #ddd6fe !important;
+  color: #7c3aed !important;
+}
+
+.card-utility-row .btn-card-chat:hover {
+  background: #ede9fe !important;
+  border-color: #c4b5fd !important;
+  color: #6d28d9 !important;
+}
+
+/* Row 2: Plan Date Button */
 .card-utility-row .btn-schedule-pill {
-  flex: 1.3;
-  justify-content: center;
-  padding: 0.3rem 0.55rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 9999px;
-  white-space: nowrap;
+  background: #0f172a !important;
+  border: 1.5px solid #0f172a !important;
+  color: white !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2) !important;
+}
+
+.card-utility-row .btn-schedule-pill:hover {
+  background: #1e293b !important;
+  border-color: #1e293b !important;
+}
+
+.card-utility-row .btn-schedule-pill.in-itinerary {
+  background: #ecfdf5 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  color: #065f46 !important;
+  box-shadow: none !important;
+}
+
+.card-utility-row .btn-schedule-pill.in-itinerary:hover {
+  background: #d1fae5 !important;
+  border-color: #6ee7b7 !important;
 }
 
 .pill-chat-share {
