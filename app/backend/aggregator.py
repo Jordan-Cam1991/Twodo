@@ -273,9 +273,9 @@ def get_enriched_events(city=None, category=None, search=None, vote_filter=None,
 
         if vote_filter == "matches" and not is_match:
             continue
-        elif vote_filter == "user1_likes" and v1 != "love":
+        elif vote_filter in ("user1_likes", "emma_likes", "emma_loves") and v1 != "love":
             continue
-        elif vote_filter == "user2_likes" and v2 != "love":
+        elif vote_filter in ("user2_likes", "jordan_likes", "jordan_loves") and v2 != "love":
             continue
         elif vote_filter == "in_planner" and not item.get("planner_id"):
             continue

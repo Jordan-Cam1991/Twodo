@@ -3474,6 +3474,12 @@ body {
   color: var(--primary);
 }
 
+.mood-chip[data-mood="jordan-loves"]:hover {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #7c3aed;
+}
+
 .mood-chip.active {
   background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
   color: white;
@@ -3481,17 +3487,34 @@ body {
   box-shadow: 0 3px 10px rgba(244, 63, 94, 0.35);
 }
 
+.mood-chip[data-mood="jordan-loves"].active {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 3px 10px rgba(139, 92, 246, 0.35);
+}
+
 .mood-chip-badge {
-  background: rgba(255, 255, 255, 0.25);
+  background: #f1f5f9;
+  color: #475569;
   font-size: 0.72rem;
   font-weight: 800;
-  padding: 1px 6px;
+  padding: 1px 7px;
   border-radius: 9999px;
+  margin-left: 0.15rem;
+}
+
+.mood-chip.active .mood-chip-badge {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
 }
 
 .mood-chip.active .mood-chip-badge.has-matches {
   background: white;
   color: #e11d48;
+}
+
+.mood-chip[data-mood="jordan-loves"].active .mood-chip-badge.has-matches {
+  background: white;
+  color: #7c3aed;
 }
 
 .mood-chip-filter-btn {

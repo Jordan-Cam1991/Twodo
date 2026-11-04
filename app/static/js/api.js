@@ -306,8 +306,8 @@ const api = {
 
       // Match / Voter filter
       if (filter === 'matches' && !isMatch) continue;
-      if (filter === 'user1_likes' && v1 !== 'love') continue;
-      if (filter === 'user2_likes' && v2 !== 'love') continue;
+      if (['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter) && v1 !== 'love') continue;
+      if (['user2_likes', 'jordan_likes', 'jordan_loves', 'jordan-loves'].includes(filter) && v2 !== 'love') continue;
       if (filter === 'in_planner' && !ev.planner_id) continue;
       if (filter === 'unvoted' && (v1 || v2)) continue;
 

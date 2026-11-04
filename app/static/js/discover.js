@@ -361,6 +361,10 @@ const discover = {
       this.activeFilter = 'all';
     } else if (mood === 'matches') {
       this.activeFilter = 'matches';
+    } else if (mood === 'emma-loves') {
+      this.activeFilter = 'user1_likes';
+    } else if (mood === 'jordan-loves') {
+      this.activeFilter = 'user2_likes';
     } else if (mood === 'weekend') {
       this.activeFilter = 'all';
       this.activeDateRange = 'this_weekend';
@@ -407,6 +411,14 @@ const discover = {
       parts.push(`📅 ${this.getDateRangeLabel()}`);
     }
 
+    if (this.currentMood === 'emma-loves') {
+      parts.push(`❤️ Emma's Loved Ideas`);
+    } else if (this.currentMood === 'jordan-loves') {
+      parts.push(`💜 Jordan's Loved Ideas`);
+    } else if (this.currentMood === 'matches') {
+      parts.push(`💖 Mutual Date Matches`);
+    }
+
     if (parts.length > 0) {
       summary.textContent = `🎯 Filtered by: ${parts.join(' • ')}`;
       bar.classList.remove('hidden');
@@ -419,11 +431,24 @@ const discover = {
     const banner = document.getElementById('matches-callout-banner');
     const title = document.getElementById('matches-banner-title');
     const moodBadge = document.getElementById('mood-matches-count');
+    const emmaBadge = document.getElementById('mood-emma-count');
+    const jordanBadge = document.getElementById('mood-jordan-count');
 
     const matches = (app.events || []).filter(e => e.is_match);
+    const emmaCount = (app.events || []).filter(e => e.u1_vote === 'love').length;
+    const jordanCount = (app.events || []).filter(e => e.u2_vote === 'love').length;
+
     if (moodBadge) {
       moodBadge.textContent = matches.length;
       moodBadge.classList.toggle('has-matches', matches.length > 0);
+    }
+    if (emmaBadge) {
+      emmaBadge.textContent = emmaCount;
+      emmaBadge.classList.toggle('has-matches', emmaCount > 0);
+    }
+    if (jordanBadge) {
+      jordanBadge.textContent = jordanCount;
+      jordanBadge.classList.toggle('has-matches', jordanCount > 0);
     }
 
     if (!banner || !title) return;
