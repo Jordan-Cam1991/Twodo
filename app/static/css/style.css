@@ -68,9 +68,17 @@ body {
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  width: 100%;
 }
 
-.btn-settings-corner {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.header-icon-btn {
   background: white;
   border: 1px solid var(--border);
   border-radius: 50%;
@@ -82,13 +90,25 @@ body {
   font-size: 1.15rem;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
+  color: var(--text-main);
+  padding: 0;
+}
+
+.header-icon-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.header-icon-btn:active {
+  transform: scale(0.95);
+  background: #f1f5f9;
 }
 
 .btn-settings-corner:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
   transform: rotate(30deg);
 }
 
@@ -2338,20 +2358,32 @@ body {
     width: 100% !important;
   }
 
-  .btn-settings-corner {
-    background: white !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 50% !important;
+  .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .header-icon-btn {
     width: 38px !important;
     height: 38px !important;
+    border-radius: 50% !important;
+    background: white !important;
+    border: 1px solid var(--border) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     font-size: 1.15rem !important;
-    cursor: pointer !important;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
-    margin-left: auto !important;
+    cursor: pointer !important;
     flex-shrink: 0 !important;
+    padding: 0 !important;
+  }
+
+  .btn-settings-corner {
+    margin-left: 0 !important;
   }
 
   /* Hide Desktop Top Tabs on Mobile */
@@ -2372,46 +2404,6 @@ body {
   .voter-pill {
     padding: 0.35rem 0.6rem !important;
     font-size: 0.76rem !important;
-  }
-
-  /* Header Pills: + Add Activity and Location Buttons identical matching size */
-  .header-pills-row {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.45rem !important;
-    width: 100% !important;
-  }
-
-  .add-activity-pill,
-  .location-badge {
-    width: 100% !important;
-    min-height: 40px !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.5rem !important;
-    padding: 0.45rem 1rem !important;
-    border-radius: 9999px !important;
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
-    background: #f1f5f9 !important;
-    border: 1px solid var(--border) !important;
-    color: var(--text-main) !important;
-    box-sizing: border-box !important;
-    cursor: pointer !important;
-    transition: all 0.15s ease !important;
-    text-decoration: none !important;
-  }
-
-  .add-activity-pill:active,
-  .location-badge:active {
-    background: #e2e8f0 !important;
-    transform: scale(0.99);
-  }
-
-  .add-activity-pill .pill-text {
-    display: inline !important;
   }
 
   /* PURE VERTICAL SCROLLING - NO HORIZONTAL SCROLL BARS */

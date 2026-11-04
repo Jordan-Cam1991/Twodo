@@ -31,7 +31,11 @@ const app = {
 
     document.getElementById('voter1-display').textContent = u1;
     document.getElementById('voter2-display').textContent = u2;
-    document.getElementById('current-location-display').textContent = this.currentCity;
+    const locDisp = document.getElementById('current-location-display');
+    if (locDisp) {
+      locDisp.textContent = this.currentCity;
+      if (locDisp.parentElement) locDisp.parentElement.title = `Current City: ${this.currentCity} (Tap to change)`;
+    }
 
     const setU1 = document.getElementById('set-user1-name');
     const setU2 = document.getElementById('set-user2-name');
@@ -114,7 +118,11 @@ const app = {
     if (!input) return;
 
     this.currentCity = input;
-    document.getElementById('current-location-display').textContent = this.currentCity;
+    const locDisp = document.getElementById('current-location-display');
+    if (locDisp) {
+      locDisp.textContent = this.currentCity;
+      if (locDisp.parentElement) locDisp.parentElement.title = `Current City: ${this.currentCity} (Tap to change)`;
+    }
     this.closeLocationModal();
 
     this.showToast(`🔍 Pulling internet events for ${this.currentCity}...`);
