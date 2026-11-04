@@ -1,0 +1,2 @@
+# TwoDo uses Python 3 standard library (no heavy third-party dependencies required)
+# Ready for instant, lightweight deployment on Render.com

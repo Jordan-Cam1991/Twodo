@@ -106,5 +106,19 @@ Stuff to do/
 
 ## ⚙️ Configuration & Customization
 - **Change Default City**: Click the location pill in the navigation bar to pick from quick presets (*Brisbane*, *Sydney*, *Melbourne*, *Gold Coast*, *New York*, *London*, etc.) or type any city name.
-- **Partner Profiles**: Click the ⚙️ settings icon to customize partner names (e.g. *Emma & Luke*) and partner colors.
+- **Partner Profiles**: Click the ⚙️ settings icon to customize partner names (e.g. *Emma & Jordan*) and partner colors.
 - **API Keys (Optional)**: In settings, you can add personal API keys for Ticketmaster or Eventbrite for higher rate limits. By default, TwoDo works immediately using public directory feeds and seed generators.
+
+---
+
+## 🚀 Deploying to Render.com
+
+TwoDo is pre-configured for 1-click deployment on [Render.com](https://render.com):
+1. In your Render dashboard, click **New +** → **Web Service**.
+2. Select your GitHub repository: `https://github.com/Jordan-Cam1991/Twodo.git`.
+3. Render automatically picks up `render.yaml` and `Procfile`:
+   - **Runtime**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt || true`
+   - **Start Command**: `python3 server.py ${PORT:-5050}`
+   - **Plan**: `Free`
+4. Click **Deploy**! Render will deploy your app with a free HTTPS URL (e.g. `https://twodo-xxxx.onrender.com`) that you and Jordan can bookmark and use on both your iPhones and Android devices with pure vertical scrolling.

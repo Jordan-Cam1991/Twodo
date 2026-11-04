@@ -201,18 +201,40 @@ def get_enriched_events(city=None, category=None, search=None, vote_filter=None,
         params.extend([c_param, c_param])
 
     if category and category != "All":
-        query += " AND e.category = ?"
-        params.append(category)
+        if isinstance(category, str):
+            cats = [c.strip() for c in category.split(",") if c.strip() and c.strip().lower() != "all"]
+        else:
+            cats = [c for c in category if c and str(c).lower() != "all"]
+        if cats:
+            placeholders = ",".join(["?"] * len(cats))
+            query += f" AND e.category IN ({placeholders})"
+            params.extend(cats)
 
     if suburb and suburb != "All":
-        query += " AND (LOWER(e.location_name) LIKE ? OR LOWER(e.tags) LIKE ? OR LOWER(e.title) LIKE ?)"
-        sub_param = f"%{suburb.strip().lower()}%"
-        params.extend([sub_param, sub_param, sub_param])
+        if isinstance(suburb, str):
+            subs = [s.strip() for s in suburb.split(",") if s.strip() and s.strip().lower() != "all"]
+        else:
+            subs = [s for s in suburb if s and str(s).lower() != "all"]
+        if subs:
+            clauses = []
+            for sub in subs:
+                clauses.append("(LOWER(e.location_name) LIKE ? OR LOWER(e.tags) LIKE ? OR LOWER(e.title) LIKE ?)")
+                sub_param = f"%{sub.lower()}%"
+                params.extend([sub_param, sub_param, sub_param])
+            query += f" AND ({' OR '.join(clauses)})"
 
     if vibe and vibe != "All":
-        query += " AND (LOWER(e.tags) LIKE ? OR LOWER(e.description) LIKE ? OR LOWER(e.title) LIKE ?)"
-        v_param = f"%{vibe.strip().lower()}%"
-        params.extend([v_param, v_param, v_param])
+        if isinstance(vibe, str):
+            vibes = [v.strip() for v in vibe.split(",") if v.strip() and v.strip().lower() != "all"]
+        else:
+            vibes = [v for v in vibe if v and str(v).lower() != "all"]
+        if vibes:
+            clauses = []
+            for v in vibes:
+                clauses.append("(LOWER(e.tags) LIKE ? OR LOWER(e.description) LIKE ? OR LOWER(e.title) LIKE ?)")
+                v_param = f"%{v.lower()}%"
+                params.extend([v_param, v_param, v_param])
+            query += f" AND ({' OR '.join(clauses)})"
 
     if search and search.strip():
         query += " AND (LOWER(e.title) LIKE ? OR LOWER(e.description) LIKE ? OR LOWER(e.tags) LIKE ? OR LOWER(e.source) LIKE ?)"

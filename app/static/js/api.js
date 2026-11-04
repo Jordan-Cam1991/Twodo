@@ -77,14 +77,23 @@ const api = {
   async getEvents(params = {}) {
     const qs = new URLSearchParams();
     if (params.city) qs.append('city', params.city);
-    if (params.category && params.category !== 'All') qs.append('category', params.category);
+    if (params.category && params.category !== 'All') {
+      const catVal = Array.isArray(params.category) ? params.category.filter(c => c && c !== 'All').join(',') : params.category;
+      if (catVal && catVal !== 'All') qs.append('category', catVal);
+    }
     if (params.search) qs.append('search', params.search);
     if (params.filter && params.filter !== 'all') qs.append('filter', params.filter);
     if (params.date_range && params.date_range !== 'all') qs.append('date_range', params.date_range);
     if (params.custom_start) qs.append('custom_start', params.custom_start);
     if (params.custom_end) qs.append('custom_end', params.custom_end);
-    if (params.suburb && params.suburb !== 'All') qs.append('suburb', params.suburb);
-    if (params.vibe && params.vibe !== 'All') qs.append('vibe', params.vibe);
+    if (params.suburb && params.suburb !== 'All') {
+      const subVal = Array.isArray(params.suburb) ? params.suburb.filter(s => s && s !== 'All').join(',') : params.suburb;
+      if (subVal && subVal !== 'All') qs.append('suburb', subVal);
+    }
+    if (params.vibe && params.vibe !== 'All') {
+      const vibeVal = Array.isArray(params.vibe) ? params.vibe.filter(v => v && v !== 'All').join(',') : params.vibe;
+      if (vibeVal && vibeVal !== 'All') qs.append('vibe', vibeVal);
+    }
 
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/events?${qs.toString()}`);
@@ -133,9 +142,30 @@ const api = {
     const plannerMap = new Map();
     planner.forEach(p => plannerMap.set(p.event_id, p));
 
-    const category = params.category || 'All';
-    const suburb = params.suburb || 'All';
-    const vibe = params.vibe || 'All';
+    // Parse categories (support single, array, or comma-separated)
+    let selectedCats = [];
+    if (params.category && params.category !== 'All') {
+      selectedCats = Array.isArray(params.category)
+        ? params.category.filter(c => c && c !== 'All')
+        : params.category.split(',').map(c => c.trim()).filter(c => c && c !== 'All');
+    }
+
+    // Parse suburbs
+    let selectedSubs = [];
+    if (params.suburb && params.suburb !== 'All') {
+      selectedSubs = Array.isArray(params.suburb)
+        ? params.suburb.filter(s => s && s !== 'All').map(s => s.toLowerCase())
+        : params.suburb.split(',').map(s => s.trim().toLowerCase()).filter(s => s && s !== 'all');
+    }
+
+    // Parse vibes
+    let selectedVibes = [];
+    if (params.vibe && params.vibe !== 'All') {
+      selectedVibes = Array.isArray(params.vibe)
+        ? params.vibe.filter(v => v && v !== 'All').map(v => v.toLowerCase())
+        : params.vibe.split(',').map(v => v.trim().toLowerCase()).filter(v => v && v !== 'all');
+    }
+
     const search = (params.search || '').trim().toLowerCase();
     const dateRange = params.date_range || 'all';
     const filter = params.filter || 'all';
@@ -194,33 +224,37 @@ const api = {
     for (const raw of allEvents) {
       const ev = { ...raw };
 
-      // Category filter
-      if (category !== 'All' && ev.category !== category) {
+      // Category filter (matches any of the selected categories)
+      if (selectedCats.length > 0 && !selectedCats.includes(ev.category)) {
         continue;
       }
 
-      // Suburb filter
-      if (suburb !== 'All') {
-        const subLow = suburb.toLowerCase();
+      // Suburb filter (matches any of the selected suburbs)
+      if (selectedSubs.length > 0) {
         const evSub = (ev.suburb || '').toLowerCase();
         const evLoc = (ev.location_name || '').toLowerCase();
         const evTitle = (ev.title || '').toLowerCase();
         const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
 
-        if (!evSub.includes(subLow) && !evLoc.includes(subLow) && !evTitle.includes(subLow) && !evTags.includes(subLow)) {
+        const matchesAnySub = selectedSubs.some(s => 
+          evSub.includes(s) || evLoc.includes(s) || evTitle.includes(s) || evTags.includes(s)
+        );
+        if (!matchesAnySub) {
           continue;
         }
       }
 
-      // Vibe filter
-      if (vibe !== 'All') {
-        const vLow = vibe.toLowerCase();
+      // Vibe filter (matches any of the selected vibes)
+      if (selectedVibes.length > 0) {
         const evVibe = (ev.vibe || '').toLowerCase();
         const evDesc = (ev.description || '').toLowerCase();
         const evTitle = (ev.title || '').toLowerCase();
         const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
 
-        if (!evVibe.includes(vLow) && !evDesc.includes(vLow) && !evTitle.includes(vLow) && !evTags.includes(vLow)) {
+        const matchesAnyVibe = selectedVibes.some(v => 
+          evVibe.includes(v) || evDesc.includes(v) || evTitle.includes(v) || evTags.includes(v)
+        );
+        if (!matchesAnyVibe) {
           continue;
         }
       }

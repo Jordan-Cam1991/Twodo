@@ -106,76 +106,63 @@
           </button>
         </div>
 
-        <!-- Date Range Filter Selector -->
-        <div class="date-filter-row">
-          <span class="filter-label">📅 Date Range:</span>
-          <div class="date-range-pills" id="date-range-pills">
-            <button class="date-pill active" data-range="all" onclick="discover.setDateRange('all')">✨ All Dates</button>
-            <button class="date-pill" data-range="today" onclick="discover.setDateRange('today')">Tonight / Today</button>
-            <button class="date-pill" data-range="tomorrow" onclick="discover.setDateRange('tomorrow')">Tomorrow</button>
-            <button class="date-pill" data-range="this_weekend" onclick="discover.setDateRange('this_weekend')">🥂 This Weekend</button>
-            <button class="date-pill" data-range="next_7_days" onclick="discover.setDateRange('next_7_days')">Next 7 Days</button>
-            <button class="date-pill" data-range="this_month" onclick="discover.setDateRange('this_month')">This Month</button>
-            <button class="date-pill" data-range="custom" onclick="discover.toggleCustomDatePicker()">🎯 Custom Date Range</button>
-          </div>
-          <div id="custom-date-picker-wrap" class="custom-date-wrap hidden">
-            <input type="date" id="custom-date-start" onchange="discover.applyCustomDate()">
-            <span>to</span>
-            <input type="date" id="custom-date-end" onchange="discover.applyCustomDate()">
-          </div>
+        <!-- Four Clean Filter Trigger Headers (Tap any to open selection pop-up) -->
+        <div class="filter-headers-grid">
+          <!-- 1: Date Range -->
+          <button type="button" class="filter-header-card" id="f-hdr-date" onclick="discover.openFilterModal('date')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">📅</span>
+              <span class="f-hdr-title">Date Range</span>
+              <span class="f-hdr-badge hidden" id="f-badge-date">Active</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="f-val-date">✨ All Dates</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 2: Suburb / Precinct -->
+          <button type="button" class="filter-header-card" id="f-hdr-suburb" onclick="discover.openFilterModal('suburb')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">📍</span>
+              <span class="f-hdr-title">Suburb / Precinct</span>
+              <span class="f-hdr-badge hidden" id="f-badge-suburb">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="f-val-suburb">🗺️ All Suburbs</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 3: Vibe & Style -->
+          <button type="button" class="filter-header-card" id="f-hdr-vibe" onclick="discover.openFilterModal('vibe')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">✨</span>
+              <span class="f-hdr-title">Vibe & Style</span>
+              <span class="f-hdr-badge hidden" id="f-badge-vibe">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="f-val-vibe">💫 All Vibes</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
+
+          <!-- 4: Activities / Categories -->
+          <button type="button" class="filter-header-card" id="f-hdr-category" onclick="discover.openFilterModal('category')">
+            <div class="f-hdr-top">
+              <span class="f-hdr-icon">🌟</span>
+              <span class="f-hdr-title">Activities</span>
+              <span class="f-hdr-badge hidden" id="f-badge-category">0</span>
+            </div>
+            <div class="f-hdr-bottom">
+              <span class="f-hdr-val" id="f-val-category">🌟 All Activities</span>
+              <span class="f-hdr-chevron">▾</span>
+            </div>
+          </button>
         </div>
 
-        <!-- Suburb Filter Row -->
-        <div class="suburb-filter-row">
-          <span class="filter-label">📍 Suburb / Precinct:</span>
-          <div class="suburb-scroll" id="suburb-pills">
-            <button class="suburb-pill active" data-suburb="All" onclick="discover.setSuburb('All')">🗺️ All Suburbs</button>
-            <button class="suburb-pill" data-suburb="Fortitude Valley" onclick="discover.setSuburb('Fortitude Valley')">🍸 Fortitude Valley & James St</button>
-            <button class="suburb-pill" data-suburb="Sunnybank" onclick="discover.setSuburb('Sunnybank')">🥟 Sunnybank Asian Food Hub</button>
-            <button class="suburb-pill" data-suburb="West End" onclick="discover.setSuburb('West End')">🎨 West End & South Brisbane</button>
-            <button class="suburb-pill" data-suburb="Brisbane CBD" onclick="discover.setSuburb('Brisbane CBD')">🏙️ CBD & Queen's Wharf</button>
-            <button class="suburb-pill" data-suburb="New Farm" onclick="discover.setSuburb('New Farm')">🥐 New Farm & Teneriffe</button>
-            <button class="suburb-pill" data-suburb="Paddington" onclick="discover.setSuburb('Paddington')">🛍️ Paddington & Milton</button>
-            <button class="suburb-pill" data-suburb="Woolloongabba" onclick="discover.setSuburb('Woolloongabba')">🏏 Woolloongabba & Kangaroo Point</button>
-            <button class="suburb-pill" data-suburb="Bulimba" onclick="discover.setSuburb('Bulimba')">⛵ Bulimba & Hawthorne</button>
-            <button class="suburb-pill" data-suburb="Hamilton" onclick="discover.setSuburb('Hamilton')">🎪 Hamilton & Eat Street</button>
-            <button class="suburb-pill" data-suburb="Mount Coot-tha" onclick="discover.setSuburb('Mount Coot-tha')">🌄 Mount Coot-tha & Lookouts</button>
-            <button class="suburb-pill" data-suburb="Day Trips" onclick="discover.setSuburb('Day Trips')">🏝️ Moreton, Straddie & Day Escapes</button>
-          </div>
-        </div>
-
-        <!-- Vibe & Experience Filter Row -->
-        <div class="vibe-filter-row">
-          <span class="filter-label">✨ Vibe & Style:</span>
-          <div class="vibe-scroll" id="vibe-pills">
-            <button class="vibe-pill active" data-vibe="All" onclick="discover.setVibe('All')">💫 All Vibes</button>
-            <button class="vibe-pill" data-vibe="TikTok" onclick="discover.setVibe('TikTok')">🔥 TikTok & Viral Sensation</button>
-            <button class="vibe-pill" data-vibe="Bakery" onclick="discover.setVibe('Bakery')">🥐 Bakeries & Pastry Crawl</button>
-            <button class="vibe-pill" data-vibe="Rooftop" onclick="discover.setVibe('Rooftop')">🍸 Rooftops & Skyline Bars</button>
-            <button class="vibe-pill" data-vibe="Sunnybank" onclick="discover.setVibe('Sunnybank')">🍜 Late Night Dumplings & Hotpot</button>
-            <button class="vibe-pill" data-vibe="Romantic" onclick="discover.setVibe('Romantic')">🕯️ Romantic Date Night</button>
-            <button class="vibe-pill" data-vibe="Hidden" onclick="discover.setVibe('Hidden')">🤫 Reddit Hidden Gems</button>
-            <button class="vibe-pill" data-vibe="Active" onclick="discover.setVibe('Active')">🛶 Kayak & Outdoor Adventure</button>
-            <button class="vibe-pill" data-vibe="Workshop" onclick="discover.setVibe('Workshop')">🏺 Pottery & Creative Classes</button>
-          </div>
-        </div>
-
-        <!-- Filter Bar -->
-        <div class="filter-row">
-          <!-- Category Pills -->
-          <div class="category-scroll" id="category-pills">
-            <button class="cat-pill active" data-cat="All" onclick="discover.setCategory('All')">🌟 All Activities</button>
-            <button class="cat-pill" data-cat="Arts & Culture" onclick="discover.setCategory('Arts & Culture')">🏛️ Museums & Galleries</button>
-            <button class="cat-pill" data-cat="Date Night Specials" onclick="discover.setCategory('Date Night Specials')">🍷 Date Night & Hidden Gems</button>
-            <button class="cat-pill" data-cat="Food & Drink" onclick="discover.setCategory('Food & Drink')">🍕 Food, Wine & Distilleries</button>
-            <button class="cat-pill" data-cat="Music & Concerts" onclick="discover.setCategory('Music & Concerts')">🎵 Live Music & Gigs</button>
-            <button class="cat-pill" data-cat="Outdoor & Adventure" onclick="discover.setCategory('Outdoor & Adventure')">🛶 Outdoor, Sports & Kayaking</button>
-            <button class="cat-pill" data-cat="Markets & Pop-ups" onclick="discover.setCategory('Markets & Pop-ups')">🎪 Farmers & Night Markets</button>
-            <button class="cat-pill" data-cat="Comedy & Shows" onclick="discover.setCategory('Comedy & Shows')">🎭 Comedy, Theatre & Shows</button>
-            <button class="cat-pill" data-cat="Sightseeing & Nature" onclick="discover.setCategory('Sightseeing & Nature')">🌿 Parks, Botanic & Council</button>
-          </div>
-
-          <!-- Match / Voter Filter Dropdown -->
+        <!-- Filter Sub-bar: Match / Voter Filter Dropdown & Clear Filters -->
+        <div class="filter-sub-bar">
           <div class="filter-dropdowns">
             <select id="vote-filter-select" onchange="discover.setFilter(this.value)" class="custom-select">
               <option value="all">👀 Show All Activities</option>
@@ -186,6 +173,9 @@
               <option value="unvoted">❓ Not Voted Yet</option>
             </select>
           </div>
+          <button type="button" id="btn-clear-all-filters" class="btn-clear-filters hidden" onclick="discover.resetFilters()">
+            ✕ Reset All Filters
+          </button>
         </div>
       </div>
 
@@ -577,6 +567,59 @@
           <button type="submit" class="btn btn-primary">Save Settings</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- DYNAMIC FILTER POP-UP MODAL (Bottom Sheet on Mobile, Dialog on Desktop) -->
+  <div id="filter-modal" class="modal-overlay hidden" onclick="discover.handleModalOverlayClick(event)">
+    <div class="modal-card filter-modal-card" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="filter-modal-header">
+        <div class="filter-modal-header-left">
+          <span class="filter-modal-header-icon" id="filter-modal-icon">📍</span>
+          <div>
+            <h3 id="filter-modal-title">Filter Suburb / Precinct</h3>
+            <p class="filter-modal-sub" id="filter-modal-sub">Choose 'All' or multi-select multiple options</p>
+          </div>
+        </div>
+        <button type="button" class="close-btn" onclick="discover.closeFilterModal()" title="Close">✕</button>
+      </div>
+
+      <!-- Quick 'All' Toggle and Multi Actions -->
+      <div class="filter-modal-actions-bar">
+        <button type="button" class="btn-filter-all active" id="modal-btn-all" onclick="discover.modalSelectAll()">
+          <span class="check-box-icon" id="modal-all-check">✓</span>
+          <span id="modal-btn-all-text">✨ All Suburbs (Show Everywhere)</span>
+        </button>
+        <div class="filter-quick-links" id="filter-quick-links">
+          <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
+          <span class="dot-sep">•</span>
+          <button type="button" class="btn-text-link" onclick="discover.modalClearAllOptions()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Custom Date Picker Fields (only visible when type === 'date' and custom is chosen) -->
+      <div id="modal-custom-date-section" class="modal-custom-date-section hidden">
+        <span class="custom-date-title">🎯 Pick Custom Date Range:</span>
+        <div class="custom-date-inputs-row">
+          <label>From: <input type="date" id="modal-date-start" onchange="discover.onCustomDateChange()"></label>
+          <label>To: <input type="date" id="modal-date-end" onchange="discover.onCustomDateChange()"></label>
+        </div>
+      </div>
+
+      <!-- Scrollable Multi-Select Options List -->
+      <div class="filter-modal-body" id="filter-modal-options-list">
+        <!-- Rendered dynamically with checkmarks & details -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="filter-modal-footer">
+        <div class="filter-modal-count-status" id="filter-modal-status">Showing All</div>
+        <div class="filter-modal-footer-btns">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="discover.resetCurrentModalCategory()">Reset</button>
+          <button type="button" class="btn btn-primary" onclick="discover.applyModalFilter()">Apply Filter ✨</button>
+        </div>
+      </div>
     </div>
   </div>
 

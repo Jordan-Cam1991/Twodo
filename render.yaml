@@ -2,10 +2,7 @@ services:
   - type: web
     name: twodo
     env: python
-    buildCommand: ""
+    buildCommand: "pip install -r requirements.txt || true"
     startCommand: "python3 server.py ${PORT:-5050}"
     autoDeploy: true
-    disk:
-      name: twodo-storage
-      mountPath: /app/data
-      sizeGB: 1
+    plan: free
