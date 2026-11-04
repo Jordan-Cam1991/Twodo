@@ -1655,6 +1655,13 @@ body {
   align-items: start;
 }
 
+@media (max-width: 992px) {
+  .planner-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
 .planner-header {
   display: flex;
   justify-content: space-between;
@@ -2560,33 +2567,173 @@ body {
     font-size: 1.25rem !important;
   }
 
-  /* Planner View Mobile */
+  /* Planner View Mobile (100% Fit & Responsive) */
+  .planner-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .planner-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .planner-header {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 0.75rem !important;
+    margin-bottom: 1.25rem !important;
   }
 
-  .planner-export-group {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.4rem !important;
+  .planner-header h2 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
   }
 
-  .planner-export-group .btn {
+  .planner-header p {
+    font-size: 0.82rem !important;
+    margin-top: 0.2rem !important;
+  }
+
+  .planner-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
     width: 100% !important;
+  }
+
+  .planner-actions .btn {
+    width: 100% !important;
+    padding: 0.65rem 0.4rem !important;
+    font-size: 0.78rem !important;
     justify-content: center !important;
+    text-align: center !important;
+    border-radius: 12px !important;
   }
 
-  .timeline-item {
-    padding: 1rem !important;
+  .section-title-row {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
   }
 
-  .timeline-meta {
+  .section-title-row h3 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Scheduled Cards Mobile */
+  .scheduled-timeline {
+    width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .itinerary-item {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .itinerary-date-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.65rem 0.95rem !important;
+    background: #f8fafc !important;
+    box-sizing: border-box !important;
+  }
+
+  .itinerary-date-col .itin-day {
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+    color: var(--primary) !important;
+  }
+
+  .itinerary-date-col .itin-date {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+  }
+
+  .itinerary-date-col .itin-slot {
+    margin-top: 0 !important;
+    font-size: 0.7rem !important;
+    padding: 0.15rem 0.45rem !important;
+    background: #e2e8f0 !important;
+    border-radius: 6px !important;
+  }
+
+  .itinerary-info-col {
+    padding: 0.95rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .itin-title-row {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 0.25rem !important;
+    gap: 0.4rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  .itin-title {
+    font-size: 1.05rem !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important;
+  }
+
+  .itin-meta {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+    word-break: break-word !important;
+  }
+
+  .itin-notes {
+    margin-top: 0.6rem !important;
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.6rem !important;
+    word-break: break-word !important;
+  }
+
+  .itin-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.45rem !important;
+    margin-top: 0.85rem !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .itin-actions .btn {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+    font-size: 0.78rem !important;
+    padding: 0.45rem 0.65rem !important;
+    border-radius: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Bucket List Sidebar on Mobile */
+  .planner-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1rem !important;
+    border-radius: 18px !important;
+  }
+
+  .bucket-list-scroll {
+    max-height: 420px !important;
   }
 
   /* Map View Mobile */
@@ -2607,16 +2754,24 @@ body {
   }
 
   /* Modals Mobile */
+  .modal-card,
   .modal-dialog {
-    width: 94% !important;
+    width: 92% !important;
     max-width: 95vw !important;
     padding: 1.25rem !important;
     border-radius: 20px !important;
-    margin: 1.5rem auto !important;
+    margin: auto !important;
+    box-sizing: border-box !important;
   }
 
+  .modal-card h3,
   .modal-dialog h2 {
     font-size: 1.25rem !important;
+  }
+
+  .form-row {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
   }
 
   .modal-actions {
