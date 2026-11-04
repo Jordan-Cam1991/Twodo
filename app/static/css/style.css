@@ -152,7 +152,16 @@ body {
 }
 
 .brand-icon {
-  font-size: 1.75rem;
+  font-size: 1.55rem;
+  width: 38px;
+  height: 38px;
+  background: #ffd1dc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(244, 63, 94, 0.12);
+  flex-shrink: 0;
 }
 
 .brand-title {

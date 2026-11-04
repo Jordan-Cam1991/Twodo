@@ -4,8 +4,8 @@
   "description": "Plan dates, swipe together, and discover adventures in your city",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#f43f5e",
+  "background_color": "#ffd1dc",
+  "theme_color": "#ffd1dc",
   "icons": [
     {
       "src": "icon-192.png",
