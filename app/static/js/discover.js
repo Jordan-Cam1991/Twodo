@@ -223,9 +223,6 @@ const discover = {
         ? `<div class="card-match-banner">🎉 Mutual Match! Both Want To Do This</div>` 
         : '';
 
-      // Tags HTML
-      const tagsHtml = (ev.tags || []).slice(0, 3).map(t => `<span class="card-tag">#${t}</span>`).join('');
-
       // Tip HTML
       const tipHtml = ev.insider_tip 
         ? `<div class="card-tip"><strong>💡 Couple Tip:</strong> ${ev.insider_tip}</div>`
@@ -296,12 +293,7 @@ const discover = {
               <span>⏰</span> <span>${ev.time_str || ev.start_date || 'Flexible timing'}</span>
             </div>
 
-            <p class="card-desc">${ev.description}</p>
             ${tipHtml}
-
-            <div class="card-tags">
-              ${tagsHtml}
-            </div>
 
             <!-- Couple Voting Status Tracker -->
             <div class="card-couple-status">

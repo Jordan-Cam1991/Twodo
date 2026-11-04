@@ -1415,6 +1415,10 @@ body {
   margin-bottom: 0.25rem;
 }
 
+.card-time {
+  margin-bottom: 0.65rem;
+}
+
 .card-desc {
   font-size: 0.85rem;
   color: #475569;
@@ -1434,6 +1438,7 @@ body {
   border-radius: 0 6px 6px 0;
   font-size: 0.78rem;
   color: #9d174d;
+  margin-top: 0.4rem;
   margin-bottom: 0.75rem;
 }
 
