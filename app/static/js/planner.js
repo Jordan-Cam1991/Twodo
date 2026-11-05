@@ -43,11 +43,77 @@ const planner = {
     if (bucketBadge) bucketBadge.textContent = bucket.length;
   },
 
+  // Legacy alias (called by older listeners)
+  updatePlannerCountBadge() {
+    this.updateBadges();
+  },
+
+  hasCloud() {
+    return typeof firebaseService !== 'undefined' && Boolean(firebaseService.coupleId || firebaseService.currentUser);
+  },
+
+  findEvent(eventId) {
+    const pool = (typeof discover !== 'undefined' && discover.getAllEventsPool) ? discover.getAllEventsPool() : (app.events || []);
+    return pool.find(e => String(e.id) === String(eventId)) || (app.events || []).find(e => String(e.id) === String(eventId)) || null;
+  },
+
+  getItemForEvent(eventId) {
+    return (this.items || []).find(i => String(i.event_id) === String(eventId)) || null;
+  },
+
+  /**
+   * Add (or replace) an event in the planner. Saves instantly on this device
+   * and to the cloud so your partner sees it too.
+   */
+  async scheduleEvent(ev, opts = {}) {
+    if (!ev || !ev.id) return null;
+    const existing = this.getItemForEvent(ev.id);
+    const id = existing?.id || ('plan_' + String(ev.id).replace(/[^a-zA-Z0-9_-]/g, '_'));
+    const item = {
+      id,
+      event_id: ev.id,
+      status: opts.status || 'scheduled',
+      scheduled_date: opts.scheduled_date || null,
+      scheduled_time: opts.scheduled_time || null,
+      time_slot: opts.time_slot || 'evening',
+      notes: opts.notes || '',
+      budget: parseFloat(opts.budget) || 0,
+      title: ev.title || 'Couple Date',
+      description: ev.description || '',
+      category: ev.category || 'Date Night',
+      location_name: ev.location_name || '',
+      city: ev.city || (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
+      image_url: ev.image_url || '',
+      price_str: ev.price_str || ev.price_level || '',
+      created_at: existing?.created_at || new Date().toISOString()
+    };
+
+    // 1. Instant local update
+    const replace = (list) => [item, ...(list || []).filter(i => String(i.event_id) !== String(ev.id))];
+    this.items = replace(this.items);
+    if (typeof firebaseService !== 'undefined') firebaseService.plannerItems = replace(firebaseService.plannerItems);
+    try {
+      const local = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+      localStorage.setItem('twodo_planner', JSON.stringify(replace(local)));
+    } catch (e) {}
+    this.renderPlanner();
+    this.updateBadges();
+
+    // 2. Cloud sync (non-blocking for the UI)
+    if (this.hasCloud()) {
+      firebaseService.savePlannerItem(item).catch(err => console.warn('Planner cloud sync note:', err));
+    }
+    return item;
+  },
+
   renderPlanner() {
-    const scheduled = this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
+    const scheduled = this.items
+      .filter(i => i.status === 'scheduled' && i.scheduled_date)
+      .sort((a, b) => `${a.scheduled_date} ${a.scheduled_time || ''}`.localeCompare(`${b.scheduled_date} ${b.scheduled_time || ''}`));
     this.renderHeroNextDate(scheduled);
     this.renderScheduled(scheduled);
     this.renderBucketList();
+    if (typeof matchesView !== 'undefined') matchesView.refresh();
   },
 
   renderHeroNextDate(scheduled) {
@@ -97,7 +163,7 @@ const planner = {
           <button type="button" class="btn btn-sm btn-white" onclick="planner.exportCalendar()">
             🗓️ Add to Calendar
           </button>
-          <button type="button" class="btn btn-sm btn-hero-subtle" onclick="planner.openScheduleModal('${nextDate.event_id}', '${nextDate.title.replace(/'/g, "\\'")}', ${nextDate.id})">
+          <button type="button" class="btn btn-sm btn-hero-subtle" onclick="planner.openScheduleModal('${nextDate.event_id}', '${nextDate.title.replace(/'/g, "\\'")}', '${nextDate.id}')">
             ✏️ Reschedule
           </button>
         </div>
@@ -159,13 +225,13 @@ const planner = {
             </div>
 
             <div class="itin-actions">
-              <button class="btn btn-sm btn-outline" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', ${item.id})">
+              <button class="btn btn-sm btn-outline" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', '${item.id}')">
                 ✏️ Reschedule
               </button>
-              <button class="btn btn-sm btn-secondary" onclick="planner.moveToBucketList(${item.id})">
+              <button class="btn btn-sm btn-secondary" onclick="planner.moveToBucketList('${item.id}')">
                 📦 To Bucket List
               </button>
-              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem(${item.id})" title="Delete from itinerary">
+              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Delete from itinerary">
                 🗑️
               </button>
             </div>
@@ -203,10 +269,10 @@ const planner = {
             </div>
             <h5 class="bucket-title">${item.title}</h5>
             <div class="bucket-card-actions">
-              <button class="btn btn-primary btn-sm btn-sched-bucket" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', ${item.id})">
+              <button class="btn btn-primary btn-sm btn-sched-bucket" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', '${item.id}')">
                 📅 Plan Date Night
               </button>
-              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem(${item.id})" title="Remove">
+              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Remove">
                 🗑️
               </button>
             </div>
@@ -218,21 +284,36 @@ const planner = {
 
   openScheduleModal(eventId, eventTitle, plannerId = null) {
     const modal = document.getElementById('schedule-modal');
+    if (plannerId === 'null' || plannerId === 'undefined') plannerId = null;
     document.getElementById('sched-event-id').value = eventId;
     document.getElementById('sched-planner-id').value = plannerId || '';
     document.getElementById('sched-event-title').textContent = eventTitle;
 
-    // Set default date to upcoming Saturday
-    const d = new Date();
-    const day = d.getDay();
-    const diff = (6 - day + 7) % 7 || 7; // next Saturday
-    const nextSat = new Date(d.setDate(d.getDate() + diff));
-    const defaultDateStr = nextSat.toISOString().split('T')[0];
-    
-    const dateInput = document.getElementById('sched-date');
-    if (!dateInput.value) {
-      dateInput.value = defaultDateStr;
+    const toYMD = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const todayStr = toYMD(new Date());
+
+    // Prefill: existing plan date → event's own date (if upcoming) → next Saturday
+    const existing = plannerId
+      ? (this.items || []).find(i => String(i.id) === String(plannerId))
+      : this.getItemForEvent(eventId);
+    const ev = this.findEvent(eventId);
+    const evDate = ((ev && ev.start_date) || '').slice(0, 10);
+
+    let defaultDateStr;
+    if (existing && existing.scheduled_date) {
+      defaultDateStr = existing.scheduled_date;
+    } else if (/^\d{4}-\d{2}-\d{2}$/.test(evDate) && evDate >= todayStr) {
+      defaultDateStr = evDate;
+    } else {
+      const d = new Date();
+      const diff = (6 - d.getDay() + 7) % 7 || 7; // next Saturday
+      d.setDate(d.getDate() + diff);
+      defaultDateStr = toYMD(d);
     }
+
+    const dateInput = document.getElementById('sched-date');
+    dateInput.value = defaultDateStr;
+    dateInput.min = todayStr;
 
     modal.classList.remove('hidden');
   },
@@ -251,57 +332,25 @@ const planner = {
     const budget = document.getElementById('sched-budget').value;
 
     try {
-      const isFb = Boolean(typeof firebaseService !== 'undefined' && firebaseService.coupleId);
-      const ev = (app.events || []).find(e => e.id === eventId) || {};
+      const ev = this.findEvent(eventId)
+        || (this.items || []).find(i => String(i.id) === String(plannerId) || String(i.event_id) === String(eventId))
+        || { id: eventId, title: document.getElementById('sched-event-title').textContent };
+      const existing = (this.items || []).find(i => String(i.id) === String(plannerId)) || this.getItemForEvent(eventId);
+      // Keep the previous details (title/image) if the event isn't in the catalog any more
+      const source = existing ? { ...existing, id: ev.id || existing.event_id, ...this.findEvent(eventId) } : ev;
 
-      if (plannerId) {
-        if (isFb) {
-          await firebaseService.updatePlannerItem(plannerId, {
-            status: 'scheduled',
-            scheduled_date: scheduledDate,
-            time_slot: timeSlot,
-            notes,
-            budget: parseFloat(budget) || 0
-          });
-        }
-        await api.updatePlanner(plannerId, {
-          status: 'scheduled',
-          scheduled_date: scheduledDate,
-          time_slot: timeSlot,
-          notes,
-          budget
-        });
-      } else {
-        if (isFb) {
-          await firebaseService.addPlannerItem({
-            event_id: eventId,
-            status: 'scheduled',
-            scheduled_date: scheduledDate,
-            time_slot: timeSlot,
-            notes,
-            budget: parseFloat(budget) || 0,
-            title: ev.title || 'Couple Date',
-            category: ev.category || 'Date Night',
-            location_name: ev.location_name || '',
-            city: ev.city || app.currentCity || 'Brisbane',
-            image_url: ev.image_url || '',
-            price_str: ev.price_str || '$$'
-          });
-        }
-        await api.addToPlanner({
-          event_id: eventId,
-          status: 'scheduled',
-          scheduled_date: scheduledDate,
-          time_slot: timeSlot,
-          notes,
-          budget
-        });
-      }
+      await this.scheduleEvent(source, {
+        status: 'scheduled',
+        scheduled_date: scheduledDate,
+        scheduled_time: null,
+        time_slot: timeSlot,
+        notes,
+        budget
+      });
 
       this.closeScheduleModal();
       app.showToast('🎉 Date scheduled on your itinerary!');
-      await this.loadPlanner();
-      await discover.loadEvents();
+      if (typeof discover !== 'undefined') discover.loadEvents();
     } catch (err) {
       console.error(err);
       app.showToast('Failed to schedule date.');
@@ -310,18 +359,18 @@ const planner = {
 
   async moveToBucketList(plannerId) {
     try {
-      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
-        await firebaseService.updatePlannerItem(plannerId, {
-          status: 'bucket_list',
-          scheduled_date: null
-        });
+      const changes = { status: 'bucket_list', scheduled_date: null, scheduled_time: null };
+      this.items = (this.items || []).map(i => String(i.id) === String(plannerId) ? { ...i, ...changes } : i);
+      if (typeof firebaseService !== 'undefined') {
+        firebaseService.plannerItems = (firebaseService.plannerItems || []).map(i => String(i.id) === String(plannerId) ? { ...i, ...changes } : i);
       }
-      await api.updatePlanner(plannerId, {
-        status: 'bucket_list',
-        scheduled_date: null
-      });
+      await api.updatePlanner(plannerId, changes);
+      if (this.hasCloud()) {
+        firebaseService.updatePlannerItem(plannerId, changes).catch(err => console.warn(err));
+      }
       app.showToast('Moved to Bucket List.');
-      await this.loadPlanner();
+      this.renderPlanner();
+      this.updateBadges();
     } catch (e) {
       console.error(e);
     }
@@ -330,13 +379,18 @@ const planner = {
   async deleteItem(plannerId) {
     if (!confirm('Remove this activity from your planner?')) return;
     try {
-      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
-        await firebaseService.deletePlannerItem(plannerId);
+      this.items = (this.items || []).filter(i => String(i.id) !== String(plannerId));
+      if (typeof firebaseService !== 'undefined') {
+        firebaseService.plannerItems = (firebaseService.plannerItems || []).filter(i => String(i.id) !== String(plannerId));
       }
       await api.deletePlannerItem(plannerId);
+      if (this.hasCloud()) {
+        firebaseService.deletePlannerItem(plannerId).catch(err => console.warn(err));
+      }
       app.showToast('Removed from planner.');
-      await this.loadPlanner();
-      await discover.loadEvents();
+      this.renderPlanner();
+      this.updateBadges();
+      if (typeof discover !== 'undefined') discover.loadEvents();
     } catch (e) {
       console.error(e);
     }

@@ -255,6 +255,8 @@ const app = {
       if (window.chatView) chatView.init();
     } else if (tabName === 'planner') {
       planner.loadPlanner();
+    } else if (tabName === 'matches') {
+      if (window.matchesView) matchesView.render();
     }
   },
 
@@ -449,6 +451,25 @@ const app = {
     }
   }
 };
+
+// Expose every module on `window`. Top-level `const` objects are NOT automatically
+// window properties, so checks like `if (window.discover)` were silently false —
+// which stopped live refreshes (votes, planner, swiper, chat) from running.
+(function exposeModules() {
+  const mods = {
+    api: typeof api !== 'undefined' ? api : undefined,
+    app,
+    authUI: typeof authUI !== 'undefined' ? authUI : undefined,
+    chatView: typeof chatView !== 'undefined' ? chatView : undefined,
+    collaborative: typeof collaborative !== 'undefined' ? collaborative : undefined,
+    discover: typeof discover !== 'undefined' ? discover : undefined,
+    firebaseService: typeof firebaseService !== 'undefined' ? firebaseService : undefined,
+    planner: typeof planner !== 'undefined' ? planner : undefined,
+    swiper: typeof swiper !== 'undefined' ? swiper : undefined,
+    matchesView: typeof matchesView !== 'undefined' ? matchesView : undefined
+  };
+  Object.keys(mods).forEach(k => { if (mods[k]) window[k] = mods[k]; });
+})();
 
 // Start application when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {

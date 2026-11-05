@@ -21,6 +21,7 @@ const firebaseService = {
   // In-memory data store
   votesMap: {},
   notesMap: {},
+  dismissedMatches: new Set(), // event ids removed from the Matches page
   plannerItems: [],
   messages: [],
   customEvents: [],
@@ -341,8 +342,8 @@ const firebaseService = {
         mySoloVotes.forEach(doc => {
           this.db.collection('couples').doc(canonicalCoupleId).collection('votes').doc(doc.id).set({
             event_id: doc.id,
-            [`votes.${myName}`]: doc.data().vote,
-            [`notes.${myName}`]: doc.data().note || '',
+            votes: { [myName]: doc.data().vote },
+            notes: { [myName]: doc.data().note || '' },
             updated_at: firebase.firestore.FieldValue.serverTimestamp()
           }, { merge: true });
         });
@@ -636,33 +637,41 @@ const firebaseService = {
     this.unsubVotes = coupleRef.collection('votes').onSnapshot((snapshot) => {
       const newVotes = {};
       const newNotes = {};
+      const dismissed = new Set();
 
       snapshot.forEach((doc) => {
         const data = doc.data();
-        const evId = doc.id;
+        const ids = Array.from(new Set([doc.id, data.event_id].filter(Boolean)));
+        const put = (map, userName, val) => ids.forEach(id => { map[`${id}_${userName}`] = val; });
+
         if (data.votes) {
-          Object.keys(data.votes).forEach((userName) => {
-            newVotes[`${evId}_${userName}`] = data.votes[userName];
-          });
+          Object.keys(data.votes).forEach((userName) => put(newVotes, userName, data.votes[userName]));
         }
         if (data.notes) {
-          Object.keys(data.notes).forEach((userName) => {
-            newNotes[`${evId}_${userName}`] = data.notes[userName];
-          });
+          Object.keys(data.notes).forEach((userName) => put(newNotes, userName, data.notes[userName]));
         }
+        // Legacy docs saved with literal "votes.Name" / "notes.Name" field names
+        Object.keys(data).forEach((key) => {
+          if (key.startsWith('votes.')) put(newVotes, key.slice(6), data[key]);
+          else if (key.startsWith('notes.')) put(newNotes, key.slice(6), data[key]);
+        });
+        if (data.match_dismissed) ids.forEach(id => dismissed.add(id));
       });
 
       this.votesMap = newVotes;
       this.notesMap = newNotes;
+      this.dismissedMatches = dismissed;
 
       try {
         localStorage.setItem('twodo_votes', JSON.stringify(newVotes));
         localStorage.setItem('twodo_notes', JSON.stringify(newNotes));
+        localStorage.setItem('twodo_dismissed_matches', JSON.stringify(Array.from(dismissed)));
       } catch (e) {}
 
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
+      if (window.matchesView) matchesView.refresh();
     }, (err) => console.warn('Votes listener note:', err));
 
     // 2. Live Planner Listener
@@ -675,6 +684,7 @@ const firebaseService = {
           event_id: data.event_id,
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
+          scheduled_time: data.scheduled_time || null,
           time_slot: data.time_slot || 'evening',
           notes: data.notes || '',
           budget: data.budget || 0,
@@ -690,10 +700,11 @@ const firebaseService = {
       });
 
       this.plannerItems = items;
+      try { localStorage.setItem('twodo_planner', JSON.stringify(items)); } catch (e) {}
       if (window.planner) {
         planner.items = items;
         planner.renderPlanner();
-        planner.updatePlannerCountBadge();
+        planner.updateBadges();
       }
     }, (err) => console.warn('Planner listener note:', err));
 
@@ -750,12 +761,15 @@ const firebaseService = {
       const u1Name = this.profile?.user1_name || myName;
       const newVotes = {};
       const newNotes = {};
+      const dismissed = new Set();
 
       snapshot.forEach(doc => {
         const d = doc.data();
         const evId = d.event_id || doc.id;
         const vote = d.vote;
         const note = d.note || '';
+        if (d.match_dismissed) { dismissed.add(doc.id); dismissed.add(evId); }
+        if (!vote) return;
 
         // Store under canonical ID and safeDocId with all voter aliases
         newVotes[`${doc.id}_${myName}`] = vote;
@@ -773,9 +787,11 @@ const firebaseService = {
 
       this.votesMap = { ...this.votesMap, ...newVotes };
       this.notesMap = { ...this.notesMap, ...newNotes };
+      this.dismissedMatches = dismissed;
 
       // Safe permanent write to LocalStorage
       try {
+        localStorage.setItem('twodo_dismissed_matches', JSON.stringify(Array.from(dismissed)));
         let existingVotes = {};
         try { existingVotes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
         localStorage.setItem('twodo_votes', JSON.stringify({ ...existingVotes, ...newVotes }));
@@ -788,6 +804,7 @@ const firebaseService = {
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
+      if (window.matchesView) matchesView.refresh();
     }, err => console.warn('Solo votes listener note:', err));
 
     // 2. Live Solo Planner Listener (Cloud Firestore -> Local Storage & Memory)
@@ -800,6 +817,7 @@ const firebaseService = {
           event_id: data.event_id,
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
+          scheduled_time: data.scheduled_time || null,
           time_slot: data.time_slot || 'evening',
           notes: data.notes || '',
           budget: data.budget || 0,
@@ -822,7 +840,7 @@ const firebaseService = {
       if (window.planner) {
         planner.items = items;
         planner.renderPlanner();
-        if (planner.updatePlannerCountBadge) planner.updatePlannerCountBadge();
+        if (planner.updateBadges) planner.updateBadges();
         if (planner.updateBadges) planner.updateBadges();
       }
     }, err => console.warn('Solo planner listener note:', err));
@@ -866,8 +884,8 @@ const firebaseService = {
         } else if (coupleId) {
           this.db.collection('couples').doc(coupleId).collection('votes').doc(safeDocId).set({
             event_id: eventId,
-            [`votes.${voterName}`]: vote,
-            [`notes.${voterName}`]: note,
+            votes: { [voterName]: vote },
+            notes: { [voterName]: note },
             updated_at: firebase.firestore.FieldValue.serverTimestamp()
           }, { merge: true }).catch(() => {});
         }
@@ -890,6 +908,7 @@ const firebaseService = {
           title: item.title || 'Date Activity',
           status: item.status || 'bucket_list',
           scheduled_date: item.scheduled_date || null,
+          scheduled_time: item.scheduled_time || null,
           time_slot: item.time_slot || 'evening',
           notes: item.notes || '',
           budget: item.budget || '',
@@ -928,13 +947,15 @@ const firebaseService = {
     // 2. If Coupled: save to couples/{coupleId}/votes/{safeDocId}
     if (this.coupleId) {
       const docRef = this.db.collection('couples').doc(this.coupleId).collection('votes').doc(safeDocId);
+      // NOTE: set() treats "votes.Name" as a literal field name, so use nested maps
+      // with merge:true — this deep-merges each partner's vote without overwriting the other's.
       const updatePayload = {
         event_id: eventId,
-        [`votes.${userName}`]: voteType,
+        votes: { [userName]: voteType },
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
       };
       if (note !== null) {
-        updatePayload[`notes.${userName}`] = note;
+        updatePayload.notes = { [userName]: note };
       }
       try {
         await docRef.set(updatePayload, { merge: true });
@@ -973,6 +994,7 @@ const firebaseService = {
       event_id: item.event_id,
       title: item.title,
       scheduled_date: item.scheduled_date || null,
+      scheduled_time: item.scheduled_time || null,
       time_slot: item.time_slot || 'evening',
       notes: item.notes || '',
       budget: item.budget || 0,
@@ -986,14 +1008,54 @@ const firebaseService = {
       updated_at: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    if (item.id && !item.id.startsWith('temp_')) {
-      await targetColl.doc(String(item.id)).set(payload, { merge: true });
-      return { success: true, id: item.id };
+    const idStr = item.id != null ? String(item.id) : '';
+    if (idStr && !idStr.startsWith('temp_')) {
+      await targetColl.doc(idStr).set(payload, { merge: true });
+      return { success: true, id: idStr };
     } else {
       payload.created_at = firebase.firestore.FieldValue.serverTimestamp();
       const ref = await targetColl.add(payload);
       return { success: true, id: ref.id };
     }
+  },
+
+  // Aliases used by the planner module
+  async addPlannerItem(item) {
+    return this.savePlannerItem(item);
+  },
+
+  async updatePlannerItem(id, changes) {
+    const targetColl = this.coupleId
+      ? this.db.collection('couples').doc(this.coupleId).collection('planner')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('planner') : null);
+    if (!targetColl || id == null) return { success: true };
+    await targetColl.doc(String(id)).set({
+      ...changes,
+      updated_at: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    return { success: true };
+  },
+
+  // Hide / restore an event on the Matches page (synced to your partner)
+  async setMatchDismissed(eventId, dismissed = true) {
+    if (!eventId) return { success: true };
+    if (!this.dismissedMatches) this.dismissedMatches = new Set();
+    if (dismissed) this.dismissedMatches.add(eventId); else this.dismissedMatches.delete(eventId);
+    try {
+      localStorage.setItem('twodo_dismissed_matches', JSON.stringify(Array.from(this.dismissedMatches)));
+    } catch (e) {}
+
+    const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
+    const coll = this.coupleId
+      ? this.db.collection('couples').doc(this.coupleId).collection('votes')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('votes') : null);
+    if (!coll) return { success: true };
+    try {
+      await coll.doc(safeDocId).set({ event_id: eventId, match_dismissed: dismissed }, { merge: true });
+    } catch (e) {
+      console.warn('Match dismiss sync note:', e);
+    }
+    return { success: true };
   },
 
   async deletePlannerItem(id) {

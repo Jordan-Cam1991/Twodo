@@ -421,7 +421,7 @@ const discover = {
       // Planner action button (compact label to fit 3-col grid)
       const isInPlanner = !!ev.planner_id;
       const scheduleBtnHtml = isInPlanner
-        ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', ${ev.planner_id})"><span>✓ Planned</span></button>`
+        ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', '${ev.planner_id}')"><span>✓ Planned</span></button>`
         : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)"><span>+ Plan Date</span></button>`;
 
       return `
@@ -691,6 +691,8 @@ const discover = {
         if (v1 === 'love' && v2 === 'love') matchesCount++;
       }
     });
+
+    if (typeof matchesView !== 'undefined') matchesView.refresh();
 
     if (moodBadge) {
       moodBadge.textContent = matchesCount;

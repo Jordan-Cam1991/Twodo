@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.9">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -193,6 +193,11 @@
             <span>Date Swiper</span>
             <span class="tab-badge" id="swiper-badge">New</span>
           </button>
+          <button class="nav-btn" data-tab="matches" onclick="app.navigate('matches')">
+            <span class="nav-icon">💖</span>
+            <span>Matches</span>
+            <span class="planner-count hidden" id="matches-tab-badge">0</span>
+          </button>
           <button class="nav-btn" data-tab="chat" onclick="app.navigate('chat')">
             <span class="nav-icon">💬</span>
             <span>Couple Chat</span>
@@ -313,7 +318,7 @@
             <span class="banner-subtext">Both love these ideas</span>
           </div>
         </div>
-        <button class="btn btn-sm btn-white banner-btn" onclick="discover.setFilter('matches')">View Matches ✨</button>
+        <button class="btn btn-sm btn-white banner-btn" onclick="app.navigate('matches')">View Matches ✨</button>
       </div>
 
       <!-- Events Grid -->
@@ -470,6 +475,29 @@
     </section>
 
     <!-- TAB 4: SHARED PLANNER & ITINERARY -->
+    <!-- TAB: MATCHES (ideas you both loved, ready to plan) -->
+    <section id="view-matches" class="view-panel">
+      <div class="matches-page-header">
+        <h2 id="matches-page-title">💖 Your Matches</h2>
+        <p id="matches-page-sub" class="matches-page-sub">Ideas you both love, ready to plan</p>
+      </div>
+
+      <div id="matches-grid" class="events-grid matches-grid">
+        <!-- Match cards injected by matches.js -->
+      </div>
+
+      <div id="matches-empty" class="empty-state hidden">
+        <span class="empty-emoji">💞</span>
+        <h3>No matches yet</h3>
+        <p id="matches-empty-msg">When you both ❤️ Love the same idea, it shows up here ready to plan.</p>
+        <button class="btn btn-primary" onclick="app.navigate('swiper')">🔥 Start Swiping</button>
+      </div>
+
+      <div id="matches-removed-wrap" class="matches-removed-wrap hidden">
+        <button type="button" id="matches-removed-toggle" class="btn-text-link" onclick="matchesView.toggleRemoved()">Show removed</button>
+      </div>
+    </section>
+
     <section id="view-planner" class="view-panel">
       <!-- Hero Next Date Countdown Card (Rendered if any upcoming date exists) -->
       <div id="planner-hero-card" class="planner-hero-card hidden">
@@ -975,6 +1003,11 @@
       <span class="m-label">Swiper</span>
       <span class="m-badge" id="m-swiper-badge">New</span>
     </button>
+    <button class="mobile-nav-item" data-tab="matches" onclick="app.navigate('matches')">
+      <span class="m-icon">💖</span>
+      <span class="m-label">Matches</span>
+      <span class="m-badge count hidden" id="m-matches-badge">0</span>
+    </button>
     <button class="mobile-nav-item" data-tab="chat" onclick="app.navigate('chat')">
       <span class="m-icon">💬</span>
       <span class="m-label">Chat</span>
@@ -997,16 +1030,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=2.9"></script>
-  <script src="js/firebase-service.js?v=2.9"></script>
-  <script src="js/auth-ui.js?v=2.9"></script>
-  <script src="js/events_data.js?v=2.9"></script>
-  <script src="js/api.js?v=2.9"></script>
-  <script src="js/chat.js?v=2.9"></script>
-  <script src="js/collaborative.js?v=2.9"></script>
-  <script src="js/discover.js?v=2.9"></script>
-  <script src="js/swiper.js?v=2.9"></script>
-  <script src="js/planner.js?v=2.9"></script>
-  <script src="js/app.js?v=2.9"></script>
+  <script src="js/firebase-config.js?v=3.0"></script>
+  <script src="js/firebase-service.js?v=3.0"></script>
+  <script src="js/auth-ui.js?v=3.0"></script>
+  <script src="js/events_data.js?v=3.0"></script>
+  <script src="js/api.js?v=3.0"></script>
+  <script src="js/chat.js?v=3.0"></script>
+  <script src="js/collaborative.js?v=3.0"></script>
+  <script src="js/discover.js?v=3.0"></script>
+  <script src="js/swiper.js?v=3.0"></script>
+  <script src="js/planner.js?v=3.0"></script>
+  <script src="js/matches.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
 </body>
 </html>
