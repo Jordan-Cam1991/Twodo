@@ -152,6 +152,7 @@ const swiper = {
             <div class="card-location" style="margin-bottom:6px;">
               <span>📍</span> <span>${ev.location_name || ev.city}</span>
             </div>
+            <div class="card-location" style="margin-bottom:6px; font-weight:600;">${typeof discover !== 'undefined' && discover.formatWhen ? discover.formatWhen(ev) : ''}</div>
             ${partnerNoteHtml}
             <p style="font-size:0.88rem; color:#475569; margin-bottom:10px; line-height:1.4;">${ev.description}</p>
             ${ev.insider_tip ? `<div class="card-tip"><strong>💡 Tip:</strong> ${ev.insider_tip}</div>` : ''}

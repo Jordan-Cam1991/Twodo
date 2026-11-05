@@ -54,6 +54,7 @@ const matchesView = {
     const active = [];
     const removed = [];
     pool.forEach(ev => {
+      if (typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev)) return; // finished events are hidden
       const v1 = votes[`${ev.id}_${u1}`] ?? votes[`${ev.id}_Emma`] ?? ev.u1_vote;
       const v2 = votes[`${ev.id}_${u2}`] ?? votes[`${ev.id}_Jordan`] ?? ev.u2_vote;
       const isMatch = isSolo
@@ -74,7 +75,7 @@ const matchesView = {
 
   /** Reads the event's own date & time from start_date ("YYYY-MM-DD HH:MM"). */
   getEventWhen(ev) {
-    const raw = String(ev.start_date || '');
+    const raw = ev.ongoing ? '' : String(ev.start_date || '');
     const m = raw.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
     if (!m) return { date: null, time: null, label: ev.time_str || 'Flexible timing', isPast: false };
 

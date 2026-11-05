@@ -407,11 +407,10 @@ const authUI = {
       if (window.app && app.closeSettingsModal) {
         app.closeSettingsModal();
       }
-      await firebaseService.logout();
+      await firebaseService.logout(); // also wipes this user's saved data from the device
       this.showAuthScreen();
-      if (window.app && app.showToast) {
-        app.showToast('Logged out of TwoDo.');
-      }
+      // Full reload guarantees nothing from this account stays in memory
+      setTimeout(() => window.location.reload(), 50);
     }
   }
 };

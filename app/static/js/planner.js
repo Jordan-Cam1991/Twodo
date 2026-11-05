@@ -34,11 +34,12 @@ const planner = {
     const scheduledBadge = document.getElementById('scheduled-count-badge');
     const bucketBadge = document.getElementById('bucket-count-badge');
 
-    const scheduled = this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
-    const bucket = this.items.filter(i => i.status === 'bucket_list' || !i.scheduled_date);
+    const visible = this.visibleItems();
+    const scheduled = visible.filter(i => i.status === 'scheduled' && i.scheduled_date);
+    const bucket = visible.filter(i => i.status === 'bucket_list' || !i.scheduled_date);
 
-    if (badge) badge.textContent = this.items.length;
-    if (mBadge) mBadge.textContent = this.items.length;
+    if (badge) badge.textContent = visible.length;
+    if (mBadge) mBadge.textContent = visible.length;
     if (scheduledBadge) scheduledBadge.textContent = scheduled.length;
     if (bucketBadge) bucketBadge.textContent = bucket.length;
   },
@@ -106,8 +107,19 @@ const planner = {
     return item;
   },
 
+  /** Planner items still worth showing — anything dated in the past is hidden. */
+  visibleItems() {
+    const today = (typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10);
+    return (this.items || []).filter(i => {
+      if (i.scheduled_date && i.scheduled_date < today) return false;
+      const ev = this.findEvent(i.event_id);
+      if (ev && typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev)) return false;
+      return true;
+    });
+  },
+
   renderPlanner() {
-    const scheduled = this.items
+    const scheduled = this.visibleItems()
       .filter(i => i.status === 'scheduled' && i.scheduled_date)
       .sort((a, b) => `${a.scheduled_date} ${a.scheduled_time || ''}`.localeCompare(`${b.scheduled_date} ${b.scheduled_time || ''}`));
     this.renderHeroNextDate(scheduled);
@@ -177,7 +189,7 @@ const planner = {
     const empty = document.getElementById('scheduled-empty');
     if (!timeline) return;
 
-    const scheduled = scheduledList || this.items.filter(i => i.status === 'scheduled' && i.scheduled_date);
+    const scheduled = scheduledList || this.visibleItems().filter(i => i.status === 'scheduled' && i.scheduled_date);
 
     if (scheduled.length === 0) {
       timeline.innerHTML = '';
@@ -246,7 +258,7 @@ const planner = {
     const empty = document.getElementById('bucket-empty');
     if (!list) return;
 
-    const bucket = this.items.filter(i => i.status === 'bucket_list' || !i.scheduled_date);
+    const bucket = this.visibleItems().filter(i => i.status === 'bucket_list' || !i.scheduled_date);
 
     if (bucket.length === 0) {
       list.innerHTML = '';

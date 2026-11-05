@@ -45,22 +45,28 @@ const firebaseService = {
     } catch (e) {}
 
     // Restore cached session identity immediately so UI is 0ms responsive
+    // (only if the cached profile belongs to the signed-in device user)
     const hasSession = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
     const cachedUid = localStorage.getItem('twodo_user_uid');
     const cachedProfile = localStorage.getItem('twodo_user_profile');
 
-    if (hasSession && cachedProfile) {
+    if (hasSession && cachedProfile && cachedUid) {
       try {
-        this.userProfile = JSON.parse(cachedProfile);
-        this.pairCode = this.userProfile?.pair_code;
-        if (this.userProfile?.couple_id) {
-          this.isSolo = false;
-          this.coupleId = this.userProfile.couple_id;
-          this.attachListeners(this.coupleId);
-        } else if (cachedUid) {
-          this.isSolo = true;
-          this.coupleId = null;
-          this.attachSoloListeners(cachedUid);
+        const parsed = JSON.parse(cachedProfile);
+        if (parsed && parsed.uid === cachedUid) {
+          this.userProfile = parsed;
+          this.pairCode = parsed.pair_code;
+          if (parsed.couple_id) {
+            this.isSolo = false;
+            this.coupleId = parsed.couple_id;
+            this.attachListeners(this.coupleId);
+          } else {
+            this.isSolo = true;
+            this.coupleId = null;
+            this.attachSoloListeners(cachedUid);
+          }
+        } else {
+          this.clearLocalUserData();
         }
       } catch (e) {}
     }
@@ -99,6 +105,49 @@ const firebaseService = {
   },
 
   // ---------------------------------------------------------------------------
+  // PER-USER DATA ISOLATION (so one person never sees another's data on a shared phone)
+  // ---------------------------------------------------------------------------
+  USER_DATA_KEYS: [
+    'twodo_profile', 'twodo_user_profile', 'twodo_user_name', 'twodo_pending_name', 'twodo_pending_uid',
+    'twodo_votes', 'twodo_notes', 'twodo_planner', 'twodo_chat_messages', 'twodo_custom_events',
+    'twodo_dismissed_matches', 'twodo_data_owner'
+  ],
+
+  /** Wipes every bit of the current user's data from this device + memory. */
+  clearLocalUserData() {
+    try { this.USER_DATA_KEYS.forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    this.detachListeners();
+    this.userProfile = null;
+    this.profile = null;
+    this.coupleId = null;
+    this.pairCode = null;
+    this.isSolo = true;
+    this.votesMap = {};
+    this.notesMap = {};
+    this.plannerItems = [];
+    this.messages = [];
+    this.customEvents = [];
+    this.dismissedMatches = new Set();
+    if (typeof app !== 'undefined') { app.profile = null; app.events = []; }
+    if (typeof planner !== 'undefined') planner.items = [];
+  },
+
+  /** If this device's saved data belongs to someone else, wipe it before loading this user. */
+  ensureDataOwner(uid) {
+    if (!uid) return;
+    let owner = localStorage.getItem('twodo_data_owner');
+    if (!owner) {
+      // Older versions didn't record an owner — infer it from the cached profile
+      try { owner = JSON.parse(localStorage.getItem('twodo_user_profile') || 'null')?.uid || null; } catch (e) {}
+    }
+    if (owner && owner !== uid) {
+      console.log('Different account on this device — clearing previous user data');
+      this.clearLocalUserData();
+    }
+    localStorage.setItem('twodo_data_owner', uid);
+  },
+
+  // ---------------------------------------------------------------------------
   // AUTHENTICATION: LOGIN & REGISTER
   // ---------------------------------------------------------------------------
   async login(email, password) {
@@ -111,6 +160,9 @@ const firebaseService = {
       const cred = await this.auth.signInWithEmailAndPassword(cleanEmail, password);
       this.currentUser = cred.user;
 
+      // Wipe any other account's leftovers BEFORE showing anything
+      this.ensureDataOwner(cred.user.uid);
+
       if (window.authUI && authUI.setDeviceSession) {
         authUI.setDeviceSession(cred.user.uid, cleanEmail, password);
       }
@@ -120,14 +172,18 @@ const firebaseService = {
         authUI.showApp();
       }
 
-      // Restore cached profile immediately for instant UI response
+      // Restore cached profile immediately for instant UI response (same user only)
       const cached = localStorage.getItem('twodo_user_profile');
       if (cached) {
         try {
-          this.userProfile = JSON.parse(cached);
-          if (this.userProfile.couple_id) {
-            this.isSolo = false;
-            this.coupleId = this.userProfile.couple_id;
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.uid === cred.user.uid) {
+            this.userProfile = parsed;
+            this.pairCode = parsed.pair_code;
+            if (parsed.couple_id) {
+              this.isSolo = false;
+              this.coupleId = parsed.couple_id;
+            }
           }
         } catch (e) {}
       }
@@ -147,23 +203,29 @@ const firebaseService = {
       const city = (defaultCity || '').trim() || 'Brisbane';
       const cleanEmail = email.trim().toLowerCase();
 
-      // Persist chosen name immediately so concurrent onAuthStateChanged has it
-      localStorage.setItem('twodo_pending_name', cleanName);
-      localStorage.setItem('twodo_user_name', cleanName);
-      localStorage.setItem('twodo_profile', JSON.stringify({
-        user1_name: cleanName,
-        user2_name: 'Partner',
-        default_city: city
-      }));
-
       try {
         await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       } catch (e) {}
 
-      // Create individual Firebase Auth user
-      const cred = await this.auth.createUserWithEmailAndPassword(cleanEmail, password);
+      // Create individual Firebase Auth user (block the auto sign-in handler meanwhile)
+      this._registering = true;
+      let cred;
+      try {
+        cred = await this.auth.createUserWithEmailAndPassword(cleanEmail, password);
+      } catch (e) {
+        this._registering = false;
+        throw e;
+      }
       const uid = cred.user.uid;
       this.currentUser = cred.user;
+
+      // Fresh account on this device: clear anyone else's data, then save this user's name
+      this.ensureDataOwner(uid);
+      localStorage.setItem('twodo_user_name', cleanName);
+      localStorage.setItem('twodo_pending_name', cleanName);
+      localStorage.setItem('twodo_pending_uid', uid);
+      // Store the name on the login itself too, so it's never lost
+      cred.user.updateProfile({ displayName: cleanName }).catch(() => {});
 
       if (window.authUI && authUI.setDeviceSession) {
         authUI.setDeviceSession(uid, cleanEmail, password);
@@ -235,8 +297,12 @@ const firebaseService = {
         authUI.updateSettingsAccountUI(cleanEmail, this.profile, this.isSolo, this.userProfile?.partner_name);
       }
 
+      localStorage.removeItem('twodo_pending_name');
+      localStorage.removeItem('twodo_pending_uid');
+      this._registering = false;
       return { success: true, user: cred.user };
     } catch (err) {
+      this._registering = false;
       return { success: false, error: this.formatAuthError(err) };
     }
   },
@@ -248,6 +314,8 @@ const firebaseService = {
     } catch (err) {
       console.error('Logout error:', err);
     }
+    // Remove ALL of this user's data from the device so the next person starts clean
+    this.clearLocalUserData();
     this.handleUserSignedOut();
   },
 
@@ -467,6 +535,7 @@ const firebaseService = {
   _syncingUid: null,
   async handleUserSignedIn(user) {
     if (!user) return;
+    if (this._registering) return; // register() sets everything up itself
     if (this._syncingUid === user.uid) {
       return;
     }
@@ -477,18 +546,21 @@ const firebaseService = {
       this.currentUser = user;
       const uid = user.uid;
 
+      // Never mix accounts: wipe a different user's leftovers first
+      this.ensureDataOwner(uid);
+
       if (window.authUI && authUI.setDeviceSession) {
         authUI.setDeviceSession(uid, user.email);
       }
 
-      // Check cached user profile first for instant 0ms render
+      // Check cached user profile first for instant 0ms render (same user only)
       let userDoc = null;
       try {
-        const cached = localStorage.getItem('twodo_user_profile');
-        if (cached) userDoc = JSON.parse(cached);
+        const cached = JSON.parse(localStorage.getItem('twodo_user_profile') || 'null');
+        if (cached && cached.uid === uid) userDoc = cached;
       } catch (e) {}
 
-      if (userDoc && userDoc.uid === uid) {
+      if (userDoc) {
         this.userProfile = userDoc;
         this.pairCode = userDoc.pair_code;
         if (userDoc.couple_id) {
@@ -500,8 +572,9 @@ const firebaseService = {
         }
       }
 
-      // 1. Fetch individual user record from Firestore / cache
+      // 1. Fetch individual user record from Firestore (source of truth)
       let cloudChecked = false;
+      const cachedLocal = userDoc;
       try {
         const uDocSnap = await this.db.collection('users').doc(uid).get();
         cloudChecked = true;
@@ -510,12 +583,13 @@ const firebaseService = {
         console.warn('User doc fetch note:', e);
       }
 
-      const pendingName = localStorage.getItem('twodo_pending_name') || localStorage.getItem('twodo_user_name');
+      // A name typed at sign-up on THIS device for THIS account (never another user's)
+      const pendingName = (localStorage.getItem('twodo_pending_uid') === uid)
+        ? localStorage.getItem('twodo_pending_name')
+        : null;
 
       // Cloud has no record yet but this device does → upload it (keeps the same invite code)
-      let cachedLocal = null;
-      try { cachedLocal = JSON.parse(localStorage.getItem('twodo_user_profile') || 'null'); } catch (e) {}
-      if (!userDoc && cachedLocal && cachedLocal.uid === uid && cachedLocal.pair_code) {
+      if (!userDoc && cachedLocal && cachedLocal.pair_code) {
         userDoc = cachedLocal;
         if (cloudChecked) {
           this.db.collection('users').doc(uid).set(userDoc, { merge: true }).catch(() => {});
@@ -526,7 +600,9 @@ const firebaseService = {
       }
 
       if (!userDoc) {
-        const resolvedName = pendingName || (user.email || '').split('@')[0] || 'Explorer';
+        const emailName = (user.email || '').split('@')[0].replace(/[._\d]+/g, ' ').trim();
+        const prettyEmailName = emailName ? emailName.charAt(0).toUpperCase() + emailName.slice(1) : '';
+        const resolvedName = pendingName || user.displayName || prettyEmailName || 'Explorer';
         const code = this.generatePairCode(resolvedName);
         userDoc = {
           uid: uid,
@@ -549,10 +625,15 @@ const firebaseService = {
           this.db.collection('pair_codes').doc(userDoc.pair_code).set({ user_name: pendingName }, { merge: true }).catch(() => {});
         }
       }
+      if (pendingName && cloudChecked) {
+        localStorage.removeItem('twodo_pending_name');
+        localStorage.removeItem('twodo_pending_uid');
+      }
 
       this.userProfile = userDoc;
       this.pairCode = userDoc.pair_code;
       localStorage.setItem('twodo_user_profile', JSON.stringify(userDoc));
+      if (userDoc.name) localStorage.setItem('twodo_user_name', userDoc.name);
 
       // 2. Check if coupled or solo
       if (userDoc.couple_id) {

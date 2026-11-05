@@ -54,8 +54,8 @@ const api = {
         try { return JSON.parse(saved); } catch (err) {}
       }
       return {
-        user1_name: 'Emma',
-        user2_name: 'Jordan',
+        user1_name: localStorage.getItem('twodo_user_name') || 'You',
+        user2_name: 'Partner',
         default_city: 'Brisbane',
         current_city: 'Brisbane',
         api_keys_json: '{}'
@@ -75,8 +75,8 @@ const api = {
         try { return JSON.parse(saved); } catch (err) {}
       }
       return {
-        user1_name: 'Emma',
-        user2_name: 'Jordan',
+        user1_name: localStorage.getItem('twodo_user_name') || 'You',
+        user2_name: 'Partner',
         default_city: 'Brisbane',
         current_city: 'Brisbane',
         api_keys_json: '{}'
@@ -145,6 +145,20 @@ const api = {
       this.serverAvailable = false;
       return this.getLocalEnrichedEvents(params);
     }
+  },
+
+  /** Local YYYY-MM-DD for today (Brisbane / device time, not UTC). */
+  todayYMD() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  },
+
+  /** True when a dated event has completely finished (ongoing venues never expire). */
+  isPastEvent(ev) {
+    if (!ev || ev.ongoing) return false;
+    const last = String(ev.end_date || ev.start_date || '').match(/\d{4}-\d{2}-\d{2}/);
+    if (!last) return false;
+    return last[0] < this.todayYMD();
   },
 
   getLocalEnrichedEvents(params = {}) {
@@ -367,8 +381,13 @@ const api = {
         }
       }
 
-      // Date Range filter
-      if (!matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
+      // Never show events that have already finished (ongoing venues never expire)
+      if (this.isPastEvent(ev)) {
+        continue;
+      }
+
+      // Date Range filter (ongoing venues are available any day)
+      if (!ev.ongoing && !matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
         continue;
       }
 

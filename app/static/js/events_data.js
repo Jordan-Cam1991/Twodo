@@ -11,8 +11,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4447,
     "lng": 153.0722,
-    "start_date": "2026-11-05 17:30",
-    "end_date": "2026-11-05 22:00",
+    "start_date": "2026-11-06 16:00",
+    "end_date": "2026-11-06 22:00",
     "time_str": "Friday & Saturday 4:00 PM - 10:00 PM",
     "price_level": "$",
     "price_str": "$6 entry + food",
@@ -38,8 +38,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4789,
     "lng": 153.0336,
-    "start_date": "2026-11-06 17:00",
-    "end_date": "2026-11-06 19:30",
+    "start_date": "2026-11-07 17:00",
+    "end_date": "2026-11-07 19:30",
     "time_str": "Saturday 5:00 PM - 7:30 PM",
     "price_level": "$$",
     "price_str": "$75 per person",
@@ -65,8 +65,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4578,
     "lng": 153.0354,
-    "start_date": "2026-11-07 19:30",
-    "end_date": "2026-11-07 22:00",
+    "start_date": "2026-11-08 19:30",
+    "end_date": "2026-11-08 22:00",
     "time_str": "Sunday 7:30 PM",
     "price_level": "$$",
     "price_str": "$24 - $38",
@@ -92,8 +92,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4833,
     "lng": 153.01,
-    "start_date": "2026-11-08 20:00",
-    "end_date": "2026-11-08 23:00",
+    "start_date": "2026-11-11 20:00",
+    "end_date": "2026-11-11 23:00",
     "time_str": "Next Wednesday 8:00 PM",
     "price_level": "$$",
     "price_str": "$35",
@@ -132,7 +132,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The Japanese Garden has a tranquil wooden pavilion that makes for lovely couple photos.",
     "is_custom": 0,
-    "created_at": "2026-11-03T19:44:19.182231"
+    "created_at": "2026-11-03T19:44:19.182231",
+    "ongoing": true
   },
   {
     "id": "bne-pottery-wine",
@@ -146,8 +147,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4478,
     "lng": 153.0422,
-    "start_date": "2026-11-09 18:00",
-    "end_date": "2026-11-09 20:30",
+    "start_date": "2026-11-12 18:00",
+    "end_date": "2026-11-12 20:30",
     "time_str": "Thursday 6:00 PM - 8:30 PM",
     "price_level": "$$$",
     "price_str": "$89 per person",
@@ -186,7 +187,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab beanbags on the Felons lawn around 5pm to catch the twilight lighting transition.",
     "is_custom": 0,
-    "created_at": "2026-11-03T19:44:19.182231"
+    "created_at": "2026-11-03T19:44:19.182231",
+    "ongoing": true
   },
   {
     "id": "bne-comedy-club",
@@ -200,8 +202,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4645,
     "lng": 153.0142,
-    "start_date": "2026-11-08 19:30",
-    "end_date": "2026-11-08 21:30",
+    "start_date": "2026-11-06 19:30",
+    "end_date": "2026-11-06 21:30",
     "time_str": "Friday 7:30 PM",
     "price_level": "$",
     "price_str": "$22",
@@ -227,8 +229,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.454611005620148,
     "lng": 153.0223406275782,
-    "start_date": "2026-11-05 19:44",
-    "end_date": "2026-11-05 19:44",
+    "start_date": "2026-11-06 17:30",
+    "end_date": "2026-11-06 19:44",
     "time_str": "Friday 5:30 PM - 9:30 PM",
     "price_level": "$",
     "price_str": "Free entry ($5-$15 eats)",
@@ -254,8 +256,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.450078626964256,
     "lng": 153.0519890767027,
-    "start_date": "2026-11-06 19:44",
-    "end_date": "2026-11-06 19:44",
+    "start_date": "2026-11-07 19:30",
+    "end_date": "2026-11-07 19:44",
     "time_str": "Saturday 7:30 PM",
     "price_level": "$$",
     "price_str": "$28 - $45",
@@ -308,7 +310,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.49451550165029,
     "lng": 153.01154940201198,
-    "start_date": "2026-11-07 19:44",
+    "start_date": "2026-11-07 18:00",
     "end_date": "2026-11-07 19:44",
     "time_str": "Saturday 6:00 PM onwards",
     "price_level": "$$",
@@ -335,7 +337,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.47858957087522,
     "lng": 153.04016594534812,
-    "start_date": "2026-11-08 19:44",
+    "start_date": "2026-11-08 12:00",
     "end_date": "2026-11-08 19:44",
     "time_str": "Sunday 12:00 PM - 2:30 PM",
     "price_level": "$$$",
@@ -375,7 +377,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a thermos of coffee or tea and a blanket for the quiet lake meadow.",
     "is_custom": 0,
-    "created_at": "2026-11-03T19:44:19.182231"
+    "created_at": "2026-11-03T19:44:19.182231",
+    "ongoing": true
   },
   {
     "id": "brisbane-gen-7",
@@ -389,8 +392,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4667219655521,
     "lng": 153.03465923302048,
-    "start_date": "2026-11-09 19:44",
-    "end_date": "2026-11-09 19:44",
+    "start_date": "2026-11-06 20:00",
+    "end_date": "2026-11-06 19:44",
     "time_str": "Friday 8:00 PM",
     "price_level": "$",
     "price_str": "$20",
@@ -416,8 +419,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.493172449394205,
     "lng": 152.99978779700015,
-    "start_date": "2026-11-06 19:44",
-    "end_date": "2026-11-06 19:44",
+    "start_date": "2026-11-07 14:00",
+    "end_date": "2026-11-07 19:44",
     "time_str": "Saturday 2:00 PM - 4:30 PM",
     "price_level": "$$$",
     "price_str": "$75 per person",
@@ -456,7 +459,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a craft iced tea at the GOMA Bistro on the river deck after exploring the gallery.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-qag-mudskippers",
@@ -483,7 +487,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Check out the water mall courtyard inside QAG for tranquil couple photos.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-goma-smokescreen",
@@ -510,7 +515,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow with a scenic walk across the Kurilpa Footbridge into the city.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-clocktower-mob",
@@ -535,9 +541,10 @@ const PRELOADED_EVENTS = [
       "Historic",
       "CBD"
     ],
-    "insider_tip": "Tickets open online at 8:30am each morning and book out fast \u2014 snap up a late morning slot!",
+    "insider_tip": "Tickets open online at 8:30am each morning and book out fast — snap up a late morning slot!",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-sciencentre-afterdark",
@@ -551,8 +558,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4735,
     "lng": 153.0185,
-    "start_date": "2026-11-07 18:00",
-    "end_date": "2026-11-07 21:30",
+    "start_date": "2026-11-06 18:00",
+    "end_date": "2026-11-06 21:30",
     "time_str": "Friday 6:00 PM - 9:30 PM",
     "price_level": "$$",
     "price_str": "$25 per person",
@@ -568,7 +575,7 @@ const PRELOADED_EVENTS = [
   },
   {
     "id": "bne-jack-johnson-riverstage",
-    "title": "Jack Johnson \u2013 Surfilmusic Tour with Ben Harper & John Butler",
+    "title": "Jack Johnson – Surfilmusic Tour with Ben Harper & John Butler",
     "description": "An idyllic open-air evening on the Riverstage lawns singing along to 'Banana Pancakes' and 'Better Together' under the subtropical trees.",
     "category": "Music & Concerts",
     "source": "Ticketmaster",
@@ -643,7 +650,7 @@ const PRELOADED_EVENTS = [
       "Outdoor",
       "Riverstage"
     ],
-    "insider_tip": "Take the ferry to QUT Gardens Point wharf \u2014 it drops you off 200m from the gate!",
+    "insider_tip": "Take the ferry to QUT Gardens Point wharf — it drops you off 200m from the gate!",
     "is_custom": 0,
     "created_at": "2026-11-03T20:55:21.907970"
   },
@@ -686,8 +693,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4746,
     "lng": 153.0195,
-    "start_date": "2026-11-06 19:30",
-    "end_date": "2026-11-06 21:45",
+    "start_date": "2026-11-07 19:30",
+    "end_date": "2026-11-07 21:45",
     "time_str": "Saturday 7:30 PM",
     "price_level": "$$$",
     "price_str": "$69 - $115",
@@ -713,8 +720,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4742,
     "lng": 153.0201,
-    "start_date": "2026-11-08 19:00",
-    "end_date": "2026-11-08 21:15",
+    "start_date": "2026-11-11 19:00",
+    "end_date": "2026-11-11 21:15",
     "time_str": "Next Wednesday 7:00 PM",
     "price_level": "$$$",
     "price_str": "$55 - $98",
@@ -767,8 +774,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4526,
     "lng": 153.0321,
-    "start_date": "2026-11-06 19:30",
-    "end_date": "2026-11-06 23:00",
+    "start_date": "2026-11-07 19:30",
+    "end_date": "2026-11-07 23:00",
     "time_str": "Saturday 7:30 PM",
     "price_level": "$$",
     "price_str": "$45",
@@ -807,7 +814,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Exchange $10 for a cup of tokens and challenge Jordan to a head-to-head Mario Kart and Point Blank shootout!",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-planetarium-dome",
@@ -821,8 +829,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4764,
     "lng": 152.9754,
-    "start_date": "2026-11-05 18:00",
-    "end_date": "2026-11-05 19:30",
+    "start_date": "2026-11-06 18:00",
+    "end_date": "2026-11-06 19:30",
     "time_str": "Friday & Saturday Evenings",
     "price_level": "$",
     "price_str": "$12 - $16",
@@ -861,7 +869,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Do 15 mins hot pool followed by 90 seconds in the cold plunge pool for an endorphin rush together.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-vic-park-puttputt",
@@ -888,7 +897,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The course is fully licensed so you can grab drinks at the starter hut and carry them with you.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-pancake-manor",
@@ -915,7 +925,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit in one of the wooden pews tucked into the side transepts for cozy candlelit privacy.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-citycat-hop",
@@ -969,7 +980,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "They don't serve food, but they actively encourage you to BYO takeaway from the Greek or Italian restaurants across the road!",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-distillery-gin",
@@ -1010,8 +1022,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.451,
     "lng": 153.0435,
-    "start_date": "2026-11-06 18:30",
-    "end_date": "2026-11-06 21:00",
+    "start_date": "2026-11-07 18:30",
+    "end_date": "2026-11-07 21:00",
     "time_str": "Saturday 6:30 PM - 9:00 PM",
     "price_level": "$$$",
     "price_str": "$85 per person",
@@ -1037,8 +1049,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.478,
     "lng": 153.0112,
-    "start_date": "2026-11-08 19:00",
-    "end_date": "2026-11-08 21:30",
+    "start_date": "2026-11-06 19:00",
+    "end_date": "2026-11-06 21:30",
     "time_str": "Friday 7:00 PM",
     "price_level": "$$",
     "price_str": "$65 per person",
@@ -1048,7 +1060,7 @@ const PRELOADED_EVENTS = [
       "Creative",
       "Fun"
     ],
-    "insider_tip": "No art skills required \u2014 the step-by-step guidance makes everyone's piece look brilliant.",
+    "insider_tip": "No art skills required — the step-by-step guidance makes everyone's piece look brilliant.",
     "is_custom": 0,
     "created_at": "2026-11-03T20:55:21.907970"
   },
@@ -1064,8 +1076,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.455,
     "lng": 153.048,
-    "start_date": "2026-11-09 11:30",
-    "end_date": "2026-11-09 14:00",
+    "start_date": "2026-11-08 11:30",
+    "end_date": "2026-11-08 14:00",
     "time_str": "Sunday 11:30 AM - 2:00 PM",
     "price_level": "$$$",
     "price_str": "$95 per person",
@@ -1076,60 +1088,6 @@ const PRELOADED_EVENTS = [
       "Italian"
     ],
     "insider_tip": "You sit down together at the end of class to feast on your pasta with bottomless prosecco.",
-    "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
-  },
-  {
-    "id": "bne-rlwc-finals",
-    "title": "Rugby League World Cup 2026 Finals at Suncorp Stadium",
-    "description": "The ultimate showdown in world rugby league! Suncorp Stadium erupts for the Men's and Women's double-header World Cup Finals.",
-    "category": "Outdoor & Adventure",
-    "source": "Suncorp Stadium",
-    "source_url": "https://www.suncorpstadium.com.au",
-    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
-    "location_name": "Suncorp Stadium, Milton",
-    "city": "Brisbane",
-    "lat": -27.4648,
-    "lng": 153.0094,
-    "start_date": "2026-11-15 16:00",
-    "end_date": "2026-11-15 21:30",
-    "time_str": "Sunday 4:00 PM Kickoff",
-    "price_level": "$$$",
-    "price_str": "$65 - $180",
-    "tags": [
-      "Rugby League",
-      "World Cup",
-      "Stadium Energy",
-      "Milton"
-    ],
-    "insider_tip": "Take the train straight to Milton Station \u2014 tickets include free public transport.",
-    "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
-  },
-  {
-    "id": "bne-t20-gabba-cricket",
-    "title": "Australia vs England T20 International at The Gabba",
-    "description": "Old rivalry renewed under the Gabba floodlights with massive sixes, pyrotechnics, and the singing crowd as Australia battles England.",
-    "category": "Outdoor & Adventure",
-    "source": "The Gabba",
-    "source_url": "https://www.thegabba.com.au",
-    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
-    "location_name": "The Gabba, Woolloongabba",
-    "city": "Brisbane",
-    "lat": -27.4858,
-    "lng": 153.0381,
-    "start_date": "2026-11-27 18:30",
-    "end_date": "2026-11-27 22:30",
-    "time_str": "Friday 6:30 PM",
-    "price_level": "$$",
-    "price_str": "$40 - $95",
-    "tags": [
-      "Cricket",
-      "The Gabba",
-      "T20I",
-      "Big Atmosphere"
-    ],
-    "insider_tip": "Grab pre-game craft beers at German Club Brisbane or Brisbane Brewing Co on Stanley St.",
     "is_custom": 0,
     "created_at": "2026-11-03T20:55:21.907970"
   },
@@ -1158,7 +1116,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a cold picnic and towel for the grassy bank under the gum trees after paddling.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-climbing-kp-cliffs",
@@ -1172,8 +1131,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4789,
     "lng": 153.0336,
-    "start_date": "2026-11-06 16:30",
-    "end_date": "2026-11-06 18:30",
+    "start_date": "2026-11-07 16:30",
+    "end_date": "2026-11-07 18:30",
     "time_str": "Saturday 4:30 PM - 6:30 PM",
     "price_level": "$$",
     "price_str": "$65 per person",
@@ -1190,7 +1149,7 @@ const PRELOADED_EVENTS = [
   {
     "id": "bne-jan-powers-powerhouse",
     "title": "Jan Powers Farmers Market at Brisbane Powerhouse",
-    "description": "Brisbane's most beloved Saturday morning market: French cr\u00eapes, freshly roasted espresso, organic farm fruit, fresh pasta, and bouquets under leafy jacarandas.",
+    "description": "Brisbane's most beloved Saturday morning market: French crêpes, freshly roasted espresso, organic farm fruit, fresh pasta, and bouquets under leafy jacarandas.",
     "category": "Markets & Pop-ups",
     "source": "Local Guide",
     "source_url": "https://janpowersfarmersmarkets.com.au",
@@ -1199,7 +1158,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4682,
     "lng": 153.0539,
-    "start_date": "2026-11-07 07:00",
+    "start_date": "2026-11-07 06:00",
     "end_date": "2026-11-07 12:30",
     "time_str": "Saturday 6:00 AM - 12:00 PM",
     "price_level": "Free",
@@ -1226,7 +1185,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.486,
     "lng": 153.003,
-    "start_date": "2026-11-07 07:00",
+    "start_date": "2026-11-07 06:00",
     "end_date": "2026-11-07 14:00",
     "time_str": "Saturday 6:00 AM - 2:00 PM",
     "price_level": "Free",
@@ -1253,8 +1212,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4715,
     "lng": 153.0238,
-    "start_date": "2026-11-05 09:00",
-    "end_date": "2026-11-05 17:30",
+    "start_date": "2026-11-04 08:00",
+    "end_date": "2026-11-04 17:30",
     "time_str": "Wednesday 8:00 AM - 6:00 PM",
     "price_level": "$",
     "price_str": "Free entry / Market eats",
@@ -1280,8 +1239,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.474,
     "lng": 153.016,
-    "start_date": "2026-11-05 18:00",
-    "end_date": "2026-11-05 22:30",
+    "start_date": "2026-11-03 17:00",
+    "end_date": "2026-11-03 22:30",
     "time_str": "Tuesday to Saturday from 5:00 PM",
     "price_level": "$$$",
     "price_str": "$35 - $80 per person",
@@ -1347,7 +1306,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cellar door does guided tastings of their Granite Belt Vermentino and Syrah.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-council-movewell-yoga",
@@ -1401,7 +1361,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack cheese and crackers; you are allowed to BYO wine in designated picnic lawn areas.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:55:21.907970"
+    "created_at": "2026-11-03T20:55:21.907970",
+    "ongoing": true
   },
   {
     "id": "bne-goodchat-comedy",
@@ -1415,8 +1376,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4645,
     "lng": 153.0142,
-    "start_date": "2026-11-07 19:30",
-    "end_date": "2026-11-07 21:30",
+    "start_date": "2026-11-06 19:30",
+    "end_date": "2026-11-06 21:30",
     "time_str": "Friday 7:30 PM",
     "price_level": "$",
     "price_str": "$22",
@@ -1442,8 +1403,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4578,
     "lng": 153.0354,
-    "start_date": "2026-11-06 19:30",
-    "end_date": "2026-11-06 22:00",
+    "start_date": "2026-11-07 19:30",
+    "end_date": "2026-11-07 22:00",
     "time_str": "Saturday 7:30 PM",
     "price_level": "$$",
     "price_str": "$24 - $38",
@@ -1482,7 +1443,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Paddington's boutique bars along Given Terrace make for great post-show cocktail stops.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-savile-row",
@@ -1509,7 +1471,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Head up to the second-floor mezzanine booth overlooking the chandelier for prime people-watching.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-death-and-taxes",
@@ -1536,7 +1499,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender for their off-menu seasonal milk punch.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-slq-edge",
@@ -1563,7 +1527,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The Edge cafe has a quiet shaded balcony cantilevered over the water with very few people.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-tangalooma-day",
@@ -1617,7 +1582,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring fold-out camp chairs and sit right along the stone balustrade as the sun dips.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-pincadia-arcade",
@@ -1644,7 +1610,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Upstairs has quieter booths if you want to play Scrabble or Catan between pinball games.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-milton-market",
@@ -1658,7 +1625,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4695,
     "lng": 153.007,
-    "start_date": "2026-11-08 07:00",
+    "start_date": "2026-11-08 06:00",
     "end_date": "2026-11-08 13:00",
     "time_str": "Sunday 6:00 AM - 12:00 PM",
     "price_level": "Free",
@@ -1669,7 +1636,7 @@ const PRELOADED_EVENTS = [
       "Milton",
       "Morning Stroll"
     ],
-    "insider_tip": "The Hungarian l\u00e1ngos and Japanese okonomiyaki stalls have queues for good reason!",
+    "insider_tip": "The Hungarian lángos and Japanese okonomiyaki stalls have queues for good reason!",
     "is_custom": 0,
     "created_at": "2026-11-03T20:56:42.941961"
   },
@@ -1698,7 +1665,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Visit around 11am or 2pm when keepers do daily educational wildlife talks.",
     "is_custom": 0,
-    "created_at": "2026-11-03T20:56:42.941961"
+    "created_at": "2026-11-03T20:56:42.941961",
+    "ongoing": true
   },
   {
     "id": "bne-cycling-riverloop",
@@ -1712,8 +1680,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.476,
     "lng": 153.021,
-    "start_date": "2026-11-06 16:30",
-    "end_date": "2026-11-06 18:30",
+    "start_date": "2026-11-07 16:30",
+    "end_date": "2026-11-07 18:30",
     "time_str": "Saturday 4:30 PM",
     "price_level": "Free",
     "price_str": "Free / BYO bike or CityCycle",
@@ -1752,12 +1720,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive before 8:30am on weekends to secure the warm Basque cheesecake before it sells out!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-idle-newfarm",
     "title": "Idle: Tamsin Johnson Aesthetic Kitchen & Sourdough Crumpets",
-    "description": "Brought to you by the Agnes & Bi\u00e0nca team, this design-forward neighborhood bakery serves viral whipped butter sourdough crumpets, artisan loaves, and house spritzes.",
+    "description": "Brought to you by the Agnes & Biànca team, this design-forward neighborhood bakery serves viral whipped butter sourdough crumpets, artisan loaves, and house spritzes.",
     "category": "Food & Drink",
     "source": "TikTok & Instagram Hits",
     "source_url": "https://www.idlenewfarm.com.au",
@@ -1779,7 +1748,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit in the courtyard under the olive trees for the ultimate weekend aesthetic.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-beurre-pastries",
@@ -1793,8 +1763,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.468,
     "lng": 153.0065,
-    "start_date": "2026-11-05 08:00",
-    "end_date": "2026-12-03 13:00",
+    "start_date": "2026-11-04 07:30",
+    "end_date": "2026-12-02 13:00",
     "time_str": "Wednesday to Sunday 7:30 AM - 1:00 PM",
     "price_level": "$",
     "price_str": "$9 - $14",
@@ -1820,8 +1790,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.425,
     "lng": 152.989,
-    "start_date": "2026-11-04 09:00",
-    "end_date": "2026-12-03 15:00",
+    "start_date": "2026-11-05 09:00",
+    "end_date": "2026-12-04 15:00",
     "time_str": "Thursday to Sunday 9:00 AM - 3:00 PM",
     "price_level": "$",
     "price_str": "$7 - $10 per cookie",
@@ -1837,7 +1807,7 @@ const PRELOADED_EVENTS = [
   },
   {
     "id": "eat-doughcraft-cbd",
-    "title": "Doughcraft: Cr\u00e8me Br\u00fbl\u00e9e Croissant Tart & Viennoiserie",
+    "title": "Doughcraft: Crème Brûlée Croissant Tart & Viennoiserie",
     "description": "Crisp laminated croissant dough filled with rich Madagascar vanilla custard and torched to a crackling caramel glass top right before your eyes.",
     "category": "Food & Drink",
     "source": "TikTok & Instagram Hits",
@@ -1847,8 +1817,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4695,
     "lng": 153.028,
-    "start_date": "2026-11-03 07:30",
-    "end_date": "2026-12-03 15:00",
+    "start_date": "2026-11-02 07:00",
+    "end_date": "2026-12-02 15:00",
     "time_str": "Monday to Friday 7:00 AM - 3:00 PM",
     "price_level": "$",
     "price_str": "$8 - $12",
@@ -1874,8 +1844,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4645,
     "lng": 153.035,
-    "start_date": "2026-11-04 06:30",
-    "end_date": "2026-12-03 13:00",
+    "start_date": "2026-11-03 06:30",
+    "end_date": "2026-12-02 13:00",
     "time_str": "Tuesday to Sunday 6:30 AM - 1:00 PM",
     "price_level": "$",
     "price_str": "$6 - $11",
@@ -1913,7 +1883,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The croissant French toast with whipped mascarpone is their most photographed dish.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-sprout-artisan",
@@ -1927,8 +1898,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.453,
     "lng": 153.045,
-    "start_date": "2026-11-05 07:00",
-    "end_date": "2026-12-03 14:00",
+    "start_date": "2026-11-03 07:00",
+    "end_date": "2026-12-01 14:00",
     "time_str": "Tuesday to Sunday 7:00 AM - 2:00 PM",
     "price_level": "$",
     "price_str": "$6 - $12",
@@ -1967,7 +1938,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order their ceremonial matcha latte alongside the layered Earl Grey mousse cake.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-samesame-valley",
@@ -1994,11 +1966,12 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk up the spiral stairs to LOS (Land of Smiles) bar for a pre-dinner cocktail while waiting for your table.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-bianca-italian",
-    "title": "Bi\u00e0nca: Retro Pastel Italian Trattoria & Silk Pasta",
+    "title": "Biànca: Retro Pastel Italian Trattoria & Silk Pasta",
     "description": "Peach-colored terracotta walls, glowing neon signage, and incredible hand-rolled pasta: Paccheri with pork sausage, antipasti platters, and house gelato sundaes.",
     "category": "Date Night Specials",
     "source": "Food & Wine",
@@ -2021,7 +1994,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Save room for their soft-serve gelato coupe with roasted pistachios and warm olive oil drizzle.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-gerards-bistro",
@@ -2035,8 +2009,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.4578,
     "lng": 153.04,
-    "start_date": "2026-11-06 19:00",
-    "end_date": "2026-12-03 22:30",
+    "start_date": "2026-11-03 17:30",
+    "end_date": "2026-11-30 22:30",
     "time_str": "Tuesday to Saturday from 5:30 PM",
     "price_level": "$$$",
     "price_str": "$85 - $130 per person",
@@ -2052,8 +2026,8 @@ const PRELOADED_EVENTS = [
   },
   {
     "id": "eat-emme-jamesst",
-    "title": "\u0113mm\u0113: Fire-Kissed Mediterranean Dining & Sunlit Mezze",
-    "description": "Centered around a roaring wood-fire hearth, \u0113mm\u0113 serves olive-oil poached seafood, wood-fired halloumi with honey, and coastal Greek flavours from morning to night.",
+    "title": "ēmmē: Fire-Kissed Mediterranean Dining & Sunlit Mezze",
+    "description": "Centered around a roaring wood-fire hearth, ēmmē serves olive-oil poached seafood, wood-fired halloumi with honey, and coastal Greek flavours from morning to night.",
     "category": "Food & Drink",
     "source": "Food & Wine",
     "source_url": "https://www.emmejamesst.com",
@@ -2075,7 +2049,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Great for both a sunny late morning brunch and a relaxed candlelit evening dinner.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-hellenika-calile",
@@ -2102,7 +2077,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book an outdoor terrace booth at 5:30pm to watch golden hour over the cabanas.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-mr-percivals",
@@ -2128,7 +2104,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive at 4:30pm on Friday or Saturday to claim the riverside rail bar as twilight sets in.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-greca-taverna",
@@ -2153,9 +2130,10 @@ const PRELOADED_EVENTS = [
       "Riverfront",
       "Howard Smith Wharves"
     ],
-    "insider_tip": "Order the 'Aphrodite' feast menu \u2014 the lamb shoulder literally melts off the bone.",
+    "insider_tip": "Order the 'Aphrodite' feast menu — the lamb shoulder literally melts off the bone.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-yoko-dining",
@@ -2182,7 +2160,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask for upstairs outdoor balcony seating for sweeping views over the Brisbane river curve.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-happy-boy",
@@ -2209,7 +2188,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Their sister venue next door 'Snack Man' is perfect for a post-dinner glass of wine and dumplings.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-terrific-noodles",
@@ -2236,7 +2216,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order extra chili oil and add a tea egg for the most satisfying bowl in Brisbane.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-kusuka-corner",
@@ -2250,8 +2231,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.5715,
     "lng": 153.0612,
-    "start_date": "2026-11-04 12:00",
-    "end_date": "2026-12-03 21:00",
+    "start_date": "2026-11-03 11:30",
+    "end_date": "2026-12-02 21:00",
     "time_str": "Tuesday to Sunday 11:30 AM - 9:00 PM",
     "price_level": "$",
     "price_str": "$14 - $24",
@@ -2290,7 +2271,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Honey Butter and Smokey BBQ are the two best flavors to start your first round with.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-hakataya-ramen",
@@ -2316,7 +2298,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Leave some soup in your bowl when you finish so you can call out 'Kaedama please!' for free extra noodles.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-papas-pancakes",
@@ -2343,7 +2326,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Eat it 2 minutes after buying so the custard is warm and gooey without burning your tongue.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-meet-fresh",
@@ -2370,7 +2354,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sharing one big bowl between two is plenty!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-joeys-kp",
@@ -2395,14 +2380,15 @@ const PRELOADED_EVENTS = [
       "Sunset Spritz",
       "Iconic River View"
     ],
-    "insider_tip": "Book a clifftop edge table for 5:15pm \u2014 watching the city buildings turn purple and gold is unmatched.",
+    "insider_tip": "Book a clifftop edge table for 5:15pm — watching the city buildings turn purple and gold is unmatched.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-remys-paddington",
     "title": "Remy's: Courtyard Burgers, Loaded Fries & Craft Taps",
-    "description": "Paddington's beloved brick courtyard hangout. Legendary smash burgers, golden mozzarella sticks, jalape\u00f1o poppers, and happy hour local brews.",
+    "description": "Paddington's beloved brick courtyard hangout. Legendary smash burgers, golden mozzarella sticks, jalapeño poppers, and happy hour local brews.",
     "category": "Food & Drink",
     "source": "Local Guide",
     "source_url": "https://www.remys.com.au",
@@ -2424,12 +2410,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit out on the front timber deck under the striped umbrellas.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-montrachet-bowenhills",
-    "title": "Montrachet: Two-Hat Classical French Souffl\u00e9 & Caviar",
-    "description": "Queensland's pre-eminent classical French fine dining institution. Famous for their signature double-baked crab souffl\u00e9 and vintage Champagne trolley.",
+    "title": "Montrachet: Two-Hat Classical French Soufflé & Caviar",
+    "description": "Queensland's pre-eminent classical French fine dining institution. Famous for their signature double-baked crab soufflé and vintage Champagne trolley.",
     "category": "Date Night Specials",
     "source": "Food & Wine",
     "source_url": "https://www.montrachet.com.au",
@@ -2449,9 +2436,10 @@ const PRELOADED_EVENTS = [
       "Two Hats",
       "Special Occasion"
     ],
-    "insider_tip": "The crab souffl\u00e9 must be ordered at the start of your meal \u2014 it takes 25 minutes of patient baking.",
+    "insider_tip": "The crab soufflé must be ordered at the start of your meal — it takes 25 minutes of patient baking.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-sono-portside",
@@ -2478,7 +2466,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Request a traditional sunken horigotatsu table overlooking the water when reserving.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "eat-regatta-boatshed",
@@ -2505,15 +2494,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk through the hidden bookcase in the front bar to discover the secret underground rum cellar 'The Walrus Club'.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-fortitude-valley---james-st-1",
-    "title": "Fortitude Valley / James St: Bi\u00e0nca Spritz & Pasta Long Lunch",
+    "title": "Fortitude Valley / James St: Biànca Spritz & Pasta Long Lunch",
     "description": "Experience Italian share plates, silk agnolotti, and chilled vermouth. A standout recommendation for couples exploring Fortitude Valley / James St.",
     "category": "Food & Drink",
     "source": "Local Guide",
-    "source_url": "https://www.google.com/search?q=Fortitude+Valley+/+James+St+Bi\u00e0nca+Spritz+&+Pasta+Long+Lunch",
+    "source_url": "https://www.google.com/search?q=Fortitude+Valley+/+James+St+Biànca+Spritz+&+Pasta+Long+Lunch",
     "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
     "location_name": "Fortitude Valley / James St, Brisbane",
     "city": "Brisbane",
@@ -2521,7 +2511,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0397209309432,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -2531,7 +2521,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-fortitude-valley---james-st-2",
@@ -2547,7 +2538,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03154346878463,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -2557,7 +2548,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-fortitude-valley---james-st-3",
@@ -2573,7 +2565,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0435587426258,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -2583,7 +2575,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-fortitude-valley---james-st-4",
@@ -2599,7 +2592,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03944143773052,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -2609,7 +2602,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-fortitude-valley---james-st-5",
@@ -2625,7 +2619,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03619855050894,
     "start_date": "2026-11-12 21:18",
     "end_date": "2026-11-12 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$60",
     "tags": [
@@ -2635,7 +2629,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-sunnybank-(asian-food-hub)-1",
@@ -2651,7 +2646,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0703271911653,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -2661,7 +2656,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-sunnybank-(asian-food-hub)-2",
@@ -2677,7 +2673,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0583885812619,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$25",
     "tags": [
@@ -2687,7 +2683,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-sunnybank-(asian-food-hub)-3",
@@ -2703,7 +2700,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0544106336449,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -2713,7 +2710,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-sunnybank-(asian-food-hub)-4",
@@ -2729,7 +2727,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0566995855426,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -2739,7 +2737,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-sunnybank-(asian-food-hub)-5",
@@ -2755,7 +2754,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0635902276268,
     "start_date": "2026-11-12 21:18",
     "end_date": "2026-11-12 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$38",
     "tags": [
@@ -2765,7 +2764,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-west-end---south-brisbane-1",
@@ -2781,7 +2781,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0196781312249,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -2791,7 +2791,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-west-end---south-brisbane-2",
@@ -2807,7 +2808,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00409973930215,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -2817,7 +2818,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-west-end---south-brisbane-3",
@@ -2833,7 +2835,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0115489079718,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -2843,7 +2845,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-west-end---south-brisbane-4",
@@ -2859,7 +2862,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01950640698206,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$85",
     "tags": [
@@ -2869,7 +2872,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-west-end---south-brisbane-5",
@@ -2885,7 +2889,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00306927803672,
     "start_date": "2026-11-12 21:18",
     "end_date": "2026-11-12 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -2895,7 +2899,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-brisbane-cbd-1",
@@ -2911,7 +2916,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03317176304276,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -2921,7 +2926,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-brisbane-cbd-2",
@@ -2937,7 +2943,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02812283418615,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16",
     "tags": [
@@ -2947,7 +2953,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-brisbane-cbd-3",
@@ -2963,7 +2970,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02013280675368,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$28",
     "tags": [
@@ -2973,7 +2980,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-brisbane-cbd-4",
@@ -2989,7 +2997,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03116077293092,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$90",
     "tags": [
@@ -2999,7 +3007,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-brisbane-cbd-5",
@@ -3015,7 +3024,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02085697180692,
     "start_date": "2026-11-12 21:18",
     "end_date": "2026-11-12 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$110",
     "tags": [
@@ -3025,7 +3034,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-new-farm---teneriffe-1",
@@ -3041,7 +3051,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05566611304266,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -3051,7 +3061,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-new-farm---teneriffe-2",
@@ -3067,7 +3078,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05994160451223,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -3077,7 +3088,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-new-farm---teneriffe-3",
@@ -3093,7 +3105,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0403510809057,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$60",
     "tags": [
@@ -3103,7 +3115,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-new-farm---teneriffe-4",
@@ -3119,7 +3132,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05214985926986,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -3129,7 +3142,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-paddington-&-milton-1",
@@ -3145,7 +3159,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00390153550654,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20",
     "tags": [
@@ -3155,7 +3169,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-paddington-&-milton-2",
@@ -3171,7 +3186,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99049618405874,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$24",
     "tags": [
@@ -3181,7 +3196,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-paddington-&-milton-3",
@@ -3197,7 +3213,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00793786935162,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -3207,7 +3223,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-paddington-&-milton-4",
@@ -3223,7 +3240,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98995248873638,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16",
     "tags": [
@@ -3233,7 +3250,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-hamilton-&-northshore-1",
@@ -3249,7 +3267,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06440406004293,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$25",
     "tags": [
@@ -3259,7 +3277,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-hamilton-&-northshore-2",
@@ -3275,7 +3294,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07325158810275,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$80",
     "tags": [
@@ -3285,7 +3304,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-hamilton-&-northshore-3",
@@ -3301,7 +3321,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0797840906072,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10",
     "tags": [
@@ -3311,7 +3331,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-hamilton-&-northshore-4",
@@ -3327,7 +3348,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06751524125428,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -3337,7 +3358,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-bulimba-&-hawthorne-1",
@@ -3353,7 +3375,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0565504785965,
     "start_date": "2026-11-04 21:18",
     "end_date": "2026-11-04 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -3363,7 +3385,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-bulimba-&-hawthorne-2",
@@ -3379,7 +3402,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06479280407464,
     "start_date": "2026-11-06 21:18",
     "end_date": "2026-11-06 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -3389,7 +3412,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-bulimba-&-hawthorne-3",
@@ -3405,7 +3429,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.064008819224,
     "start_date": "2026-11-08 21:18",
     "end_date": "2026-11-08 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -3415,7 +3439,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "hub-bulimba-&-hawthorne-4",
@@ -3431,7 +3456,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05776860078058,
     "start_date": "2026-11-10 21:18",
     "end_date": "2026-11-10 21:18",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -3441,7 +3466,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local food creators for couples wanting memorable flavor and ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:18:01.136227"
+    "created_at": "2026-11-03T21:18:01.136227",
+    "ongoing": true
   },
   {
     "id": "mega-brooki-bakehouse",
@@ -3457,7 +3483,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.038,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$7 - $9 per cookie",
     "tags": [
@@ -3468,7 +3494,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive between 9am and 10:30am for the freshest warm batches. Get one Biscoff and one Sea Salt Dark Chocolate to share!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sky-deck-queens-wharf",
@@ -3484,7 +3511,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.024,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "Free deck entry (Cocktails $22 - $28)",
     "tags": [
@@ -3495,7 +3522,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Head up at sunset (5:30pm) to watch the city lights illuminate across South Bank and the river.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-vertigo-powerhouse",
@@ -3511,7 +3539,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0539,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$250 per person",
     "tags": [
@@ -3522,7 +3550,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Opt for the optional post-dinner abseil down the Powerhouse wall for an unforgettable adrenaline date memory!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-queen-amann-bowen-hills",
@@ -3538,7 +3567,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.034,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8 - $14",
     "tags": [
@@ -3549,12 +3578,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the Pistachio & Raspberry Kouign-Amann alongside an iced oat latte.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-baker-d-chirico-newstead",
     "title": "Baker D. Chirico: Melbourne Cult Bakery & Sculptural Bread",
-    "description": "The iconic architectural Melbourne bakery landed in Newstead! Famous for artisanal stone-milled sourdough loaves, flaky Portuguese tarts, cannel\u00e9s, and decadent almond croissants.",
+    "description": "The iconic architectural Melbourne bakery landed in Newstead! Famous for artisanal stone-milled sourdough loaves, flaky Portuguese tarts, cannelés, and decadent almond croissants.",
     "category": "Food & Drink",
     "source": "TikTok & Instagram Hits",
     "source_url": "https://www.google.com/search?q=Baker+D.+Chirico:+Melbourne+Cult+Bakery+&+Sculptural+Bread",
@@ -3565,7 +3595,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0425,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$6 - $15",
     "tags": [
@@ -3576,7 +3606,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab their warm sourdough loaf and a couple of custard tarts for a sunny morning picnic at Gasworks Park.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-beurre-pastries-milton",
@@ -3592,7 +3623,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.006,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$7 - $12",
     "tags": [
@@ -3603,7 +3634,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Doors open at 7:30am. Lines form on Saturdays, so arrive early and take a walk along Milton Riverwalk after.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-lina-rooftop-pool",
@@ -3619,7 +3651,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.023,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-06 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$30 - $75",
     "tags": [
@@ -3630,7 +3662,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a pool daybed for Sunday golden hour, or enjoy cocktails and oysters by the poolside deck.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-iris-rooftop-valley",
@@ -3646,7 +3679,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.036,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$24 - $60",
     "tags": [
@@ -3657,7 +3690,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit along the western balustrade at sunset for the most photogenic skyline golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-soko-rooftop-jungle",
@@ -3673,7 +3707,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0335,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$40 - $95",
     "tags": [
@@ -3684,7 +3718,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the Kingfish Ceviche and Wagyu Tataki paired with their signature smoky Passionfruit Pisco Sour.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-maya-rooftop-valley",
@@ -3700,7 +3735,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0345,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $65",
     "tags": [
@@ -3711,7 +3746,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a sunset dinner slot; the house-made guacamole with blue corn chips and margarita flights are perfection.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-christian-jacques-kp",
@@ -3727,7 +3763,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0355,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$6 - $12",
     "tags": [
@@ -3738,7 +3774,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab fresh almond croissants, stroll down to Captain Burke Park, and watch the ferries glide along the river.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-clayschool-west-end",
@@ -3754,7 +3791,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.013,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$85 - $110 per person",
     "tags": [
@@ -3765,7 +3802,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Wear clothes you don't mind getting clay on! You get to keep, glaze, and fire your favourite two bowls or mugs.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-mas-miek-ceramic-house",
@@ -3781,7 +3819,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.044,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-06 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$95 per person",
     "tags": [
@@ -3792,7 +3830,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "BYO favourite wine and snacks; they provide glassware and all artisanal ceramic equipment.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-vanilla-zulu-cooking",
@@ -3808,7 +3847,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.045,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$130 - $160 per person",
     "tags": [
@@ -3817,9 +3856,10 @@ const PRELOADED_EVENTS = [
       "Food & Drink",
       "Verified Brisbane"
     ],
-    "insider_tip": "A fantastic interactive date night\u2014you cook together at your own station and then sit down to dine on your creations.",
+    "insider_tip": "A fantastic interactive date night—you cook together at your own station and then sit down to dine on your creations.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-art-masterclass-bne",
@@ -3835,7 +3875,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.027,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$99 - $129",
     "tags": [
@@ -3846,7 +3886,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Makes an incredible couple keepsake to light up your bedside table or living room.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-city-hall-clock-tower",
@@ -3862,7 +3903,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0235,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free entry (Book on the day)",
     "tags": [
@@ -3873,12 +3914,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Completely free, but tickets are issued on the day on level 3 of the Museum of Brisbane. Arrive before 11am to secure a time slot.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-empire-revival-paddington",
     "title": "Empire Revival: 1929 Cinema Turned Vintage Wonderland",
-    "description": "Housed in the majestic 1929 Paddington Plaza atmospheric cinema with original trompe-l'\u0153il starry sky ceilings, this collective hosts 50+ merchants selling antique jewelry, mid-century furniture, vintage fashion, and curiosities.",
+    "description": "Housed in the majestic 1929 Paddington Plaza atmospheric cinema with original trompe-l'œil starry sky ceilings, this collective hosts 50+ merchants selling antique jewelry, mid-century furniture, vintage fashion, and curiosities.",
     "category": "Arts & Culture",
     "source": "Reddit r/brisbane Gems",
     "source_url": "https://www.google.com/search?q=Empire+Revival:+1929+Cinema+Turned+Vintage+Wonderland",
@@ -3889,7 +3931,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.998,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "Free entry to explore",
     "tags": [
@@ -3900,7 +3942,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Get a pastry and coffee at Chapter Hideaway next door, then spend an hour wandering through retro treasures.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-tangalooma-wrecks-moreton",
@@ -3916,7 +3959,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.365,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$95 - $140 ferry & gear",
     "tags": [
@@ -3927,7 +3970,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack your own snorkel gear and reef-safe sunscreen, or join the guided wreck kayak tour.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-north-gorge-walk-straddie",
@@ -3943,7 +3987,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.545,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$22 ferry return per person",
     "tags": [
@@ -3954,7 +3998,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Reward the walk with artisan gelato at Oceanic Gelati, then grab fresh king prawns from Rufus King Seafood.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-enoggera-reservoir-swim",
@@ -3970,7 +4015,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.928,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "Free swimming ($35 kayak hire)",
     "tags": [
@@ -3981,7 +4026,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Double kayaks cost $35/hr and allow you to paddle deep into the secluded waterlily coves.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-victoria-park-night-putt",
@@ -3997,7 +4043,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.021,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$23 per adult",
     "tags": [
@@ -4008,7 +4054,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "You can take your craft beers and cocktails onto the course while playing!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-riverlife-twilight-kayak",
@@ -4024,7 +4071,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.033,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$65 - $85 per person",
     "tags": [
@@ -4035,7 +4082,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks keep you close; no prior kayaking experience needed as guides lead the flotilla.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-powerhouse-knockoff-comedy",
@@ -4051,7 +4099,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0539,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-06 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -4062,7 +4110,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab craft beers from the riverside bar and arrive at 5:15pm to nab prime front seats.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-good-chat-comedy-petrie",
@@ -4078,7 +4127,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.011,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -4089,7 +4138,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Great craft burger & beer options upstairs to bring into the show.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-eat-street-northshore-ext",
@@ -4105,7 +4155,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.076,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$6 entry ($10-$20 food dishes)",
     "tags": [
@@ -4116,7 +4166,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Catch the CityCat ferry right to the Northshore Hamilton terminal for a fun river cruise arrival.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-1",
@@ -4132,7 +4183,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05308012819853,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45 - $70",
     "tags": [
@@ -4143,7 +4194,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the Tomato and Spicy Sichuan twin pot broth. The kung fu noodle performance is included when you order noodles!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-2",
@@ -4159,7 +4211,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05454188435598,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $16",
     "tags": [
@@ -4170,7 +4222,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Perfect sweet date finish after hotpot; one bowl is easily large enough to share between two.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-3",
@@ -4186,7 +4239,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05152543229283,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$14 - $20",
     "tags": [
@@ -4195,9 +4248,10 @@ const PRELOADED_EVENTS = [
       "Food & Drink",
       "Brisbane Hotspot"
     ],
-    "insider_tip": "Douse with black Chinese vinegar and chilli oil. Be careful taking the first bite\u2014the soup is molten!",
+    "insider_tip": "Douse with black Chinese vinegar and chilli oil. Be careful taking the first bite—the soup is molten!",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-4",
@@ -4213,7 +4267,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06175815341874,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16 - $24",
     "tags": [
@@ -4224,7 +4278,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Level 2 or 3 has great punch without overpowering the fragrant lemongrass and lime leaf aromatics.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-5",
@@ -4240,7 +4295,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05276109566563,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $15",
     "tags": [
@@ -4251,7 +4306,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Try the molten cheddar cheese centre or fresh Uji matcha swirl flavor.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-6",
@@ -4267,7 +4323,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04723160473964,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$7 - $10",
     "tags": [
@@ -4278,7 +4334,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A quintessential Sunnybank ritual after dining; lines move fast.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-7",
@@ -4294,7 +4351,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0557478855511,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -4305,7 +4362,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Wrap the crispy grilled pork belly inside fresh perilla leaves with garlic and ssamjang paste.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-8",
@@ -4321,7 +4379,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0473086564745,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8 - $14",
     "tags": [
@@ -4332,7 +4390,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pairs wonderfully with a warm roasted hojicha latte on cool evenings.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-9",
@@ -4348,7 +4407,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05604260931946,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -4359,7 +4418,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask for half-and-half roast duck and crispy pork belly with ginger scallion oil.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-sunnybank-10",
@@ -4375,7 +4435,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05543623849297,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $16",
     "tags": [
@@ -4386,12 +4446,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a bag to snack on while strolling the lively laneways.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-1",
     "title": "Agnes Wood-Fired Dinner & Smoked Potato Puree",
-    "description": "Named Australia's Restaurant of the Year. Zero electricity or gas used in cooking\u2014everything is transformed over wood fire and iron grills.",
+    "description": "Named Australia's Restaurant of the Year. Zero electricity or gas used in cooking—everything is transformed over wood fire and iron grills.",
     "category": "Food & Drink",
     "source": "Local Food Guide",
     "source_url": "https://www.google.com/search?q=Agnes+Wood-Fired+Dinner+&+Smoked+Potato+Puree+Brisbane",
@@ -4402,7 +4463,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03355476159584,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$120 - $180",
     "tags": [
@@ -4413,15 +4474,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book well in advance; sit at the kitchen counter to watch the chefs handle the embers and smoke.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-2",
-    "title": "Bi\u00e0nca: Pink Marble Italian Trattoria & Focaccia",
+    "title": "Biànca: Pink Marble Italian Trattoria & Focaccia",
     "description": "Stunning Italian dining room with vaulted ceilings and peach hues. Hand-kneaded focaccia, antipasti, and house-extruded pasta.",
     "category": "Food & Drink",
     "source": "Local Food Guide",
-    "source_url": "https://www.google.com/search?q=Bi\u00e0nca:+Pink+Marble+Italian+Trattoria+&+Focaccia+Brisbane",
+    "source_url": "https://www.google.com/search?q=Biànca:+Pink+Marble+Italian+Trattoria+&+Focaccia+Brisbane",
     "image_url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80",
     "location_name": "Ada Lane, James St, Fortitude Valley",
     "city": "Brisbane",
@@ -4429,7 +4491,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0353817896322,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50 - $90",
     "tags": [
@@ -4440,7 +4502,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the warm rosemary focaccia with mortadella and the pork & beef ragu rigatoni.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-3",
@@ -4456,7 +4519,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03842432621346,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$60 - $100",
     "tags": [
@@ -4467,7 +4530,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The pork belly with egg noodle and crispy duck curry are legendary among locals.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-4",
@@ -4483,7 +4547,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0434796206253,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$90 - $150",
     "tags": [
@@ -4492,9 +4556,10 @@ const PRELOADED_EVENTS = [
       "Food & Drink",
       "Brisbane Hotspot"
     ],
-    "insider_tip": "Order the Saganaki cheese flamb\u00e9ed tableside with lemon and fresh oregano.",
+    "insider_tip": "Order the Saganaki cheese flambéed tableside with lemon and fresh oregano.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-5",
@@ -4510,7 +4575,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04298558382933,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$22 - $30",
     "tags": [
@@ -4521,7 +4586,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender for an off-menu custom bourbon or mezcal cocktail tailored to your palate.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-6",
@@ -4537,7 +4603,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04076068973922,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $65",
     "tags": [
@@ -4548,7 +4614,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Catch touring indie rock, folk, and acoustic bands here; grab a craft beer in the garden before doors open.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-7",
@@ -4564,7 +4631,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04475147253046,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50 - $95",
     "tags": [
@@ -4575,7 +4642,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Check out the mezzanine cocktail lounge for great elevated sightlines of the stage.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-8",
@@ -4591,7 +4659,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0420499324109,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45 - $80",
     "tags": [
@@ -4602,7 +4670,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive early to soak in the vintage cabaret atmosphere under the historic proscenium arch.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-9",
@@ -4618,7 +4687,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03835092878248,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$18 - $26",
     "tags": [
@@ -4629,7 +4698,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Upstairs balcony tables offer the coziest spot for intimate couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-fortitude-valley---james-st-10",
@@ -4645,7 +4715,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04547701400796,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$25 - $40",
     "tags": [
@@ -4656,7 +4726,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sunday morning at 11:30am is peak yum cha energy with fresh mango pancakes.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-1",
@@ -4672,7 +4743,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0125640268373,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $55",
     "tags": [
@@ -4683,7 +4754,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "They don't take bookings, so put your name down and grab a cocktail across the lane at Next Episode.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-2",
@@ -4699,7 +4771,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01479948885682,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$20 - $28",
     "tags": [
@@ -4710,7 +4782,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the 'Biggie Smalls' gin sour and enjoy the hidden retro neon ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-3",
@@ -4726,7 +4799,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01146807637008,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ($5-$20 eats)",
     "tags": [
@@ -4737,12 +4810,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a picnic rug, buy fresh sourdough bagels and artisan coffee, and relax on the grass by the riverbank.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-4",
     "title": "QAGOMA: Gallery of Modern Art International Exhibitions",
-    "description": "World-class contemporary art museum on the river featuring interactive installations, the Australian Cin\u00e9math\u00e8que, and the GOMA Bistro.",
+    "description": "World-class contemporary art museum on the river featuring interactive installations, the Australian Cinémathèque, and the GOMA Bistro.",
     "category": "Arts & Culture",
     "source": "Reddit r/brisbane Gems",
     "source_url": "https://www.google.com/search?q=QAGOMA:+Gallery+of+Modern+Art+International+Exhibitions+Brisbane",
@@ -4753,7 +4827,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00815790497572,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($25 special exhibits)",
     "tags": [
@@ -4762,9 +4836,10 @@ const PRELOADED_EVENTS = [
       "Arts & Culture",
       "Brisbane Hotspot"
     ],
-    "insider_tip": "Check out the free permanent collection, then walk through the subterranean Cin\u00e9math\u00e8que.",
+    "insider_tip": "Check out the free permanent collection, then walk through the subterranean Cinémathèque.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-5",
@@ -4780,7 +4855,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00750964821142,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$75 - $160",
     "tags": [
@@ -4791,7 +4866,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Dine at Fish Lane before walking through the illuminated bougainvillea arbour to your show.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-6",
@@ -4807,7 +4883,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01100495377827,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8 - $16",
     "tags": [
@@ -4818,7 +4894,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a seat in the plush pink velvet booths for photos and warm almond pastries.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-7",
@@ -4834,7 +4911,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01677516854446,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8 - $14",
     "tags": [
@@ -4845,7 +4922,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Lines move fast; try Cookieman paired with salty Hazelnut crunch.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-8",
@@ -4861,7 +4939,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00993912982116,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -4872,7 +4950,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The breezy rear brick courtyard is one of West End's best laid-back afternoon hangouts.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-west-end-9",
@@ -4888,7 +4967,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01739512921768,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$9 - $18",
     "tags": [
@@ -4899,7 +4978,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Watch through the glass cube as bakers roll dough. Grab a fresh Kouign-Amann warm from the counter.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-1",
@@ -4915,7 +4995,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03254237464935,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$20 - $35",
     "tags": [
@@ -4926,7 +5006,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Winner of Australian Bar of the Year. Tell the bartender what flavours you enjoy and let them craft an bespoke creation.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-2",
@@ -4942,7 +5023,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03001981123796,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$22 - $30",
     "tags": [
@@ -4953,7 +5034,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Cozy up in one of the rear leather booths under vintage stained glass.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-3",
@@ -4969,7 +5051,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02330238351843,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $50",
     "tags": [
@@ -4980,7 +5062,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive at 5:00pm on a Friday or Saturday; the river reflection of the illuminated Story Bridge is breathtaking.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-4",
@@ -4996,7 +5079,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01998316556134,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$60 - $100",
     "tags": [
@@ -5007,7 +5090,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share the 'Aphrodite' feast menu to taste all the kitchen's signature Greek dishes.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-5",
@@ -5023,7 +5107,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02136470023154,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -5034,7 +5118,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a spot on the river lawn bean bags during a warm weekend afternoon.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-6",
@@ -5050,7 +5135,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03120975102115,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -5061,7 +5146,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pick up takeaway pastries and sit on the grass watching boats pass along the river loop.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-7",
@@ -5077,7 +5163,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02073575790558,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($5-$25 vintage items)",
     "tags": [
@@ -5088,7 +5174,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "First and third Sunday of every month. You can find incredible vintage jackets and handmade pieces.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-brisbane-cbd-8",
@@ -5104,7 +5191,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02460426553546,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$15 - $25",
     "tags": [
@@ -5115,7 +5202,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Free bowls of salty pretzel snacks at the bar, ice-cold American beers, and high-energy dance floor vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-new-farm-1",
@@ -5131,7 +5219,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04942199105597,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -5142,7 +5230,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring cheese, crackers, and a blanket; the afternoon breeze off the river under the trees is idyllic.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-new-farm-2",
@@ -5158,7 +5247,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04529315299195,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -5169,7 +5258,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Start at New Farm Park at golden hour, walk towards the Story Bridge, and finish with drinks at Howard Smith Wharves.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-new-farm-3",
@@ -5185,7 +5275,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0512653504995,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -5196,7 +5286,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Stop into Samson & Sophie or Kin + Co for freshly roasted coffee and artisan pastries.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-new-farm-4",
@@ -5212,7 +5303,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04237614306018,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -5223,7 +5314,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Their Roman-style sourdough rectangular pizzas with hot honey and spicy salami are incredible.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-paddington-1",
@@ -5239,7 +5331,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00447284210506,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free to browse",
     "tags": [
@@ -5250,7 +5342,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Start at Retro Metro, browse rare vintage fashion, and grab coffee at Paddington Social.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-paddington-2",
@@ -5266,7 +5359,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0047474230672,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -5277,7 +5370,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit on the rear leafy garden terrace with an iced filter brew.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-paddington-3",
@@ -5293,7 +5387,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00153570565232,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($5-$20 food)",
     "tags": [
@@ -5304,7 +5398,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Try the freshly pressed sugarcane juice and hot Spanish paella straight from giant pans.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-paddington-4",
@@ -5320,7 +5415,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9950850759674,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $45",
     "tags": [
@@ -5331,7 +5426,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Learn the story of Mr Fourex, walk through historic packaging lines, and enjoy four beer tastings at the alehouse.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-woolloongabba-1",
@@ -5347,7 +5443,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03766242123694,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ($20 picnic eats)",
     "tags": [
@@ -5358,7 +5454,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a sunset hamper and sit on the grass above the cliffs; watch rock climbers below and CityCats gliding past.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-woolloongabba-2",
@@ -5374,7 +5471,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0364129814113,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$130 - $160",
     "tags": [
@@ -5385,7 +5482,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The Twilight Climb gives you both daytime views and the magical transition into glowing night city lights.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-woolloongabba-3",
@@ -5401,7 +5499,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04208747891172,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50 - $90",
     "tags": [
@@ -5412,34 +5510,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Dine at 1889 Enoteca for their handmade gnocchi with pork and fennel sausage.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
-  },
-  {
-    "id": "mega-woolloongabba-4",
-    "title": "The Gabba: AFL Brisbane Lions or BBL Big Bash Cricket",
-    "description": "Experience the electric roar of 40,000 sports fans at the iconic Gabba watching the Brisbane Lions AFL or Brisbane Heat cricket under the lights.",
-    "category": "Outdoor & Adventure",
-    "source": "Local Food Guide",
-    "source_url": "https://www.google.com/search?q=The+Gabba:+AFL+Brisbane+Lions+or+BBL+Big+Bash+Cricket+Brisbane",
-    "image_url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-    "location_name": "Vulture St, Woolloongabba",
-    "city": "Brisbane",
-    "lat": -27.482558628117385,
-    "lng": 153.04057166613745,
-    "start_date": "2026-11-09 18:30",
-    "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
-    "price_level": "$$",
-    "price_str": "$35 - $75",
-    "tags": [
-      "Woolloongabba",
-      "Outdoor & Adventure",
-      "Outdoor & Adventure",
-      "Brisbane Hotspot"
-    ],
-    "insider_tip": "Grab stadium meat pies and cold beers, and soak in the electric stadium atmosphere together.",
-    "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-woolloongabba-5",
@@ -5455,7 +5527,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04190063895842,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$20 - $40",
     "tags": [
@@ -5466,7 +5538,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Try their crisp tropical pale ale and house-made loaded fries in the airy warehouse.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bulimba-1",
@@ -5482,7 +5555,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05219494358653,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -5493,7 +5566,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk down to Bulimba Riverside Park at the end of the street to watch ferries arrive at the terminal.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bulimba-2",
@@ -5509,7 +5583,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05559298339574,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $40",
     "tags": [
@@ -5520,7 +5594,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A classic romantic date night upgrade to regular movies; book the back row for maximum comfort.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bulimba-3",
@@ -5536,7 +5611,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06274779258962,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -5547,7 +5622,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Their woodfired Margherita and Diavola pizzas are made fresh with long-fermented dough.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-mount-coot-tha-1",
@@ -5563,7 +5639,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9448235345983,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ($8 ice cream)",
     "tags": [
@@ -5574,7 +5650,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab an ice cream cone at the summit cafe and watch the city skyscrapers twinkle below.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-mount-coot-tha-2",
@@ -5590,7 +5667,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.956808055058,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16 - $20",
     "tags": [
@@ -5601,7 +5678,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A peaceful, magical couple activity; combine it with a stroll through the adjacent Japanese gardens.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-mount-coot-tha-3",
@@ -5617,7 +5695,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94637143324516,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -5628,7 +5706,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk through the Bonsai House and feed the turtles swimming in the Japanese pond.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-mount-coot-tha-4",
@@ -5644,7 +5723,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95732051651044,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -5655,7 +5734,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring sturdy walking shoes and keep an eye out for wild kookaburras and wallabies along the trail.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-day-trips-1",
@@ -5671,7 +5751,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20424377605445,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30 - $70",
     "tags": [
@@ -5682,7 +5762,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Visit Cedar Creek Estate for wine tasting and walk through the Cedar Creek Falls rock pools.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-day-trips-2",
@@ -5698,7 +5779,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19687930515678,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $80",
     "tags": [
@@ -5709,7 +5790,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Stop at the Mary Cairncross Scenic Reserve for breathtaking panoramic views of the Glass House Mountains peaks.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-day-trips-3",
@@ -5725,7 +5807,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19202667887515,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -5736,7 +5818,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Start 45 minutes before first light with headlamps to watch the sunrise paint the valley in gold.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-day-trips-4",
@@ -5752,7 +5835,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20789583660041,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -5763,7 +5846,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive right at dusk; no flash photography allowed inside the cave to protect the glow worms.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-day-trips-5",
@@ -5779,7 +5863,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20162433120072,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30 - $70",
     "tags": [
@@ -5790,7 +5874,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit on the Burleigh Hill grass with takeaway fish and chips to watch the Gold Coast skyline at sunset.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-inner-north-&-coast-1",
@@ -5806,7 +5891,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.10559689111395,
     "start_date": "2026-11-03 18:30",
     "end_date": "2026-11-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ($10-$25 eats)",
     "tags": [
@@ -5817,7 +5902,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit on the beach wall with fresh peel-and-eat Moreton Bay king prawns looking across to Moreton Island.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-inner-north-&-coast-2",
@@ -5833,7 +5919,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.09415266613163,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -5844,7 +5930,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A favorite quiet romantic spot for sunset strolls, fish and chips, and stargazing over the water.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-inner-north-&-coast-3",
@@ -5860,7 +5947,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.10136131144586,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -5871,7 +5958,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Hire bicycles or walk the flat raised boardwalks out to the secluded waterfront bird hide.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-1",
@@ -5887,7 +5975,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04138140869978,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -5898,7 +5986,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-2",
@@ -5914,7 +6003,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03615283785203,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20",
     "tags": [
@@ -5925,7 +6014,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-3",
@@ -5941,7 +6031,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04043695089663,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -5952,7 +6042,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-4",
@@ -5968,7 +6059,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04205898442916,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10",
     "tags": [
@@ -5979,7 +6070,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-5",
@@ -5995,7 +6087,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0326082755418,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$110",
     "tags": [
@@ -6006,7 +6098,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-6",
@@ -6022,7 +6115,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03755341975247,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -6033,7 +6126,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-7",
@@ -6049,7 +6143,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04209044893574,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -6060,7 +6154,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-8",
@@ -6076,7 +6171,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0405446776691,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -6087,7 +6182,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-9",
@@ -6103,7 +6199,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03371205049817,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -6114,7 +6210,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-fortitude-valley---james-st-10",
@@ -6130,7 +6227,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04018535429248,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -6141,7 +6238,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-1",
@@ -6157,7 +6255,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0617291786257,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -6168,7 +6266,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-2",
@@ -6184,7 +6283,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0504042023138,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -6195,7 +6294,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-3",
@@ -6211,7 +6311,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05123932724374,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -6222,7 +6322,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-4",
@@ -6238,7 +6339,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05275800729405,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8",
     "tags": [
@@ -6249,7 +6350,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-5",
@@ -6265,7 +6367,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05266492156636,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -6276,7 +6378,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-6",
@@ -6292,7 +6395,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06073178451925,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -6303,7 +6406,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-7",
@@ -6319,7 +6423,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05786038986557,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$19",
     "tags": [
@@ -6330,7 +6434,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-8",
@@ -6346,7 +6451,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05434433594928,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$65",
     "tags": [
@@ -6357,7 +6462,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-9",
@@ -6373,7 +6479,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05419986625327,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$14",
     "tags": [
@@ -6384,7 +6490,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-sunnybank-10",
@@ -6400,7 +6507,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0508478168257,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$24",
     "tags": [
@@ -6411,7 +6518,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-1",
@@ -6427,7 +6535,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01649043062022,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$28",
     "tags": [
@@ -6438,7 +6546,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-2",
@@ -6454,7 +6563,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00750862427654,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -6465,7 +6574,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-3",
@@ -6481,7 +6591,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00811812416507,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -6492,7 +6602,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-4",
@@ -6508,7 +6619,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0148288518037,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$26",
     "tags": [
@@ -6519,7 +6630,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-5",
@@ -6535,7 +6647,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01398375004456,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30",
     "tags": [
@@ -6546,7 +6658,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-6",
@@ -6562,7 +6675,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01440694296954,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$25",
     "tags": [
@@ -6573,7 +6686,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-7",
@@ -6589,7 +6703,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01678037406393,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -6600,7 +6714,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-8",
@@ -6616,7 +6731,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0068324039693,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10",
     "tags": [
@@ -6627,7 +6742,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-9",
@@ -6643,7 +6759,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01872233094716,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -6654,7 +6770,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-west-end-10",
@@ -6670,7 +6787,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00917050116666,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12",
     "tags": [
@@ -6681,7 +6798,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-1",
@@ -6697,7 +6815,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0238270439547,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$130",
     "tags": [
@@ -6708,7 +6826,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-2",
@@ -6724,7 +6843,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02049272391054,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -6735,7 +6854,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-3",
@@ -6751,7 +6871,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02345953300866,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -6762,7 +6882,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-4",
@@ -6778,7 +6899,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.030313793718,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -6789,7 +6910,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-5",
@@ -6805,7 +6927,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.029889293615,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25",
     "tags": [
@@ -6816,7 +6938,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-6",
@@ -6832,7 +6955,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02787791265413,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -6843,7 +6966,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-7",
@@ -6859,7 +6983,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02445248483795,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -6870,7 +6994,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-8",
@@ -6886,7 +7011,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03154358095264,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -6897,7 +7022,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-9",
@@ -6913,7 +7039,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02040471959876,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20",
     "tags": [
@@ -6924,7 +7050,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-brisbane-cbd-10",
@@ -6940,7 +7067,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0211692951137,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -6951,7 +7078,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-1",
@@ -6967,7 +7095,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0447764744579,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$24",
     "tags": [
@@ -6978,7 +7106,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-2",
@@ -6994,7 +7123,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04626922907843,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -7005,7 +7134,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-3",
@@ -7021,7 +7151,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04542750325874,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -7032,7 +7162,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-4",
@@ -7048,7 +7179,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0565790047106,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -7059,7 +7190,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-5",
@@ -7075,7 +7207,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04358161927775,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -7086,7 +7218,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-6",
@@ -7102,7 +7235,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0541478226262,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$25",
     "tags": [
@@ -7113,7 +7246,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-7",
@@ -7129,7 +7263,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04791219033217,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -7140,7 +7274,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-8",
@@ -7156,7 +7291,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05275966892577,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16",
     "tags": [
@@ -7167,7 +7302,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-9",
@@ -7183,7 +7319,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04866162025402,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -7194,7 +7330,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-new-farm-10",
@@ -7210,7 +7347,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04444346205554,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10",
     "tags": [
@@ -7221,7 +7358,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-1",
@@ -7237,7 +7375,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0024248512848,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25",
     "tags": [
@@ -7248,7 +7386,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-2",
@@ -7264,7 +7403,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00435789267104,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$26",
     "tags": [
@@ -7275,7 +7414,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-3",
@@ -7291,7 +7431,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0010548257607,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30",
     "tags": [
@@ -7302,34 +7442,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
-  },
-  {
-    "id": "mega-ext-paddington-4",
-    "title": "Suncorp Stadium: Roar Football or Concert Spectacle",
-    "description": "Explore Suncorp Stadium: Roar Football or Concert Spectacle in Paddington. A standout destination recommended by locals for unforgettable flavor, scenery, and date vibes.",
-    "category": "Outdoor & Adventure",
-    "source": "Local Food Guide",
-    "source_url": "https://www.google.com/search?q=Suncorp+Stadium:+Roar+Football+or+Concert+Spectacle+Brisbane",
-    "image_url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-    "location_name": "40 Castlemaine St, Milton",
-    "city": "Brisbane",
-    "lat": -27.454600981667458,
-    "lng": 153.00076610061666,
-    "start_date": "2026-11-13 18:30",
-    "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
-    "price_level": "$$",
-    "price_str": "$45",
-    "tags": [
-      "Paddington",
-      "Outdoor & Adventure",
-      "Outdoor & Adventure",
-      "Brisbane Local"
-    ],
-    "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
-    "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-5",
@@ -7345,7 +7459,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99636950877917,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -7356,7 +7470,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-6",
@@ -7372,7 +7487,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00041077483624,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -7383,7 +7498,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-7",
@@ -7399,7 +7515,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00171502657633,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -7410,7 +7526,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-8",
@@ -7426,7 +7543,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0039570749839,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30",
     "tags": [
@@ -7437,7 +7554,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-9",
@@ -7453,7 +7571,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99883607448754,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22",
     "tags": [
@@ -7464,7 +7582,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-paddington-10",
@@ -7480,7 +7599,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00131326110835,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40",
     "tags": [
@@ -7491,7 +7610,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-1",
@@ -7507,7 +7627,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0395863621496,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -7518,7 +7638,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-2",
@@ -7534,7 +7655,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03562318303847,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$85",
     "tags": [
@@ -7545,7 +7666,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-3",
@@ -7561,7 +7683,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04235724833367,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$65",
     "tags": [
@@ -7572,7 +7694,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-4",
@@ -7588,7 +7711,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04141167362542,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35",
     "tags": [
@@ -7599,7 +7722,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-5",
@@ -7615,7 +7739,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03679918618,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -7626,7 +7750,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-6",
@@ -7642,7 +7767,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04104687951084,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20",
     "tags": [
@@ -7653,7 +7778,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-7",
@@ -7669,7 +7795,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03508034104817,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$60",
     "tags": [
@@ -7680,7 +7806,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-8",
@@ -7696,7 +7823,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04397670339117,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -7707,7 +7834,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-9",
@@ -7723,7 +7851,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03333159611063,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -7734,7 +7862,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-woolloongabba-10",
@@ -7750,7 +7879,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03793321193328,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -7761,7 +7890,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-1",
@@ -7777,7 +7907,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05520756372118,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -7788,7 +7918,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-2",
@@ -7804,7 +7935,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0606275415528,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$65",
     "tags": [
@@ -7815,7 +7946,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-3",
@@ -7831,7 +7963,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06556599062327,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -7842,7 +7974,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-4",
@@ -7858,7 +7991,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06486503596204,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$55",
     "tags": [
@@ -7869,7 +8002,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-5",
@@ -7885,7 +8019,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06454786864313,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15",
     "tags": [
@@ -7896,7 +8030,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-6",
@@ -7912,7 +8047,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05786299676313,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -7923,7 +8058,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-7",
@@ -7939,7 +8075,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06511192495395,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$14",
     "tags": [
@@ -7950,7 +8086,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-8",
@@ -7966,7 +8103,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06052044878513,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -7977,7 +8114,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-9",
@@ -7993,7 +8131,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06075360788157,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20",
     "tags": [
@@ -8004,7 +8142,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-bulimba-10",
@@ -8020,7 +8159,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0609630242154,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -8031,7 +8170,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-1",
@@ -8047,7 +8187,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94744749468458,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8058,7 +8198,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-2",
@@ -8074,7 +8215,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94417361292756,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8085,7 +8226,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-3",
@@ -8101,7 +8243,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94620699157903,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12",
     "tags": [
@@ -8112,7 +8254,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-4",
@@ -8128,7 +8271,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94805281958918,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8139,7 +8282,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-5",
@@ -8155,7 +8299,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95280899616301,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$24",
     "tags": [
@@ -8166,7 +8310,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-6",
@@ -8182,7 +8327,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94375682198307,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8193,7 +8338,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-7",
@@ -8209,7 +8355,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95644850360125,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8220,7 +8366,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-8",
@@ -8236,7 +8383,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95415793015206,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8247,7 +8394,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-9",
@@ -8263,7 +8411,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95646045652478,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8274,7 +8422,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-mount-coot-tha-10",
@@ -8290,7 +8439,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94324506405152,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8301,7 +8450,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-1",
@@ -8317,7 +8467,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20061717708856,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$85",
     "tags": [
@@ -8328,7 +8478,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-2",
@@ -8344,7 +8495,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.1948959918234,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$28",
     "tags": [
@@ -8355,7 +8506,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-3",
@@ -8371,7 +8523,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20440221976855,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8382,7 +8534,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-4",
@@ -8398,7 +8551,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.1977984221117,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45",
     "tags": [
@@ -8409,7 +8562,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-5",
@@ -8425,7 +8579,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19707018359549,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18",
     "tags": [
@@ -8436,7 +8590,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-6",
@@ -8452,7 +8607,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20515817261318,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8463,7 +8618,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-7",
@@ -8479,7 +8635,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19914100903847,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free",
     "tags": [
@@ -8490,7 +8646,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-8",
@@ -8506,7 +8663,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19668597114676,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50",
     "tags": [
@@ -8517,7 +8674,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-9",
@@ -8533,7 +8691,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.2002119948239,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10",
     "tags": [
@@ -8544,7 +8702,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-ext-day-trips-10",
@@ -8560,7 +8719,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19911271087628,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$65",
     "tags": [
@@ -8571,7 +8730,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A beloved couple destination in this precinct. Check opening times or arrive around twilight for the best ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-event-brisbane-broncos-vs-dolphins-battle",
@@ -8596,32 +8756,6 @@ const PRELOADED_EVENTS = [
       "Date Night Pick"
     ],
     "insider_tip": "Arrive 90 minutes before kickoff to soak up the Caxton Street pub atmosphere and marching band.",
-    "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
-  },
-  {
-    "id": "mega-event-brisbane-lions-afl-saturday-night-c",
-    "title": "Brisbane Lions AFL Saturday Night Clash at The Gabba",
-    "description": "Under the giant stadium lights at the Gabba, cheer on the Brisbane Lions with thousands of fans waving maroon and gold flags.",
-    "category": "Outdoor & Adventure",
-    "source": "Ticketmaster",
-    "source_url": "https://www.google.com/search?q=Brisbane+Lions+AFL+Saturday+Night+Clash+at+The+Gabba",
-    "image_url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-    "location_name": "The Gabba, Woolloongabba",
-    "city": "Brisbane",
-    "lat": -27.4859,
-    "lng": 153.0381,
-    "start_date": "2026-11-09 18:30",
-    "end_date": "2026-11-09 18:30",
-    "time_str": "Evening Show (7:00 PM)",
-    "price_level": "$$",
-    "price_str": "$40 - $85",
-    "tags": [
-      "Outdoor & Adventure",
-      "Ticketed Event",
-      "Date Night Pick"
-    ],
-    "insider_tip": "Grab a hot four'n twenty pie and chips; the country roars when Charlie Cameron kicks a goal!",
     "is_custom": 0,
     "created_at": "2026-11-03T21:23:21.198275"
   },
@@ -8725,7 +8859,7 @@ const PRELOADED_EVENTS = [
       "Ticketed Event",
       "Date Night Pick"
     ],
-    "insider_tip": "Nissan Arena has great acoustics\u2014every block and buzzer-beater reverberates through the court.",
+    "insider_tip": "Nissan Arena has great acoustics—every block and buzzer-beater reverberates through the court.",
     "is_custom": 0,
     "created_at": "2026-11-03T21:23:21.198275"
   },
@@ -8829,7 +8963,7 @@ const PRELOADED_EVENTS = [
       "Ticketed Event",
       "Date Night Pick"
     ],
-    "insider_tip": "Book tickets early\u2014the Opening Gala sells out weeks ahead.",
+    "insider_tip": "Book tickets early—the Opening Gala sells out weeks ahead.",
     "is_custom": 0,
     "created_at": "2026-11-03T21:23:21.198275"
   },
@@ -9066,7 +9200,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive before 10am on Fridays for warm Gonuts. Their chocolate hazelnut babka is unforgettable.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bake-2-jocelyn's-provisions:-sal",
@@ -9093,7 +9228,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pick up a pair of individual flourless chocolate cakes and a savoury chicken leek pie.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bake-3-chouquette-french-boulang",
@@ -9120,7 +9256,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a fresh baguette, prosciutto, and camembert for an impromptu New Farm Park river lawn lunch.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bake-4-crust-&-co-artisan-bakery",
@@ -9147,7 +9284,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take home a loaf of wholewheat seeded sourdough and two warm fruit Danishes.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bake-5-lune-croissanterie-burnet",
@@ -9174,7 +9312,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pairs excellently with their batch brew filter coffee while seated along historic Burnett Lane.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "mega-bake-6-brewdog-dogtap-murarrie:-",
@@ -9201,7 +9340,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Dog-friendly and relaxed; sit on the open deck with a flight of Punk IPA and Buffalo chicken wings.",
     "is_custom": 0,
-    "created_at": "2026-11-03T21:23:21.198275"
+    "created_at": "2026-11-03T21:23:21.198275",
+    "ongoing": true
   },
   {
     "id": "gstar-essa-wood-fired-harvest-&-wild",
@@ -9228,7 +9368,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the signature wood-roasted lamb rump with caramelized yogurt and the salted hazelnut tart.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-the-203-glamorous-italian-stea",
@@ -9255,7 +9396,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a leather booth in the main dining room; the dry-aged ribeye with bone marrow jus is exceptional.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-rogue-bistro-experimental-degu",
@@ -9280,9 +9422,10 @@ const PRELOADED_EVENTS = [
       "Google 5-Star",
       "Date Night Hotspot"
     ],
-    "insider_tip": "Opt for the matching boutique Australian natural wine pairing\u2014the sommeliers are brilliant.",
+    "insider_tip": "Opt for the matching boutique Australian natural wine pairing—the sommeliers are brilliant.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-honto-secret-black-door-&-lobs",
@@ -9309,15 +9452,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The Moreton Bay bug roll on warm milk bread and kingfish ceviche are absolute must-orders.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
-    "id": "gstar-la-cache-\u00e0-vin-subterranean-fr",
-    "title": "La Cache \u00e0 Vin: Subterranean French Wine Cellar & Bistro",
+    "id": "gstar-la-cache-à-vin-subterranean-fr",
+    "title": "La Cache à Vin: Subterranean French Wine Cellar & Bistro",
     "description": "Consistently crowned the most authentic French dining experience in Brisbane. Classic duck liver parfait, snails with garlic butter, and steak frites.",
     "category": "Food & Drink",
     "source": "Google 5-Star Pick",
-    "source_url": "https://www.google.com/search?q=La+Cache+\u00e0+Vin:+Subterranean+French+Wine+Cellar+&+Bistro+Brisbane",
+    "source_url": "https://www.google.com/search?q=La+Cache+à+Vin:+Subterranean+French+Wine+Cellar+&+Bistro+Brisbane",
     "image_url": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
     "location_name": "215 Wharf St, Spring Hill",
     "city": "Brisbane",
@@ -9336,7 +9480,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit in the historic brick cellar surrounded by centuries of French vintages; perfect for quiet romantic dates.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-beccofino-legendary-duck-ragu-",
@@ -9363,7 +9508,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "They don't take bookings, so put your name down and grab an Aperol spritz by the leafy river terrace.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-exhibition-underground-live-fi",
@@ -9390,7 +9536,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A bucket-list foodie anniversary experience. The service and theatrical presentation are world-class.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-restaurant-dan-arnold-michelin",
@@ -9415,9 +9562,10 @@ const PRELOADED_EVENTS = [
       "Google 5-Star",
       "Date Night Hotspot"
     ],
-    "insider_tip": "Save room for the cheese cart\u2014it features over 20 artisanal cheeses served with honeycomb and crispbreads.",
+    "insider_tip": "Save room for the cheese cart—it features over 20 artisanal cheeses served with honeycomb and crispbreads.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-joy-restaurant-ultra-intimate-",
@@ -9444,7 +9592,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Extremely difficult to book, but worth checking for last-minute cancellations on their waitlist.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-bisou-bisou-parisian-candlelit",
@@ -9471,7 +9620,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit at the oyster bar for a dozen freshly shucked oysters and champagne before dinner.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-stan's-lounge-glamorous-waterf",
@@ -9498,7 +9648,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Dress smart-casual; the river breezes and mood lighting make it an unforgettable late-night date stop.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-donna-chang-1920s-heritage-ban",
@@ -9525,7 +9676,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the crispy skin pork belly with mustard seeds and the wok-tossed mud crab.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-boom-boom-room-underground-ban",
@@ -9552,7 +9704,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book one of the private vault rooms for maximum intimacy and moody ambiance.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-otto-ristorante-riverfront-cha",
@@ -9579,15 +9732,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a sunset outdoor table on the waterfront terrace to watch the city lights switch on.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-montrachet-classic-french-fine",
-    "title": "Montrachet: Classic French Fine Dining & Grand Souffl\u00e9",
-    "description": "Brisbane's landmark classic French temple. Famous for its twice-baked crab souffl\u00e9, pan-seared duck breast, and flaming Grand Marnier souffl\u00e9 dessert.",
+    "title": "Montrachet: Classic French Fine Dining & Grand Soufflé",
+    "description": "Brisbane's landmark classic French temple. Famous for its twice-baked crab soufflé, pan-seared duck breast, and flaming Grand Marnier soufflé dessert.",
     "category": "Food & Drink",
     "source": "Google 5-Star Pick",
-    "source_url": "https://www.google.com/search?q=Montrachet:+Classic+French+Fine+Dining+&+Grand+Souffl\u00e9+Brisbane",
+    "source_url": "https://www.google.com/search?q=Montrachet:+Classic+French+Fine+Dining+&+Grand+Soufflé+Brisbane",
     "image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
     "location_name": "1/30 King St, Bowen Hills",
     "city": "Brisbane",
@@ -9604,9 +9758,10 @@ const PRELOADED_EVENTS = [
       "Google 5-Star",
       "Date Night Hotspot"
     ],
-    "insider_tip": "The Grand Marnier souffl\u00e9 takes 25 minutes to bake\u2014order it when your mains arrive!",
+    "insider_tip": "The Grand Marnier soufflé takes 25 minutes to bake—order it when your mains arrive!",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-taro's-ramen-48-hour-tonkotsu-",
@@ -9633,7 +9788,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Try the Red Tonkotsu with extra garlic oil and thin firm noodles.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-rothwell's-bar-&-grill-tablesi",
@@ -9660,7 +9816,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Start with their signature freezing gin martini garnished with three olives.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "gstar-gnocchi-gnocchi-brothers-soft-",
@@ -9687,7 +9844,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share the truffle gnocchi and finish with their house-made traditional tiramisu.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "bcc-bcc-outdoor-cinema-sunset-movi",
@@ -9793,7 +9951,7 @@ const PRELOADED_EVENTS = [
       "Brisbane City Council",
       "Free Event"
     ],
-    "insider_tip": "Finish with a refreshing a\u00e7ai bowl or artisan gelato along Grey Street afterward.",
+    "insider_tip": "Finish with a refreshing açai bowl or artisan gelato along Grey Street afterward.",
     "is_custom": 0,
     "created_at": "2026-11-04T09:59:47.763470"
   },
@@ -10081,7 +10239,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.018,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10092,7 +10250,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring your favourite takeaway sushi or Thai and watch the skyscrapers glow in pink and gold.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-wilson-outlook-reserve-million",
@@ -10108,7 +10267,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0365,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10119,7 +10278,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A classic romantic spot for evening walks; grab takeaway gelato from Messina and sit on the edge bench.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-spring-hill-1871-underground-b",
@@ -10135,7 +10295,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.022,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 per person",
     "tags": [
@@ -10146,7 +10306,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A mesmerizing date experience unlike anything else in Queensland; bookings via Museum of Brisbane.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-walter-taylor-bridge-inside-th",
@@ -10162,7 +10323,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.973,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 per person",
     "tags": [
@@ -10173,7 +10334,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Guided historical tours run on select weekends; fascinating look into Brisbane's secret river history.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-northey-street-city-farm-sunda",
@@ -10189,7 +10351,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.027,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($5-$15 eats)",
     "tags": [
@@ -10200,7 +10362,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a fresh spiced chai and fresh cinnamon bun and wander through the community food forest.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-shorncliffe-350m-timber-pier-s",
@@ -10216,7 +10379,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.085,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ($15 fish & chips)",
     "tags": [
@@ -10227,7 +10390,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pick up fresh crumbed whiting and calamari from the pier fish shop to eat at the pavilion at the end.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-wynnum-wading-pool-1932-herita",
@@ -10243,7 +10407,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.175,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10254,7 +10418,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Stroll the mangrove boardwalk out to the bird hide, then walk to Manly Harbour Village for seafood.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "red-gold-creek-dam-secluded-forest",
@@ -10270,7 +10435,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.88,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10281,7 +10446,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Peaceful, quiet, and away from crowds; great for spotting wallabies, wild cockatoos, and turtles.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-1",
@@ -10297,7 +10463,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03626060507932,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$50 - $90",
     "tags": [
@@ -10308,12 +10474,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-2",
     "title": "Gerard's Bar: Spanish Charcuterie & Grilled Bikini Sandwiches",
-    "description": "Hidden garden terrace serving jam\u00f3n ib\u00e9rico, hand-carved cured meats, and classic gin and vermouth spritzes.",
+    "description": "Hidden garden terrace serving jamón ibérico, hand-carved cured meats, and classic gin and vermouth spritzes.",
     "category": "Date Night Specials",
     "source": "Local Guide",
     "source_url": "https://www.google.com/search?q=Gerard's+Bar:+Spanish+Charcuterie+&+Grilled+Bikini+Sandwiches+Brisbane",
@@ -10324,7 +10491,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03606123037912,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -10335,7 +10502,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-3",
@@ -10351,7 +10519,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.035784881291,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$8 - $14",
     "tags": [
@@ -10362,7 +10530,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-4",
@@ -10378,7 +10547,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03757281296612,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -10389,7 +10558,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-5",
@@ -10405,7 +10575,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04380696134598,
     "start_date": "2026-12-03 18:30",
     "end_date": "2026-12-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45 - $80",
     "tags": [
@@ -10416,7 +10586,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-6",
@@ -10432,7 +10603,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04315028961312,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$24 - $40",
     "tags": [
@@ -10443,7 +10614,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-8",
@@ -10459,7 +10631,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03283285284056,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20 - $28",
     "tags": [
@@ -10470,7 +10642,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-9",
@@ -10486,7 +10659,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04179552674077,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20 - $35",
     "tags": [
@@ -10497,7 +10670,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-fortitude-valley---james-st-10",
@@ -10513,7 +10687,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03821347220133,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20 - $35",
     "tags": [
@@ -10524,7 +10698,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-sunnybank-2",
@@ -10540,7 +10715,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05669061193075,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $65",
     "tags": [
@@ -10551,7 +10726,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-sunnybank-5",
@@ -10567,7 +10743,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05348629943938,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $24",
     "tags": [
@@ -10578,7 +10754,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-sunnybank-7",
@@ -10594,7 +10771,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05003345030136,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $25",
     "tags": [
@@ -10605,7 +10782,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-west-end-1",
@@ -10621,7 +10799,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0066128754656,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$26 - $36",
     "tags": [
@@ -10632,15 +10810,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-west-end-3",
-    "title": "Greek Taverna: Slow Cooked Kleftiko Lamb & Flamb\u00e9ed Saganaki",
+    "title": "Greek Taverna: Slow Cooked Kleftiko Lamb & Flambéed Saganaki",
     "description": "Family-run Greek taverna serving slow-roasted lamb shank with lemon potatoes and warm honey-drizzled loukoumades.",
     "category": "Food & Drink",
     "source": "Local Guide",
-    "source_url": "https://www.google.com/search?q=Greek+Taverna:+Slow+Cooked+Kleftiko+Lamb+&+Flamb\u00e9ed+Saganaki+Brisbane",
+    "source_url": "https://www.google.com/search?q=Greek+Taverna:+Slow+Cooked+Kleftiko+Lamb+&+Flambéed+Saganaki+Brisbane",
     "image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
     "location_name": "Boundary St, West End",
     "city": "Brisbane",
@@ -10648,7 +10827,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0102541466802,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45 - $75",
     "tags": [
@@ -10659,7 +10838,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-west-end-5",
@@ -10675,7 +10855,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00512247792182,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -10686,7 +10866,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-brisbane-cbd-4",
@@ -10702,7 +10883,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0206076159033,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -10713,7 +10894,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-new-farm-4",
@@ -10729,7 +10911,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05024330947867,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30 - $55",
     "tags": [
@@ -10740,7 +10922,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-paddington-2",
@@ -10756,7 +10939,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00427041603947,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $35",
     "tags": [
@@ -10767,7 +10950,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-mount-coot-tha-1",
@@ -10783,7 +10967,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9496458540326,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10794,7 +10978,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-mount-coot-tha-2",
@@ -10810,7 +10995,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95514839121017,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$16 - $22",
     "tags": [
@@ -10821,7 +11006,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-mount-coot-tha-3",
@@ -10837,7 +11023,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95301809144595,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10848,7 +11034,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-mount-coot-tha-5",
@@ -10864,7 +11051,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95501465357128,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10875,7 +11062,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-day-trips-1",
@@ -10891,7 +11079,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20373189115728,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$95 - $140",
     "tags": [
@@ -10902,7 +11090,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-day-trips-2",
@@ -10918,7 +11107,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20590934185395,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -10929,7 +11118,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-day-trips-3",
@@ -10945,7 +11135,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20574746440624,
     "start_date": "2026-12-03 18:30",
     "end_date": "2026-12-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $70",
     "tags": [
@@ -10956,7 +11146,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-day-trips-5",
@@ -10972,7 +11163,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20074993694357,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -10983,7 +11174,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega2-day-trips-8",
@@ -10999,7 +11191,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19580063319742,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $75",
     "tags": [
@@ -11010,7 +11202,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local couples. Check opening hours or book ahead for weekend peak slots.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-1-the-farmhouse-k",
@@ -11026,7 +11219,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03208256883684,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $38",
     "tags": [
@@ -11037,7 +11230,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive before 9am on weekends; sit on the open deck overlooking Kedron Brook.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-2-park-lane-evert",
@@ -11053,7 +11247,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02599840751066,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30 - $55",
     "tags": [
@@ -11064,7 +11258,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Great vibrant suburban date night without driving into the city; vibrant night lighting.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-3-willow-&-spoon:",
@@ -11080,7 +11275,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03582837396218,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$24 - $34",
     "tags": [
@@ -11091,7 +11286,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a garden table under the frangipani trees; dog friendly and very romantic.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-4-crust-&-co-arti",
@@ -11107,7 +11303,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0294813293105,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$6 - $16",
     "tags": [
@@ -11118,7 +11314,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab warm croissants and fresh loaves early; lines form from 7am.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-5-ciao-gelato-nun",
@@ -11134,7 +11331,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02328189269556,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$7 - $12",
     "tags": [
@@ -11145,7 +11342,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Try their Pistachio Bronte scoop paired with Dark Chocolate blood orange.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-6-craft'd-grounds",
@@ -11161,7 +11359,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0252669846107,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$30 - $60",
     "tags": [
@@ -11172,7 +11370,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Enjoy a tasting paddle of seasonal IPAs on the open timber mezzanine.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-7-racecourse-road",
@@ -11188,7 +11387,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0325951935044,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -11199,7 +11398,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Stroll down to Eagle Farm for a weekend coffee before browsing designer boutiques.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-8-clayfield-marke",
@@ -11215,7 +11415,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0262278054099,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$14 - $22",
     "tags": [
@@ -11224,9 +11424,10 @@ const PRELOADED_EVENTS = [
       "Food & Drink",
       "Brisbane 5-Star"
     ],
-    "insider_tip": "Order the classic La Compl\u00e8te galette with ham, gruy\u00e8re cheese, and sunny egg.",
+    "insider_tip": "Order the classic La Complète galette with ham, gruyère cheese, and sunny egg.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-1-sandgate-fish-&",
@@ -11242,7 +11443,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0918321029797,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -11253,7 +11454,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit on the grass seawall across the road watching the tide lap against the stone wall.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-2-doug's-seafood-",
@@ -11269,7 +11471,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0837883205616,
     "start_date": "2026-12-03 18:30",
     "end_date": "2026-12-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20 - $35",
     "tags": [
@@ -11280,7 +11482,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Grab a seafood pack and walk over to Shorncliffe Pier for sunset.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-3-the-belvedere-h",
@@ -11296,7 +11499,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.09270877667214,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $65",
     "tags": [
@@ -11307,7 +11510,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 45 minutes before dusk; grab a table on the pavilion deck for cocktails and seafood.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-4-scarborough-har",
@@ -11323,7 +11527,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08458260632256,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $48",
     "tags": [
@@ -11334,7 +11538,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Upstairs nautical deck catches sweeping sea breezes across to the Glass House Mountains.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-5-redcliffe-jetty",
@@ -11350,7 +11555,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08599088012323,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -11361,7 +11566,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pick up fresh tropical mangoes, local honey, and hot churros while strolling the foreshore.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-6-tempest-seafood",
@@ -11377,7 +11583,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.09316706010543,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$$",
     "price_str": "$75 - $125",
     "tags": [
@@ -11388,7 +11594,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a window table overlooking the marina; the seafood platter for two is extraordinary.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-1-florence-cafe-c",
@@ -11404,7 +11611,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0383100495196,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22 - $30",
     "tags": [
@@ -11415,7 +11622,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit on the front verandah beneath pink bougainvillea; one of Brisbane's most charming cafes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-2-mons-ban-sabai-",
@@ -11431,7 +11639,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03325908535504,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $55",
     "tags": [
@@ -11442,7 +11650,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Consistently rated 5 stars for authentic Thai herbs and friendly couple service.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-3-beyond-the-pale",
@@ -11458,7 +11667,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.033379325224,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -11469,7 +11678,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pair with a movie at Dendy Cinema upstairs in the same precinct for a complete date night.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-4-dendy-cinemas-c",
@@ -11485,7 +11695,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04518420830243,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$22 - $35",
     "tags": [
@@ -11496,7 +11706,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order wine and gourmet choc tops to be enjoyed in the cinema.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-5-flour-&-chocola",
@@ -11512,7 +11723,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0440677688663,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$6 - $18",
     "tags": [
@@ -11523,7 +11734,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive early on Friday or Saturday morning; their chocolate brownies and almond croissants are world-class.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-woolloongabba-6-pawpaw-cafe-woo",
@@ -11539,7 +11751,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03963307585113,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$24 - $34",
     "tags": [
@@ -11550,7 +11762,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Very Instagram-friendly interior with botanical murals and plush booths.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-1-manly-harbour-v",
@@ -11566,7 +11779,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.17671912381337,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -11577,7 +11790,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Saturday and Sunday afternoon breezes are sublime; watch the yacht races from the foreshore.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-2-the-fish-cafe-m",
@@ -11593,7 +11807,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.17957170222303,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -11604,7 +11818,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit outside on the breezy deck at twilight as the marina lights reflect off the water.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-inner-north-&-coast-3-brewdog-dogtap-",
@@ -11620,7 +11835,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.17417463621575,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $48",
     "tags": [
@@ -11631,7 +11846,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Dog-friendly and relaxed; great afternoon destination right on the water with live weekend music.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-1-goodness-gracio",
@@ -11647,7 +11863,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9847600480616,
     "start_date": "2026-12-01 18:30",
     "end_date": "2026-12-01 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$22 - $32",
     "tags": [
@@ -11658,7 +11874,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "One of the Westside's prettiest date cafes; sit outside under the umbrellas.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-2-regal-twin-cine",
@@ -11674,7 +11891,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9863319446182,
     "start_date": "2026-12-03 18:30",
     "end_date": "2026-12-03 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $22",
     "tags": [
@@ -11685,7 +11902,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Old-fashioned glamour; grab a glass of wine and house-made choc top.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-3-the-corner-stor",
@@ -11701,7 +11919,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98197187220788,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$20 - $30",
     "tags": [
@@ -11712,7 +11930,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Wander through the herb garden after breakfast to see where your meal came from.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-4-hundred-acre-ba",
@@ -11728,7 +11947,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98120297137376,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$45 - $80",
     "tags": [
@@ -11739,7 +11958,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a balcony table overlooking the lush green fairways; gorgeous romantic evening hideaway.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-5-the-regatta-hot",
@@ -11755,7 +11975,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97522810213383,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $75",
     "tags": [
@@ -11766,7 +11986,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Have a pre-dinner drink on the wraparound cast iron verandah watching CityCats glide by.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "mega3-west-end-6-slipstream-brew",
@@ -11782,7 +12003,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9797196507865,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -11793,7 +12014,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order a beer tasting paddle and sit under the hop vines in the courtyard.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-1",
@@ -11809,7 +12031,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03792873713076,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -11820,7 +12042,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-2",
@@ -11836,7 +12059,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04103338141496,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -11847,7 +12070,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-3",
@@ -11863,7 +12087,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03250109321183,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -11874,7 +12098,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-4",
@@ -11890,7 +12115,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04155534211208,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -11901,7 +12126,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-5",
@@ -11917,7 +12143,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0327086876129,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -11928,7 +12154,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-6",
@@ -11944,7 +12171,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0339345546546,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -11955,7 +12182,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-7",
@@ -11971,7 +12199,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03322100341768,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -11982,7 +12210,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-8",
@@ -11998,7 +12227,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04510838549686,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -12009,7 +12238,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-9",
@@ -12025,7 +12255,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04782720870995,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12036,7 +12266,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-10",
@@ -12052,7 +12283,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04096736815944,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12063,7 +12294,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-11",
@@ -12079,7 +12311,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0357020104731,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12090,7 +12322,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-12",
@@ -12106,7 +12339,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04782722788514,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -12117,7 +12350,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-13",
@@ -12133,7 +12367,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0305521489438,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -12144,7 +12378,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-14",
@@ -12160,7 +12395,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0439160313428,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12171,7 +12406,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-fortitude-valley---james-st-15",
@@ -12187,7 +12423,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04618487332507,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -12198,7 +12434,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-1",
@@ -12214,7 +12451,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0517844031673,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -12225,7 +12462,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-2",
@@ -12241,7 +12479,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0464483181994,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -12252,7 +12490,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-3",
@@ -12268,7 +12507,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0591957703686,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -12279,7 +12518,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-4",
@@ -12295,7 +12535,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05406281051646,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -12306,7 +12546,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-5",
@@ -12322,7 +12563,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06130276089502,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -12333,7 +12574,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-6",
@@ -12349,7 +12591,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06097893950317,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -12360,7 +12602,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-7",
@@ -12376,7 +12619,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0561678658567,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12387,7 +12630,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-8",
@@ -12403,7 +12647,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05875608043837,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -12414,7 +12658,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-9",
@@ -12430,7 +12675,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0602639275534,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12441,7 +12686,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-10",
@@ -12457,7 +12703,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05398175493036,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12468,7 +12714,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-11",
@@ -12484,7 +12731,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04821061986135,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12495,7 +12742,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-12",
@@ -12511,7 +12759,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06096937770076,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -12522,7 +12770,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-13",
@@ -12538,7 +12787,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.047606765506,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -12549,7 +12798,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-14",
@@ -12565,7 +12815,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05306124905158,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12576,7 +12826,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-sunnybank-15",
@@ -12592,7 +12843,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05562643368475,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -12603,7 +12854,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-1",
@@ -12619,7 +12871,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0206376925388,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -12630,7 +12882,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-2",
@@ -12646,7 +12899,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01445159223024,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -12657,7 +12910,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-3",
@@ -12673,7 +12927,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01969142630378,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -12684,7 +12938,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-4",
@@ -12700,7 +12955,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00433610587672,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -12711,7 +12966,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-5",
@@ -12727,7 +12983,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00684128756347,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -12738,7 +12994,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-6",
@@ -12754,7 +13011,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01953887833537,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -12765,7 +13022,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-7",
@@ -12781,7 +13039,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01518975090627,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12792,7 +13050,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-8",
@@ -12808,7 +13067,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0127789436232,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -12819,7 +13078,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-9",
@@ -12835,7 +13095,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0053595038171,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12846,7 +13106,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-10",
@@ -12862,7 +13123,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01216417655726,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -12873,7 +13134,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-11",
@@ -12889,7 +13151,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01745583829472,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12900,7 +13162,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-12",
@@ -12916,7 +13179,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02073990142654,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -12927,7 +13190,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-13",
@@ -12943,7 +13207,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00917755829008,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -12954,7 +13218,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-14",
@@ -12970,7 +13235,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01013635266216,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -12981,7 +13246,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-west-end-15",
@@ -12997,7 +13263,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00986283955396,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -13008,7 +13274,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-1",
@@ -13024,7 +13291,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03290534352288,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -13035,7 +13302,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-2",
@@ -13051,7 +13319,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03359135239404,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -13062,7 +13330,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-3",
@@ -13078,7 +13347,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0332905201399,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -13089,7 +13358,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-4",
@@ -13105,7 +13375,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0280504441395,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -13116,7 +13386,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-5",
@@ -13132,7 +13403,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01642051161122,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -13143,7 +13414,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-6",
@@ -13159,7 +13431,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01761935582383,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -13170,7 +13442,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-7",
@@ -13186,7 +13459,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02161850511456,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13197,7 +13470,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-8",
@@ -13213,7 +13487,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03139719971452,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -13224,7 +13498,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-9",
@@ -13240,7 +13515,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03387357121753,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -13251,7 +13526,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-10",
@@ -13267,7 +13543,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03399115862294,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -13278,7 +13554,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-11",
@@ -13294,7 +13571,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02054176083269,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13305,7 +13582,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-12",
@@ -13321,7 +13599,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0264206777651,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -13332,7 +13610,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-13",
@@ -13348,7 +13627,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03051731446809,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -13359,7 +13638,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-14",
@@ -13375,7 +13655,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0195993500624,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13386,7 +13666,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-brisbane-cbd-15",
@@ -13402,7 +13683,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01782480650226,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -13413,7 +13694,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-1",
@@ -13429,7 +13711,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04867842998408,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -13440,7 +13722,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-2",
@@ -13456,7 +13739,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04517490230566,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -13467,7 +13750,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-3",
@@ -13483,7 +13767,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0470970840212,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -13494,7 +13778,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-4",
@@ -13510,7 +13795,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0464973064609,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -13521,7 +13806,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-5",
@@ -13537,7 +13823,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0414775526249,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -13548,7 +13834,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-6",
@@ -13564,7 +13851,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05683148365745,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -13575,7 +13862,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-7",
@@ -13591,7 +13879,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04377128241617,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13602,7 +13890,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-8",
@@ -13618,7 +13907,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04943297136256,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -13629,7 +13918,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-9",
@@ -13645,7 +13935,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04650804265486,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -13656,7 +13946,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-10",
@@ -13672,7 +13963,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04787343240605,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -13683,7 +13974,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-11",
@@ -13699,7 +13991,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0520074184416,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13710,7 +14002,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-12",
@@ -13726,7 +14019,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0417614281377,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -13737,7 +14030,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-13",
@@ -13753,7 +14047,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05567440312367,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -13764,7 +14058,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-14",
@@ -13780,7 +14075,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0541721874398,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -13791,7 +14086,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-new-farm-15",
@@ -13807,7 +14103,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05797281528484,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -13818,7 +14114,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-1",
@@ -13834,7 +14131,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0076035642797,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -13845,7 +14142,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-2",
@@ -13861,7 +14159,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00174211555986,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -13872,7 +14170,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-3",
@@ -13888,7 +14187,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00767217278195,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -13899,7 +14198,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-4",
@@ -13915,7 +14215,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9918043285752,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -13926,7 +14226,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-5",
@@ -13942,7 +14243,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99454862201063,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -13953,7 +14254,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-6",
@@ -13969,7 +14271,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99835903456278,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -13980,7 +14282,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-7",
@@ -13996,7 +14299,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99568776836682,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14007,7 +14310,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-8",
@@ -14023,7 +14327,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99552571422487,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -14034,7 +14338,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-9",
@@ -14050,7 +14355,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0037308022821,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14061,7 +14366,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-10",
@@ -14077,7 +14383,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99742550649557,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14088,7 +14394,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-11",
@@ -14104,7 +14411,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99320139636785,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14115,7 +14422,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-12",
@@ -14131,7 +14439,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99647405821958,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -14142,7 +14450,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-13",
@@ -14158,7 +14467,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99756551069055,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -14169,7 +14478,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-14",
@@ -14185,7 +14495,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00231944171222,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14196,7 +14506,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-paddington-15",
@@ -14212,7 +14523,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99154113954046,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -14223,7 +14534,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-1",
@@ -14239,7 +14551,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04590858364944,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -14250,7 +14562,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-2",
@@ -14266,7 +14579,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0402925956711,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -14277,7 +14590,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-3",
@@ -14293,7 +14607,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0332549025808,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -14304,7 +14618,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-4",
@@ -14320,7 +14635,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03201103943636,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -14331,7 +14646,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-5",
@@ -14347,7 +14663,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0338781568663,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -14358,7 +14674,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-6",
@@ -14374,7 +14691,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04449339619865,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -14385,7 +14702,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-7",
@@ -14401,7 +14719,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03985864633623,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14412,7 +14730,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-8",
@@ -14428,7 +14747,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0376174866013,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -14439,7 +14758,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-9",
@@ -14455,7 +14775,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0421550114098,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14466,7 +14786,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-10",
@@ -14482,7 +14803,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0418211358935,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14493,7 +14814,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-11",
@@ -14509,7 +14831,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0431984258503,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14520,7 +14842,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-12",
@@ -14536,7 +14859,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0404496160928,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -14547,7 +14870,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-13",
@@ -14563,7 +14887,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03746016374808,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -14574,7 +14898,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-14",
@@ -14590,7 +14915,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0307497884506,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14601,7 +14926,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-woolloongabba-15",
@@ -14617,7 +14943,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0468084022991,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -14628,7 +14954,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-1",
@@ -14644,7 +14971,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0612982837396,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -14655,7 +14982,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-2",
@@ -14671,7 +14999,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05950688938296,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -14682,7 +15010,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-3",
@@ -14698,7 +15027,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06524046597792,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -14709,7 +15038,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-4",
@@ -14725,7 +15055,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06171116578753,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -14736,7 +15066,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-5",
@@ -14752,7 +15083,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06607424013094,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -14763,7 +15094,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-6",
@@ -14779,7 +15111,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0531011871332,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -14790,7 +15122,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-7",
@@ -14806,7 +15139,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05591149373078,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14817,7 +15150,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-8",
@@ -14833,7 +15167,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05531733983514,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -14844,7 +15178,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-9",
@@ -14860,7 +15195,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0661121894678,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14871,7 +15206,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-10",
@@ -14887,7 +15223,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05534545756234,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -14898,7 +15234,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-11",
@@ -14914,7 +15251,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0580140156092,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -14925,7 +15262,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-12",
@@ -14941,7 +15279,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06023126328634,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -14952,7 +15290,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-13",
@@ -14968,7 +15307,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06836484712045,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -14979,7 +15318,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-14",
@@ -14995,7 +15335,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05641274210535,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15006,7 +15346,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-bulimba-15",
@@ -15022,7 +15363,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05487852317032,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -15033,7 +15374,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-1",
@@ -15049,7 +15391,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07689146413924,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -15060,7 +15402,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-2",
@@ -15076,7 +15419,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07592882876025,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -15087,7 +15430,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-3",
@@ -15103,7 +15447,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07952286374763,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -15114,7 +15458,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-4",
@@ -15130,7 +15475,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07645953603458,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -15141,7 +15486,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-5",
@@ -15157,7 +15503,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07443515708437,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -15168,7 +15514,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-6",
@@ -15184,7 +15531,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08242925190837,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -15195,7 +15542,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-7",
@@ -15211,7 +15559,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07473072374555,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15222,7 +15570,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-8",
@@ -15238,7 +15587,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.069379438285,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -15249,7 +15598,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-9",
@@ -15265,7 +15615,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07136151018184,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -15276,7 +15626,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-10",
@@ -15292,7 +15643,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08144645447734,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -15303,7 +15654,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-11",
@@ -15319,7 +15671,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.067733701677,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15330,7 +15682,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-12",
@@ -15346,7 +15699,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06761958368796,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -15357,7 +15710,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-13",
@@ -15373,7 +15727,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07146173977767,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -15384,7 +15738,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-14",
@@ -15400,7 +15755,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07841705876837,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15411,7 +15766,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-hamilton-15",
@@ -15427,7 +15783,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06753600839062,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -15438,7 +15794,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-1",
@@ -15454,7 +15811,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94178231122405,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -15465,7 +15822,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-2",
@@ -15481,7 +15839,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.957141300161,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -15492,7 +15850,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-3",
@@ -15508,7 +15867,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94521751958484,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -15519,7 +15878,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-4",
@@ -15535,7 +15895,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95072496482368,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -15546,7 +15906,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-5",
@@ -15562,7 +15923,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95501047802702,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -15573,7 +15934,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-6",
@@ -15589,7 +15951,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95119786369187,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -15600,7 +15962,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-7",
@@ -15616,7 +15979,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95116470036905,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15627,7 +15990,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-8",
@@ -15643,7 +16007,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94540304786574,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -15654,7 +16018,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-9",
@@ -15670,7 +16035,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9459720974973,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -15681,7 +16046,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-10",
@@ -15697,7 +16063,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.94429642355846,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -15708,7 +16074,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-11",
@@ -15724,7 +16091,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95261477063278,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15735,7 +16102,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-12",
@@ -15751,7 +16119,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95767231209592,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -15762,7 +16130,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-13",
@@ -15778,7 +16147,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9503250126325,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -15789,7 +16158,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-14",
@@ -15805,7 +16175,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.95809839823846,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -15816,7 +16186,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-mount-coot-tha-15",
@@ -15832,7 +16203,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9550960090582,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -15843,7 +16214,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-1",
@@ -15859,7 +16231,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04879905000573,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -15870,7 +16242,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-2",
@@ -15886,7 +16259,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04929972680617,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -15897,7 +16270,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-3",
@@ -15913,7 +16287,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05121374969755,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -15924,7 +16298,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-4",
@@ -15940,7 +16315,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05399202410968,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -15951,7 +16326,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-5",
@@ -15967,7 +16343,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05673751842235,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -15978,7 +16354,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-6",
@@ -15994,7 +16371,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04918774790184,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -16005,7 +16382,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-7",
@@ -16021,7 +16399,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0549411947416,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16032,7 +16410,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-8",
@@ -16048,7 +16427,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0496567538418,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -16059,7 +16438,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-9",
@@ -16075,7 +16455,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0487194724483,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -16086,7 +16466,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-10",
@@ -16102,7 +16483,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04584489933006,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -16113,7 +16494,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-11",
@@ -16129,7 +16511,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04543190349327,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16140,7 +16522,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-12",
@@ -16156,7 +16539,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05267206327173,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -16167,7 +16550,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-13",
@@ -16183,7 +16567,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05345212390154,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -16194,7 +16578,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-14",
@@ -16210,7 +16595,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04431999678758,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16221,7 +16606,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-inner-north-&-coast-15",
@@ -16237,7 +16623,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04994587198973,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -16248,7 +16634,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-1",
@@ -16264,7 +16651,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19501318351507,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -16275,7 +16662,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Arrive 30 minutes before twilight to watch the sky turn pastel pink.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-2",
@@ -16291,7 +16679,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20237966660335,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$12 - $20",
     "tags": [
@@ -16302,7 +16690,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take your pastries to a nearby shaded park bench under jacaranda trees.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-3",
@@ -16318,7 +16707,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.2015448843798,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $30",
     "tags": [
@@ -16329,7 +16718,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Relaxed, intimate date atmosphere with table service and chilled vibes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-4",
@@ -16345,7 +16735,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20635350463164,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$25 - $45",
     "tags": [
@@ -16356,7 +16746,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask the bartender to craft an off-menu cocktail tailored to your favorite spirits.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-5",
@@ -16372,7 +16763,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19737651627435,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$10 - $20",
     "tags": [
@@ -16383,7 +16774,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "The cool breeze coming off the river at dusk is refreshing after a warm sunny day.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-6",
@@ -16399,7 +16791,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20150548593614,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry ($10-$20 eats)",
     "tags": [
@@ -16410,7 +16802,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring a reusable tote bag; pick up fresh flowers and sourdough for the weekend.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-7",
@@ -16426,7 +16819,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19197779557896,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16437,7 +16830,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pack a warm blanket, a thermos of tea or wine, and enjoy quiet couple conversations.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-8",
@@ -16453,7 +16847,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19740419221267,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$75 - $95 per person",
     "tags": [
@@ -16464,7 +16858,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "No experience needed; all tools, glazes, and kiln firing included.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-9",
@@ -16480,7 +16875,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19906210518087,
     "start_date": "2026-12-02 18:30",
     "end_date": "2026-12-02 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -16491,7 +16886,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Share multiple dishes across different stalls for a mini food safari.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-10",
@@ -16507,7 +16903,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19507969114426,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$18 - $28",
     "tags": [
@@ -16518,7 +16914,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Laughter-filled date night; grab a craft beer upstairs before heading to your seats.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-11",
@@ -16534,7 +16931,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.2067877420293,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16545,7 +16942,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Follow the hike with specialty coffee and avocado toast at a nearby village cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-12",
@@ -16561,7 +16959,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20471468566643,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$35 - $60",
     "tags": [
@@ -16572,7 +16970,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Tandem kayaks are easy to paddle together; bring a waterproof phone pouch for photos.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-13",
@@ -16588,7 +16987,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20257986776863,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$$",
     "price_str": "$40 - $70",
     "tags": [
@@ -16599,7 +16998,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "A sophisticated afternoon date; take home your favorite wedge of cheese.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-14",
@@ -16615,7 +17015,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.20488234644955,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16626,7 +17026,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Bring low deck chairs, warm blankets, and cinema snacks.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "allsub-day-trips-15",
@@ -16642,7 +17043,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.19159341101255,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": "$15 - $25",
     "tags": [
@@ -16653,7 +17054,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit right at the end of the pier for the most tranquil ocean view.",
     "is_custom": 0,
-    "created_at": "2026-11-04T09:59:47.763470"
+    "created_at": "2026-11-04T09:59:47.763470",
+    "ongoing": true
   },
   {
     "id": "scour-extra-60-wellington-point-to-",
@@ -16669,7 +17071,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.24,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16680,7 +17082,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Check the tide times! Begin your walk 45 minutes before dead low tide and return before the water covers the sandbar.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-54-cleveland-point-hist",
@@ -16696,7 +17099,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.29,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free ( fish & chips)",
     "tags": [
@@ -16707,7 +17110,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Watch the sun sink behind the bay while eating hot crispy calamari from the point cafe.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-54-kooroomba-lavender-f",
@@ -16723,7 +17127,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.61,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-12 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16734,7 +17138,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk through the flowering purple lavender rows; incredible couple photos and romantic lunch.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-60-o'reilly's-canungra-",
@@ -16750,7 +17155,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.13,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16761,7 +17166,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Book a picnic hamper with local cheeses and cured meats; sit by the creek under weeping willows.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-55-victoria-point-water",
@@ -16777,7 +17183,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.305,
     "start_date": "2026-11-19 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "Free",
     "price_str": "Free Entry",
     "tags": [
@@ -16788,7 +17194,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Take the 10-minute ferry to Coochie island for a peaceful circum-island beach walk.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-58-ormiston-house-1862",
@@ -16804,7 +17211,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.255,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-12 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -16815,7 +17222,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Open on Sundays; wander the antique 1860s verandahs and grand heritage grounds.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-54-emporium-terrace-roo",
@@ -16831,7 +17239,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.024,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16842,7 +17250,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "One of Brisbane's premier luxury rooftop lounges; order the lychee rose martini at dusk.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-56-cielo-rooftop-bar-i",
@@ -16858,7 +17267,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.034,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16869,7 +17278,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "DJ beats pick up as the sun sets; great pre-dinner drinks spot.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-57-tasting-room-at-bris",
@@ -16885,7 +17295,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.015,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16896,12 +17306,13 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order a 4-gin tasting flight with artisanal tonic and dehydrated citrus garnishes.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-59-aether-brewing-co-no",
     "title": "Aether Brewing Co Northgate: Smoked Brisket & Sour Ale Taps",
-    "description": "Industrial Northside taproom featuring house-smoked Texas brisket, jalape\u00f1o poppers, and award-winning blackberry sour ales on tap.",
+    "description": "Industrial Northside taproom featuring house-smoked Texas brisket, jalapeño poppers, and award-winning blackberry sour ales on tap.",
     "category": "Food & Drink",
     "source": "Must Do Brisbane",
     "source_url": "https://www.google.com/search?q=Aether+Brewing+Co+Northgate:+Smoked+Brisket+&+Sour+Ale+Taps",
@@ -16912,7 +17323,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.073,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16923,7 +17334,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the brisket platter to share with a crisp ginger beer or citrus hazy ale.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-51-sunnybank-weekend-a",
@@ -16939,7 +17351,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.004466736486,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-12 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -16950,7 +17362,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-50-west-end-weekend-ar",
@@ -16966,7 +17379,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04610394185744,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -16977,7 +17390,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-54-brisbane-cbd-weeken",
@@ -16993,7 +17407,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05726832030868,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17004,7 +17418,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-50-new-farm-weekend-ar",
@@ -17020,7 +17435,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0075151295496,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17031,7 +17446,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-52-paddington-weekend-",
@@ -17047,7 +17463,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0571691981478,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17058,7 +17474,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-55-woolloongabba-weeke",
@@ -17074,7 +17491,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97521344386308,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17085,7 +17502,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-49-bulimba-weekend-art",
@@ -17101,7 +17519,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97293975830965,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17112,7 +17530,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-50-hamilton-weekend-ar",
@@ -17128,7 +17547,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03767681840762,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17139,7 +17558,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-56-mount-coot-tha-week",
@@ -17155,7 +17575,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07561911278938,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17166,7 +17586,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-62-inner-north-&-coast",
@@ -17182,7 +17603,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98563602167914,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17193,7 +17614,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-52-day-trips-weekend-a",
@@ -17209,7 +17631,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04388296226546,
     "start_date": "2026-11-18 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17220,7 +17642,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-70-fortitude-valley-/-j",
@@ -17236,7 +17659,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0498565085459,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17247,7 +17670,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-52-sunnybank-weekend-a",
@@ -17263,7 +17687,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02818591945007,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17274,7 +17698,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-51-west-end-weekend-ar",
@@ -17290,7 +17715,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97352977293917,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17301,7 +17726,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-55-brisbane-cbd-weeken",
@@ -17317,7 +17743,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9752510105418,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17328,7 +17754,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-51-new-farm-weekend-ar",
@@ -17344,7 +17771,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05722319107247,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17355,7 +17782,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-53-paddington-weekend-",
@@ -17371,7 +17799,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0280417670554,
     "start_date": "2026-11-16 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17382,7 +17810,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-56-woolloongabba-weeke",
@@ -17398,7 +17827,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.034576616644,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17409,7 +17838,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-50-bulimba-weekend-art",
@@ -17425,7 +17855,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0251871152555,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316",
     "price_str": " - ",
     "tags": [
@@ -17436,7 +17866,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-51-hamilton-weekend-ar",
@@ -17452,7 +17883,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06698143288148,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55316$",
     "price_str": " - ",
     "tags": [
@@ -17463,7 +17894,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-57-mount-coot-tha-week",
@@ -17479,7 +17911,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97888393578972,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17490,7 +17922,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Beloved by local regulars; check current opening hours or arrive around golden hour.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:19.342954"
+    "created_at": "2026-11-04T10:00:19.342954",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-sunnybank-couple's-",
@@ -17506,7 +17939,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03616796642032,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355",
     "price_str": " - ",
     "tags": [
@@ -17517,7 +17950,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-west-end-couple's-c",
@@ -17533,7 +17967,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00661393387165,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355$",
     "price_str": " - ",
     "tags": [
@@ -17544,7 +17978,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-brisbane-cbd-couple",
@@ -17560,7 +17995,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08327826858982,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17571,7 +18006,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-new-farm-couple's-c",
@@ -17587,7 +18023,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9835393797901,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355",
     "price_str": " - ",
     "tags": [
@@ -17598,7 +18034,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-paddington-couple's",
@@ -17614,7 +18051,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0503085723267,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355$",
     "price_str": " - ",
     "tags": [
@@ -17625,7 +18062,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-woolloongabba-coupl",
@@ -17641,7 +18079,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01592470365085,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17652,7 +18090,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-bulimba-couple's-cu",
@@ -17668,7 +18107,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98353246339656,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355",
     "price_str": " - ",
     "tags": [
@@ -17679,7 +18118,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-hamilton-couple's-c",
@@ -17695,7 +18135,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98728655229255,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-24 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355$",
     "price_str": " - ",
     "tags": [
@@ -17706,7 +18146,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-mount-coot-tha-coup",
@@ -17722,7 +18163,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0481354497846,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17733,7 +18174,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-inner-north-&-coast",
@@ -17749,7 +18191,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0639092451654,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355",
     "price_str": " - ",
     "tags": [
@@ -17760,7 +18202,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-day-trips-couple's-",
@@ -17776,7 +18219,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01091398740843,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55355$",
     "price_str": " - ",
     "tags": [
@@ -17787,7 +18230,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "scour-extra-batch2-79-fortitude-valley-/-j",
@@ -17803,7 +18247,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02578039729383,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "$",
     "price_str": " - ",
     "tags": [
@@ -17814,7 +18258,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "High local review score. Arrive around twilight or book ahead on weekends.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:37.864673"
+    "created_at": "2026-11-04T10:00:37.864673",
+    "ongoing": true
   },
   {
     "id": "bne-vault-707-692879",
@@ -17830,7 +18275,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97117546487166,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17841,7 +18286,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-708-965283",
@@ -17857,7 +18303,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9766052605464,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17868,7 +18314,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-709-913273",
@@ -17884,7 +18331,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.96889779622236,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-18 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17895,7 +18342,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-710-144069",
@@ -17911,7 +18359,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01196777653146,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-12 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17922,7 +18370,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-711-801771",
@@ -17938,7 +18387,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98264306999758,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17949,7 +18398,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-712-325691",
@@ -17965,7 +18415,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00987062875677,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-18 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -17976,7 +18426,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-713-894739",
@@ -17992,7 +18443,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0734405977228,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18003,7 +18454,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-714-815202",
@@ -18019,7 +18471,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00593284289988,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18030,7 +18482,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-715-627653",
@@ -18046,7 +18499,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07071841492953,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18057,7 +18510,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-716-241139",
@@ -18073,7 +18527,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0811254660056,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18084,7 +18538,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-717-714255",
@@ -18100,7 +18555,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06969613946544,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18111,7 +18566,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-718-504217",
@@ -18127,7 +18583,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9734080767271,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18138,7 +18594,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-719-278703",
@@ -18154,7 +18611,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9764374046721,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18165,7 +18622,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-720-948171",
@@ -18181,7 +18639,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0636676728438,
     "start_date": "2026-11-22 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18192,7 +18650,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-721-249458",
@@ -18208,7 +18667,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.001410638987,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-24 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18219,7 +18678,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-722-440546",
@@ -18235,7 +18695,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04496601283427,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-28 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18246,7 +18706,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-723-999672",
@@ -18262,7 +18723,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.96752567090928,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18273,7 +18734,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-724-690050",
@@ -18289,7 +18751,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01942243534168,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-14 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18300,7 +18762,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-725-863287",
@@ -18316,7 +18779,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02834997703008,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18327,7 +18790,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-726-312369",
@@ -18343,7 +18807,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9875411782992,
     "start_date": "2026-11-07 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18354,7 +18818,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-727-551659",
@@ -18370,7 +18835,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9792695113457,
     "start_date": "2026-11-25 18:30",
     "end_date": "2026-11-06 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18381,7 +18846,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-728-503116",
@@ -18397,7 +18863,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03786161724335,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-10 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18408,7 +18874,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-729-234271",
@@ -18424,7 +18891,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05376185943342,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18435,7 +18902,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-730-708499",
@@ -18451,7 +18919,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05539207321198,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18462,7 +18930,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-731-557158",
@@ -18478,7 +18947,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06846323491826,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18489,7 +18958,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-732-874895",
@@ -18505,7 +18975,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06865283945,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18516,7 +18986,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-733-391388",
@@ -18532,7 +19003,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.053024105016,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18543,7 +19014,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-734-151105",
@@ -18559,7 +19031,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08470684978892,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18570,7 +19042,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-735-835894",
@@ -18586,7 +19059,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03988116076755,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18597,7 +19070,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-736-253996",
@@ -18613,7 +19087,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0032248979891,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-06 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18624,7 +19098,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-737-408135",
@@ -18640,7 +19115,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97915255371225,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-18 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18651,7 +19126,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-738-407645",
@@ -18667,7 +19143,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04419134372935,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18678,7 +19154,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-739-722433",
@@ -18694,7 +19171,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9692373837975,
     "start_date": "2026-11-18 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18705,7 +19182,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-740-629045",
@@ -18721,7 +19199,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0328724072917,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18732,7 +19210,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-741-404022",
@@ -18748,7 +19227,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00379372682352,
     "start_date": "2026-11-12 18:30",
     "end_date": "2026-11-07 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18759,7 +19238,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-742-437755",
@@ -18775,7 +19255,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.96754001986574,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18786,7 +19266,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-743-459235",
@@ -18802,7 +19283,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0053428435198,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18813,7 +19294,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-744-539526",
@@ -18829,7 +19311,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9941484430244,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18840,7 +19322,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-745-986899",
@@ -18856,7 +19339,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01413136344698,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18867,7 +19350,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-746-669732",
@@ -18883,7 +19367,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98762592652034,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18894,7 +19378,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-747-868890",
@@ -18910,7 +19395,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.04462183131895,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18921,7 +19406,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-748-377238",
@@ -18937,7 +19423,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06849441524037,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18948,7 +19434,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-749-202038",
@@ -18964,7 +19451,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99518282367865,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-20 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -18975,7 +19462,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-750-867491",
@@ -18991,7 +19479,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02258928854476,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19002,7 +19490,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-751-180371",
@@ -19018,7 +19507,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00442934753585,
     "start_date": "2026-11-21 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19029,7 +19518,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-752-267551",
@@ -19045,7 +19535,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00651403897078,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19056,7 +19546,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-753-568957",
@@ -19072,7 +19563,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.05500217079558,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19083,7 +19574,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-754-475433",
@@ -19099,7 +19591,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98767908472647,
     "start_date": "2026-11-04 18:30",
     "end_date": "2026-11-27 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19110,7 +19602,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-755-852384",
@@ -19126,7 +19619,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.07383992283363,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19137,7 +19630,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-756-260254",
@@ -19153,7 +19647,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.02685754512444,
     "start_date": "2026-11-26 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19164,7 +19658,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-757-382047",
@@ -19180,7 +19675,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.985359036427,
     "start_date": "2026-11-13 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19191,7 +19686,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-758-692742",
@@ -19207,7 +19703,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99770456830444,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-25 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19218,7 +19714,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-759-104223",
@@ -19234,7 +19731,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06595472514095,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19245,7 +19742,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-760-415802",
@@ -19261,7 +19759,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00099973298686,
     "start_date": "2026-11-10 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19272,7 +19770,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-761-534030",
@@ -19288,7 +19787,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9965322329961,
     "start_date": "2026-11-14 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19299,7 +19798,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-762-854235",
@@ -19315,7 +19815,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03417463292536,
     "start_date": "2026-11-05 18:30",
     "end_date": "2026-11-08 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19326,7 +19826,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-763-296541",
@@ -19342,7 +19843,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.98019267871385,
     "start_date": "2026-11-09 18:30",
     "end_date": "2026-11-21 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19353,7 +19854,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-764-906289",
@@ -19369,7 +19871,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0259318523007,
     "start_date": "2026-11-20 18:30",
     "end_date": "2026-11-23 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19380,7 +19882,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-765-236364",
@@ -19396,7 +19899,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.00328378604783,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-15 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19407,7 +19910,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-766-549447",
@@ -19423,7 +19927,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.9695340572248,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-13 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19434,7 +19938,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-767-770397",
@@ -19450,7 +19955,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03024608308462,
     "start_date": "2026-11-29 18:30",
     "end_date": "2026-11-05 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19461,7 +19966,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-768-963495",
@@ -19477,7 +19983,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.036772823044,
     "start_date": "2026-11-08 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19488,7 +19994,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-769-428241",
@@ -19504,7 +20011,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0142480180219,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-11 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19515,7 +20022,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-770-154447",
@@ -19531,7 +20039,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03203899389723,
     "start_date": "2026-11-27 18:30",
     "end_date": "2026-11-17 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19542,7 +20050,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-771-632648",
@@ -19558,7 +20067,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.06504598930667,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-09 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19569,7 +20078,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-772-155828",
@@ -19585,7 +20095,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.99056048693333,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-22 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19596,7 +20106,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-773-461818",
@@ -19612,7 +20123,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.03062896825452,
     "start_date": "2026-11-23 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19623,7 +20134,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-774-340308",
@@ -19639,7 +20151,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.0737296795907,
     "start_date": "2026-11-15 18:30",
     "end_date": "2026-11-19 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19650,7 +20162,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-775-977587",
@@ -19666,7 +20179,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.97493982591814,
     "start_date": "2026-11-24 18:30",
     "end_date": "2026-11-26 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19677,7 +20190,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-776-532348",
@@ -19693,7 +20207,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.01974087376672,
     "start_date": "2026-11-11 18:30",
     "end_date": "2026-11-12 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19704,7 +20218,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-777-643018",
@@ -19720,7 +20235,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.08060925682454,
     "start_date": "2026-11-17 18:30",
     "end_date": "2026-11-16 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19731,7 +20246,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-778-672948",
@@ -19747,7 +20263,7 @@ const PRELOADED_EVENTS = [
     "lng": 153.001065390104,
     "start_date": "2026-11-28 18:30",
     "end_date": "2026-11-29 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19758,7 +20274,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "bne-vault-779-359547",
@@ -19774,7 +20291,7 @@ const PRELOADED_EVENTS = [
     "lng": 152.969775060397,
     "start_date": "2026-11-06 18:30",
     "end_date": "2026-11-04 18:30",
-    "time_str": "Open this week",
+    "time_str": "Visit any day – check opening hours",
     "price_level": "55414",
     "price_str": " - ",
     "tags": [
@@ -19785,7 +20302,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Highly rated by local Brisbane couples. Check opening hours or book for twilight views.",
     "is_custom": 0,
-    "created_at": "2026-11-04T10:00:56.088808"
+    "created_at": "2026-11-04T10:00:56.088808",
+    "ongoing": true
   },
   {
     "id": "deep-30d-1-spring-hill-underground-r",
@@ -19920,7 +20438,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Enter via the Spectacle Garden entrance after dusk when the rainforest illuminations switch on.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-6-kangaroo-point-cliffs:-su",
@@ -19992,7 +20511,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-11 18:30",
     "time_str": "Dinner Sitting (6:30 PM)",
     "price_level": "$$$$",
-    "price_str": "5.0\u2605 Google ($185pp)",
+    "price_str": "5.0★ Google ($185pp)",
     "tags": [
       "Fortitude Valley",
       "Romantic Date Night",
@@ -20001,7 +20520,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit elbow-to-elbow with chef Sarah Scott; each course is paired with boutique natural wines.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-9-agnes-restaurant:-woodfir",
@@ -20019,7 +20539,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-06 18:30",
     "time_str": "Dinner (7:30 PM)",
     "price_level": "$$$$",
-    "price_str": "4.8\u2605 Google ($120 - $180)",
+    "price_str": "4.8★ Google ($120 - $180)",
     "tags": [
       "Fortitude Valley",
       "Romantic Date Night",
@@ -20028,7 +20548,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Don't miss the smoked potato bread with fermented brown butter and wood-roasted ribeye.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-10-essa-restaurant-&-wine-ba",
@@ -20046,7 +20567,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-07 18:30",
     "time_str": "Dinner (7:00 PM)",
     "price_level": "$$$",
-    "price_str": "4.8\u2605 Google ($90 - $140)",
+    "price_str": "4.8★ Google ($90 - $140)",
     "tags": [
       "Fortitude Valley",
       "Romantic Date Night",
@@ -20055,7 +20576,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Request the intimate booth near the back greenery garden wall.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-11-restaurant-dan-arnold:-fr",
@@ -20073,7 +20595,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-13 18:30",
     "time_str": "Sitting (6:45 PM)",
     "price_level": "$$$$",
-    "price_str": "4.9\u2605 Google ($170 - $240)",
+    "price_str": "4.9★ Google ($170 - $240)",
     "tags": [
       "Fortitude Valley",
       "Romantic Date Night",
@@ -20100,7 +20622,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-12 18:30",
     "time_str": "Evening Tasting (7:00 PM)",
     "price_level": "$$$$",
-    "price_str": "4.8\u2605 Google ($135pp)",
+    "price_str": "4.8★ Google ($135pp)",
     "tags": [
       "New Farm",
       "Romantic Date Night",
@@ -20127,7 +20649,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-08 18:30",
     "time_str": "Dinner (6:30 PM)",
     "price_level": "$$$",
-    "price_str": "4.8\u2605 Google ($75 - $110)",
+    "price_str": "4.8★ Google ($75 - $110)",
     "tags": [
       "Woolloongabba",
       "Romantic Date Night",
@@ -20136,7 +20658,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Ask to see the underground brick cellar where private candlelit tastings take place.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-14-julius-pizzeria:-woodfire",
@@ -20154,7 +20677,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-05 18:30",
     "time_str": "Dinner (6:00 PM - 9:30 PM)",
     "price_level": "$$",
-    "price_str": "4.7\u2605 Google ($35 - $60)",
+    "price_str": "4.7★ Google ($35 - $60)",
     "tags": [
       "West End",
       "Food & Drink",
@@ -20163,15 +20686,16 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Walk-in only; put your name down and grab a spritz across Fish Lane at Bar Merenda while waiting.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
-    "id": "deep-30d-15-bi\u00e0nca:-pastel-peach-trat",
-    "title": "Bi\u00e0nca: Pastel Peach Trattoria & Handmade Pasta",
+    "id": "deep-30d-15-biànca:-pastel-peach-trat",
+    "title": "Biànca: Pastel Peach Trattoria & Handmade Pasta",
     "description": "Vibrant pastel aesthetic with terracotta hues, serving exquisite handmade paccheri, antipasti, and house-churned gelato.",
     "category": "Food & Drink",
     "source": "Live 30-Day Scraper",
-    "source_url": "https://www.google.com/search?q=Bi\u00e0nca:+Pastel+Peach+Trattoria+&+Handmade+Pasta+Brisbane",
+    "source_url": "https://www.google.com/search?q=Biànca:+Pastel+Peach+Trattoria+&+Handmade+Pasta+Brisbane",
     "image_url": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
     "location_name": "Ada Lane, Fortitude Valley",
     "city": "Brisbane",
@@ -20181,7 +20705,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-09 18:30",
     "time_str": "Lunch & Dinner (12:00 PM / 7:00 PM)",
     "price_level": "$$$",
-    "price_str": "4.8\u2605 Google ($65 - $100)",
+    "price_str": "4.8★ Google ($65 - $100)",
     "tags": [
       "Fortitude Valley",
       "Food & Drink",
@@ -20190,7 +20714,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Sit at the marble bar watching the pasta rolling station in action.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-16-same-same:-modern-thai-&-",
@@ -20208,7 +20733,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-10 18:30",
     "time_str": "Dinner (7:15 PM)",
     "price_level": "$$$",
-    "price_str": "4.8\u2605 Google ($70 - $120)",
+    "price_str": "4.8★ Google ($70 - $120)",
     "tags": [
       "Fortitude Valley",
       "Date Night Specials",
@@ -20217,7 +20742,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order the twice-cooked lamb ribs with sweet fish sauce and Thai basil.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-17-exhibition-restaurant:-su",
@@ -20235,7 +20761,7 @@ const PRELOADED_EVENTS = [
     "end_date": "2026-11-15 18:30",
     "time_str": "Dinner (6:30 PM)",
     "price_level": "$$$$",
-    "price_str": "4.9\u2605 Google ($165pp)",
+    "price_str": "4.9★ Google ($165pp)",
     "tags": [
       "Brisbane CBD",
       "Date Night Specials",
@@ -20244,7 +20770,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Pre-dinner house highball at the intimate entrance bar is an absolute must.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-18-brooki-bakehouse:-viral-n",
@@ -20352,7 +20879,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Secure an outdoor terrace river-facing table at 6:00pm to watch city lights reflect off water.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-22-sunnybank-market-square:-",
@@ -20393,7 +20921,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.441,
     "lng": 153.084,
-    "start_date": "2026-11-06 18:30",
+    "start_date": "2026-11-06 16:00",
     "end_date": "2026-11-06 18:30",
     "time_str": "Friday & Saturday (4:00 PM - 10:00 PM)",
     "price_level": "$",
@@ -20474,7 +21002,7 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.45,
     "lng": 153.043,
-    "start_date": "2026-11-08 18:30",
+    "start_date": "2026-11-08 13:00",
     "end_date": "2026-11-08 18:30",
     "time_str": "Sunday Afternoon (1:00 PM - 6:00 PM)",
     "price_level": "$",
@@ -20744,8 +21272,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.458,
     "lng": 153.042,
-    "start_date": "2026-11-08 18:30",
-    "end_date": "2026-11-08 18:30",
+    "start_date": "2026-11-10 10:00",
+    "end_date": "2026-11-10 18:30",
     "time_str": "Tuesday - Saturday (10:00 AM - 5:00 PM)",
     "price_level": "Free",
     "price_str": "Free Admission",
@@ -20771,8 +21299,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.458,
     "lng": 153.036,
-    "start_date": "2026-11-09 18:30",
-    "end_date": "2026-11-09 18:30",
+    "start_date": "2026-11-11 11:00",
+    "end_date": "2026-11-11 18:30",
     "time_str": "Wednesday - Saturday (11:00 AM - 5:00 PM)",
     "price_level": "Free",
     "price_str": "Free Entry",
@@ -20852,8 +21380,8 @@ const PRELOADED_EVENTS = [
     "city": "Brisbane",
     "lat": -27.476,
     "lng": 153.022,
-    "start_date": "2026-11-07 18:30",
-    "end_date": "2026-11-07 18:30",
+    "start_date": "2026-11-06 17:00",
+    "end_date": "2026-11-06 18:30",
     "time_str": "Friday (5:00 PM) & Weekend (10:00 AM - 9:00 PM)",
     "price_level": "Free",
     "price_str": "Free Entry",
@@ -21027,7 +21555,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Play under the evening fairy lights for a competitive, fun date night.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-47-netherworld:-vintage-arca",
@@ -21054,7 +21583,8 @@ const PRELOADED_EVENTS = [
     ],
     "insider_tip": "Order a local craft sour beer and challenge each other to Point Blank or Mario Kart.",
     "is_custom": 0,
-    "created_at": "2026-11-04T11:42:28.644066"
+    "created_at": "2026-11-04T11:42:28.644066",
+    "ongoing": true
   },
   {
     "id": "deep-30d-48-moreton-island:-tangaloom",
@@ -21082,5 +21612,2558 @@ const PRELOADED_EVENTS = [
     "insider_tip": "Book the dolphin feeding sunset package for an unforgettable island day.",
     "is_custom": 0,
     "created_at": "2026-11-04T11:42:28.644066"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-hobart-hurricanes-wbbl-2026-11-07",
+    "title": "Brisbane Heat v Hobart Hurricanes (WBBL)",
+    "description": "Cheap, relaxed twilight women's T20 on a grassy boutique ground – picnic rug and a sunset over the cricket.",
+    "category": "Sports & Active",
+    "source": "Cricket (WBBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Allan Border Field, Albion",
+    "city": "Brisbane",
+    "suburb": "Albion",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-07 18:10",
+    "end_date": "2026-11-07 21:10",
+    "time_str": "Sat 7 Nov, 6:10 PM",
+    "price_level": "$$",
+    "price_str": "Adults from $25",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (WBBL)",
+      "Albion"
+    ],
+    "insider_tip": "The hill is the best spot; bring a rug and catch the train to Albion station.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-queensland-bulls-v-tasmania-sheffield-shield-day-2026-11-11",
+    "title": "Queensland Bulls v Tasmania (Sheffield Shield, Day 1 of 4)",
+    "description": "An unhurried day of first-class cricket at the Gabba with the stands almost to yourselves.",
+    "category": "Sports & Active",
+    "source": "Cricket (Sheffield Shield)",
+    "source_url": "https://www.qldcricket.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-11 10:30",
+    "end_date": "2026-11-14 17:30",
+    "time_str": "Wed 11 Nov, 10:30 AM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (Sheffield Shield)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Runs 11–14 Nov. Drop in for an afternoon session, then grab dinner in Woolloongabba.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-tasmania-jackjumpers-nbl-2026-11-15",
+    "title": "Brisbane Bullets v Tasmania JackJumpers (NBL)",
+    "description": "Loud, fast and fun Sunday-afternoon basketball, with plenty to watch at every break.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-15 16:00",
+    "end_date": "2026-11-15 19:00",
+    "time_str": "Sun 15 Nov, 4:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Billed as the RACQ Round. Train to Boondall station is a short walk to the arena.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-sydney-thunder-wbbl-2026-11-19",
+    "title": "Brisbane Heat v Sydney Thunder (WBBL)",
+    "description": "A Thursday-night cricket date under lights for not much money.",
+    "category": "Sports & Active",
+    "source": "Cricket (WBBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Allan Border Field, Albion",
+    "city": "Brisbane",
+    "suburb": "Albion",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-19 18:10",
+    "end_date": "2026-11-19 21:10",
+    "time_str": "Thu 19 Nov, 6:10 PM",
+    "price_level": "$$",
+    "price_str": "Adults from $25",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (WBBL)",
+      "Albion"
+    ],
+    "insider_tip": "Food trucks run out quickly; eat beforehand at a Breakfast Creek or Albion venue.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-v-sydney-fc-roar-women-v-melbourne-2026-11-21",
+    "title": "Brisbane Roar v Sydney FC + Roar Women v Melbourne City (double-header)",
+    "description": "Two A-League games for one ticket at a seaside stadium – make a Redcliffe day of it.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Men & Women)",
+    "source_url": "https://www.brisbaneroar.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Kayo Stadium, Redcliffe",
+    "city": "Brisbane",
+    "suburb": "Redcliffe",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-21 18:40",
+    "end_date": "2026-11-21 21:40",
+    "time_str": "Sat 21 Nov, 6:40 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Men & Women)",
+      "Redcliffe"
+    ],
+    "insider_tip": "Kick-off is 6:40pm per ticketing listings. Arrive early for fish and chips on the Redcliffe foreshore.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-adelaide-strikers-wbbl-2026-11-22",
+    "title": "Brisbane Heat v Adelaide Strikers (WBBL)",
+    "description": "Sunday-afternoon cricket followed by a lazy dinner.",
+    "category": "Sports & Active",
+    "source": "Cricket (WBBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Allan Border Field, Albion",
+    "city": "Brisbane",
+    "suburb": "Albion",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-22 14:40",
+    "end_date": "2026-11-22 17:40",
+    "time_str": "Sun 22 Nov, 2:40 PM",
+    "price_level": "$$",
+    "price_str": "Adults from $25",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (WBBL)",
+      "Albion"
+    ],
+    "insider_tip": "Afternoon sun is strong – bring hats and sunscreen.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-sydney-kings-indigenous-round-2026-11-22",
+    "title": "Brisbane Bullets v Sydney Kings – Indigenous Round (NBL)",
+    "description": "A big-rivalry Sunday game with Indigenous Round celebrations.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisent.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-22 16:00",
+    "end_date": "2026-11-22 19:00",
+    "time_str": "Sun 22 Nov, 4:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Kings games draw big crowds – book seats together early.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bandits-v-perth-heat-abl-baseball-serie-2026-11-25",
+    "title": "Brisbane Bandits v Perth Heat (ABL baseball series opener)",
+    "description": "Summer baseball in Newmarket with hot dogs, a cold drink and a laid-back crowd – an underrated date night.",
+    "category": "Sports & Active",
+    "source": "Baseball (ABL)",
+    "source_url": "https://brisbanebandits.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Holloway Field (Viticon Stadium), Newmarket",
+    "city": "Brisbane",
+    "suburb": "Newmarket",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-25 18:30",
+    "end_date": "2026-11-25 21:30",
+    "time_str": "Wed 25 Nov, 6:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Baseball (ABL)",
+      "Newmarket"
+    ],
+    "insider_tip": "Reported first home series: 25 Nov (6:30pm), 26 Nov (6pm), 27 Nov. Confirm on the Bandits Ticket Hub.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-australia-v-england-men-s-t20-international-3rd--2026-11-27",
+    "title": "Australia v England – Men's T20 International (3rd T20I)",
+    "description": "Ashes-rivalry cricket under lights at the Gabba – the big-ticket summer sports date.",
+    "category": "Sports & Active",
+    "source": "Cricket (International T20)",
+    "source_url": "https://thegabba.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-11-27 18:15",
+    "end_date": "2026-11-27 21:15",
+    "time_str": "Fri 27 Nov, 6:15 PM",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketmaster)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (International T20)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Gates open 4:45pm. There's no Gabba Test this summer, so this is the main international game in town.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-perth-wildcats-nbl-2026-12-03",
+    "title": "Brisbane Bullets v Perth Wildcats (NBL)",
+    "description": "A Thursday-night clash against the league's traditional powerhouse.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-03 20:00",
+    "end_date": "2026-12-03 23:00",
+    "time_str": "Thu 3 Dec, 8:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Billed as Teddy Toss night – bring a teddy to throw for charity.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-summer-twilight-raceday-doomben-2026-12-11",
+    "title": "Summer Twilight Raceday – Doomben",
+    "description": "Dress up for an evening of racing that runs into twilight – a classic Brisbane date.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Doomben Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-11 16:00",
+    "end_date": "2026-12-11 19:00",
+    "time_str": "Fri 11 Dec, 4:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Start time not published yet. Ascot station is right beside the track.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-the-gateway-raceday-eagle-farm-2026-12-12",
+    "title": "The Gateway Raceday – Eagle Farm",
+    "description": "Saturday racing where the winner earns a start in the 2027 Stradbroke – frocks, fascinators and a flutter.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Eagle Farm Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-12 12:00",
+    "end_date": "2026-12-12 15:00",
+    "time_str": "Sat 12 Dec, 12:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Daytime meeting; exact first race not confirmed. Book a members' area package for shade.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-sydney-sixers-bbl-16-home-opener-2026-12-15",
+    "title": "Brisbane Heat v Sydney Sixers (BBL|16 home opener)",
+    "description": "The summer's first BBL night at the Gabba – fireworks, flames and big hitting.",
+    "category": "Sports & Active",
+    "source": "Cricket (BBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-15 18:15",
+    "end_date": "2026-12-15 21:15",
+    "time_str": "Tue 15 Dec, 6:15 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (BBL)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Heat's first home game of the season. Upper-deck seats in the shade stay cooler.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-v-western-sydney-wanderers-a-leagu-2026-12-19",
+    "title": "Brisbane Roar v Western Sydney Wanderers (A-League Men)",
+    "description": "Saturday-night football before Christmas.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Men)",
+    "source_url": "https://www.brisbaneroar.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Venue TBC – check website, Brisbane",
+    "city": "Brisbane",
+    "suburb": "Brisbane",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-19 19:00",
+    "end_date": "2026-12-19 22:00",
+    "time_str": "Sat 19 Dec, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Men)",
+      "Brisbane"
+    ],
+    "insider_tip": "Venue and kick-off not confirmed – check the Roar fixtures page.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-grand-prix-raceday-eagle-farm-2026-12-19",
+    "title": "Grand Prix Raceday – Eagle Farm",
+    "description": "A pre-Christmas race day headlined by the Group 3 Grand Prix Stakes.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Eagle Farm Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-19 12:00",
+    "end_date": "2026-12-19 15:00",
+    "time_str": "Sat 19 Dec, 12:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Daytime meeting; first race time not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-boxing-day-races-eagle-farm-2026-12-26",
+    "title": "Boxing Day Races – Eagle Farm",
+    "description": "Walk off Christmas lunch with a Boxing Day race-day date.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Eagle Farm Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-26 12:00",
+    "end_date": "2026-12-26 15:00",
+    "time_str": "Sat 26 Dec, 12:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Daytime meeting; time not confirmed. Feature race is the Members Mile.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-cairns-taipans-nbl-2026-12-27",
+    "title": "Brisbane Bullets v Cairns Taipans (NBL)",
+    "description": "The Queensland derby in the Christmas-week lull.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisent.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-27 16:00",
+    "end_date": "2026-12-27 19:00",
+    "time_str": "Sun 27 Dec, 4:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Sources give different tip-off times (4pm or 5pm) – check your ticket.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-adelaide-strikers-bbl-2026-12-28",
+    "title": "Brisbane Heat v Adelaide Strikers (BBL)",
+    "description": "Holiday-week cricket at the Gabba under lights.",
+    "category": "Sports & Active",
+    "source": "Cricket (BBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-28 18:15",
+    "end_date": "2026-12-28 21:15",
+    "time_str": "Mon 28 Dec, 6:15 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (BBL)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Busy holiday crowds – catch the busway to Woolloongabba instead of driving.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-v-perth-glory-roar-women-v-perth-d-2026-12-30",
+    "title": "Brisbane Roar v Perth Glory + Roar Women v Perth (double-header)",
+    "description": "A midweek two-game football night between Christmas and New Year.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Men & Women)",
+    "source_url": "https://www.brisbaneroar.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Kayo Stadium, Redcliffe",
+    "city": "Brisbane",
+    "suburb": "Redcliffe",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-30 19:00",
+    "end_date": "2026-12-30 22:00",
+    "time_str": "Wed 30 Dec, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Men & Women)",
+      "Redcliffe"
+    ],
+    "insider_tip": "Kick-off times not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-adelaide-36ers-ignite-cup-nbl-2026-12-30",
+    "title": "Brisbane Bullets v Adelaide 36ers – Ignite Cup (NBL)",
+    "description": "A pre-New Year's Eve night at the basketball.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2026-12-30 18:30",
+    "end_date": "2026-12-30 21:30",
+    "time_str": "Wed 30 Dec, 6:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Sources give different tip-off times (6:30pm or 7:30pm).",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-hobart-hurricanes-bbl-new-year-s-2027-01-01",
+    "title": "Brisbane Heat v Hobart Hurricanes (BBL – New Year's Day)",
+    "description": "Start 2027 with a New Year's Day night at the cricket.",
+    "category": "Sports & Active",
+    "source": "Cricket (BBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-01 18:15",
+    "end_date": "2027-01-01 21:15",
+    "time_str": "Fri 1 Jan, 6:15 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (BBL)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Public holiday – check transport timetables and book tickets early.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-magic-millions-prelude-raceday-eagle-farm-2027-01-02",
+    "title": "Magic Millions Prelude Raceday – Eagle Farm",
+    "description": "A Saturday race day full of lead-up races to the Gold Coast's Magic Millions.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Eagle Farm Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-02 12:00",
+    "end_date": "2027-01-02 15:00",
+    "time_str": "Sat 2 Jan, 12:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Daytime meeting; time not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-international-2027-atp-wta-tennis-2027-01-03",
+    "title": "Brisbane International 2027 (ATP/WTA tennis)",
+    "description": "World-class tennis in the summer heat – a day session on the outer courts or a night match in the main arena.",
+    "category": "Sports & Active",
+    "source": "Tennis",
+    "source_url": "https://tennis.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Pat Rafter Arena, Queensland Tennis Centre, Tennyson",
+    "city": "Brisbane",
+    "suburb": "Tennyson",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-03 10:00",
+    "end_date": "2027-01-10 22:00",
+    "time_str": "Sun 3 Jan, 10:00 AM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Approx. $30–$500 depending on session",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Tennis",
+      "Tennyson"
+    ],
+    "insider_tip": "Runs 3–10 Jan 2027. Early-round ground passes are the best value – roam the outer courts up close.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-melbourne-united-nbl-2027-01-03",
+    "title": "Brisbane Bullets v Melbourne United (NBL)",
+    "description": "Sunday basketball against one of the league's glamour teams.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.ticketek.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-03 19:00",
+    "end_date": "2027-01-03 22:00",
+    "time_str": "Sun 3 Jan, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "This game only appears in some listings – confirm before booking.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-perth-scorchers-bbl-2027-01-08",
+    "title": "Brisbane Heat v Perth Scorchers (BBL)",
+    "description": "A Friday-night BBL heavyweight clash.",
+    "category": "Sports & Active",
+    "source": "Cricket (BBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-08 18:15",
+    "end_date": "2027-01-08 21:15",
+    "time_str": "Fri 8 Jan, 6:15 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (BBL)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Clashes with Bullets v Kings the same night – pick one.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-sydney-kings-nbl-2027-01-08",
+    "title": "Brisbane Bullets v Sydney Kings (NBL)",
+    "description": "Friday-night rivalry basketball.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-08 19:30",
+    "end_date": "2027-01-08 22:30",
+    "time_str": "Fri 8 Jan, 7:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Same night as Heat v Scorchers at the Gabba.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-v-melbourne-victory-a-league-men-2027-01-09",
+    "title": "Brisbane Roar v Melbourne Victory (A-League Men)",
+    "description": "A Saturday-night football date against a big Victorian rival.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Men)",
+    "source_url": "https://www.brisbaneroar.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Venue TBC – check website, Brisbane",
+    "city": "Brisbane",
+    "suburb": "Brisbane",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-09 19:00",
+    "end_date": "2027-01-09 22:00",
+    "time_str": "Sat 9 Jan, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Men)",
+      "Brisbane"
+    ],
+    "insider_tip": "Venue and kick-off not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-heat-v-sydney-thunder-bbl-final-home-ga-2027-01-17",
+    "title": "Brisbane Heat v Sydney Thunder (BBL – final home game)",
+    "description": "The Heat's last regular-season night at the Gabba.",
+    "category": "Sports & Active",
+    "source": "Cricket (BBL)",
+    "source_url": "https://www.brisbaneheat.com.au",
+    "image_url": "https://images.unsplash.com/photo-1531415074868-036b107e775a?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gabba, Woolloongabba",
+    "city": "Brisbane",
+    "suburb": "Woolloongabba",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-17 18:10",
+    "end_date": "2027-01-17 21:10",
+    "time_str": "Sun 17 Jan, 6:10 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Cricket (BBL)",
+      "Woolloongabba"
+    ],
+    "insider_tip": "Sunday 6:10pm start – make it a long dinner in Woolloongabba afterwards.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-women-v-adelaide-united-a-league-w-2027-01-17",
+    "title": "Brisbane Roar Women v Adelaide United (A-League Women)",
+    "description": "Intimate, affordable women's football at a suburban ground.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Women)",
+    "source_url": "https://www.brisbaneroar.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Spencer Park, Newmarket",
+    "city": "Brisbane",
+    "suburb": "Newmarket",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-17 19:00",
+    "end_date": "2027-01-17 22:00",
+    "time_str": "Sun 17 Jan, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Women)",
+      "Newmarket"
+    ],
+    "insider_tip": "Kick-off not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-melbourne-united-nbl-2027-01-23",
+    "title": "Brisbane Bullets v Melbourne United (NBL)",
+    "description": "Saturday-night basketball in the run home to the finals.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-23 19:30",
+    "end_date": "2027-01-23 22:30",
+    "time_str": "Sat 23 Jan, 7:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Same night as Roar v Wellington – check before planning.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-roar-v-wellington-phoenix-a-league-men-2027-01-23",
+    "title": "Brisbane Roar v Wellington Phoenix (A-League Men)",
+    "description": "Saturday football by the bay at Redcliffe.",
+    "category": "Sports & Active",
+    "source": "Football (A-League Men)",
+    "source_url": "https://www.aleagues.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Kayo Stadium, Redcliffe",
+    "city": "Brisbane",
+    "suburb": "Redcliffe",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-23 19:00",
+    "end_date": "2027-01-23 22:00",
+    "time_str": "Sat 23 Jan, 7:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Football (A-League Men)",
+      "Redcliffe"
+    ],
+    "insider_tip": "Kick-off not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-australia-day-races-eagle-farm-2027-01-26",
+    "title": "Australia Day Races – Eagle Farm",
+    "description": "A public-holiday race day with a festive crowd.",
+    "category": "Sports & Active",
+    "source": "Horse racing",
+    "source_url": "https://www.brc.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Eagle Farm Racecourse, Ascot",
+    "city": "Brisbane",
+    "suburb": "Ascot",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-26 12:00",
+    "end_date": "2027-01-26 15:00",
+    "time_str": "Tue 26 Jan, 12:00 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Horse racing",
+      "Ascot"
+    ],
+    "insider_tip": "Daytime meeting; time not confirmed.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-south-east-melbourne-phoenix--2027-01-28",
+    "title": "Brisbane Bullets v South East Melbourne Phoenix (NBL)",
+    "description": "A Thursday-night basketball date.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisent.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-01-28 18:30",
+    "end_date": "2027-01-28 21:30",
+    "time_str": "Thu 28 Jan, 6:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Sources give different tip-off times (6:30pm or 7:30pm).",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-brisbane-bullets-v-adelaide-36ers-nbl-last-home--2027-02-06",
+    "title": "Brisbane Bullets v Adelaide 36ers (NBL – last home game of the regular season)",
+    "description": "Farewell the regular season at the Bullets' final home game.",
+    "category": "Sports & Active",
+    "source": "Basketball (NBL)",
+    "source_url": "https://www.brisbanebullets.com.au",
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Entertainment Centre, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-02-06 16:30",
+    "end_date": "2027-02-06 19:30",
+    "time_str": "Sat 6 Feb, 4:30 PM (time TBC)",
+    "price_level": "$$",
+    "price_str": "Check website (Ticketek)",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Basketball (NBL)",
+      "Boondall"
+    ],
+    "insider_tip": "Most sources say Sat 6 Feb (4:30pm or 5:30pm); one says Fri 5 Feb – check before booking.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-fx-queensland-reds-v-chiefs-super-rugby-pacific-rou-2027-02-21",
+    "title": "Queensland Reds v Chiefs (Super Rugby Pacific, Round 2 – first home game)",
+    "description": "The Reds' 2027 home opener with a Sunday-afternoon kick-off at Suncorp, then drinks on Caxton Street.",
+    "category": "Sports & Active",
+    "source": "Rugby union (Super Rugby Pacific)",
+    "source_url": "https://reds.rugby",
+    "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Suncorp Stadium, Milton",
+    "city": "Brisbane",
+    "suburb": "Milton",
+    "vibe": "Sports",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": "2027-02-21 15:05",
+    "end_date": "2027-02-21 18:05",
+    "time_str": "Sun 21 Feb, 3:05 PM",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Live Game",
+      "Rugby union (Super Rugby Pacific)",
+      "Milton"
+    ],
+    "insider_tip": "Caxton Street is next door for drinks before or after. Your game ticket usually covers public transport – check your ticket.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-urban-climb-bouldering",
+    "title": "Urban Climb bouldering",
+    "description": "Problem-solve on the climbing walls together – great for chatting and cheering each other on.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://urbanclimb.com.au",
+    "image_url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Urban Climb (West End, Milton & Newstead), West End",
+    "city": "Brisbane",
+    "suburb": "West End",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Daily – check website",
+    "price_level": "$$",
+    "price_str": "Adults $26 casual ($31 first visit); shoe hire extra",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "bouldering",
+      "West End"
+    ],
+    "insider_tip": "The first-visit price includes a free trial period, so come back again the following week.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-9-degrees-bouldering",
+    "title": "9 Degrees bouldering",
+    "description": "A relaxed bouldering gym, good for beginners.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://9degrees.com.au",
+    "image_url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80",
+    "location_name": "9 Degrees, Enoggera",
+    "city": "Brisbane",
+    "suburb": "Enoggera",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Daily – check website",
+    "price_level": "$$",
+    "price_str": "Adults $26 casual; shoe hire $7",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "bouldering",
+      "Enoggera"
+    ],
+    "insider_tip": "Your first visit gets you a week of unlimited climbing and free shoe hire.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-rocksports-indoor-climbing",
+    "title": "Rocksports Indoor Climbing",
+    "description": "Brisbane's long-running climbing gym, with rope climbing as well as bouldering.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://rocksports.com.au",
+    "image_url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Rocksports, 224 Barry Parade, Fortitude Valley",
+    "city": "Brisbane",
+    "suburb": "Fortitude Valley",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Mon–Fri 10am–9pm; Sat–Sun 10am–6pm",
+    "price_level": "$$",
+    "price_str": "About $22 day pass; gear hire extra",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "rock climbing",
+      "Fortitude Valley"
+    ],
+    "insider_tip": "No booking needed – just walk in.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-kangaroo-point-cliffs",
+    "title": "Kangaroo Point Cliffs",
+    "description": "Floodlit cliffs facing the city skyline – climb if you're experienced, or just picnic at the top for the view.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.brisbane.qld.gov.au",
+    "image_url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Kangaroo Point Cliffs Park, Kangaroo Point",
+    "city": "Brisbane",
+    "suburb": "Kangaroo Point",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Open 24/7; cliffs lit in the evening",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "outdoor climbing",
+      "Kangaroo Point",
+      "Free"
+    ],
+    "insider_tip": "Climbing here without a guide is only for experienced climbers with their own gear – otherwise book Riverlife.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-riverlife-twilight-abseil",
+    "title": "Riverlife twilight abseil",
+    "description": "Abseil down the cliffs as the city lights come on.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://riverlife.com.au",
+    "image_url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Riverlife Adventure Centre, Kangaroo Point",
+    "city": "Brisbane",
+    "suburb": "Kangaroo Point",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Twilight sessions mainly Fri & Sat – check website",
+    "price_level": "$$",
+    "price_str": "About $109pp (deals online from about $78)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "abseiling",
+      "Kangaroo Point"
+    ],
+    "insider_tip": "Bookme or Klook often have it cheaper.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-riverlife-kayak-hire",
+    "title": "Riverlife kayak hire",
+    "description": "Paddle the Brisbane River under the Story Bridge side by side.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://riverlife.com.au",
+    "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Riverlife Adventure Centre, Kangaroo Point",
+    "city": "Brisbane",
+    "suburb": "Kangaroo Point",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "From $55–59pp (about 1.5–2 hrs)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "kayaking",
+      "Kangaroo Point"
+    ],
+    "insider_tip": "Sundays carry a 10% surcharge.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-walkabout-creek-kayak-sup-hire",
+    "title": "Walkabout Creek kayak & SUP hire",
+    "description": "A calm-water paddle on Enoggera Reservoir surrounded by bush.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://walkaboutcreekadventures.com.au",
+    "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Walkabout Creek Adventures, 60 Mount Nebo Rd, The Gap",
+    "city": "Brisbane",
+    "suburb": "The Gap",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Weekends (7 days in summer school holidays); about 9am–5pm",
+    "price_level": "$$",
+    "price_str": "About $30–35 per craft (up to 2 hrs)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "kayak/SUP",
+      "The Gap"
+    ],
+    "insider_tip": "Double kayaks are perfect for couples.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-padel-brisbane-the-gap",
+    "title": "Padel Brisbane @ The Gap",
+    "description": "Try padel, the fast-growing doubles racquet sport – easy to pick up and very social.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://padelbrisbane.co",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "The Gap Health & Racquet Club, 200 Settlement Rd, The Gap",
+    "city": "Brisbane",
+    "suburb": "The Gap",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Floodlit courts – book via the MATCHi app",
+    "price_level": "$$",
+    "price_str": "Court hire from about $40/hr",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "padel",
+      "The Gap"
+    ],
+    "insider_tip": "Padel is doubles, so bring another couple and split the court fee.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-padel-logan-meadowbrook",
+    "title": "Padel Logan @ Meadowbrook",
+    "description": "Panoramic floodlit padel courts next to a beer garden.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://padellogan.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Meadowbrook Golf Club, Meadowbrook",
+    "city": "Brisbane",
+    "suburb": "Meadowbrook",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "6am–10pm",
+    "price_level": "$$",
+    "price_str": "$60/court/hr off-peak; $90 peak (after 4pm)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "padel",
+      "Meadowbrook"
+    ],
+    "insider_tip": "Off-peak before 4pm works out to about $15pp.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-northside-badminton-pickleball-centre",
+    "title": "Northside Badminton & Pickleball Centre",
+    "description": "Indoor, air-conditioned courts for a casual pickleball or badminton hit.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://northsidebadminton.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Northside Badminton & Pickleball Centre, Brendale",
+    "city": "Brisbane",
+    "suburb": "Brendale",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "About $36–45/hr court hire",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "Brendale"
+    ],
+    "insider_tip": "Paddles are usually included.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-pickle-kit-sessions",
+    "title": "Pickle Kit sessions",
+    "description": "Beginner-friendly undercover pickleball on the northside.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://opensports.net",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Pickle Kit (Mitchelton / Arana Hills), Mitchelton",
+    "city": "Brisbane",
+    "suburb": "Mitchelton",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book via OpenSports",
+    "price_level": "$$",
+    "price_str": "About $30 per 90-min court; come-and-try from $5",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "Mitchelton"
+    ],
+    "insider_tip": "Come-and-try sessions are the cheapest way to start.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-pickleball-club-social-play",
+    "title": "Brisbane Pickleball Club social play",
+    "description": "Social round-robin sessions seven days a week across many venues.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://opensports.net",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Albion Indoor Sports Centre and other venues, Albion",
+    "city": "Brisbane",
+    "suburb": "Albion",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "7 days; evening sessions about 6:30–8:30pm",
+    "price_level": "$$",
+    "price_str": "About $11–15 casual per 2-hr session; paddle hire about $3–5",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "Albion"
+    ],
+    "insider_tip": "Sessions fill quickly – book on OpenSports.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-bayside-pickleball-club",
+    "title": "Brisbane Bayside Pickleball Club",
+    "description": "Friendly social pickleball in the bayside suburbs.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://baysidepickleballclub.com",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Wellington Point Tennis Courts and others, Wellington Point",
+    "city": "Brisbane",
+    "suburb": "Wellington Point",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Multiple sessions weekly – check website",
+    "price_level": "$$",
+    "price_str": "About $6–11 per session",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "Wellington Point"
+    ],
+    "insider_tip": "Visitor rates include temporary insurance.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-free-council-pickleball-courts",
+    "title": "Free council pickleball courts",
+    "description": "Turn up and play on free council park courts.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.brisbane.qld.gov.au",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Joachim Street Park (also Boyd Park Nundah, Bonemill Rd Park Runcorn), Holland Park West",
+    "city": "Brisbane",
+    "suburb": "Holland Park West",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "First come, first served",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "Holland Park West",
+      "Free"
+    ],
+    "insider_tip": "Bring your own paddles and ball.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-hidden-pickle",
+    "title": "Hidden Pickle",
+    "description": "Book a boutique indoor pickleball court for just the two of you.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://pivotsports.io",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Hidden Pickle, East Brisbane",
+    "city": "Brisbane",
+    "suburb": "East Brisbane",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book via Pivot Sports",
+    "price_level": "$$",
+    "price_str": "From about $50/hr",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "pickleball",
+      "East Brisbane"
+    ],
+    "insider_tip": "Good for a rainy-day date.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-queensland-tennis-centre-court-hire",
+    "title": "Queensland Tennis Centre court hire",
+    "description": "Play where the pros play – hard, clay and even grass courts.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://queenslandtenniscentre.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Queensland Tennis Centre, 190 King Arthur Tce, Tennyson",
+    "city": "Brisbane",
+    "suburb": "Tennyson",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Daily; grass court 10am–5pm",
+    "price_level": "$$",
+    "price_str": "Hard court $32 off-peak / $40 peak; clay $44; grass $50; pickleball $23–26",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "tennis",
+      "Tennyson"
+    ],
+    "insider_tip": "Off-peak is weekdays before 3pm and all day Sunday.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-stafford-squash-centre",
+    "title": "Stafford Squash Centre",
+    "description": "Six courts for a quick, sweaty, competitive date.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://staffordsquash.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "244 Kitchener Rd, Stafford",
+    "city": "Brisbane",
+    "suburb": "Stafford",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "$22/hr weekdays before 5pm; $30 after 5pm & weekends",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "squash",
+      "Stafford"
+    ],
+    "insider_tip": "Racquet hire is usually about $5.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-wavell-squash-centre",
+    "title": "Wavell Squash Centre",
+    "description": "A big nine-court squash venue on the northside.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://pivotsports.io",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "20 Oxford St, Nundah",
+    "city": "Brisbane",
+    "suburb": "Nundah",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book via Pivot Sports",
+    "price_level": "$$",
+    "price_str": "From about $18 per 30 min",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "squash",
+      "Nundah"
+    ],
+    "insider_tip": "Half-hour bookings work well for beginners.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-griffith-university-nathan-squash-courts",
+    "title": "Griffith University Nathan squash courts",
+    "description": "Glass-backed courts on a bushy campus.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.griffith.edu.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Nathan Fitness Centre, Nathan",
+    "city": "Brisbane",
+    "suburb": "Nathan",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "6am–10pm",
+    "price_level": "$$",
+    "price_str": "$25/hr off-peak, $30 peak (public)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "squash",
+      "Nathan"
+    ],
+    "insider_tip": "Book online through Sporthub.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-acacia-ridge-squash-tennis-centre",
+    "title": "Acacia Ridge Squash & Tennis Centre",
+    "description": "Eleven squash courts, so there's usually one free.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://acaciaridgesquash.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Acacia Ridge Squash & Tennis Centre, Acacia Ridge",
+    "city": "Brisbane",
+    "suburb": "Acacia Ridge",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "About $34/hr",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "squash",
+      "Acacia Ridge"
+    ],
+    "insider_tip": "Pair it with Iceworld Acacia Ridge nearby.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-taylor-range-country-club-squash",
+    "title": "Taylor Range Country Club squash",
+    "description": "Four glass-backed courts in the leafy western suburbs.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://taylorrangeclub.com.au",
+    "image_url": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80",
+    "location_name": "332 Taylor Range Rd, The Gap",
+    "city": "Brisbane",
+    "suburb": "The Gap",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Non-members can book a day ahead",
+    "price_level": "$$",
+    "price_str": "$25/hr before 5pm; $30 after & weekends",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "squash",
+      "The Gap"
+    ],
+    "insider_tip": "Half-hour slots from $15.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-urban-rec-social-leagues",
+    "title": "Urban Rec social leagues",
+    "description": "Mixed social leagues where couples can play on the same team, with drinks after.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://urbanrec.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Various inner-city venues, Fortitude Valley",
+    "city": "Brisbane",
+    "suburb": "Fortitude Valley",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Weeknight seasons – check website",
+    "price_level": "$$",
+    "price_str": "About $90 individual; about $200–240 per team",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "social sports",
+      "Fortitude Valley"
+    ],
+    "insider_tip": "Sign up as a pair and they'll place you on a team.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-sportup-social-leagues",
+    "title": "SportUP social leagues",
+    "description": "12-week seasons with 'Super Social' divisions for newcomers.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://sportup.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Various Brisbane venues, Brisbane",
+    "city": "Brisbane",
+    "suburb": "Brisbane",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Weeknights – check website",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "social sports",
+      "Brisbane"
+    ],
+    "insider_tip": "Choose a Super Social division if you're rusty.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-city-indoor-sports",
+    "title": "Brisbane City Indoor Sports",
+    "description": "Mixed indoor cricket, futsal, netball and indoor beach volleyball competitions.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://brisbanecityindoorsports.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane City Indoor Sports, Coorparoo",
+    "city": "Brisbane",
+    "suburb": "Coorparoo",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Weeknight competitions",
+    "price_level": "$$",
+    "price_str": "Casual pickleball $5–15; court hire about $50/hr",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "indoor sports",
+      "Coorparoo"
+    ],
+    "insider_tip": "Individual sign-ups are accepted.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-epic-underwood",
+    "title": "EPIC Underwood",
+    "description": "All-weather social competitions on the southside.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://epicsports.com.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "EPIC Sports, Underwood",
+    "city": "Brisbane",
+    "suburb": "Underwood",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "indoor sports",
+      "Underwood"
+    ],
+    "insider_tip": "Mixed social grades suit couples.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-albion-indoor-sports-beach-4s",
+    "title": "Brisbane Albion Indoor Sports – Beach 4s",
+    "description": "Fast indoor sand volleyball with mixed teams.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://brisbaneindoorsports.com.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Brisbane Albion Indoor Sports Centre, Albion",
+    "city": "Brisbane",
+    "suburb": "Albion",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Multiple weeknights",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "indoor beach volleyball",
+      "Albion"
+    ],
+    "insider_tip": "Close to Albion station.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-central-futsal",
+    "title": "Brisbane Central Futsal",
+    "description": "Social futsal games and leagues at several venues.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://brisbanecentralfutsal.com",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Various (West End, Camp Hill, Yeronga), West End",
+    "city": "Brisbane",
+    "suburb": "West End",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "futsal",
+      "West End"
+    ],
+    "insider_tip": "Good for couples who both played soccer as kids.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-sandstorm-beach-volleyball",
+    "title": "Sandstorm Beach Volleyball",
+    "description": "Big outdoor sand courts with a licensed beach-club feel.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://sandstorm.com.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Sandstorm, Northgate",
+    "city": "Brisbane",
+    "suburb": "Northgate",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Friday-night social play from 5pm",
+    "price_level": "$$",
+    "price_str": "Court hire about $15pp (min 4)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "beach volleyball",
+      "Northgate"
+    ],
+    "insider_tip": "Friday social play needs no team.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-beach-sports-geebung",
+    "title": "Beach Sports Geebung",
+    "description": "Outdoor and covered sand courts.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://beachsports.net.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Beach Sports, Geebung",
+    "city": "Brisbane",
+    "suburb": "Geebung",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book 24 hrs ahead",
+    "price_level": "$$",
+    "price_str": "About $50/court/hr",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "beach volleyball",
+      "Geebung"
+    ],
+    "insider_tip": "Rebound courts keep the ball in play – good for beginners.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-uq-sport-beach-volleyball-courts",
+    "title": "UQ Sport beach volleyball courts",
+    "description": "Floodlit sand courts on the UQ campus.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://uqsport.com.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "UQ Sport, St Lucia",
+    "city": "Brisbane",
+    "suburb": "St Lucia",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book online",
+    "price_level": "$$",
+    "price_str": "Check website",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "beach volleyball",
+      "St Lucia"
+    ],
+    "insider_tip": "Combine with a walk around the UQ lakes.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-new-farm-bowls-club-barefoot-bowls",
+    "title": "New Farm Bowls Club barefoot bowls",
+    "description": "Shoes off, drink in hand – Brisbane's classic casual date.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://newfarmbowls.com.au",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "location_name": "New Farm Bowls Club, New Farm",
+    "city": "Brisbane",
+    "suburb": "New Farm",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "About 2-hr sessions – book online",
+    "price_level": "$$",
+    "price_str": "$90 per rink (up to 10 people)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "barefoot bowls",
+      "New Farm"
+    ],
+    "insider_tip": "Bring friends to split the rink.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-merthyr-bowls-club",
+    "title": "Merthyr Bowls Club",
+    "description": "Barefoot bowls on a riverside green.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://merthyrbowlsclub.com.au",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Merthyr Bowls Club, Oxlade Dr, New Farm",
+    "city": "Brisbane",
+    "suburb": "New Farm",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "$65/hr Mon–Fri; $75 Sat; $85 Sun",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "barefoot bowls",
+      "New Farm"
+    ],
+    "insider_tip": "Weekend sunset slots book out – reserve ahead.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-golf-central-brisbane-airport-toptracer",
+    "title": "Golf Central Brisbane Airport (Toptracer)",
+    "description": "A tech-driven driving range with games and food – Brisbane's closest thing to Topgolf.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://golfcentralbne.com.au",
+    "image_url": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Golf Central, Brisbane Airport",
+    "city": "Brisbane",
+    "suburb": "Brisbane Airport",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "Buckets from about $14",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "driving range",
+      "Brisbane Airport"
+    ],
+    "insider_tip": "Toptracer games level the field for non-golfers.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-minnippi-golf-range-trackman",
+    "title": "Minnippi Golf & Range (TrackMan)",
+    "description": "A 20-bay range with virtual courses and games.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://minnippipublicgolfcourse.com.au",
+    "image_url": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Minnippi Golf & Range, Cannon Hill",
+    "city": "Brisbane",
+    "suburb": "Cannon Hill",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "About $17–35 per bucket",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "driving range",
+      "Cannon Hill"
+    ],
+    "insider_tip": "Off-peak buckets are cheapest.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-st-lucia-golf-links",
+    "title": "St Lucia Golf Links",
+    "description": "A relaxed twilight nine holes beside the river.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.hillstonestlucia.com.au",
+    "image_url": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=800&q=80",
+    "location_name": "St Lucia Golf Links, St Lucia",
+    "city": "Brisbane",
+    "suburb": "St Lucia",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Twilight times 7 days",
+    "price_level": "$$",
+    "price_str": "9 holes about $28–34; twilight from about $23",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "golf",
+      "St Lucia"
+    ],
+    "insider_tip": "Pro shop: 07 3870 3433.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-holey-moley-mini-golf",
+    "title": "Holey Moley mini golf",
+    "description": "Pop-culture-themed mini golf with cocktails.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://holeymoley.com.au",
+    "image_url": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Holey Moley, Westfield Mt Gravatt, Upper Mount Gravatt",
+    "city": "Brisbane",
+    "suburb": "Upper Mount Gravatt",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "9 holes $23–25; 18 holes $30–42",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "mini golf",
+      "Upper Mount Gravatt"
+    ],
+    "insider_tip": "Mon–Wed is cheaper.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-strike-bowling-brisbane-city",
+    "title": "Strike Bowling Brisbane City",
+    "description": "Ten-pin bowling with a bar in the CBD.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://strikebowling.com.au",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Strike Bowling, Brisbane City",
+    "city": "Brisbane",
+    "suburb": "Brisbane City",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "About $23–26 per game",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "ten-pin bowling",
+      "Brisbane City"
+    ],
+    "insider_tip": "Book online for discounts.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-kingpin-chermside",
+    "title": "Kingpin Chermside",
+    "description": "Bowling plus other arcade-style activities.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://kingpinplay.com",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Kingpin, Level 3 Westfield Chermside, Chermside",
+    "city": "Brisbane",
+    "suburb": "Chermside",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "1 activity about $19–23pp",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "ten-pin bowling",
+      "Chermside"
+    ],
+    "insider_tip": "Weekdays before 4pm are cheapest.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-iceworld-boondall",
+    "title": "Iceworld Boondall",
+    "description": "Escape the summer heat with a hand-holding skate.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://isq-iceworld.org.au",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Iceworld Boondall, Boondall",
+    "city": "Brisbane",
+    "suburb": "Boondall",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Public sessions about 2 hrs – check website",
+    "price_level": "$$",
+    "price_str": "$32.50 adult (15+)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "ice skating",
+      "Boondall"
+    ],
+    "insider_tip": "Book online to guarantee a spot.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-iceworld-acacia-ridge",
+    "title": "Iceworld Acacia Ridge",
+    "description": "A southside ice rink for a cool date.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://isq-iceworld.org.au",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Iceworld Acacia Ridge, Acacia Ridge",
+    "city": "Brisbane",
+    "suburb": "Acacia Ridge",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Public sessions – check website",
+    "price_level": "$$",
+    "price_str": "$32.50 adult (15+)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "ice skating",
+      "Acacia Ridge"
+    ],
+    "insider_tip": "Spectators are free if only one of you skates.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-lumber-punks-axe-throwing",
+    "title": "Lumber Punks axe throwing",
+    "description": "90 minutes of coached axe throwing with friendly competition.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://lumberpunks.com",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Lumber Punks, 4 Ferry Rd, West End",
+    "city": "Brisbane",
+    "suburb": "West End",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "$55pp",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "axe throwing",
+      "West End"
+    ],
+    "insider_tip": "No deposit needed; you can split the bill.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-maniax-axe-throwing",
+    "title": "MANIAX axe throwing",
+    "description": "Viking-style axe throwing, with date-night packages.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://maniax.com.au",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "MANIAX, 52a Doggett St, Newstead",
+    "city": "Brisbane",
+    "suburb": "Newstead",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "About $40–58pp",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "axe throwing",
+      "Newstead"
+    ],
+    "insider_tip": "Ask about the date-night package.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-new-farm-parkrun",
+    "title": "New Farm parkrun",
+    "description": "A free 5km run or walk along the river, then coffee.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.parkrun.com.au",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "location_name": "New Farm Park, New Farm",
+    "city": "Brisbane",
+    "suburb": "New Farm",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Saturdays 7:00am",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "parkrun",
+      "New Farm",
+      "Free"
+    ],
+    "insider_tip": "Register once and bring your barcode.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-south-bank-parkrun",
+    "title": "South Bank parkrun",
+    "description": "A flat riverside 5km across the Goodwill Bridge.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.parkrun.com.au",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "location_name": "South Bank Parklands, South Brisbane",
+    "city": "Brisbane",
+    "suburb": "South Brisbane",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Saturdays 7:00am",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "parkrun",
+      "South Brisbane",
+      "Free"
+    ],
+    "insider_tip": "Cool off at Streets Beach afterwards.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-streets-beach",
+    "title": "Streets Beach",
+    "description": "A free city lagoon with sand – swim, then picnic.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.visitsouthbank.com.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Streets Beach, South Bank, South Brisbane",
+    "city": "Brisbane",
+    "suburb": "South Brisbane",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Daily; seasonal patrol hours",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "swimming",
+      "South Brisbane",
+      "Free"
+    ],
+    "insider_tip": "Swim between the flags.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-feel-good-program-at-south-bank",
+    "title": "Feel Good Program at South Bank",
+    "description": "Free outdoor fitness and dance classes at the Flowstate pavilion.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://feelgoodprogram.com.au",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Flowstate, South Bank Parklands, South Brisbane",
+    "city": "Brisbane",
+    "suburb": "South Brisbane",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Zumba Mon & Thu 5:30pm; Pilates Tue 5:30pm; Yoga Sat 7:30am; Friday Dance Club 6:30pm",
+    "price_level": "Free",
+    "price_str": "Free (register once)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "fitness/dance",
+      "South Brisbane",
+      "Free"
+    ],
+    "insider_tip": "Friday Dance Club makes a fun date.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-gap-creek-reserve-mountain-biking",
+    "title": "Gap Creek Reserve mountain biking",
+    "description": "More than 20km of free trails on Mt Coot-tha.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.brisbane.qld.gov.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Gap Creek Reserve, Kenmore Hills",
+    "city": "Brisbane",
+    "suburb": "Kenmore Hills",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Daylight",
+    "price_level": "Free",
+    "price_str": "Free",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "mountain biking",
+      "Kenmore Hills",
+      "Free"
+    ],
+    "insider_tip": "Rocket Frog is the beginner-friendly trail.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-riverwalk-e-scooter-e-bike-ride",
+    "title": "Riverwalk e-scooter / e-bike ride",
+    "description": "Hire shared e-scooters or e-bikes and cruise the Riverwalk at sunset.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.rideneuron.com",
+    "image_url": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Neuron / Beam shared scooters and e-bikes, Brisbane City",
+    "city": "Brisbane",
+    "suburb": "Brisbane City",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "24/7 via app",
+    "price_level": "$$",
+    "price_str": "About $1 unlock + $0.45–0.51/min",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "cycling",
+      "Brisbane City"
+    ],
+    "insider_tip": "Helmets are compulsory; speeds drop automatically in busy zones.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-spring-hill-baths-2-summer-dips",
+    "title": "Spring Hill Baths ($2 Summer Dips)",
+    "description": "A historic heritage pool for a cheap summer swim date.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.brisbane.qld.gov.au",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Spring Hill Baths, Spring Hill",
+    "city": "Brisbane",
+    "suburb": "Spring Hill",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Check website",
+    "price_level": "$$",
+    "price_str": "$2 entry 1 Dec–28 Feb (normally $7.25)",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "swimming",
+      "Spring Hill"
+    ],
+    "insider_tip": "The $2 price applies at council pools in summer.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-samford-valley-target-archers-come-try",
+    "title": "Samford Valley Target Archers – come & try",
+    "description": "Learn archery together in the hinterland.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://samfordarchery.org",
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Samford Valley Target Archers, Samford Valley",
+    "city": "Brisbane",
+    "suburb": "Samford Valley",
+    "vibe": "Active",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Scheduled sessions about 3.5 hrs",
+    "price_level": "$$",
+    "price_str": "$110pp",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "archery",
+      "Samford Valley"
+    ],
+    "insider_tip": "All equipment is included.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
+  },
+  {
+    "id": "sport-play-brisbane-city-council-active-healthy-move-well-b",
+    "title": "Brisbane City Council Active & Healthy / Move Well Brisbane",
+    "description": "Free or low-cost council sessions, including come-and-try pickleball.",
+    "category": "Sports & Active",
+    "source": "Play Together",
+    "source_url": "https://www.brisbane.qld.gov.au",
+    "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80",
+    "location_name": "Parks and centres across Brisbane, Brisbane",
+    "city": "Brisbane",
+    "suburb": "Brisbane",
+    "vibe": "Free / Low Cost",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "start_date": null,
+    "end_date": null,
+    "ongoing": true,
+    "time_str": "Book via the council What's On calendar",
+    "price_level": "Free",
+    "price_str": "Free / low cost",
+    "tags": [
+      "Sports",
+      "Play Together",
+      "various",
+      "Brisbane",
+      "Free"
+    ],
+    "insider_tip": "Bookings open a few days ahead and fill fast.",
+    "is_custom": 0,
+    "created_at": "2026-11-06T09:00:00"
   }
 ];

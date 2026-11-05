@@ -5017,3 +5017,9 @@ html.device-authenticated #app-container {
   text-align: center;
   margin: 1.5rem 0 2rem;
 }
+
+/* Discover cards: Love / Pass only (everything un-voted is automatically "maybe") */
+.vote-btn-row.two-col,
+.card-utility-row.two-col {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}

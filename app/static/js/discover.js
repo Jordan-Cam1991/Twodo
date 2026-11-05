@@ -111,7 +111,8 @@ const discover = {
         { id: 'Outdoor & Adventure', label: '🛶 Outdoor, Sports & Kayaking', desc: 'Active fun, trail walks, water sports' },
         { id: 'Markets & Pop-ups', label: '🎪 Farmers & Night Markets', desc: 'Weekend markets, twilight food stalls' },
         { id: 'Comedy & Shows', label: '🎭 Comedy, Theatre & Shows', desc: 'Live comedy, performing arts & stage plays' },
-        { id: 'Sightseeing & Nature', label: '🌿 Parks, Botanic & Council', desc: 'Brisbane City Council park programs & nature' }
+        { id: 'Sightseeing & Nature', label: '🌿 Parks, Botanic & Council', desc: 'Brisbane City Council park programs & nature' },
+        { id: 'Sports & Active', label: '🏟️ Sports, Games & Active', desc: 'Live games, pickleball, squash, climbing & social sport' }
       ]
     }
   },
@@ -119,6 +120,30 @@ const discover = {
   // ---------------------------------------------------------------------------
   // DATE RANGE ENGINE (This Week default, single days, upcoming weeks, custom)
   // ---------------------------------------------------------------------------
+  /** Card label: real date & time for dated events, opening hours for ongoing venues. */
+  formatWhen(ev) {
+    const esc = (t) => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    if (!ev) return '';
+    if (ev.ongoing || !ev.start_date) return `🕐 ${esc(ev.time_str || 'Flexible timing')}`;
+    const m = String(ev.start_date).match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+    if (!m) return `🕐 ${esc(ev.time_str || 'Flexible timing')}`;
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    let label = d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+    if (m[4]) {
+      const h = Number(m[4]);
+      label += ` · ${((h + 11) % 12) + 1}:${m[5]} ${h >= 12 ? 'PM' : 'AM'}`;
+    }
+    const em = String(ev.end_date || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (em && em[0] !== m[0].slice(0, 10)) {
+      const e = new Date(Number(em[1]), Number(em[2]) - 1, Number(em[3]));
+      const endLabel = e.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      if (d < today) return `📅 On now – until ${endLabel}`;
+      label += ` – ${endLabel}`;
+    }
+    return `📅 ${label}`;
+  },
+
   toYMD(d) {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -443,7 +468,7 @@ const discover = {
                 📍 ${ev.location_name || ev.city} <span class="map-link-arrow">↗</span>
               </a>
               <span class="meta-dot">•</span>
-              <span class="card-time-span">⏰ ${ev.time_str || ev.start_date || 'Flexible'}</span>
+              <span class="card-time-span">${discover.formatWhen(ev)}</span>
             </div>
 
             ${tipHtml}
@@ -452,18 +477,18 @@ const discover = {
             ${isSolo ? `
               <div class="card-solo-status" style="margin-bottom:0.75rem;">
                 <span class="solo-status-badge" style="font-size:0.84rem; font-weight:600; color:var(--text-muted); display:inline-flex; align-items:center; gap:0.35rem; background:#f8fafc; padding:0.3rem 0.65rem; border-radius:8px; border:1px solid var(--border);">
-                  ${currentVote === 'love' ? '❤️ Saved to My Loves' : (currentVote === 'maybe' ? '🤔 In Maybe list' : (currentVote === 'pass' ? '❌ Passed' : '✨ Exploring'))}
+                  ${currentVote === 'love' ? '❤️ Saved to My Loves' : (currentVote === 'pass' ? '❌ Passed' : '✨ Exploring')}
                 </span>
               </div>
             ` : `
               <div class="card-couple-status">
                 <div class="vote-partner-tag">
                   <span style="color:var(--primary)">❤️ ${u1}:</span>
-                  <span>${v1 === 'love' ? 'Loves it!' : (v1 === 'maybe' ? 'Maybe' : (v1 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+                  <span>${v1 === 'love' ? 'Loves it!' : (v1 === 'pass' ? 'Pass' : 'Thinking...')}</span>
                 </div>
                 <div class="vote-partner-tag">
                   <span style="color:var(--secondary)">💜 ${u2}:</span>
-                  <span>${v2 === 'love' ? 'Loves it!' : (v2 === 'maybe' ? 'Maybe' : (v2 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+                  <span>${v2 === 'love' ? 'Loves it!' : (v2 === 'pass' ? 'Pass' : 'Thinking...')}</span>
                 </div>
               </div>
             `}
@@ -472,23 +497,19 @@ const discover = {
 
             <!-- Streamlined Voting & Planning Action Bar -->
             <div class="card-actions-streamlined">
-              <div class="vote-btn-row">
+              <div class="vote-btn-row two-col">
                 <button class="btn-vote-pill btn-vote-love ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
                   <span>❤️ ${loveActive ? 'Loved' : 'Love'}</span>
-                </button>
-                <button class="btn-vote-pill btn-vote-maybe ${maybeActive}" onclick="collaborative.handleVote('${ev.id}', 'maybe')" title="Maybe">
-                  <span>🤔 Maybe</span>
                 </button>
                 <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass on this idea">
                   <span class="pass-icon">✕</span>
                   <span>${passActive ? 'Passed' : 'Pass'}</span>
                 </button>
               </div>
-              <div class="card-utility-row">
-                ${!isSolo ? noteBtnHtml : ''}
-                ${!isSolo ? chatShareBtnHtml : ''}
-                ${scheduleBtnHtml}
-              </div>
+              ${!isSolo ? `<div class="card-utility-row two-col">
+                ${noteBtnHtml}
+                ${chatShareBtnHtml}
+              </div>` : ''}
             </div>
           </div>
         </article>
@@ -559,6 +580,9 @@ const discover = {
     } else if (mood === 'shows') {
       this.activeFilter = 'all';
       this.selectedCategories = ['Comedy & Shows', 'Music & Concerts'];
+    } else if (mood === 'sports') {
+      this.activeFilter = 'all';
+      this.selectedCategories = ['Sports & Active'];
     } else if (mood === 'budget') {
       this.activeFilter = 'all';
       this.selectedVibes = ['Free / Low Cost', 'Casual & Fun'];
@@ -595,6 +619,21 @@ const discover = {
       parts.push(`📅 ${this.getDateChipLabel()}`);
     }
 
+    // Quick mood chips (Comedy & Shows, Tonight, Budget, etc.) — show them so they can be cleared
+    const moodLabels = {
+      weekend: '🥂 This Weekend',
+      tonight: '🔥 Tonight',
+      dinner: '🍷 Romantic Dinner',
+      drinks: '🍹 Rooftops & Drinks',
+      outdoor: '🌿 Outdoors & Sun',
+      shows: '🎭 Comedy & Shows',
+      budget: '⚡ Budget & Free',
+      sports: '🏟️ Sports'
+    };
+    if (moodLabels[this.currentMood]) {
+      parts.push(moodLabels[this.currentMood]);
+    }
+
     if (this.currentMood === 'my-loves' || (isSolo && this.currentMood === 'emma-loves')) {
       parts.push(`❤️ My Loves`);
     } else if (this.currentMood === 'my-passed' || (isSolo && this.currentMood === 'emma-passed')) {
@@ -626,7 +665,8 @@ const discover = {
     const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
     const appEvs = (typeof app !== 'undefined' && Array.isArray(app.events)) ? app.events : [];
     
-    const combined = [...fbCustoms, ...customEvents, ...appEvs, ...rawSeeds];
+    const combined = [...fbCustoms, ...customEvents, ...appEvs, ...rawSeeds]
+      .filter(ev => !(typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev))); // hide finished events
     const seenTitles = new Set();
     const seenIds = new Set();
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
