@@ -7,9 +7,10 @@ const swiper = {
   currentIndex: 0,
 
   initDeck() {
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const activeVoter = app.getActiveVoterName();
-    const u1 = app.profile?.user1_name || 'Emma';
-    const u2 = app.profile?.user2_name || 'Jordan';
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
     const isUser1 = activeVoter === u1;
     const isTogether = app.currentVoter === 'both';
     
@@ -32,6 +33,11 @@ const swiper = {
       ev.u1_vote = v1;
       ev.u2_vote = v2;
       ev.is_match = Boolean(v1 === 'love' && v2 === 'love');
+
+      if (isSolo) {
+        const myVote = votes[`${ev.id}_${activeVoter}`] || ev.my_vote || v1 || v2;
+        return !myVote || myVote === 'maybe';
+      }
 
       if (isTogether) {
         const d1 = v1 === 'love' || v1 === 'pass';

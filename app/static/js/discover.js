@@ -191,11 +191,11 @@ const discover = {
     if (!grid) return;
 
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const u1 = app.profile?.user1_name || 'Emma';
-    const u2 = app.profile?.user2_name || 'Jordan';
     const activeVoter = app.getActiveVoterName();
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
     const isTogether = app.currentVoter === 'both';
-    const isSpecialMood = ['matches', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(this.currentMood);
+    const isSpecialMood = ['matches', 'my-loves', 'my-passed', 'my_loves', 'my_passed', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(this.currentMood);
 
     // In normal feed browsing: only show items with no selection or thinking ('maybe')!
     // Loved or passed items are excluded from the main feed & search results.
@@ -207,7 +207,12 @@ const discover = {
       }
 
       if (!isSpecialMood) {
-        if (isTogether) {
+        if (isSolo) {
+          const vote = ev.my_vote !== undefined ? ev.my_vote : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
+          if (vote === 'love' || vote === 'pass') {
+            return false;
+          }
+        } else if (isTogether) {
           if (ev.u1_vote === 'love' || ev.u1_vote === 'pass' || ev.u2_vote === 'love' || ev.u2_vote === 'pass') {
             return false;
           }
@@ -418,15 +423,16 @@ const discover = {
     this.selectedCategories = [];
     this.selectedVibes = [];
     this.activeDateRange = 'all';
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
 
     if (mood === 'all') {
       this.activeFilter = 'all';
     } else if (mood === 'matches') {
       this.activeFilter = 'matches';
-    } else if (mood === 'emma-loves') {
-      this.activeFilter = 'user1_likes';
-    } else if (mood === 'emma-passed') {
-      this.activeFilter = 'user1_passed';
+    } else if (mood === 'my-loves' || mood === 'emma-loves') {
+      this.activeFilter = isSolo ? 'my_loves' : 'user1_likes';
+    } else if (mood === 'my-passed' || mood === 'emma-passed') {
+      this.activeFilter = isSolo ? 'my_passed' : 'user1_passed';
     } else if (mood === 'jordan-loves') {
       this.activeFilter = 'user2_likes';
     } else if (mood === 'jordan-passed') {
@@ -463,8 +469,13 @@ const discover = {
     const summary = document.getElementById('active-filter-summary');
     if (!bar || !summary) return;
 
-    const u1 = app.profile?.user1_name || 'Emma';
-    const u2 = app.profile?.user2_name || 'Jordan';
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+      ? firebaseService.userProfile.name
+      : (localStorage.getItem('twodo_user_name') || 'You');
+
+    const u1 = isSolo ? activeSoloName : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
 
     const parts = [];
     if (this.selectedSuburbs && this.selectedSuburbs.length > 0) {
@@ -480,7 +491,11 @@ const discover = {
       parts.push(`📅 ${this.getDateRangeLabel()}`);
     }
 
-    if (this.currentMood === 'emma-loves') {
+    if (this.currentMood === 'my-loves' || (isSolo && this.currentMood === 'emma-loves')) {
+      parts.push(`❤️ My Loves`);
+    } else if (this.currentMood === 'my-passed' || (isSolo && this.currentMood === 'emma-passed')) {
+      parts.push(`❌ My Passed`);
+    } else if (this.currentMood === 'emma-loves') {
       parts.push(`❤️ ${u1}'s Loves`);
     } else if (this.currentMood === 'emma-passed') {
       parts.push(`❌ ${u1}'s Passed`);
@@ -508,10 +523,17 @@ const discover = {
     const appEvs = (typeof app !== 'undefined' && Array.isArray(app.events)) ? app.events : [];
     
     const combined = [...fbCustoms, ...customEvents, ...appEvs, ...rawSeeds];
-    const seen = new Set();
+    const seenTitles = new Set();
+    const seenIds = new Set();
+    const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+
     return combined.filter(ev => {
-      if (!ev || !ev.id || seen.has(ev.id)) return false;
-      seen.add(ev.id);
+      if (!ev || !ev.id || !ev.title) return false;
+      const tKey = norm(ev.title);
+      const idKey = String(ev.id);
+      if (seenTitles.has(tKey) || seenIds.has(idKey)) return false;
+      seenTitles.add(tKey);
+      seenIds.add(idKey);
       return true;
     });
   },
@@ -532,8 +554,12 @@ const discover = {
       votes = { ...votes, ...firebaseService.votesMap };
     }
 
-    const u1 = app.profile?.user1_name || 'Emma';
-    const u2 = app.profile?.user2_name || 'Jordan';
+    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+      ? firebaseService.userProfile.name
+      : (localStorage.getItem('twodo_user_name') || 'You');
+
+    const u1 = isSolo ? activeSoloName : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
 
     const pool = this.getAllEventsPool();
     const seen = new Set();
@@ -548,11 +574,18 @@ const discover = {
       seen.add(ev.id);
       const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
       const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
-      if (v1 === 'love') emmaLoveCount++;
-      if (v1 === 'pass') emmaPassCount++;
-      if (v2 === 'love') jordanLoveCount++;
-      if (v2 === 'pass') jordanPassCount++;
-      if (v1 === 'love' && v2 === 'love') matchesCount++;
+      const myVote = isSolo ? (votes[`${ev.id}_${activeSoloName}`] || v1 || v2) : null;
+
+      if (isSolo) {
+        if (myVote === 'love') emmaLoveCount++;
+        if (myVote === 'pass') emmaPassCount++;
+      } else {
+        if (v1 === 'love') emmaLoveCount++;
+        if (v1 === 'pass') emmaPassCount++;
+        if (v2 === 'love') jordanLoveCount++;
+        if (v2 === 'pass') jordanPassCount++;
+        if (v1 === 'love' && v2 === 'love') matchesCount++;
+      }
     });
 
     if (moodBadge) {

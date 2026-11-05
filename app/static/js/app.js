@@ -32,11 +32,11 @@ const app = {
   updateProfileUI() {
     if (!this.profile) return;
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const u1 = this.profile.user1_name || 'Emma';
-    const u2 = this.profile.user2_name || 'Jordan';
     const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
       ? firebaseService.userProfile.name
-      : (localStorage.getItem('twodo_user_name') || u1 || 'You');
+      : (localStorage.getItem('twodo_user_name') || 'You');
+    const u1 = isSolo ? activeSoloName : (this.profile.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (this.profile.user2_name || 'Jordan');
 
     // 1. Header voter switch vs. solo bar
     const voterSwitch = document.getElementById('voter-switch-container');

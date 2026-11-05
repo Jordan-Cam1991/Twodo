@@ -159,14 +159,23 @@ const api = {
     } catch (e) {}
 
     const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
-    const allEvents = [...fbCustoms, ...customEvents, ...rawSeeds];
+    const allEventsRaw = [...fbCustoms, ...customEvents, ...rawSeeds];
 
-    // Load couple profile
+    // Load couple profile & identity
     const profile = (typeof firebaseService !== 'undefined' && firebaseService.profile)
       ? firebaseService.profile
       : JSON.parse(localStorage.getItem('twodo_profile') || '{"user1_name":"Emma","user2_name":"Jordan"}');
-    const u1 = profile.user1_name || (window.app && app.profile?.user1_name) || 'Emma';
-    const u2 = profile.user2_name || (window.app && app.profile?.user2_name) || 'Jordan';
+    
+    const isSolo = (typeof firebaseService !== 'undefined') 
+      ? firebaseService.isSolo 
+      : (localStorage.getItem('twodo_user_profile') ? JSON.parse(localStorage.getItem('twodo_user_profile'))?.couple_id == null : false);
+
+    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+      ? firebaseService.userProfile.name
+      : (localStorage.getItem('twodo_user_name') || 'You');
+
+    const u1 = isSolo ? activeSoloName : (profile.user1_name || (window.app && app.profile?.user1_name) || 'Emma');
+    const u2 = isSolo ? 'Partner' : (profile.user2_name || (window.app && app.profile?.user2_name) || 'Jordan');
 
     // Load votes & notes (merge Firebase real-time votes with local storage)
     let votes = {};
@@ -180,6 +189,45 @@ const api = {
     }
     if (typeof firebaseService !== 'undefined' && firebaseService.notesMap) {
       notes = { ...notes, ...firebaseService.notesMap };
+    }
+
+    // Title normalizer for deduplication & vote inheritance
+    const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+
+    // Map votes and notes by normalized title so aliases and duplicates share their votes!
+    const votesByNormTitle = {};
+    const notesByNormTitle = {};
+
+    for (const raw of allEventsRaw) {
+      if (!raw || !raw.title || !raw.id) continue;
+      const key = norm(raw.title);
+      if (!key) continue;
+
+      const v_u1 = votes[`${raw.id}_${u1}`] || votes[`${raw.id}_Emma`];
+      const v_u2 = votes[`${raw.id}_${u2}`] || votes[`${raw.id}_Jordan`];
+      const v_solo = votes[`${raw.id}_${activeSoloName}`] || votes[`${raw.id}_Jordan`] || votes[`${raw.id}_Emma`];
+
+      if (v_u1 && !votesByNormTitle[`${key}_${u1}`]) votesByNormTitle[`${key}_${u1}`] = v_u1;
+      if (v_u2 && !votesByNormTitle[`${key}_${u2}`]) votesByNormTitle[`${key}_${u2}`] = v_u2;
+      if (v_solo && !votesByNormTitle[`${key}_solo`]) votesByNormTitle[`${key}_solo`] = v_solo;
+    }
+
+    // Deduplicate all events: each unique activity appears AT MOST ONCE
+    const allEvents = [];
+    const seenTitles = new Set();
+    const seenIds = new Set();
+
+    for (const raw of allEventsRaw) {
+      if (!raw || !raw.title || !raw.id) continue;
+      const key = norm(raw.title);
+      const idKey = String(raw.id);
+
+      if (seenTitles.has(key) || seenIds.has(idKey)) {
+        continue; // Skip repeated / duplicate events!
+      }
+      seenTitles.add(key);
+      seenIds.add(idKey);
+      allEvents.push(raw);
     }
 
     // Load planner items
@@ -325,11 +373,27 @@ const api = {
       }
 
       // Voting and Match calculation
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : null);
-      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : null);
+      const key = norm(ev.title);
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined 
+        ? votes[`${ev.id}_${u1}`] 
+        : (votesByNormTitle[`${key}_${u1}`] !== undefined 
+          ? votesByNormTitle[`${key}_${u1}`] 
+          : (isSolo ? (votes[`${ev.id}_${activeSoloName}`] || votesByNormTitle[`${key}_solo`] || votes[`${ev.id}_Jordan`] || votes[`${ev.id}_Emma`]) : (votes[`${ev.id}_Emma`] || null)));
+
+      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined 
+        ? votes[`${ev.id}_${u2}`] 
+        : (votesByNormTitle[`${key}_${u2}`] !== undefined 
+          ? votesByNormTitle[`${key}_${u2}`] 
+          : (votes[`${ev.id}_Jordan`] || null)));
+
+      const myVote = isSolo 
+        ? (votes[`${ev.id}_${activeSoloName}`] || votesByNormTitle[`${key}_solo`] || v1)
+        : ((typeof app !== 'undefined' && app.getActiveVoterName && app.getActiveVoterName() === u1) ? v1 : v2);
+
       ev.u1_vote = v1;
       ev.u2_vote = v2;
-      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || notes[`${ev.id}_Emma`] || '';
+      ev.my_vote = myVote;
+      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || (isSolo ? (notes[`${ev.id}_${activeSoloName}`] || notes[`${ev.id}_Emma`]) : notes[`${ev.id}_Emma`]) || '';
       ev.u2_note = ev.u2_note || notes[`${ev.id}_${u2}`] || notes[`${ev.id}_Jordan`] || '';
       ev.user1_name = u1;
       ev.user2_name = u2;
@@ -356,6 +420,10 @@ const api = {
       // Match / Voter filter
       if (filter === 'matches') {
         if (!isMatch) continue;
+      } else if (['my_loves', 'my-loves', 'my_likes'].includes(filter) || (isSolo && ['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter))) {
+        if (myVote !== 'love') continue;
+      } else if (['my_passed', 'my-passed'].includes(filter) || (isSolo && ['user1_passed', 'emma_passed', 'emma-passed'].includes(filter))) {
+        if (myVote !== 'pass') continue;
       } else if (['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter)) {
         if (v1 !== 'love') continue;
       } else if (['user1_passed', 'emma_passed', 'emma-passed'].includes(filter)) {
@@ -367,21 +435,27 @@ const api = {
       } else if (filter === 'in_planner') {
         if (!ev.planner_id) continue;
       } else if (filter === 'unvoted') {
-        if (v1 || v2) continue;
+        if (isSolo ? (myVote === 'love' || myVote === 'pass') : (v1 || v2)) continue;
       } else {
         // Standard feed browsing (all, lifestyle moods, suburbs, etc.):
         // Only ones with no selection or thinking ('maybe') should be in discover!
         // When active voter has already loved or passed, remove it from the feed!
-        const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : u1;
-        const isTogether = (typeof app !== 'undefined' && app.currentVoter === 'both');
-        if (isTogether) {
-          if ((v1 === 'love' || v1 === 'pass') || (v2 === 'love' || v2 === 'pass')) {
+        if (isSolo) {
+          if (myVote === 'love' || myVote === 'pass') {
             continue;
           }
         } else {
-          const myVote = (activeVoter === u1) ? v1 : v2;
-          if (myVote === 'love' || myVote === 'pass') {
-            continue;
+          const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : u1;
+          const isTogether = (typeof app !== 'undefined' && app.currentVoter === 'both');
+          if (isTogether) {
+            if ((v1 === 'love' || v1 === 'pass') || (v2 === 'love' || v2 === 'pass')) {
+              continue;
+            }
+          } else {
+            const thisVoterVote = (activeVoter === u1) ? v1 : v2;
+            if (thisVoterVote === 'love' || thisVoterVote === 'pass') {
+              continue;
+            }
           }
         }
       }
