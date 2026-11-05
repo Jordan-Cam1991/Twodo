@@ -501,16 +501,29 @@ const firebaseService = {
       }
 
       // 1. Fetch individual user record from Firestore / cache
+      let cloudChecked = false;
       try {
         const uDocSnap = await this.db.collection('users').doc(uid).get();
-        if (uDocSnap.exists) {
-          userDoc = uDocSnap.data();
-        }
+        cloudChecked = true;
+        userDoc = uDocSnap.exists ? uDocSnap.data() : null;
       } catch (e) {
         console.warn('User doc fetch note:', e);
       }
 
       const pendingName = localStorage.getItem('twodo_pending_name') || localStorage.getItem('twodo_user_name');
+
+      // Cloud has no record yet but this device does → upload it (keeps the same invite code)
+      let cachedLocal = null;
+      try { cachedLocal = JSON.parse(localStorage.getItem('twodo_user_profile') || 'null'); } catch (e) {}
+      if (!userDoc && cachedLocal && cachedLocal.uid === uid && cachedLocal.pair_code) {
+        userDoc = cachedLocal;
+        if (cloudChecked) {
+          this.db.collection('users').doc(uid).set(userDoc, { merge: true }).catch(() => {});
+          this.db.collection('pair_codes').doc(userDoc.pair_code).set({
+            code: userDoc.pair_code, user_uid: uid, user_name: userDoc.name || pendingName || 'Partner'
+          }, { merge: true }).catch(() => {});
+        }
+      }
 
       if (!userDoc) {
         const resolvedName = pendingName || (user.email || '').split('@')[0] || 'Explorer';
