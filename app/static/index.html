@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.8">
+  <link rel="stylesheet" href="css/style.css?v=2.9">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -282,7 +282,7 @@
       <!-- Chic Horizontal Mood & Filter Pills (Zero Clutter) -->
       <div class="mood-chips-bar">
         <div class="mood-chips-scroll" id="mood-chips-scroll">
-          <button type="button" class="mood-chip active" data-mood="all" onclick="discover.setMoodFilter('all')">✨ All</button>
+          <button type="button" class="mood-chip date-chip active" data-mood="all" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Choose dates" aria-label="Choose date range">📅 <span id="date-chip-label">This Week</span> <span class="date-chip-caret">▾</span></button>
           <button type="button" class="mood-chip" data-mood="matches" id="mood-chip-matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
@@ -357,6 +357,9 @@
         <div class="swiper-filter-compact-bar">
           <span class="swiper-filter-status-pill" id="sw-filter-status">⚡ Swiping activities in Brisbane</span>
           <div class="swiper-filter-actions">
+            <button type="button" class="btn-swiper-filter-pill" id="sw-date-pill" onclick="discover.openFilterModal('date')">
+              <span>📅 <span id="sw-date-pill-label">This Week</span> ▾</span>
+            </button>
             <button type="button" class="btn-swiper-filter-pill" onclick="discover.openFilterModal('suburb')">
               <span>🎯 Filter ▾</span>
             </button>
@@ -994,16 +997,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=2.8"></script>
-  <script src="js/firebase-service.js?v=2.8"></script>
-  <script src="js/auth-ui.js?v=2.8"></script>
-  <script src="js/events_data.js?v=2.8"></script>
-  <script src="js/api.js?v=2.8"></script>
-  <script src="js/chat.js?v=2.8"></script>
-  <script src="js/collaborative.js?v=2.8"></script>
-  <script src="js/discover.js?v=2.8"></script>
-  <script src="js/swiper.js?v=2.8"></script>
-  <script src="js/planner.js?v=2.8"></script>
-  <script src="js/app.js?v=2.8"></script>
+  <script src="js/firebase-config.js?v=2.9"></script>
+  <script src="js/firebase-service.js?v=2.9"></script>
+  <script src="js/auth-ui.js?v=2.9"></script>
+  <script src="js/events_data.js?v=2.9"></script>
+  <script src="js/api.js?v=2.9"></script>
+  <script src="js/chat.js?v=2.9"></script>
+  <script src="js/collaborative.js?v=2.9"></script>
+  <script src="js/discover.js?v=2.9"></script>
+  <script src="js/swiper.js?v=2.9"></script>
+  <script src="js/planner.js?v=2.9"></script>
+  <script src="js/app.js?v=2.9"></script>
 </body>
 </html>

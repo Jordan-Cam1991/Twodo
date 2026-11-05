@@ -271,21 +271,22 @@ const api = {
     const filter = params.filter || 'all';
 
     // Helper: is event date within date range
-    const matchesDateRange = (evDateStr, range, customStart, customEnd) => {
+    const matchesDateRange = (evDateStr, range, customStart, customEnd, evEndStr = null) => {
       if (!range || range === 'all') return true;
       if (!evDateStr) return true;
 
-      const m = evDateStr.match(/(\d{4}-\d{2}-\d{2})/);
-      if (!m) return true;
+      // Parse YYYY-MM-DD as a LOCAL calendar date (avoids UTC off-by-one-day bugs)
+      const parseLocal = (s) => {
+        const mm = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+        return mm ? new Date(Number(mm[1]), Number(mm[2]) - 1, Number(mm[3])) : null;
+      };
 
-      const evDate = new Date(m[1]);
-      if (isNaN(evDate.getTime())) return true;
+      const target = parseLocal(evDateStr);
+      if (!target || isNaN(target.getTime())) return true; // Undated / ongoing activities always show
+      const targetEnd = parseLocal(evEndStr) || target;
 
       const now = new Date();
       now.setHours(0, 0, 0, 0);
-
-      const target = new Date(evDate);
-      target.setHours(0, 0, 0, 0);
 
       const diffDays = Math.round((target - now) / (1000 * 60 * 60 * 24));
 
@@ -307,12 +308,11 @@ const api = {
       } else if (range === 'this_month') {
         return diffDays >= 0 && diffDays <= 30;
       } else if (range === 'custom') {
-        if (customStart && customEnd) {
-          const s = new Date(customStart);
-          const e = new Date(customEnd);
-          s.setHours(0, 0, 0, 0);
-          e.setHours(23, 59, 59, 999);
-          return target >= s && target <= e;
+        const s = parseLocal(customStart);
+        const e = parseLocal(customEnd);
+        if (s && e) {
+          // Include events that overlap the chosen range (multi-day events count too)
+          return target <= e && targetEnd >= s;
         }
         return true;
       }
@@ -368,7 +368,7 @@ const api = {
       }
 
       // Date Range filter
-      if (!matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end)) {
+      if (!matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
         continue;
       }
 

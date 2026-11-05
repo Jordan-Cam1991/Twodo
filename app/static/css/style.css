@@ -4912,3 +4912,23 @@ html.device-authenticated #app-container {
 }
 
 
+
+
+/* ===== 📅 Calendar Date-Range Chip & Date Modal Sections ===== */
+.mood-chip.date-chip {
+  font-weight: 700;
+}
+.mood-chip.date-chip .date-chip-caret {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-left: -0.1rem;
+}
+.filter-option-section {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0.55rem 0.2rem 0.05rem;
+  flex-shrink: 0;
+}

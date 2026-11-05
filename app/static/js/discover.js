@@ -8,7 +8,8 @@ const discover = {
   selectedCategories: [],
   selectedSuburbs: [],
   selectedVibes: [],
-  activeDateRange: 'all',
+  activeDateRange: 'this_week', // Default: events happening this week (today + next 6 days)
+  defaultDateRange: 'this_week',
   activeFilter: 'all',
   customStart: null,
   customEnd: null,
@@ -51,18 +52,10 @@ const discover = {
       type: 'date',
       title: 'Date Range',
       icon: '📅',
-      subtitle: 'Pick when you want to find activities',
-      allLabel: '✨ All Dates (Any Time)',
+      subtitle: 'Pick a day, a week, or your own date range',
+      allLabel: '✨ Any Date (Show Everything)',
       isMulti: false,
-      options: [
-        { id: 'all', label: '✨ All Dates', desc: 'Any upcoming day or daily activity' },
-        { id: 'today', label: '🔥 Tonight / Today', desc: 'Happening today or tonight' },
-        { id: 'tomorrow', label: '🌅 Tomorrow', desc: 'Good plans for tomorrow' },
-        { id: 'this_weekend', label: '🥂 This Weekend', desc: 'Friday, Saturday & Sunday' },
-        { id: 'next_7_days', label: '🗓️ Next 7 Days', desc: 'Throughout the coming week' },
-        { id: 'this_month', label: '📆 This Month', desc: 'Next 30 days of activities' },
-        { id: 'custom', label: '🎯 Custom Date Range', desc: 'Pick exact start & end dates' }
-      ]
+      options: [] // Built dynamically from today's date by buildDateOptions()
     },
     suburb: {
       type: 'suburb',
@@ -123,62 +116,167 @@ const discover = {
     }
   },
 
+  // ---------------------------------------------------------------------------
+  // DATE RANGE ENGINE (This Week default, single days, upcoming weeks, custom)
+  // ---------------------------------------------------------------------------
+  toYMD(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  },
+
+  parseYMD(s) {
+    const m = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return null;
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  },
+
+  dayOffset(n) {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + n);
+    return d;
+  },
+
+  fmtShort(d) {
+    return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+  },
+
+  fmtDayMonth(d) {
+    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+  },
+
+  /** Returns { start: Date, end: Date } for a range id, or null for "any date". */
+  getDateBounds(range = this.activeDateRange) {
+    const span = (a, b) => ({ start: this.dayOffset(a), end: this.dayOffset(b) });
+    if (!range || range === 'all') return null;
+    if (range === 'this_week' || range === 'next_7_days') return span(0, 6);
+    if (range === 'today') return span(0, 0);
+    if (range === 'tomorrow') return span(1, 1);
+    const dayMatch = range.match(/^day_(\d+)$/);
+    if (dayMatch) { const n = Number(dayMatch[1]); return span(n, n); }
+    const weekMatch = range.match(/^week_(\d+)$/);
+    if (weekMatch) { const w = Number(weekMatch[1]); return span(w * 7, w * 7 + 6); }
+    if (range === 'this_month') return span(0, 30);
+    if (range === 'this_weekend') {
+      const today = this.dayOffset(0);
+      const dow = today.getDay(); // 0 Sun ... 6 Sat
+      if (dow === 0) return span(0, 0);           // Sunday: just today
+      if (dow === 6) return span(0, 1);           // Saturday: Sat + Sun
+      const toFri = (5 - dow + 7) % 7;
+      return span(toFri, toFri + 2);              // Fri, Sat, Sun
+    }
+    if (range === 'custom') {
+      const s = this.parseYMD(this.customStart);
+      const e = this.parseYMD(this.customEnd);
+      if (s && e) return s <= e ? { start: s, end: e } : { start: e, end: s };
+      return null;
+    }
+    return null;
+  },
+
+  buildDateOptions() {
+    const range = (a, b) => `${this.fmtShort(this.dayOffset(a))} – ${this.fmtShort(this.dayOffset(b))}`;
+    const opts = [
+      { id: 'this_week', label: '🗓️ This Week', desc: `${range(0, 6)} (default)` },
+      { header: true, label: 'Pick a day' }
+    ];
+    for (let i = 0; i <= 6; i++) {
+      const d = this.dayOffset(i);
+      const name = i === 0 ? '🔥 Today' : (i === 1 ? '🌅 Tomorrow' : `📍 ${d.toLocaleDateString('en-AU', { weekday: 'long' })}`);
+      opts.push({ id: `day_${i}`, label: name, desc: this.fmtShort(d) });
+    }
+    opts.push({ header: true, label: 'Upcoming weeks' });
+    opts.push({ id: 'week_1', label: '📆 Next Week', desc: range(7, 13) });
+    opts.push({ id: 'week_2', label: '📆 Week After', desc: range(14, 20) });
+    opts.push({ id: 'week_3', label: '📆 The Week After That', desc: range(21, 27) });
+    opts.push({ header: true, label: 'Something else' });
+    opts.push({ id: 'custom', label: '🎯 Custom Date Range', desc: 'Pick exact start & end dates' });
+    return opts;
+  },
+
+  /** Short label for the calendar chip / swiper pill, e.g. "This Week", "Fri 6 Nov". */
+  getDateChipLabel() {
+    const r = this.activeDateRange;
+    if (!r || r === 'all') return 'Any Date';
+    if (r === 'this_week') return 'This Week';
+    if (r === 'today' || r === 'day_0') return 'Today';
+    if (r === 'tomorrow' || r === 'day_1') return 'Tomorrow';
+    if (r === 'week_1') return 'Next Week';
+    if (r === 'week_2') return 'Week After';
+    if (r === 'week_3') return 'In 3 Weeks';
+    if (r === 'this_weekend') return 'This Weekend';
+    const b = this.getDateBounds(r);
+    if (!b) return 'Any Date';
+    if (b.start.getTime() === b.end.getTime()) return this.fmtShort(b.start);
+    return `${this.fmtDayMonth(b.start)} – ${this.fmtDayMonth(b.end)}`;
+  },
+
+  isDefaultDate() {
+    return this.activeDateRange === this.defaultDateRange;
+  },
+
+  isSpecialMood(mood = this.currentMood) {
+    return ['matches', 'my-loves', 'my-passed', 'my_loves', 'my_passed', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(mood);
+  },
+
+  /** Single source of truth for filter params, shared by Discover & Swiper. */
+  getFilterParams({ forSwiper = false } = {}) {
+    const searchVal = forSwiper ? '' : (this.searchQuery || document.getElementById('discover-search-input')?.value || '');
+    // Loves / Passed / Matches lists show everything you've voted on, regardless of date
+    const ignoreDate = !forSwiper && this.isSpecialMood();
+    const bounds = ignoreDate ? null : this.getDateBounds();
+    return {
+      city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
+      category: this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All',
+      suburb: this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All',
+      vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
+      search: searchVal,
+      filter: forSwiper ? 'all' : this.activeFilter,
+      date_range: bounds ? 'custom' : 'all',
+      custom_start: bounds ? this.toYMD(bounds.start) : null,
+      custom_end: bounds ? this.toYMD(bounds.end) : null
+    };
+  },
+
+  onDateChipClick() {
+    // From a Loves / Passed list, one tap takes you back to the feed and opens the calendar
+    if (this.isSpecialMood()) {
+      this.setMoodFilter('all');
+    }
+    this.openFilterModal('date');
+  },
+
+  updateDateChipLabels() {
+    const label = this.getDateChipLabel();
+    ['date-chip-label', 'sw-date-pill-label'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = label;
+    });
+  },
+
   async loadEvents(showLoading = false) {
     const grid = document.getElementById('events-grid');
-    const empty = document.getElementById('events-empty');
     if (showLoading && grid && (!app.events || app.events.length === 0)) {
       grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;"><span class="spin-icon" style="font-size:2rem; display:inline-block; animation:spin 1s infinite linear;">🔄</span><p style="margin-top:10px; color:var(--text-muted);">Searching councils, venues, galleries, Reddit, and live feeds...</p></div>';
     }
 
+    this.currentPage = 1;
+    const params = this.getFilterParams();
     try {
-      this.currentPage = 1;
-      const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('search-input')?.value || '';
-      const catParam = this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All';
-      const subParam = this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All';
-      const vibeParam = this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All';
-
-      const data = await api.getEvents({
-        city: app.currentCity,
-        category: catParam,
-        search: searchVal,
-        filter: this.activeFilter,
-        date_range: this.activeDateRange,
-        custom_start: this.customStart,
-        custom_end: this.customEnd,
-        suburb: subParam,
-        vibe: vibeParam
-      });
-
+      const data = await api.getEvents(params);
       app.events = data.events || [];
-      this.renderEvents();
-      this.updateMatchBanner();
-      this.updateFilterHeaderBadges();
-      
-      // Also update Swiper deck if available
-      swiper.initDeck();
     } catch (e) {
       console.warn('API fetch warning, using offline activities vault:', e);
-      const catParam = this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All';
-      const subParam = this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All';
-      const vibeParam = this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All';
-      const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('search-input')?.value || '';
-
-      const fallbackData = api.getLocalEnrichedEvents({
-        category: catParam,
-        suburb: subParam,
-        vibe: vibeParam,
-        date_range: this.activeDateRange,
-        custom_start: this.customStart,
-        custom_end: this.customEnd,
-        filter: this.activeFilter,
-        search: searchVal
-      });
-      app.events = fallbackData.events || [];
-      this.renderEvents();
-      this.updateMatchBanner();
-      this.updateFilterHeaderBadges();
-      swiper.initDeck();
+      app.events = (api.getLocalEnrichedEvents(params).events) || [];
     }
+
+    this.renderEvents();
+    this.updateMatchBanner();
+    this.updateFilterHeaderBadges();
+    // Swiper uses the same date / suburb / vibe / category filters
+    if (typeof swiper !== 'undefined') swiper.initDeck();
   },
 
   renderEvents() {
@@ -230,7 +328,7 @@ const discover = {
     const visibleEvents = displayEvents.slice(0, this.pageSize * this.currentPage);
 
     if (countText) {
-      const dateLabel = this.activeDateRange === 'all' ? '' : ` (${this.getDateRangeLabel()})`;
+      const dateLabel = (this.activeDateRange === 'all' || this.isSpecialMood()) ? '' : ` · 📅 ${this.getDateChipLabel()}`;
       const filterDetails = [];
       if (this.searchQuery) filterDetails.push(`Search: "${this.searchQuery}"`);
       if (this.selectedSuburbs.length > 0) filterDetails.push(this.selectedSuburbs.join(', '));
@@ -411,6 +509,7 @@ const discover = {
   },
 
   setMoodFilter(mood) {
+    const prevMood = this.currentMood;
     this.currentMood = mood;
     this.currentPage = 1;
 
@@ -419,10 +518,15 @@ const discover = {
       c.classList.toggle('active', c.dataset.mood === mood);
     });
 
-    // Reset custom parameters
+    // Reset custom parameters (the chosen date range is kept — it's set from the 📅 calendar chip)
     this.selectedCategories = [];
     this.selectedVibes = [];
-    this.activeDateRange = 'all';
+    const dateMoods = ['weekend', 'tonight'];
+    if (dateMoods.includes(prevMood) && !dateMoods.includes(mood)) {
+      this.activeDateRange = this.defaultDateRange;
+      this.customStart = null;
+      this.customEnd = null;
+    }
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
 
     if (mood === 'all') {
@@ -487,8 +591,8 @@ const discover = {
     if (this.selectedVibes && this.selectedVibes.length > 0 && this.currentMood === 'all') {
       parts.push(`✨ ${this.selectedVibes.join(', ')}`);
     }
-    if (this.activeDateRange !== 'all' && this.currentMood === 'all') {
-      parts.push(`📅 ${this.getDateRangeLabel()}`);
+    if (!this.isDefaultDate() && this.activeDateRange !== 'all' && this.currentMood === 'all') {
+      parts.push(`📅 ${this.getDateChipLabel()}`);
     }
 
     if (this.currentMood === 'my-loves' || (isSolo && this.currentMood === 'emma-loves')) {
@@ -665,12 +769,16 @@ const discover = {
   // FILTER MODAL POPUP & MULTI-SELECT ENGINE
   // ---------------------------------------------------------------------------
   openFilterModal(type) {
-    if (typeof app !== 'undefined' && app.activeTab && app.activeTab !== 'discover') {
+    // Stay on Swiper if opened from there (filters apply to both views)
+    if (typeof app !== 'undefined' && app.activeTab && !['discover', 'swiper'].includes(app.activeTab)) {
       app.navigate('discover');
     }
     this.currentModalType = type;
     const def = this.filterDefinitions[type];
     if (!def) return;
+    if (type === 'date') {
+      def.options = this.buildDateOptions(); // Rebuilt each time so day names stay current
+    }
 
     const iconEl = document.getElementById('filter-modal-icon');
     const titleEl = document.getElementById('filter-modal-title');
@@ -758,7 +866,7 @@ const discover = {
       if (def.type === 'date') {
         const sel = Array.from(this.modalSelectedSet)[0] || 'all';
         const found = def.options.find(o => o.id === sel);
-        statusText.textContent = found ? found.label : 'All Dates';
+        statusText.textContent = found ? `${found.label} · ${found.desc.replace(' (default)', '')}` : 'Any Date';
       } else {
         if (isAll) {
           statusText.textContent = `Showing All ${def.title}`;
@@ -771,6 +879,10 @@ const discover = {
     let html = '';
     def.options.forEach(opt => {
       if (def.type === 'date' && opt.id === 'all') return; // Handled by top button
+      if (opt.header) {
+        html += `<div class="filter-option-section">${opt.label}</div>`;
+        return;
+      }
 
       const isChecked = !isAll && this.modalSelectedSet.has(opt.id);
       html += `
@@ -802,12 +914,10 @@ const discover = {
         if (id === 'custom') {
           const sInput = document.getElementById('modal-date-start');
           const eInput = document.getElementById('modal-date-end');
-          if (sInput && !sInput.value) sInput.value = new Date().toISOString().split('T')[0];
-          if (eInput && !eInput.value) {
-            const nextWeek = new Date();
-            nextWeek.setDate(nextWeek.getDate() + 7);
-            eInput.value = nextWeek.toISOString().split('T')[0];
-          }
+          if (sInput && !sInput.value) sInput.value = this.toYMD(this.dayOffset(0));
+          if (eInput && !eInput.value) eInput.value = this.toYMD(this.dayOffset(13));
+          if (sInput) sInput.min = this.toYMD(this.dayOffset(0));
+          if (eInput) eInput.min = this.toYMD(this.dayOffset(0));
         }
       }
     } else {
@@ -858,6 +968,14 @@ const discover = {
   },
 
   resetCurrentModalCategory() {
+    if (this.currentModalType === 'date') {
+      // Reset the calendar back to the default "This Week"
+      this.modalSelectedSet.clear();
+      this.modalSelectedSet.add(this.defaultDateRange);
+      document.getElementById('modal-custom-date-section')?.classList.add('hidden');
+      this.renderModalOptions();
+      return;
+    }
     this.modalSelectAll();
   },
 
@@ -867,15 +985,32 @@ const discover = {
     if (!def) return;
 
     if (type === 'date') {
-      const selected = Array.from(this.modalSelectedSet)[0] || 'all';
-      this.activeDateRange = selected;
+      let selected = Array.from(this.modalSelectedSet)[0] || 'all';
       if (selected === 'custom') {
-        this.customStart = document.getElementById('modal-date-start')?.value || null;
-        this.customEnd = document.getElementById('modal-date-end')?.value || null;
+        const s = document.getElementById('modal-date-start')?.value || null;
+        const e = document.getElementById('modal-date-end')?.value || null;
+        if (s && e) {
+          this.customStart = s <= e ? s : e;
+          this.customEnd = s <= e ? e : s;
+        } else {
+          if (typeof app !== 'undefined' && app.showToast) app.showToast('Pick both a start and end date 📅');
+          return;
+        }
       } else {
         this.customStart = null;
         this.customEnd = null;
       }
+      this.activeDateRange = selected;
+
+      // Date ranges apply to the main feed — leave Loves/Passed lists or the Tonight/Weekend shortcuts
+      if (this.isSpecialMood() || ['weekend', 'tonight'].includes(this.currentMood)) {
+        this.currentMood = 'all';
+        this.activeFilter = 'all';
+        document.querySelectorAll('.mood-chip').forEach(c => {
+          c.classList.toggle('active', c.dataset.mood === 'all');
+        });
+      }
+      this.updateActiveFilterPillBar();
     } else if (type === 'suburb') {
       if (this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all')) {
         this.selectedSuburbs = [];
@@ -902,9 +1037,11 @@ const discover = {
   },
 
   updateFilterHeaderBadges() {
-    // 1. Date (including header 📅 button)
-    const isDateFiltered = this.activeDateRange !== 'all';
+    // 1. Date (including header 📅 button and the 📅 calendar chip)
+    // "This Week" is the default, so it doesn't count as an extra filter
+    const isDateFiltered = !this.isDefaultDate();
     const dateLabel = this.getDateRangeLabel();
+    this.updateDateChipLabels();
     const btnHeaderDate = document.getElementById('btn-header-date');
     const headerDateDot = document.getElementById('header-date-dot');
     if (btnHeaderDate) btnHeaderDate.classList.toggle('filter-active', isDateFiltered);
@@ -1018,19 +1155,8 @@ const discover = {
   },
 
   getDateRangeLabel() {
-    switch (this.activeDateRange) {
-      case 'today': return '🔥 Tonight / Today';
-      case 'tomorrow': return '🌅 Tomorrow';
-      case 'this_weekend': return '🥂 This Weekend';
-      case 'next_7_days': return '🗓️ Next 7 Days';
-      case 'this_month': return '📆 This Month';
-      case 'custom': 
-        if (this.customStart && this.customEnd) {
-          return `🎯 ${this.customStart.slice(5)} to ${this.customEnd.slice(5)}`;
-        }
-        return '🎯 Custom Dates';
-      default: return '✨ All Dates';
-    }
+    if (!this.activeDateRange || this.activeDateRange === 'all') return '✨ Any Date';
+    return `📅 ${this.getDateChipLabel()}`;
   },
 
   setFilter(filter) {
@@ -1045,7 +1171,7 @@ const discover = {
     this.selectedCategories = [];
     this.selectedSuburbs = [];
     this.selectedVibes = [];
-    this.activeDateRange = 'all';
+    this.activeDateRange = this.defaultDateRange;
     this.customStart = null;
     this.customEnd = null;
     this.activeFilter = 'all';
@@ -1085,7 +1211,7 @@ const discover = {
   },
 
   setDateRange(range) {
-    this.activeDateRange = range || 'all';
+    this.activeDateRange = range || this.defaultDateRange;
     this.updateFilterHeaderBadges();
     this.loadEvents(true);
   },

@@ -14,10 +14,13 @@ const swiper = {
     const isUser1 = activeVoter === u1;
     const isTogether = app.currentVoter === 'both';
     
-    // Always draw from the master pool so Swiper has all unvoted activities
-    const pool = (typeof discover !== 'undefined' && discover.getAllEventsPool) 
-      ? discover.getAllEventsPool() 
-      : (app.events || []);
+    // Build the deck with the same Date / Suburb / Vibe / Category filters as Discover
+    let pool;
+    if (typeof discover !== 'undefined' && discover.getFilterParams && typeof api !== 'undefined') {
+      pool = api.getLocalEnrichedEvents(discover.getFilterParams({ forSwiper: true })).events || [];
+    } else {
+      pool = app.events || [];
+    }
 
     let votes = {};
     try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
@@ -86,7 +89,7 @@ const swiper = {
       }
 
       const anyActive = (typeof discover !== 'undefined') && (
-        discover.activeDateRange !== 'all' ||
+        !discover.isDefaultDate() ||
         discover.selectedSuburbs.length > 0 ||
         discover.selectedVibes.length > 0 ||
         discover.selectedCategories.length > 0
@@ -171,7 +174,7 @@ const swiper = {
     const remaining = Math.max(0, this.deckQueue.length - this.currentIndex);
     const filterParts = [];
     if (typeof discover !== 'undefined') {
-      if (discover.activeDateRange !== 'all') filterParts.push(discover.getDateRangeLabel());
+      if (discover.activeDateRange !== 'all') filterParts.push(`📅 ${discover.getDateChipLabel()}`);
       if (discover.selectedSuburbs && discover.selectedSuburbs.length > 0) {
         filterParts.push(discover.selectedSuburbs.length === 1 ? discover.selectedSuburbs[0] : `${discover.selectedSuburbs.length} Suburbs`);
       }
