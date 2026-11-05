@@ -393,6 +393,13 @@ const firebaseService = {
       return { success: true, partnerName };
     } catch (err) {
       console.error('Pairing error:', err);
+      const msg = String(err && (err.code || err.message) || '');
+      if (msg.includes('offline') || msg.includes('unavailable')) {
+        return { success: false, error: "Couldn't reach the TwoDo server to link accounts. Check your internet connection and try again in a moment." };
+      }
+      if (msg.includes('permission')) {
+        return { success: false, error: 'Linking was blocked by a permissions issue. Please try again shortly.' };
+      }
       return { success: false, error: err.message || 'Could not link accounts. Check connection.' };
     }
   },
