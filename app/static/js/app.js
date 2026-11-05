@@ -111,11 +111,19 @@ const app = {
     const setU1Label = document.getElementById('settings-user1-label');
     const setU2Group = document.getElementById('settings-user2-group');
 
-    if (setU1) setU1.value = u1;
+    if (setU1) setU1.value = isSolo ? activeSoloName : u1;
     if (setU2) setU2.value = isSolo ? '' : u2;
     if (setCity) setCity.value = this.currentCity;
     if (setU1Label) setU1Label.textContent = isSolo ? 'Your Name' : 'Partner 1 Name';
     if (setU2Group) setU2Group.classList.toggle('hidden', isSolo);
+
+    if (window.authUI && authUI.updateSettingsAccountUI) {
+      const email = (typeof firebaseService !== 'undefined' && firebaseService.currentUser) 
+        ? firebaseService.currentUser.email 
+        : localStorage.getItem('twodo_user_email');
+      const partnerName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.partner_name);
+      authUI.updateSettingsAccountUI(email, this.profile, isSolo, partnerName);
+    }
 
     try {
       const keys = JSON.parse(this.profile.api_keys_json || '{}');
@@ -149,12 +157,45 @@ const app = {
     if (this.profile) this.profile.user1_name = clean;
     localStorage.setItem('twodo_user_name', clean);
     localStorage.setItem('twodo_pending_name', clean);
+    if (this.profile) localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+
+    // Migrate votes from currentName to clean so likes stay intact
+    if (currentName && currentName !== clean) {
+      try {
+        const votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
+        let migrated = false;
+        Object.keys(votes).forEach(k => {
+          if (k.endsWith(`_${currentName}`)) {
+            const newKey = k.slice(0, -currentName.length) + clean;
+            votes[newKey] = votes[k];
+            if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+              firebaseService.votesMap[newKey] = votes[k];
+            }
+            migrated = true;
+          }
+        });
+        if (migrated) {
+          localStorage.setItem('twodo_votes', JSON.stringify(votes));
+        }
+      } catch (err) {}
+    }
     
     if (typeof firebaseService !== 'undefined') {
+      if (firebaseService.userProfile) {
+        firebaseService.userProfile.name = clean;
+        localStorage.setItem('twodo_user_profile', JSON.stringify(firebaseService.userProfile));
+      }
       await firebaseService.updateSoloProfile({ name: clean });
     }
     this.updateProfileUI();
-    this.showToast(`Updated your name to ${clean}! ✨`);
+    this.showToast(`Updated name to ${clean}! ✨`);
+    if (window.discover && discover.renderEvents) {
+      discover.renderEvents();
+      discover.updateMatchBanner();
+    }
+    if (window.swiper && swiper.renderDeck) {
+      swiper.renderDeck();
+    }
   },
 
   setVoter(voterIndex) {
@@ -266,7 +307,7 @@ const app = {
   },
 
   async saveSettings(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = document.getElementById('set-user1-name').value.trim() || 'You';
     const rawU2 = document.getElementById('set-user2-name') ? document.getElementById('set-user2-name').value.trim() : '';
@@ -274,6 +315,8 @@ const app = {
     const city = document.getElementById('set-default-city').value.trim() || 'Brisbane';
     const tmKey = document.getElementById('set-tm-key')?.value.trim();
     const ebKey = document.getElementById('set-eb-key')?.value.trim();
+
+    const oldName = this.profile?.user1_name || (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name) || 'Emma';
 
     try {
       const updateData = {
@@ -286,7 +329,19 @@ const app = {
         }
       };
 
+      // 1. Immediately store new name in local storage
+      localStorage.setItem('twodo_user_name', u1);
+      localStorage.setItem('twodo_pending_name', u1);
+      localStorage.setItem('twodo_profile', JSON.stringify(updateData));
+
+      // 2. Update Firebase Service
       if (typeof firebaseService !== 'undefined') {
+        if (firebaseService.userProfile) {
+          firebaseService.userProfile.name = u1;
+          firebaseService.userProfile.city = city;
+          localStorage.setItem('twodo_user_profile', JSON.stringify(firebaseService.userProfile));
+        }
+
         if (firebaseService.coupleId) {
           await firebaseService.updateCoupleProfile(updateData);
         } else if (firebaseService.currentUser) {
@@ -294,13 +349,43 @@ const app = {
         }
       }
 
-      this.profile = await api.updateProfile(updateData);
+      // 3. Migrate votes from old name to new name so user doesn't lose likes!
+      if (oldName && oldName !== u1) {
+        try {
+          const votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
+          let migrated = false;
+          Object.keys(votes).forEach(k => {
+            if (k.endsWith(`_${oldName}`)) {
+              const newKey = k.slice(0, -oldName.length) + u1;
+              votes[newKey] = votes[k];
+              if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+                firebaseService.votesMap[newKey] = votes[k];
+              }
+              migrated = true;
+            }
+          });
+          if (migrated) {
+            localStorage.setItem('twodo_votes', JSON.stringify(votes));
+          }
+        } catch (err) {}
+      }
 
+      // 4. Update memory profile
+      this.profile = updateData;
       this.currentCity = city;
+
+      // 5. Update UI across the entire app
       this.updateProfileUI();
       this.closeSettingsModal();
-      this.showToast(isSolo ? 'Profile settings saved!' : 'Couple settings saved!');
-      await discover.loadEvents();
+      this.showToast(isSolo ? `Saved! Exploring as ${u1} ✨` : 'Couple settings saved! ✨');
+
+      if (window.discover && discover.renderEvents) {
+        discover.renderEvents();
+        discover.updateMatchBanner();
+      }
+      if (window.swiper && swiper.renderDeck) {
+        swiper.renderDeck();
+      }
     } catch (err) {
       console.error(err);
       this.showToast('Failed to save settings.');

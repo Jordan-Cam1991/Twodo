@@ -66,9 +66,10 @@ const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      return await res.json();
+      const resJson = await res.json();
+      return resJson?.profile || resJson || data;
     } catch (e) {
-      return { success: true, profile: data };
+      return data;
     }
   },
 

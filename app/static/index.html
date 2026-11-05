@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.3">
+  <link rel="stylesheet" href="css/style.css?v=2.4">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -705,8 +705,11 @@
   <div id="settings-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Couple Profile & Settings</h3>
-        <button class="close-btn" onclick="app.closeSettingsModal()">&times;</button>
+        <h3 id="settings-modal-title" style="margin:0;">Profile & Settings</h3>
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <button type="submit" form="settings-form" class="btn btn-primary btn-sm" style="padding:0.4rem 1rem; font-weight:700; border-radius:9999px;">Save ✨</button>
+          <button type="button" class="close-btn" onclick="app.closeSettingsModal()">&times;</button>
+        </div>
       </div>
       <form id="settings-form" onsubmit="app.saveSettings(event)">
         <div class="form-row">
@@ -991,16 +994,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=2.3"></script>
-  <script src="js/firebase-service.js?v=2.3"></script>
-  <script src="js/auth-ui.js?v=2.3"></script>
-  <script src="js/events_data.js?v=2.3"></script>
-  <script src="js/api.js?v=2.3"></script>
-  <script src="js/chat.js?v=2.3"></script>
-  <script src="js/collaborative.js?v=2.3"></script>
-  <script src="js/discover.js?v=2.3"></script>
-  <script src="js/swiper.js?v=2.3"></script>
-  <script src="js/planner.js?v=2.3"></script>
-  <script src="js/app.js?v=2.3"></script>
+  <script src="js/firebase-config.js?v=2.4"></script>
+  <script src="js/firebase-service.js?v=2.4"></script>
+  <script src="js/auth-ui.js?v=2.4"></script>
+  <script src="js/events_data.js?v=2.4"></script>
+  <script src="js/api.js?v=2.4"></script>
+  <script src="js/chat.js?v=2.4"></script>
+  <script src="js/collaborative.js?v=2.4"></script>
+  <script src="js/discover.js?v=2.4"></script>
+  <script src="js/swiper.js?v=2.4"></script>
+  <script src="js/planner.js?v=2.4"></script>
+  <script src="js/app.js?v=2.4"></script>
 </body>
 </html>
