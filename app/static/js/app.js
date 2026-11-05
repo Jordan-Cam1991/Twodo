@@ -43,7 +43,10 @@ const app = {
     if (isSolo) {
       if (voterSwitch) voterSwitch.classList.add('hidden');
       if (soloBar) soloBar.classList.remove('hidden');
-      if (soloUserDisplay) soloUserDisplay.textContent = u1;
+      const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+        ? firebaseService.userProfile.name
+        : (localStorage.getItem('twodo_user_name') || u1 || 'You');
+      if (soloUserDisplay) soloUserDisplay.textContent = activeSoloName;
     } else {
       if (voterSwitch) voterSwitch.classList.remove('hidden');
       if (soloBar) soloBar.classList.add('hidden');
@@ -124,12 +127,34 @@ const app = {
   getActiveVoterName() {
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     if (isSolo) {
-      return this.profile?.user1_name || 'You';
+      return (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+        ? firebaseService.userProfile.name
+        : (localStorage.getItem('twodo_user_name') || this.profile?.user1_name || 'You');
     }
     if (this.currentVoter === 2) {
       return this.profile?.user2_name || 'Jordan';
     }
     return this.profile?.user1_name || 'Emma';
+  },
+
+  async quickEditName() {
+    const currentName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name) 
+      || localStorage.getItem('twodo_user_name')
+      || this.profile?.user1_name 
+      || 'Jordan';
+    const newName = prompt('Update your name:', currentName);
+    if (!newName || !newName.trim() || newName.trim() === currentName) return;
+    
+    const clean = newName.trim();
+    if (this.profile) this.profile.user1_name = clean;
+    localStorage.setItem('twodo_user_name', clean);
+    localStorage.setItem('twodo_pending_name', clean);
+    
+    if (typeof firebaseService !== 'undefined') {
+      await firebaseService.updateSoloProfile({ name: clean });
+    }
+    this.updateProfileUI();
+    this.showToast(`Updated your name to ${clean}! ✨`);
   },
 
   setVoter(voterIndex) {

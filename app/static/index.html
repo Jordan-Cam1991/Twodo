@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=2.2">
+  <link rel="stylesheet" href="css/style.css?v=2.3">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -248,8 +248,8 @@
 
       <!-- Solo Mode Status Bar (Active when single / exploring solo) -->
       <div class="solo-bar-wrap hidden" id="solo-bar-container">
-        <div class="solo-user-badge">
-          <span>👤 Exploring as: <strong id="solo-user-display">You</strong></span>
+        <div class="solo-user-badge" onclick="app.quickEditName()" style="cursor:pointer;" title="Tap to change your name">
+          <span>👤 Exploring as: <strong id="solo-user-display">You</strong> <span style="font-size:0.75rem; opacity:0.6; margin-left:3px;">✏️</span></span>
         </div>
         <button type="button" class="btn-pair-partner-pill" onclick="authUI.openPairModal()" title="Link accounts with your partner">
           <span>💑 Link Partner</span>
@@ -991,16 +991,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=2.2"></script>
-  <script src="js/firebase-service.js?v=2.2"></script>
-  <script src="js/auth-ui.js?v=2.2"></script>
-  <script src="js/events_data.js?v=2.2"></script>
-  <script src="js/api.js?v=2.2"></script>
-  <script src="js/chat.js?v=2.2"></script>
-  <script src="js/collaborative.js?v=2.2"></script>
-  <script src="js/discover.js?v=2.2"></script>
-  <script src="js/swiper.js?v=2.2"></script>
-  <script src="js/planner.js?v=2.2"></script>
-  <script src="js/app.js?v=2.2"></script>
+  <script src="js/firebase-config.js?v=2.3"></script>
+  <script src="js/firebase-service.js?v=2.3"></script>
+  <script src="js/auth-ui.js?v=2.3"></script>
+  <script src="js/events_data.js?v=2.3"></script>
+  <script src="js/api.js?v=2.3"></script>
+  <script src="js/chat.js?v=2.3"></script>
+  <script src="js/collaborative.js?v=2.3"></script>
+  <script src="js/discover.js?v=2.3"></script>
+  <script src="js/swiper.js?v=2.3"></script>
+  <script src="js/planner.js?v=2.3"></script>
+  <script src="js/app.js?v=2.3"></script>
 </body>
 </html>

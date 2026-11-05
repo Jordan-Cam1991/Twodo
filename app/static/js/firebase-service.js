@@ -127,6 +127,15 @@ const firebaseService = {
       const city = (defaultCity || '').trim() || 'Brisbane';
       const cleanEmail = email.trim().toLowerCase();
 
+      // Persist chosen name immediately so concurrent onAuthStateChanged has it
+      localStorage.setItem('twodo_pending_name', cleanName);
+      localStorage.setItem('twodo_user_name', cleanName);
+      localStorage.setItem('twodo_profile', JSON.stringify({
+        user1_name: cleanName,
+        user2_name: 'Partner',
+        default_city: city
+      }));
+
       try {
         await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       } catch (e) {}
@@ -448,29 +457,35 @@ const firebaseService = {
       console.warn('User doc fetch note:', e);
     }
 
+    const pendingName = localStorage.getItem('twodo_pending_name') || localStorage.getItem('twodo_user_name');
+
     if (!userDoc) {
       try {
         const cached = localStorage.getItem('twodo_user_profile');
         if (cached) userDoc = JSON.parse(cached);
       } catch (e) {}
 
-      if (!userDoc) {
-        const fallbackName = (user.email || '').split('@')[0] || 'Explorer';
-        const code = this.generatePairCode(fallbackName);
-        userDoc = {
-          uid: uid,
-          name: fallbackName,
-          email: user.email,
-          city: 'Brisbane',
-          pair_code: code,
-          status: 'single',
-          couple_id: null,
-          partner_uid: null,
-          partner_name: null,
-          created_at: new Date().toISOString()
-        };
-        this.db.collection('users').doc(uid).set(userDoc).catch(() => {});
-        this.db.collection('pair_codes').doc(code).set({ code, user_uid: uid, user_name: fallbackName }).catch(() => {});
+      const resolvedName = pendingName || userDoc?.name || (user.email || '').split('@')[0] || 'Explorer';
+      const code = this.generatePairCode(resolvedName);
+      userDoc = {
+        uid: uid,
+        name: resolvedName,
+        email: user.email,
+        city: 'Brisbane',
+        pair_code: code,
+        status: 'single',
+        couple_id: null,
+        partner_uid: null,
+        partner_name: null,
+        created_at: new Date().toISOString()
+      };
+      this.db.collection('users').doc(uid).set(userDoc).catch(() => {});
+      this.db.collection('pair_codes').doc(code).set({ code, user_uid: uid, user_name: resolvedName }).catch(() => {});
+    } else if (pendingName && userDoc.name !== pendingName) {
+      userDoc.name = pendingName;
+      this.db.collection('users').doc(uid).set({ name: pendingName }, { merge: true }).catch(() => {});
+      if (userDoc.pair_code) {
+        this.db.collection('pair_codes').doc(userDoc.pair_code).set({ user_name: pendingName }, { merge: true }).catch(() => {});
       }
     }
 

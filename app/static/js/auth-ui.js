@@ -172,9 +172,12 @@ const authUI = {
     e.preventDefault();
     this.clearErrors();
 
-    const name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value;
-    const pass = document.getElementById('reg-password').value;
+    const nameInput = document.getElementById('reg-name');
+    const name = nameInput ? nameInput.value.trim() : '';
+    const emailInput = document.getElementById('reg-email');
+    const email = emailInput ? emailInput.value.trim() : '';
+    const passInput = document.getElementById('reg-password');
+    const pass = passInput ? passInput.value : '';
     const city = document.getElementById('reg-city')?.value || 'Brisbane';
     const pairCode = document.getElementById('reg-pair-code')?.value || null;
 
@@ -182,6 +185,9 @@ const authUI = {
       this.showError('Please enter your name, email, and password.');
       return;
     }
+
+    localStorage.setItem('twodo_pending_name', name);
+    localStorage.setItem('twodo_user_name', name);
 
     if (pass.length < 6) {
       this.showError('Password must be at least 6 characters.');
