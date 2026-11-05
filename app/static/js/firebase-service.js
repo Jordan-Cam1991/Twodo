@@ -733,24 +733,175 @@ const firebaseService = {
         discover.loadEvents(true);
       }
     }, (err) => console.warn('Custom events error:', err));
+
+    // Ensure any offline local votes or planner items are backed up to cloud
+    if (this.currentUser) {
+      this.syncLocalDataToCloud(this.currentUser.uid);
+    }
   },
 
   attachSoloListeners(uid) {
     this.detachListeners();
     if (!uid) return;
 
-    // Solo Votes Listener
+    // 1. Live Solo Votes Listener (Cloud Firestore -> Local Storage & Memory)
     this.unsubVotes = this.db.collection('users').doc(uid).collection('votes').onSnapshot((snapshot) => {
       const myName = this.userProfile?.name || 'You';
+      const u1Name = this.profile?.user1_name || myName;
+      const newVotes = {};
+      const newNotes = {};
+
       snapshot.forEach(doc => {
         const d = doc.data();
-        this.votesMap[`${doc.id}_${myName}`] = d.vote;
-        if (d.note) this.notesMap[`${doc.id}_${myName}`] = d.note;
+        const evId = d.event_id || doc.id;
+        const vote = d.vote;
+        const note = d.note || '';
+
+        // Store under canonical ID and safeDocId with all voter aliases
+        newVotes[`${doc.id}_${myName}`] = vote;
+        newVotes[`${evId}_${myName}`] = vote;
+        newVotes[`${doc.id}_${u1Name}`] = vote;
+        newVotes[`${evId}_${u1Name}`] = vote;
+        newVotes[`${doc.id}_You`] = vote;
+        newVotes[`${evId}_You`] = vote;
+
+        if (note) {
+          newNotes[`${doc.id}_${myName}`] = note;
+          newNotes[`${evId}_${myName}`] = note;
+        }
       });
+
+      this.votesMap = { ...this.votesMap, ...newVotes };
+      this.notesMap = { ...this.notesMap, ...newNotes };
+
+      // Safe permanent write to LocalStorage
+      try {
+        let existingVotes = {};
+        try { existingVotes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
+        localStorage.setItem('twodo_votes', JSON.stringify({ ...existingVotes, ...newVotes }));
+
+        let existingNotes = {};
+        try { existingNotes = JSON.parse(localStorage.getItem('twodo_notes') || '{}'); } catch (e) {}
+        localStorage.setItem('twodo_notes', JSON.stringify({ ...existingNotes, ...newNotes }));
+      } catch (e) {}
+
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
     }, err => console.warn('Solo votes listener note:', err));
+
+    // 2. Live Solo Planner Listener (Cloud Firestore -> Local Storage & Memory)
+    this.unsubPlanner = this.db.collection('users').doc(uid).collection('planner').onSnapshot((snapshot) => {
+      const items = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        items.push({
+          id: doc.id,
+          event_id: data.event_id,
+          status: data.status || 'bucket_list',
+          scheduled_date: data.scheduled_date || null,
+          time_slot: data.time_slot || 'evening',
+          notes: data.notes || '',
+          budget: data.budget || 0,
+          reservation_info: data.reservation_info || '',
+          title: data.title || '',
+          category: data.category || '',
+          location_name: data.location_name || '',
+          city: data.city || '',
+          image_url: data.image_url || '',
+          price_str: data.price_str || '',
+          created_at: data.created_at ? (data.created_at.toDate?.()?.toISOString?.() || new Date().toISOString()) : new Date().toISOString()
+        });
+      });
+
+      this.plannerItems = items;
+      try {
+        localStorage.setItem('twodo_planner', JSON.stringify(items));
+      } catch (e) {}
+
+      if (window.planner) {
+        planner.items = items;
+        planner.renderPlanner();
+        if (planner.updatePlannerCountBadge) planner.updatePlannerCountBadge();
+        if (planner.updateBadges) planner.updateBadges();
+      }
+    }, err => console.warn('Solo planner listener note:', err));
+
+    // 3. Automatically sync any unsynced local data to Cloud Firestore in background
+    this.syncLocalDataToCloud(uid);
+  },
+
+  async syncLocalDataToCloud(uid) {
+    if (!uid || !this.db) return;
+    try {
+      // 1. Sync any local votes to Firestore
+      let localVotes = {};
+      let localNotes = {};
+      try {
+        localVotes = JSON.parse(localStorage.getItem('twodo_votes') || '{}');
+        localNotes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
+      } catch (e) {}
+
+      const myName = this.userProfile?.name || 'You';
+      const isSolo = this.isSolo;
+      const coupleId = this.coupleId;
+
+      for (const key of Object.keys(localVotes)) {
+        const parts = key.split('_');
+        const eventId = parts.slice(0, -1).join('_');
+        const voterName = parts[parts.length - 1];
+        const vote = localVotes[key];
+        const note = localNotes[key] || '';
+
+        if (!eventId || !vote) continue;
+        const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
+
+        if (isSolo) {
+          this.db.collection('users').doc(uid).collection('votes').doc(safeDocId).set({
+            event_id: eventId,
+            vote: vote,
+            note: note,
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true }).catch(() => {});
+        } else if (coupleId) {
+          this.db.collection('couples').doc(coupleId).collection('votes').doc(safeDocId).set({
+            event_id: eventId,
+            [`votes.${voterName}`]: vote,
+            [`notes.${voterName}`]: note,
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true }).catch(() => {});
+        }
+      }
+
+      // 2. Sync any local planner items to Firestore
+      let localPlanner = [];
+      try {
+        localPlanner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+      } catch (e) {}
+
+      for (const item of localPlanner) {
+        if (!item || !item.event_id) continue;
+        const targetColl = coupleId 
+          ? this.db.collection('couples').doc(coupleId).collection('planner')
+          : this.db.collection('users').doc(uid).collection('planner');
+        const planDocId = String(item.id || item.event_id);
+        targetColl.doc(planDocId).set({
+          event_id: item.event_id,
+          title: item.title || 'Date Activity',
+          status: item.status || 'bucket_list',
+          scheduled_date: item.scheduled_date || null,
+          time_slot: item.time_slot || 'evening',
+          notes: item.notes || '',
+          budget: item.budget || '',
+          category: item.category || '',
+          location_name: item.location_name || '',
+          image_url: item.image_url || '',
+          updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }).catch(() => {});
+      }
+    } catch (e) {
+      console.warn('Local data to cloud backup note:', e);
+    }
   },
 
   detachListeners() {
