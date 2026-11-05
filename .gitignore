@@ -10,6 +10,10 @@ ENV/
 
 # System & IDE
 .DS_Store
+
+# Firebase
+.firebase/
+firebase-debug.log*
 .vscode/
 .idea/
 *.log
