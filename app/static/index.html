@@ -188,11 +188,15 @@
           </button>
         </nav>
 
-        <!-- Header Actions: 📅 Date Filter, ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
+        <!-- Header Actions: 📅 Date Filter, 🎯 Suburb/Category Filter, ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
         <div class="header-actions">
           <button type="button" class="btn-icon header-icon-btn" id="btn-header-date" onclick="discover.openFilterModal('date')" title="Filter by Date" aria-label="Filter by Date">
             <span>📅</span>
             <span class="header-date-active-dot hidden" id="header-date-dot"></span>
+          </button>
+          <button type="button" class="btn-icon header-icon-btn" id="btn-header-filter" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb & Category" aria-label="Filters">
+            <span>🎯</span>
+            <span class="header-filter-active-dot hidden" id="header-filter-dot"></span>
           </button>
           <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Date Activity" aria-label="Add Custom Activity">
             <span>➕</span>
@@ -233,13 +237,31 @@
 
     <!-- TAB 1: DISCOVER VIEW -->
     <section id="view-discover" class="view-panel active">
+      <!-- Dedicated Real-Time Search Bar -->
+      <div class="discover-search-wrap">
+        <div class="discover-search-box">
+          <span class="discover-search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="discover-search-input" 
+            class="discover-search-input" 
+            placeholder="Search date ideas, venues, keywords..." 
+            autocomplete="off"
+            oninput="discover.handleSearchInput(this.value)"
+          >
+          <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
+        </div>
+      </div>
+
       <!-- Chic Horizontal Mood & Filter Pills (Zero Clutter) -->
       <div class="mood-chips-bar">
         <div class="mood-chips-scroll" id="mood-chips-scroll">
           <button type="button" class="mood-chip active" data-mood="all" onclick="discover.setMoodFilter('all')">✨ All</button>
           <button type="button" class="mood-chip" data-mood="matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
+          <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="jordan-loves" id="mood-chip-jordan" onclick="discover.setMoodFilter('jordan-loves')">💜 <span id="mood-chip-jordan-label">Jordan's Loves</span> <span class="mood-chip-badge" id="mood-jordan-count">0</span></button>
+          <button type="button" class="mood-chip" data-mood="jordan-passed" id="mood-chip-jordan-passed" onclick="discover.setMoodFilter('jordan-passed')">❌ <span id="mood-chip-jordan-passed-label">Jordan's Passed</span> <span class="mood-chip-badge" id="mood-jordan-passed-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="weekend" onclick="discover.setMoodFilter('weekend')">🥂 This Weekend</button>
           <button type="button" class="mood-chip" data-mood="tonight" onclick="discover.setMoodFilter('tonight')">🔥 Tonight</button>
           <button type="button" class="mood-chip" data-mood="dinner" onclick="discover.setMoodFilter('dinner')">🍷 Romantic Dinner</button>
@@ -247,7 +269,6 @@
           <button type="button" class="mood-chip" data-mood="outdoor" onclick="discover.setMoodFilter('outdoor')">🌿 Outdoors & Sun</button>
           <button type="button" class="mood-chip" data-mood="shows" onclick="discover.setMoodFilter('shows')">🎭 Comedy & Shows</button>
           <button type="button" class="mood-chip" data-mood="budget" onclick="discover.setMoodFilter('budget')">⚡ Budget & Free</button>
-          <button type="button" class="mood-chip mood-chip-filter-btn" onclick="discover.openFilterModal('suburb')">🎯 Filter ▾</button>
         </div>
       </div>
 

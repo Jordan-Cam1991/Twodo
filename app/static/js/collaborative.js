@@ -4,44 +4,29 @@
 const collaborative = {
   currentMatchEvent: null,
 
-  async handleVote(eventId, voteType, note = null) {
+  async handleVote(eventId, voteType, note = null, fromSwiper = false) {
     const isTogether = app.currentVoter === 'both';
     const u1 = app.profile?.user1_name || 'Emma';
     const u2 = app.profile?.user2_name || 'Jordan';
     const activeVoter = app.getActiveVoterName();
-    const event = app.events.find(e => e.id === eventId);
-    if (!event) return;
+    const pool = (typeof discover !== 'undefined' && discover.getAllEventsPool) ? discover.getAllEventsPool() : [];
+    const event = (app.events || []).find(e => e.id === eventId) || pool.find(e => e.id === eventId);
 
-    try {
-      let res;
-      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
-        if (isTogether) {
-          await firebaseService.saveVote(eventId, u1, voteType, note);
-          res = await firebaseService.saveVote(eventId, u2, voteType, note);
-        } else {
-          res = await firebaseService.saveVote(eventId, activeVoter, voteType, note);
-        }
-      }
-
+    // 1. OPTIMISTIC IMMEDIATE UPDATE (Instant 0ms UI response!)
+    if (event) {
       if (isTogether) {
-        // Together Mode: record the vote for both partners
-        await api.vote(eventId, u1, voteType, note);
-        res = await api.vote(eventId, u2, voteType, note);
         event.u1_vote = voteType;
         event.u2_vote = voteType;
         if (note !== null) {
           event.u1_note = note;
           event.u2_note = note;
         }
+      } else if (activeVoter === u1) {
+        event.u1_vote = voteType;
+        if (note !== null) event.u1_note = note;
       } else {
-        res = await api.vote(eventId, activeVoter, voteType, note);
-        if (activeVoter === u1) {
-          event.u1_vote = voteType;
-          if (note !== null) event.u1_note = note;
-        } else {
-          event.u2_vote = voteType;
-          if (note !== null) event.u2_note = note;
-        }
+        event.u2_vote = voteType;
+        if (note !== null) event.u2_note = note;
       }
 
       // STRICT MATCH RULE: Only double love (both partners voted 'love') is a match!
@@ -49,25 +34,58 @@ const collaborative = {
       event.is_match = isStrictMatch;
       event.match_level = isStrictMatch ? 'double_love' : 'none';
 
-      // Celebrate ONLY if:
-      // 1. Both partners loved the event (isStrictMatch is true)
-      // 2. The vote action itself was 'love' (NEVER celebrate a maybe or a pass!)
+      // Celebrate ONLY if both loved and action was love
       if (isStrictMatch && voteType === 'love') {
         this.triggerMatchCelebration(event);
       } else {
-        app.showToast(voteType === 'love' ? (note ? '💬 Note & ❤️ Love saved!' : '❤️ Saved to Bucket List!') : (voteType === 'maybe' ? '🤔 Noted as maybe' : 'Passed'));
+        app.showToast(voteType === 'love' ? (note ? '💬 Note & ❤️ Love saved!' : '❤️ Saved to Loves!') : (voteType === 'maybe' ? '🤔 Noted as maybe' : '❌ Passed'));
       }
+    }
 
-      // Re-render views
-      discover.renderEvents();
-      planner.loadPlanner();
-      discover.updateMatchBanner();
-      if (window.mapView) mapView.renderMarkers();
-
-      return res;
+    // 2. PERSIST TO LOCAL STORAGE
+    try {
+      if (isTogether) {
+        await api.vote(eventId, u1, voteType, note);
+        await api.vote(eventId, u2, voteType, note);
+      } else {
+        await api.vote(eventId, activeVoter, voteType, note);
+      }
     } catch (e) {
-      console.error('Failed to vote:', e);
-      app.showToast('Could not save vote. Check connection.');
+      console.warn('Local storage vote note:', e);
+    }
+
+    // 3. UPDATE FIREBASE IN-MEMORY CACHE
+    if (typeof firebaseService !== 'undefined') {
+      if (isTogether) {
+        firebaseService.votesMap[`${eventId}_${u1}`] = voteType;
+        firebaseService.votesMap[`${eventId}_${u2}`] = voteType;
+        if (note !== null) {
+          firebaseService.notesMap[`${eventId}_${u1}`] = note;
+          firebaseService.notesMap[`${eventId}_${u2}`] = note;
+        }
+      } else {
+        firebaseService.votesMap[`${eventId}_${activeVoter}`] = voteType;
+        if (note !== null) {
+          firebaseService.notesMap[`${eventId}_${activeVoter}`] = note;
+        }
+      }
+    }
+
+    // 4. RE-RENDER VIEWS IMMEDIATELY (Instantly updates cards, badge counts, and swiper!)
+    discover.renderEvents();
+    discover.updateMatchBanner();
+    if (window.planner) planner.loadPlanner();
+    if (window.swiper && !fromSwiper) swiper.initDeck();
+    if (window.mapView) mapView.renderMarkers();
+
+    // 5. ASYNC FIREBASE FIRESTORE SYNC (non-blocking in background)
+    if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+      if (isTogether) {
+        firebaseService.saveVote(eventId, u1, voteType, note).catch(e => console.warn('Vote sync u1 note:', e));
+        firebaseService.saveVote(eventId, u2, voteType, note).catch(e => console.warn('Vote sync u2 note:', e));
+      } else {
+        firebaseService.saveVote(eventId, activeVoter, voteType, note).catch(e => console.warn('Vote sync active note:', e));
+      }
     }
   },
 

@@ -44,6 +44,11 @@ const app = {
     if (emmaLabel) emmaLabel.textContent = `${u1}'s Loves`;
     if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
 
+    const emmaPassLabel = document.getElementById('mood-chip-emma-passed-label');
+    const jordanPassLabel = document.getElementById('mood-chip-jordan-passed-label');
+    if (emmaPassLabel) emmaPassLabel.textContent = `${u1}'s Passed`;
+    if (jordanPassLabel) jordanPassLabel.textContent = `${u2}'s Passed`;
+
     const locDisp = document.getElementById('current-location-display');
     if (locDisp) {
       locDisp.textContent = this.currentCity;

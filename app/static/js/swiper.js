@@ -8,16 +8,38 @@ const swiper = {
 
   initDeck() {
     const activeVoter = app.getActiveVoterName();
-    const isUser1 = activeVoter === (app.profile?.user1_name || 'Emma');
+    const u1 = app.profile?.user1_name || 'Emma';
+    const u2 = app.profile?.user2_name || 'Jordan';
+    const isUser1 = activeVoter === u1;
+    const isTogether = app.currentVoter === 'both';
     
-    // Fallback to offline enriched catalog if app.events is not yet populated
-    const pool = (app.events && app.events.length > 0) 
-      ? app.events 
-      : (typeof api !== 'undefined' && api.getLocalEnrichedEvents ? api.getLocalEnrichedEvents().events : []);
+    // Always draw from the master pool so Swiper has all unvoted activities
+    const pool = (typeof discover !== 'undefined' && discover.getAllEventsPool) 
+      ? discover.getAllEventsPool() 
+      : (app.events || []);
 
-    // Filter queue to items this voter hasn't voted 'love' or 'pass' on yet
+    let votes = {};
+    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+      votes = { ...votes, ...firebaseService.votesMap };
+    }
+
+    // Filter queue to items this voter hasn't decided (neither 'love' nor 'pass')
     this.deckQueue = (pool || []).filter(ev => {
-      const myVote = isUser1 ? ev.u1_vote : ev.u2_vote;
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
+      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
+      
+      ev.u1_vote = v1;
+      ev.u2_vote = v2;
+      ev.is_match = Boolean(v1 === 'love' && v2 === 'love');
+
+      if (isTogether) {
+        const d1 = v1 === 'love' || v1 === 'pass';
+        const d2 = v2 === 'love' || v2 === 'pass';
+        return !d1 && !d2;
+      }
+      const myVote = isUser1 ? v1 : v2;
+      // Only items with no selection or thinking ('maybe') should be in swiper!
       return !myVote || myVote === 'maybe';
     });
 
@@ -245,10 +267,16 @@ const swiper = {
     }
 
     setTimeout(async () => {
-      await collaborative.handleVote(currentEvent.id, direction);
-      this.currentIndex++;
+      await collaborative.handleVote(currentEvent.id, direction, null, true);
+      // Remove current swiped card from queue
+      this.deckQueue = this.deckQueue.filter(e => e.id !== currentEvent.id);
+      if (direction === 'maybe') {
+        // Thinking / maybe: append to back of queue
+        this.deckQueue.push(currentEvent);
+      }
+      this.currentIndex = 0;
       this.renderDeck();
       this.updateSwiperFilterStatus();
-    }, 200);
+    }, 220);
   }
 };

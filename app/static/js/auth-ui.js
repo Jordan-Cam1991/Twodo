@@ -8,15 +8,17 @@ const authUI = {
   init() {
     this.bindEvents();
 
-    // Safety timeout: if Firebase hasn't resolved auth within 1.2s, display auth screen
-    setTimeout(() => {
-      const splash = document.getElementById('auth-loading-splash');
-      if (splash && !splash.classList.contains('hidden')) {
-        if (!window.firebaseService || !firebaseService.currentUser) {
-          this.showAuthScreen();
-        }
-      }
-    }, 1200);
+    // Check device session persistence: remember user across visits
+    const hasSession = localStorage.getItem('twodo_session_active') === '1';
+    const splash = document.getElementById('auth-loading-splash');
+
+    if (hasSession) {
+      // Device is already logged in: immediately reveal app, no login prompt!
+      this.showApp();
+    } else {
+      // New visitor / logged out device: show auth screen immediately
+      this.showAuthScreen();
+    }
   },
 
   bindEvents() {
@@ -124,6 +126,10 @@ const authUI = {
     if (!result.success) {
       this.showError(result.error);
     } else {
+      localStorage.setItem('twodo_session_active', '1');
+      if (result.user && result.user.uid) {
+        localStorage.setItem('twodo_user_uid', result.user.uid);
+      }
       this.showApp();
       if (window.app && app.showToast) {
         app.showToast('Welcome back! 💕');
@@ -164,6 +170,10 @@ const authUI = {
         this.showError(result.error);
       }
     } else {
+      localStorage.setItem('twodo_session_active', '1');
+      if (result.user && result.user.uid) {
+        localStorage.setItem('twodo_user_uid', result.user.uid);
+      }
       this.showApp();
       if (window.app && app.showToast) {
         app.showToast(`🎉 TwoDo space created for ${u1} & ${u2}!`);
@@ -204,6 +214,8 @@ const authUI = {
 
   async handleLogout() {
     if (confirm('Are you sure you want to log out of TwoDo?')) {
+      localStorage.removeItem('twodo_session_active');
+      localStorage.removeItem('twodo_user_uid');
       if (window.app && app.closeSettingsModal) {
         app.closeSettingsModal();
       }

@@ -129,8 +129,8 @@ const api = {
     const profile = (typeof firebaseService !== 'undefined' && firebaseService.profile)
       ? firebaseService.profile
       : JSON.parse(localStorage.getItem('twodo_profile') || '{"user1_name":"Emma","user2_name":"Jordan"}');
-    const u1 = profile.user1_name || 'Partner 1';
-    const u2 = profile.user2_name || 'Partner 2';
+    const u1 = profile.user1_name || (window.app && app.profile?.user1_name) || 'Emma';
+    const u2 = profile.user2_name || (window.app && app.profile?.user2_name) || 'Jordan';
 
     // Load votes & notes (merge Firebase real-time votes with local storage)
     let votes = {};
@@ -277,7 +277,7 @@ const api = {
 
       // Search filter
       if (search) {
-        const str = `${ev.title} ${ev.description} ${ev.location_name} ${(ev.tags || []).join(' ')} ${ev.source}`.toLowerCase();
+        const str = `${ev.title} ${ev.description} ${ev.location_name} ${(ev.tags || []).join(' ')} ${ev.source} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
         if (!str.includes(search)) {
           continue;
         }
@@ -289,12 +289,12 @@ const api = {
       }
 
       // Voting and Match calculation
-      const v1 = votes[`${ev.id}_${u1}`] || null;
-      const v2 = votes[`${ev.id}_${u2}`] || null;
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : null);
+      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : null);
       ev.u1_vote = v1;
       ev.u2_vote = v2;
-      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || '';
-      ev.u2_note = ev.u2_note || notes[`${ev.id}_${u2}`] || '';
+      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || notes[`${ev.id}_Emma`] || '';
+      ev.u2_note = ev.u2_note || notes[`${ev.id}_${u2}`] || notes[`${ev.id}_Jordan`] || '';
       ev.user1_name = u1;
       ev.user2_name = u2;
 
@@ -318,11 +318,37 @@ const api = {
       }
 
       // Match / Voter filter
-      if (filter === 'matches' && !isMatch) continue;
-      if (['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter) && v1 !== 'love') continue;
-      if (['user2_likes', 'jordan_likes', 'jordan_loves', 'jordan-loves'].includes(filter) && v2 !== 'love') continue;
-      if (filter === 'in_planner' && !ev.planner_id) continue;
-      if (filter === 'unvoted' && (v1 || v2)) continue;
+      if (filter === 'matches') {
+        if (!isMatch) continue;
+      } else if (['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter)) {
+        if (v1 !== 'love') continue;
+      } else if (['user1_passed', 'emma_passed', 'emma-passed'].includes(filter)) {
+        if (v1 !== 'pass') continue;
+      } else if (['user2_likes', 'jordan_likes', 'jordan_loves', 'jordan-loves'].includes(filter)) {
+        if (v2 !== 'love') continue;
+      } else if (['user2_passed', 'jordan_passed', 'jordan-passed'].includes(filter)) {
+        if (v2 !== 'pass') continue;
+      } else if (filter === 'in_planner') {
+        if (!ev.planner_id) continue;
+      } else if (filter === 'unvoted') {
+        if (v1 || v2) continue;
+      } else {
+        // Standard feed browsing (all, lifestyle moods, suburbs, etc.):
+        // Only ones with no selection or thinking ('maybe') should be in discover!
+        // When active voter has already loved or passed, remove it from the feed!
+        const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : u1;
+        const isTogether = (typeof app !== 'undefined' && app.currentVoter === 'both');
+        if (isTogether) {
+          if ((v1 === 'love' || v1 === 'pass') || (v2 === 'love' || v2 === 'pass')) {
+            continue;
+          }
+        } else {
+          const myVote = (activeVoter === u1) ? v1 : v2;
+          if (myVote === 'love' || myVote === 'pass') {
+            continue;
+          }
+        }
+      }
 
       results.push(ev);
     }

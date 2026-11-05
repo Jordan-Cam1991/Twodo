@@ -13,8 +13,33 @@ const discover = {
   customStart: null,
   customEnd: null,
   searchDebounceTimer: null,
+  searchQuery: '',
   pageSize: 24,
   currentPage: 1,
+
+  handleSearchInput(val) {
+    this.searchQuery = (val || '').trim();
+    const clearBtn = document.getElementById('discover-search-clear');
+    if (clearBtn) {
+      clearBtn.classList.toggle('hidden', !this.searchQuery);
+    }
+
+    clearTimeout(this.searchDebounceTimer);
+    this.searchDebounceTimer = setTimeout(() => {
+      this.currentPage = 1;
+      this.loadEvents(false);
+    }, 250);
+  },
+
+  clearSearch() {
+    this.searchQuery = '';
+    const input = document.getElementById('discover-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('discover-search-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
+    this.currentPage = 1;
+    this.loadEvents(false);
+  },
 
   // Pop-up Filter Modal State
   currentModalType: null, // 'date' | 'suburb' | 'vibe' | 'category'
@@ -107,7 +132,7 @@ const discover = {
 
     try {
       this.currentPage = 1;
-      const searchVal = document.getElementById('search-input')?.value || '';
+      const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('search-input')?.value || '';
       const catParam = this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All';
       const subParam = this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All';
       const vibeParam = this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All';
@@ -136,7 +161,7 @@ const discover = {
       const catParam = this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All';
       const subParam = this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All';
       const vibeParam = this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All';
-      const searchVal = document.getElementById('search-input')?.value || '';
+      const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('search-input')?.value || '';
 
       const fallbackData = api.getLocalEnrichedEvents({
         category: catParam,
@@ -165,24 +190,56 @@ const discover = {
 
     if (!grid) return;
 
-    const visibleEvents = app.events.slice(0, this.pageSize * this.currentPage);
+    const u1 = app.profile?.user1_name || 'Emma';
+    const u2 = app.profile?.user2_name || 'Jordan';
+    const activeVoter = app.getActiveVoterName();
+    const isTogether = app.currentVoter === 'both';
+    const isSpecialMood = ['matches', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(this.currentMood);
+
+    // In normal feed browsing: only show items with no selection or thinking ('maybe')!
+    // Loved or passed items are excluded from the main feed & search results.
+    let displayEvents = (app.events || []).filter(ev => {
+      if (this.searchQuery) {
+        const q = this.searchQuery.toLowerCase();
+        const str = `${ev.title} ${ev.description} ${ev.location_name} ${(ev.tags || []).join(' ')} ${ev.source} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
+        if (!str.includes(q)) return false;
+      }
+
+      if (!isSpecialMood) {
+        if (isTogether) {
+          if (ev.u1_vote === 'love' || ev.u1_vote === 'pass' || ev.u2_vote === 'love' || ev.u2_vote === 'pass') {
+            return false;
+          }
+        } else {
+          const myVote = (activeVoter === u1) ? ev.u1_vote : ev.u2_vote;
+          if (myVote === 'love' || myVote === 'pass') {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    });
+
+    const visibleEvents = displayEvents.slice(0, this.pageSize * this.currentPage);
 
     if (countText) {
       const dateLabel = this.activeDateRange === 'all' ? '' : ` (${this.getDateRangeLabel()})`;
       const filterDetails = [];
+      if (this.searchQuery) filterDetails.push(`Search: "${this.searchQuery}"`);
       if (this.selectedSuburbs.length > 0) filterDetails.push(this.selectedSuburbs.join(', '));
       if (this.selectedVibes.length > 0) filterDetails.push(this.selectedVibes.join(', '));
       if (this.selectedCategories.length > 0) filterDetails.push(this.selectedCategories.join(', '));
       const filterStr = filterDetails.length > 0 ? ` • ${filterDetails.join(' | ')}` : '';
       
-      if (app.events.length > visibleEvents.length) {
-        countText.textContent = `Showing ${visibleEvents.length} of ${app.events.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
+      if (displayEvents.length > visibleEvents.length) {
+        countText.textContent = `Showing ${visibleEvents.length} of ${displayEvents.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
       } else {
-        countText.textContent = `Showing ${app.events.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
+        countText.textContent = `Showing ${displayEvents.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
       }
     }
 
-    if (app.events.length === 0) {
+    if (displayEvents.length === 0) {
       grid.innerHTML = '';
       empty?.classList.remove('hidden');
       if (loadMoreWrap) loadMoreWrap.classList.add('hidden');
@@ -192,17 +249,13 @@ const discover = {
     empty?.classList.add('hidden');
 
     // Manage Load More button
-    const remaining = app.events.length - visibleEvents.length;
+    const remaining = displayEvents.length - visibleEvents.length;
     if (remaining > 0 && loadMoreWrap) {
       loadMoreWrap.classList.remove('hidden');
       if (remainingSpan) remainingSpan.textContent = remaining;
     } else if (loadMoreWrap) {
       loadMoreWrap.classList.add('hidden');
     }
-
-    const u1 = app.profile?.user1_name || 'Emma';
-    const u2 = app.profile?.user2_name || 'Jordan';
-    const activeVoter = app.getActiveVoterName();
 
     grid.innerHTML = visibleEvents.map(ev => {
       const isMatch = ev.is_match;
@@ -363,8 +416,12 @@ const discover = {
       this.activeFilter = 'matches';
     } else if (mood === 'emma-loves') {
       this.activeFilter = 'user1_likes';
+    } else if (mood === 'emma-passed') {
+      this.activeFilter = 'user1_passed';
     } else if (mood === 'jordan-loves') {
       this.activeFilter = 'user2_likes';
+    } else if (mood === 'jordan-passed') {
+      this.activeFilter = 'user2_passed';
     } else if (mood === 'weekend') {
       this.activeFilter = 'all';
       this.activeDateRange = 'this_weekend';
@@ -397,6 +454,9 @@ const discover = {
     const summary = document.getElementById('active-filter-summary');
     if (!bar || !summary) return;
 
+    const u1 = app.profile?.user1_name || 'Emma';
+    const u2 = app.profile?.user2_name || 'Jordan';
+
     const parts = [];
     if (this.selectedSuburbs && this.selectedSuburbs.length > 0) {
       parts.push(`📍 ${this.selectedSuburbs.join(', ')}`);
@@ -412,9 +472,13 @@ const discover = {
     }
 
     if (this.currentMood === 'emma-loves') {
-      parts.push(`❤️ Emma's Loves`);
+      parts.push(`❤️ ${u1}'s Loves`);
+    } else if (this.currentMood === 'emma-passed') {
+      parts.push(`❌ ${u1}'s Passed`);
     } else if (this.currentMood === 'jordan-loves') {
-      parts.push(`💜 Jordan's Loves`);
+      parts.push(`💜 ${u2}'s Loves`);
+    } else if (this.currentMood === 'jordan-passed') {
+      parts.push(`❌ ${u2}'s Passed`);
     } else if (this.currentMood === 'matches') {
       parts.push(`💖 Mutual Date Matches`);
     }
@@ -427,34 +491,77 @@ const discover = {
     }
   },
 
+  getAllEventsPool() {
+    const rawSeeds = (typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [];
+    let customEvents = [];
+    try { customEvents = JSON.parse(localStorage.getItem('twodo_custom_events') || '[]'); } catch (e) {}
+    const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
+    return [...fbCustoms, ...customEvents, ...rawSeeds];
+  },
+
   updateMatchBanner() {
     const banner = document.getElementById('matches-callout-banner');
     const title = document.getElementById('matches-banner-title');
     const moodBadge = document.getElementById('mood-matches-count');
     const emmaBadge = document.getElementById('mood-emma-count');
+    const emmaPassBadge = document.getElementById('mood-emma-passed-count');
     const jordanBadge = document.getElementById('mood-jordan-count');
+    const jordanPassBadge = document.getElementById('mood-jordan-passed-count');
 
-    const matches = (app.events || []).filter(e => e.is_match);
-    const emmaCount = (app.events || []).filter(e => e.u1_vote === 'love').length;
-    const jordanCount = (app.events || []).filter(e => e.u2_vote === 'love').length;
+    let votes = {};
+    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+      votes = { ...votes, ...firebaseService.votesMap };
+    }
+
+    const u1 = app.profile?.user1_name || 'Emma';
+    const u2 = app.profile?.user2_name || 'Jordan';
+
+    const pool = this.getAllEventsPool();
+    const seen = new Set();
+    let matchesCount = 0;
+    let emmaLoveCount = 0;
+    let emmaPassCount = 0;
+    let jordanLoveCount = 0;
+    let jordanPassCount = 0;
+
+    pool.forEach(ev => {
+      if (!ev || !ev.id || seen.has(ev.id)) return;
+      seen.add(ev.id);
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
+      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
+      if (v1 === 'love') emmaLoveCount++;
+      if (v1 === 'pass') emmaPassCount++;
+      if (v2 === 'love') jordanLoveCount++;
+      if (v2 === 'pass') jordanPassCount++;
+      if (v1 === 'love' && v2 === 'love') matchesCount++;
+    });
 
     if (moodBadge) {
-      moodBadge.textContent = matches.length;
-      moodBadge.classList.toggle('has-matches', matches.length > 0);
+      moodBadge.textContent = matchesCount;
+      moodBadge.classList.toggle('has-matches', matchesCount > 0);
     }
     if (emmaBadge) {
-      emmaBadge.textContent = emmaCount;
-      emmaBadge.classList.toggle('has-matches', emmaCount > 0);
+      emmaBadge.textContent = emmaLoveCount;
+      emmaBadge.classList.toggle('has-matches', emmaLoveCount > 0);
+    }
+    if (emmaPassBadge) {
+      emmaPassBadge.textContent = emmaPassCount;
+      emmaPassBadge.classList.toggle('has-matches', emmaPassCount > 0);
     }
     if (jordanBadge) {
-      jordanBadge.textContent = jordanCount;
-      jordanBadge.classList.toggle('has-matches', jordanCount > 0);
+      jordanBadge.textContent = jordanLoveCount;
+      jordanBadge.classList.toggle('has-matches', jordanLoveCount > 0);
+    }
+    if (jordanPassBadge) {
+      jordanPassBadge.textContent = jordanPassCount;
+      jordanPassBadge.classList.toggle('has-matches', jordanPassCount > 0);
     }
 
     if (!banner || !title) return;
-    if (matches.length > 0) {
+    if (matchesCount > 0) {
       banner.classList.remove('hidden');
-      title.textContent = `${matches.length} Mutual Date ${matches.length === 1 ? 'Match' : 'Matches'}!`;
+      title.textContent = `${matchesCount} Mutual Date ${matchesCount === 1 ? 'Match' : 'Matches'}!`;
     } else {
       banner.classList.add('hidden');
     }
@@ -751,6 +858,13 @@ const discover = {
     const headerDateDot = document.getElementById('header-date-dot');
     if (btnHeaderDate) btnHeaderDate.classList.toggle('filter-active', isDateFiltered);
     if (headerDateDot) headerDateDot.classList.toggle('hidden', !isDateFiltered);
+
+    // Header 🎯 Suburb & Category Filter button
+    const isOtherFiltered = this.selectedSuburbs.length > 0 || this.selectedVibes.length > 0 || this.selectedCategories.length > 0;
+    const btnHeaderFilter = document.getElementById('btn-header-filter');
+    const headerFilterDot = document.getElementById('header-filter-dot');
+    if (btnHeaderFilter) btnHeaderFilter.classList.toggle('filter-active', isOtherFiltered);
+    if (headerFilterDot) headerFilterDot.classList.toggle('hidden', !isOtherFiltered);
 
     ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const dateVal = document.getElementById(`${prefix}-val-date`);

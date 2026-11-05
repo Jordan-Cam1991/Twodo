@@ -30,6 +30,11 @@ const firebaseService = {
     this.auth = firebase.auth();
     this.db = firebase.firestore();
 
+    // Ensure session persistence is explicitly LOCAL
+    try {
+      this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    } catch (e) {}
+
     // Enable offline persistence if supported (safe non-blocking)
     try {
       this.db.enablePersistence().catch(err => {
@@ -162,6 +167,11 @@ const firebaseService = {
     this.currentUser = user;
     this.coupleId = user.uid;
 
+    try {
+      localStorage.setItem('twodo_session_active', '1');
+      localStorage.setItem('twodo_user_uid', user.uid);
+    } catch (e) {}
+
     // If profile is not in memory yet (e.g. reload or fresh login), check cache and Firestore
     if (!this.profile) {
       try {
@@ -235,8 +245,9 @@ const firebaseService = {
     this.messages = [];
     this.customEvents = [];
 
-    // Show Centsauble-style Auth Screen
-    if (window.authUI) {
+    // Only show auth screen if session is not active on this device
+    const hasSession = localStorage.getItem('twodo_session_active') === '1';
+    if (!hasSession && window.authUI) {
       authUI.showAuthScreen();
     }
   },
@@ -358,9 +369,18 @@ const firebaseService = {
   // COUPLE DATA MUTATIONS
   // ---------------------------------------------------------------------------
   async saveVote(eventId, userName, voteType, note = null) {
-    if (!this.coupleId) return;
+    if (!eventId || !userName) return { success: true };
 
-    const docRef = this.db.collection('couples').doc(this.coupleId).collection('votes').doc(eventId);
+    // Immediately cache in local memory
+    this.votesMap[`${eventId}_${userName}`] = voteType;
+    if (note !== null) {
+      this.notesMap[`${eventId}_${userName}`] = note;
+    }
+
+    if (!this.coupleId) return { success: true };
+
+    const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
+    const docRef = this.db.collection('couples').doc(this.coupleId).collection('votes').doc(safeDocId);
     const updatePayload = {
       event_id: eventId,
       [`votes.${userName}`]: voteType,
@@ -374,8 +394,8 @@ const firebaseService = {
       await docRef.set(updatePayload, { merge: true });
       return { success: true };
     } catch (e) {
-      console.error('Failed to save vote to Firestore:', e);
-      throw e;
+      console.warn('Background Firestore saveVote warning (cached locally):', e);
+      return { success: true };
     }
   },
 
