@@ -165,7 +165,7 @@ const authUI = {
       if (result.error && (result.error.includes('already registered') || result.error.includes('already in use'))) {
         const loginEmail = document.getElementById('login-email');
         if (loginEmail) loginEmail.value = email;
-        this.showError('This couple email is already registered! Please switch to Login above to sign in.');
+        this.showError('This email is already registered! Please switch to Login above to sign in.');
       } else {
         this.showError(result.error);
       }
