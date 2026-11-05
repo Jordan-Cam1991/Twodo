@@ -25,6 +25,135 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- INITIAL AUTH CHECK SPLASH -->
+  <div id="auth-loading-splash" class="auth-loading-splash">
+    <div class="auth-splash-box">
+      <div class="auth-splash-icon">💑</div>
+      <div class="auth-splash-title">TwoDo</div>
+      <div class="auth-splash-spinner"></div>
+    </div>
+  </div>
+
+  <!-- CENTSAUBLE-STYLE AUTHENTICATION SCREEN IN TWODO THEME -->
+  <div id="auth-screen" class="centsauble-auth-screen hidden">
+    <div class="centsauble-auth-card">
+      <!-- Brand Header -->
+      <div class="centsauble-brand-row">
+        <span class="centsauble-brand-icon">💑</span>
+        <span class="centsauble-brand-name">TwoDo</span>
+      </div>
+
+      <!-- Segmented Tab Underline Switcher (Identical to Centsauble) -->
+      <div class="centsauble-tabs">
+        <button type="button" class="centsauble-tab-btn active" id="auth-tab-btn-login" onclick="authUI.switchTab('login')">
+          Login
+        </button>
+        <button type="button" class="centsauble-tab-btn" id="auth-tab-btn-register" onclick="authUI.switchTab('register')">
+          Sign Up
+        </button>
+      </div>
+
+      <!-- TAB 1: LOGIN -->
+      <div id="auth-section-login" class="centsauble-section">
+        <h1 class="centsauble-title">Login</h1>
+        <p class="centsauble-subtitle">Welcome back! Please enter your details.</p>
+
+        <form id="auth-login-form">
+          <div class="centsauble-error-box hidden" id="auth-login-error"></div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="login-email">Email</label>
+            <input type="email" id="login-email" class="centsauble-input" placeholder="m@example.com" required autocomplete="email">
+          </div>
+
+          <div class="centsauble-form-group">
+            <div class="centsauble-label-row">
+              <label class="centsauble-label" for="login-password">Password</label>
+              <button type="button" class="centsauble-forgot-link" onclick="authUI.switchTab('forgot')">Forgot Password?</button>
+            </div>
+            <input type="password" id="login-password" class="centsauble-input" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="centsauble-btn-submit" id="btn-auth-login-submit">
+            Login
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 2: SIGN UP -->
+      <div id="auth-section-register" class="centsauble-section hidden">
+        <h1 class="centsauble-title">Sign Up</h1>
+        <p class="centsauble-subtitle">Create your shared couple space to discover and plan together.</p>
+
+        <form id="auth-register-form">
+          <div class="centsauble-error-box hidden" id="auth-register-error"></div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="reg-email">Couple Email</label>
+            <input type="email" id="reg-email" class="centsauble-input" placeholder="m@example.com" required autocomplete="email">
+          </div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="centsauble-input" placeholder="Create a password (min 6 characters)" minlength="6" required autocomplete="new-password">
+          </div>
+
+          <div class="centsauble-form-row">
+            <div class="centsauble-form-group">
+              <label class="centsauble-label" for="reg-user1">Partner 1 Name</label>
+              <input type="text" id="reg-user1" class="centsauble-input" placeholder="e.g. Emma" required>
+            </div>
+            <div class="centsauble-form-group">
+              <label class="centsauble-label" for="reg-user2">Partner 2 Name</label>
+              <input type="text" id="reg-user2" class="centsauble-input" placeholder="e.g. Jordan" required>
+            </div>
+          </div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="reg-city">Home City</label>
+            <select id="reg-city" class="centsauble-select">
+              <option value="Brisbane" selected>Brisbane</option>
+              <option value="Gold Coast">Gold Coast</option>
+              <option value="Sunshine Coast">Sunshine Coast</option>
+              <option value="Sydney">Sydney</option>
+              <option value="Melbourne">Melbourne</option>
+            </select>
+          </div>
+
+          <button type="submit" class="centsauble-btn-submit" id="btn-auth-register-submit">
+            Sign Up
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 3: FORGOT PASSWORD -->
+      <div id="auth-section-forgot" class="centsauble-section hidden">
+        <h1 class="centsauble-title">Reset Password</h1>
+        <p class="centsauble-subtitle">Enter your account email and we'll send a password reset link.</p>
+
+        <form id="auth-forgot-form">
+          <div class="centsauble-error-box hidden" id="auth-forgot-error"></div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="forgot-email">Account Email</label>
+            <input type="email" id="forgot-email" class="centsauble-input" placeholder="m@example.com" required>
+          </div>
+
+          <button type="submit" class="centsauble-btn-submit" id="btn-auth-forgot-submit">
+            Send Reset Link
+          </button>
+
+          <div style="margin-top: 1.25rem; text-align: center;">
+            <button type="button" class="centsauble-forgot-link" onclick="authUI.switchTab('login')">← Back to Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP WRAPPER (Shown only when authenticated) -->
+  <div id="app-container" class="app-container hidden">
+
   <!-- Header / Navigation -->
   <header class="navbar">
     <div class="nav-container">
@@ -59,7 +188,7 @@
           </button>
         </nav>
 
-        <!-- Header Actions: 📅 Date Filter, ➕ Add Custom Date, ⚙️ Settings -->
+        <!-- Header Actions: 📅 Date Filter, ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
         <div class="header-actions">
           <button type="button" class="btn-icon header-icon-btn" id="btn-header-date" onclick="discover.openFilterModal('date')" title="Filter by Date" aria-label="Filter by Date">
             <span>📅</span>
@@ -70,6 +199,13 @@
           </button>
           <button type="button" class="btn-icon header-icon-btn btn-settings-corner" onclick="app.openSettingsModal()" title="Settings & Sync" aria-label="Couple Settings">
             <span>⚙️</span>
+          </button>
+          <button type="button" class="btn-icon header-icon-btn btn-logout-header" onclick="authUI.handleLogout()" title="Log Out" aria-label="Log Out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
           </button>
         </div>
       </div>
@@ -700,122 +836,6 @@
     </div>
   </div>
 
-  <!-- COUPLE AUTHENTICATION & WELCOME MODAL -->
-  <div id="auth-modal" class="modal-overlay hidden">
-    <div class="modal-card auth-card">
-      <div class="auth-header">
-        <div class="auth-logo-badge">💑</div>
-        <h2 class="auth-title">TwoDo</h2>
-        <p class="auth-sub">Your Private Couple Adventure & Date Space</p>
-      </div>
-
-      <!-- Segmented Tab Switcher: Sign In vs Create Space -->
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab-btn active" id="auth-tab-btn-login" onclick="authUI.switchTab('login')">
-          Sign In
-        </button>
-        <button type="button" class="auth-tab-btn" id="auth-tab-btn-register" onclick="authUI.switchTab('register')">
-          New Couple? Sign Up ✨
-        </button>
-      </div>
-
-      <!-- TAB 1: SIGN IN -->
-      <div id="auth-section-login" class="auth-section">
-        <form id="auth-login-form">
-          <div class="auth-error-box hidden" id="auth-login-error"></div>
-          
-          <div class="form-group">
-            <label for="login-email">Shared Couple Email</label>
-            <input type="email" id="login-email" placeholder="e.g. callumandkaitlin@gmail.com" required autocomplete="email">
-          </div>
-
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-login-submit">
-            💖 Sign In as Couple
-          </button>
-
-          <div class="auth-helper-row">
-            <button type="button" class="btn-text-link" onclick="authUI.switchTab('forgot')">Forgot Password?</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- TAB 2: REGISTER NEW COUPLE -->
-      <div id="auth-section-register" class="auth-section hidden">
-        <form id="auth-register-form">
-          <div class="auth-error-box hidden" id="auth-register-error"></div>
-
-          <p class="auth-hint">Create one shared login for both of you to use on your phones:</p>
-
-          <div class="form-group">
-            <label for="reg-email">Couple Email</label>
-            <input type="email" id="reg-email" placeholder="e.g. callumandkaitlin@gmail.com" required autocomplete="email">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-password">Password (min 6 characters)</label>
-            <input type="password" id="reg-password" placeholder="Create a password" minlength="6" required autocomplete="new-password">
-          </div>
-
-          <div class="form-row">
-            <div class="form-group flex-1">
-              <label for="reg-user1">Partner 1 Name</label>
-              <input type="text" id="reg-user1" placeholder="e.g. Callum" required>
-            </div>
-            <div class="form-group flex-1">
-              <label for="reg-user2">Partner 2 Name</label>
-              <input type="text" id="reg-user2" placeholder="e.g. Kaitlin" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-city">Home City</label>
-            <select id="reg-city" class="auth-select">
-              <option value="Brisbane" selected>Brisbane</option>
-              <option value="Gold Coast">Gold Coast</option>
-              <option value="Sunshine Coast">Sunshine Coast</option>
-              <option value="Sydney">Sydney</option>
-              <option value="Melbourne">Melbourne</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-register-submit">
-            ✨ Create Our Couple Space
-          </button>
-        </form>
-      </div>
-
-      <!-- TAB 3: FORGOT PASSWORD -->
-      <div id="auth-section-forgot" class="auth-section hidden">
-        <form id="auth-forgot-form">
-          <div class="auth-error-box hidden" id="auth-forgot-error"></div>
-
-          <p class="auth-hint">Enter your account email and we'll send a password reset link:</p>
-
-          <div class="form-group">
-            <label for="forgot-email">Account Email</label>
-            <input type="email" id="forgot-email" placeholder="e.g. callumandkaitlin@gmail.com" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block auth-btn-submit" id="btn-auth-forgot-submit">
-            Send Reset Link 📬
-          </button>
-
-          <div class="auth-helper-row" style="margin-top:1rem; text-align:center;">
-            <button type="button" class="btn-text-link" onclick="authUI.switchTab('login')">← Back to Sign In</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container"></div>
-
   <!-- Fixed Mobile Bottom Navigation Bar (4 Clean Core Tabs) -->
   <nav class="mobile-bottom-bar" id="mobile-bottom-nav">
     <button class="mobile-nav-item active" data-tab="discover" onclick="app.navigate('discover')">
@@ -837,6 +857,11 @@
       <span class="m-badge count" id="m-planner-badge">0</span>
     </button>
   </nav>
+
+  </div> <!-- /#app-container -->
+
+  <!-- Toast Notification Container (Global) -->
+  <div id="toast-container" class="toast-container"></div>
 
   <!-- Firebase SDKs (Compat v10.12.0) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

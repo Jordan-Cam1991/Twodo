@@ -1,12 +1,22 @@
 /**
  * TwoDo Authentication UI Controller
- * Manages the Welcome / Sign In / Sign Up Modal and Account Settings
+ * Manages the Centsauble-style Login & Sign Up screen, Splash check, and Logout flow
  */
 const authUI = {
   currentTab: 'login', // 'login' | 'register' | 'forgot'
 
   init() {
     this.bindEvents();
+
+    // Safety timeout: if Firebase hasn't resolved auth within 1.2s, display auth screen
+    setTimeout(() => {
+      const splash = document.getElementById('auth-loading-splash');
+      if (splash && !splash.classList.contains('hidden')) {
+        if (!window.firebaseService || !firebaseService.currentUser) {
+          this.showAuthScreen();
+        }
+      }
+    }, 1200);
   },
 
   bindEvents() {
@@ -25,21 +35,27 @@ const authUI = {
     }
   },
 
-  showAuthModal() {
-    const modal = document.getElementById('auth-modal');
-    if (modal) {
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
+  showAuthScreen() {
+    const splash = document.getElementById('auth-loading-splash');
+    const authScreen = document.getElementById('auth-screen');
+    const appContainer = document.getElementById('app-container');
+
+    if (splash) splash.classList.add('hidden');
+    if (appContainer) appContainer.classList.add('hidden');
+    if (authScreen) authScreen.classList.remove('hidden');
+
     this.switchTab('login');
   },
 
-  hideAuthModal() {
-    const modal = document.getElementById('auth-modal');
-    if (modal) {
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
+  showApp() {
+    const splash = document.getElementById('auth-loading-splash');
+    const authScreen = document.getElementById('auth-screen');
+    const appContainer = document.getElementById('app-container');
+
+    if (splash) splash.classList.add('hidden');
+    if (authScreen) authScreen.classList.add('hidden');
+    if (appContainer) appContainer.classList.remove('hidden');
+
     this.clearErrors();
   },
 
@@ -101,14 +117,17 @@ const authUI = {
       return;
     }
 
-    this.setLoading('btn-auth-login-submit', true, '💖 Sign In as Couple');
+    this.setLoading('btn-auth-login-submit', true, 'Login');
     const result = await firebaseService.login(email, pass);
-    this.setLoading('btn-auth-login-submit', false, '💖 Sign In as Couple');
+    this.setLoading('btn-auth-login-submit', false, 'Login');
 
     if (!result.success) {
       this.showError(result.error);
     } else {
-      app.showToast('Welcome back! 💕');
+      this.showApp();
+      if (window.app && app.showToast) {
+        app.showToast('Welcome back! 💕');
+      }
     }
   },
 
@@ -132,14 +151,17 @@ const authUI = {
       return;
     }
 
-    this.setLoading('btn-auth-register-submit', true, '✨ Creating Space...');
+    this.setLoading('btn-auth-register-submit', true, 'Sign Up');
     const result = await firebaseService.register(email, pass, u1, u2, city);
-    this.setLoading('btn-auth-register-submit', false, '✨ Create Our Couple Space');
+    this.setLoading('btn-auth-register-submit', false, 'Sign Up');
 
     if (!result.success) {
       this.showError(result.error);
     } else {
-      app.showToast(`🎉 TwoDo space created for ${u1} & ${u2}!`);
+      this.showApp();
+      if (window.app && app.showToast) {
+        app.showToast(`🎉 TwoDo space created for ${u1} & ${u2}!`);
+      }
     }
   },
 
@@ -160,7 +182,9 @@ const authUI = {
     if (!result.success) {
       this.showError(result.error);
     } else {
-      app.showToast('Password reset email sent! Check your inbox 📬');
+      if (window.app && app.showToast) {
+        app.showToast('Password reset email sent! Check your inbox 📬');
+      }
       this.switchTab('login');
     }
   },
@@ -174,9 +198,14 @@ const authUI = {
 
   async handleLogout() {
     if (confirm('Are you sure you want to log out of TwoDo?')) {
-      app.closeSettingsModal();
+      if (window.app && app.closeSettingsModal) {
+        app.closeSettingsModal();
+      }
       await firebaseService.logout();
-      app.showToast('Logged out.');
+      this.showAuthScreen();
+      if (window.app && app.showToast) {
+        app.showToast('Logged out of TwoDo.');
+      }
     }
   }
 };

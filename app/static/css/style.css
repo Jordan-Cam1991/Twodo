@@ -4292,3 +4292,369 @@ body {
   border-color: #fda4af !important;
 }
 
+/* ========================================================
+   APP CONTAINER & AUTH GATE
+   ======================================================== */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.app-container.hidden {
+  display: none !important;
+}
+
+/* Header Logout Button */
+.btn-logout-header {
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.btn-logout-header:hover {
+  color: var(--primary) !important;
+  border-color: #fecdd3 !important;
+  background: #fff1f2 !important;
+}
+
+.btn-logout-header svg {
+  display: block;
+}
+
+/* ========================================================
+   INITIAL AUTH SPLASH SCREEN
+   ======================================================== */
+.auth-loading-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.auth-loading-splash.hidden {
+  display: none !important;
+}
+
+.auth-splash-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.auth-splash-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffe4e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.2);
+  animation: pulseSplash 1.5s ease-in-out infinite;
+}
+
+.auth-splash-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.auth-splash-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid #fce7f3;
+  border-top-color: #f43f5e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-top: 0.5rem;
+}
+
+@keyframes pulseSplash {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ========================================================
+   CENTSAUBLE-STYLE AUTH SCREEN IN TWODO PALETTE
+   ======================================================== */
+.centsauble-auth-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(180deg, #fdf2f8 0%, #f8fafc 100%);
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  box-sizing: border-box;
+}
+
+.centsauble-auth-screen.hidden {
+  display: none !important;
+}
+
+.centsauble-auth-card {
+  max-width: 420px;
+  width: 100%;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 40px -15px rgba(244, 63, 94, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .centsauble-auth-screen {
+    padding: 2rem 1.25rem;
+    background: #ffffff;
+    align-items: flex-start;
+  }
+  .centsauble-auth-card {
+    padding: 1.5rem 0.25rem;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+  }
+}
+
+.centsauble-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.centsauble-brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffe4e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.18);
+}
+
+.centsauble-brand-name {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.03em;
+}
+
+/* Tabs with Clean Active Underline (Just like Centsauble) */
+.centsauble-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.75rem;
+  width: 100%;
+}
+
+.centsauble-tab-btn {
+  flex: 1;
+  text-align: center;
+  background: transparent;
+  border: none;
+  padding: 0.85rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.centsauble-tab-btn.active {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.centsauble-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #f43f5e;
+  border-radius: 3px 3px 0 0;
+}
+
+.centsauble-section.hidden {
+  display: none !important;
+}
+
+.centsauble-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.centsauble-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 1.75rem;
+  line-height: 1.4;
+}
+
+.centsauble-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.centsauble-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.45rem;
+}
+
+.centsauble-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.centsauble-label-row .centsauble-label {
+  margin-bottom: 0;
+}
+
+.centsauble-forgot-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f43f5e;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.centsauble-forgot-link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.centsauble-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.centsauble-input:focus {
+  outline: none;
+  border-color: #f43f5e;
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+}
+
+.centsauble-input::placeholder {
+  color: #94a3b8;
+}
+
+.centsauble-form-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.centsauble-form-row > * {
+  flex: 1;
+}
+
+.centsauble-select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.centsauble-select:focus {
+  border-color: #f43f5e;
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+}
+
+.centsauble-btn-submit {
+  width: 100%;
+  padding: 0.88rem;
+  background: #f43f5e;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+}
+
+.centsauble-btn-submit:hover {
+  background: #e11d48;
+  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.35);
+}
+
+.centsauble-btn-submit:active {
+  transform: scale(0.99);
+}
+
+.centsauble-btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.centsauble-error-box {
+  padding: 0.75rem 1rem;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  color: #e11d48;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.centsauble-error-box.hidden {
+  display: none !important;
+}
+

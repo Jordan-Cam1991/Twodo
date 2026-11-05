@@ -160,11 +160,17 @@ const firebaseService = {
       app.profile = this.profile;
       app.currentCity = this.profile.default_city || 'Brisbane';
       app.updateProfileUI();
+      if (window.discover && discover.loadEvents) {
+        discover.loadEvents(true);
+      }
+      if (window.planner && planner.loadPlanner) {
+        planner.loadPlanner();
+      }
     }
 
-    // Hide Auth Modal
+    // Reveal Main App & update account details in settings
     if (window.authUI) {
-      authUI.hideAuthModal();
+      authUI.showApp();
       authUI.updateSettingsAccountUI(user.email, this.profile);
     }
 
@@ -186,9 +192,9 @@ const firebaseService = {
     this.messages = [];
     this.customEvents = [];
 
-    // Show Auth Modal
+    // Show Centsauble-style Auth Screen
     if (window.authUI) {
-      authUI.showAuthModal();
+      authUI.showAuthScreen();
     }
   },
 
