@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "twodoapp",
     "public": "app/static",
     "ignore": [
       "firebase.json",
