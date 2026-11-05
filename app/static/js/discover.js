@@ -28,7 +28,7 @@ const discover = {
     this.searchDebounceTimer = setTimeout(() => {
       this.currentPage = 1;
       this.loadEvents(false);
-    }, 250);
+    }, 100);
   },
 
   clearSearch() {
@@ -126,7 +126,7 @@ const discover = {
   async loadEvents(showLoading = false) {
     const grid = document.getElementById('events-grid');
     const empty = document.getElementById('events-empty');
-    if (showLoading && grid) {
+    if (showLoading && grid && (!app.events || app.events.length === 0)) {
       grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;"><span class="spin-icon" style="font-size:2rem; display:inline-block; animation:spin 1s infinite linear;">🔄</span><p style="margin-top:10px; color:var(--text-muted);">Searching councils, venues, galleries, Reddit, and live feeds...</p></div>';
     }
 
@@ -455,7 +455,7 @@ const discover = {
     }
 
     this.updateActiveFilterPillBar();
-    this.loadEvents(true);
+    this.loadEvents(false);
   },
 
   updateActiveFilterPillBar() {

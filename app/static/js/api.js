@@ -1,14 +1,25 @@
 /**
  * TwoDo API Client & Universal Storage Engine
  * Connects to the Python backend when running locally/cloud (Render/Railway),
- * with automatic seamless client-side localStorage fallback when running on Netlify or offline.
+ * with automatic seamless client-side localStorage fallback when running on Firebase/Netlify or offline.
  */
+const isStaticHosting = typeof window !== 'undefined' && (
+  window.location.hostname.includes('web.app') || 
+  window.location.hostname.includes('firebaseapp.com') ||
+  window.location.hostname.includes('github.io') ||
+  window.location.hostname.includes('netlify.app') ||
+  window.location.protocol === 'file:'
+);
+
 const api = {
   baseUrl: '',
-  serverAvailable: null,
+  serverAvailable: isStaticHosting ? false : null,
 
   async safeFetch(url, options = {}) {
-    const timeoutMs = options.timeout || 12000;
+    if (this.serverAvailable === false) {
+      throw new Error('Server not available (static hosting)');
+    }
+    const timeoutMs = options.timeout || 2500;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -28,6 +39,7 @@ const api = {
       return res;
     } catch (err) {
       clearTimeout(timeoutId);
+      this.serverAvailable = false;
       throw err;
     }
   },
@@ -36,6 +48,20 @@ const api = {
   // PROFILE API
   // ---------------------------------------------------------------------------
   async getProfile() {
+    if (this.serverAvailable === false) {
+      const saved = localStorage.getItem('twodo_profile');
+      if (saved) {
+        try { return JSON.parse(saved); } catch (err) {}
+      }
+      return {
+        user1_name: 'Emma',
+        user2_name: 'Jordan',
+        default_city: 'Brisbane',
+        current_city: 'Brisbane',
+        api_keys_json: '{}'
+      };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/profile`);
       this.serverAvailable = true;
@@ -60,6 +86,10 @@ const api = {
 
   async updateProfile(data) {
     localStorage.setItem('twodo_profile', JSON.stringify(data));
+    if (this.serverAvailable === false) {
+      return data;
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/profile`, {
         method: 'POST',
@@ -69,6 +99,7 @@ const api = {
       const resJson = await res.json();
       return resJson?.profile || resJson || data;
     } catch (e) {
+      this.serverAvailable = false;
       return data;
     }
   },
@@ -77,6 +108,10 @@ const api = {
   // EVENTS API (WITH CLIENT-SIDE INTELLIGENT FILTERING FALLBACK)
   // ---------------------------------------------------------------------------
   async getEvents(params = {}) {
+    if (this.serverAvailable === false) {
+      return this.getLocalEnrichedEvents(params);
+    }
+
     const qs = new URLSearchParams();
     if (params.city) qs.append('city', params.city);
     if (params.category && params.category !== 'All') {
@@ -1177,16 +1212,18 @@ const api = {
     ];
 
     let backendResult = null;
-    try {
-      const res = await this.safeFetch(`${this.baseUrl}/api/events/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ city, lat, lng }),
-        timeout: 25000 // 25s for deep Python scraper
-      });
-      backendResult = await res.json();
-    } catch (e) {
-      console.warn('Backend refresh network timeout/bypass, executing deep client scanner:', e);
+    if (this.serverAvailable !== false) {
+      try {
+        const res = await this.safeFetch(`${this.baseUrl}/api/events/refresh`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ city, lat, lng }),
+          timeout: 4000
+        });
+        backendResult = await res.json();
+      } catch (e) {
+        this.serverAvailable = false;
+      }
     }
 
     // Always inject any un-discovered items into localStorage custom events
@@ -1298,6 +1335,24 @@ const api = {
     const isMatch = Boolean(v1 === 'love' && v2 === 'love');
     const matchLevel = isMatch ? 'double_love' : ((['love', 'maybe'].includes(v1) && ['love', 'maybe'].includes(v2)) ? 'mutual_interest' : 'none');
 
+    const result = {
+      success: true,
+      event_id: eventId,
+      user_name: userName,
+      vote: vote,
+      note: note,
+      u1_vote: v1,
+      u2_vote: v2,
+      u1_note: n1,
+      u2_note: n2,
+      is_match: isMatch,
+      match_level: matchLevel
+    };
+
+    if (this.serverAvailable === false) {
+      return result;
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/votes`, {
         method: 'POST',
@@ -1306,19 +1361,8 @@ const api = {
       });
       return await res.json();
     } catch (e) {
-      return {
-        success: true,
-        event_id: eventId,
-        user_name: userName,
-        vote: vote,
-        note: note,
-        u1_vote: v1,
-        u2_vote: v2,
-        u1_note: n1,
-        u2_note: n2,
-        is_match: isMatch,
-        match_level: matchLevel
-      };
+      this.serverAvailable = false;
+      return result;
     }
   },
 
@@ -1326,6 +1370,17 @@ const api = {
   // COUPLE CHAT API (Emma & Jordan Private Chat)
   // ---------------------------------------------------------------------------
   async getChatMessages() {
+    if (this.serverAvailable === false) {
+      if (typeof firebaseService !== 'undefined' && firebaseService.messages && firebaseService.messages.length > 0) {
+        return firebaseService.messages;
+      }
+      try {
+        return JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
+      } catch (err) {
+        return [];
+      }
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/chat`);
       const data = await res.json();
@@ -1335,6 +1390,7 @@ const api = {
       }
       throw new Error('Invalid chat payload');
     } catch (e) {
+      this.serverAvailable = false;
       try {
         return JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
       } catch (err) {
@@ -1351,6 +1407,25 @@ const api = {
       activity_title: activity ? activity.title : null,
       activity_image: activity ? activity.image_url : null
     };
+
+    if (this.serverAvailable === false) {
+      const localMsg = {
+        id: 'msg-' + Date.now(),
+        sender_name: senderName,
+        text: text,
+        activity_id: payload.activity_id,
+        activity_title: payload.activity_title,
+        activity_image: payload.activity_image,
+        created_at: new Date().toISOString()
+      };
+      let msgs = [];
+      try {
+        msgs = JSON.parse(localStorage.getItem('twodo_chat_messages') || '[]');
+      } catch (err) {}
+      msgs.push(localMsg);
+      localStorage.setItem('twodo_chat_messages', JSON.stringify(msgs));
+      return localMsg;
+    }
 
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/chat`, {
@@ -1370,6 +1445,7 @@ const api = {
       }
       throw new Error('Message send failed');
     } catch (e) {
+      this.serverAvailable = false;
       const localMsg = {
         id: Date.now(),
         sender_name: senderName,
@@ -1403,6 +1479,19 @@ const api = {
       localStorage.setItem('twodo_purged_demo_plans_v2', 'true');
     }
 
+    if (this.serverAvailable === false) {
+      let items = [];
+      if (typeof firebaseService !== 'undefined' && firebaseService.plannerItems && firebaseService.plannerItems.length > 0) {
+        items = firebaseService.plannerItems;
+      } else {
+        try {
+          items = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+          items = items.filter(i => i.event_id !== 'bne-eat-street' && i.event_id !== 'bne-rooftop-cinema');
+        } catch (err) {}
+      }
+      return { items: items, count: items.length };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/planner`);
       const data = await res.json();
@@ -1415,6 +1504,7 @@ const api = {
       }
       throw new Error('Invalid planner payload');
     } catch (e) {
+      this.serverAvailable = false;
       let items = [];
       try {
         items = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
@@ -1456,6 +1546,10 @@ const api = {
     items.unshift(newItem);
     localStorage.setItem('twodo_planner', JSON.stringify(items));
 
+    if (this.serverAvailable === false) {
+      return { success: true, item: newItem };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/planner`, {
         method: 'POST',
@@ -1464,6 +1558,7 @@ const api = {
       });
       return await res.json();
     } catch (e) {
+      this.serverAvailable = false;
       return { success: true, item: newItem };
     }
   },
@@ -1479,6 +1574,10 @@ const api = {
       }
     } catch (e) {}
 
+    if (this.serverAvailable === false) {
+      return { success: true };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/planner/${id}`, {
         method: 'PUT',
@@ -1487,6 +1586,7 @@ const api = {
       });
       return await res.json();
     } catch (e) {
+      this.serverAvailable = false;
       return { success: true };
     }
   },
@@ -1499,12 +1599,17 @@ const api = {
       localStorage.setItem('twodo_planner', JSON.stringify(items));
     } catch (e) {}
 
+    if (this.serverAvailable === false) {
+      return { success: true };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/planner/${id}`, {
         method: 'DELETE'
       });
       return await res.json();
     } catch (e) {
+      this.serverAvailable = false;
       return { success: true };
     }
   },
@@ -1540,6 +1645,10 @@ const api = {
       await this.addToPlanner({ event_id: slug, status: 'bucket_list' });
     }
 
+    if (this.serverAvailable === false) {
+      return { success: true, event: customEv };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/events/custom`, {
         method: 'POST',
@@ -1548,15 +1657,30 @@ const api = {
       });
       return await res.json();
     } catch (e) {
+      this.serverAvailable = false;
       return { success: true, event: customEv };
     }
   },
 
   async getSummary() {
+    if (this.serverAvailable === false) {
+      const planner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+      const lines = ['💑 TwoDo: Emma & Jordan Couple Itinerary', '====================================', ''];
+      planner.forEach((it, idx) => {
+        lines.push(`${idx + 1}. ${it.title}`);
+        if (it.scheduled_date) lines.push(`   📅 Date: ${it.scheduled_date} (${it.time_slot || 'Evening'})`);
+        if (it.location_name) lines.push(`   📍 Location: ${it.location_name}`);
+        if (it.notes) lines.push(`   📝 Notes: ${it.notes}`);
+        lines.push('');
+      });
+      return { summary: lines.join('\n') };
+    }
+
     try {
       const res = await this.safeFetch(`${this.baseUrl}/api/export/summary`);
       return await res.json();
     } catch (e) {
+      this.serverAvailable = false;
       const planner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
       const lines = ['💑 TwoDo: Emma & Jordan Couple Itinerary', '====================================', ''];
       planner.forEach((it, idx) => {

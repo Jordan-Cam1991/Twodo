@@ -20,7 +20,7 @@ const app = {
       this.updateProfileUI();
 
       // Load initial events and planner
-      await discover.loadEvents(true);
+      await discover.loadEvents(false);
       await planner.loadPlanner();
 
       console.log('TwoDo ready!');
