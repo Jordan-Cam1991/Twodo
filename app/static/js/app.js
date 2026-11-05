@@ -34,6 +34,9 @@ const app = {
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = this.profile.user1_name || 'Emma';
     const u2 = this.profile.user2_name || 'Jordan';
+    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+      ? firebaseService.userProfile.name
+      : (localStorage.getItem('twodo_user_name') || u1 || 'You');
 
     // 1. Header voter switch vs. solo bar
     const voterSwitch = document.getElementById('voter-switch-container');
@@ -43,9 +46,6 @@ const app = {
     if (isSolo) {
       if (voterSwitch) voterSwitch.classList.add('hidden');
       if (soloBar) soloBar.classList.remove('hidden');
-      const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
-        ? firebaseService.userProfile.name
-        : (localStorage.getItem('twodo_user_name') || u1 || 'You');
       if (soloUserDisplay) soloUserDisplay.textContent = activeSoloName;
     } else {
       if (voterSwitch) voterSwitch.classList.remove('hidden');
@@ -298,12 +298,22 @@ const app = {
   },
 
   openSettingsModal() {
-    this.updateProfileUI();
-    document.getElementById('settings-modal').classList.remove('hidden');
+    try {
+      this.updateProfileUI();
+    } catch (err) {
+      console.warn('updateProfileUI note in openSettingsModal:', err);
+    }
+    const modal = document.getElementById('settings-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
   },
 
   closeSettingsModal() {
-    document.getElementById('settings-modal').classList.add('hidden');
+    const modal = document.getElementById('settings-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
   },
 
   async saveSettings(e) {
