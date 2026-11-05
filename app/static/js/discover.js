@@ -190,6 +190,7 @@ const discover = {
 
     if (!grid) return;
 
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = app.profile?.user1_name || 'Emma';
     const u2 = app.profile?.user2_name || 'Jordan';
     const activeVoter = app.getActiveVoterName();
@@ -269,14 +270,14 @@ const discover = {
       const maybeActive = currentVote === 'maybe' ? 'active-maybe' : '';
       const passActive = currentVote === 'pass' ? 'active-pass' : '';
 
-      // Match banner
-      const matchBannerHtml = isMatch 
+      // Match banner (only shown in Coupled Mode)
+      const matchBannerHtml = (!isSolo && isMatch)
         ? `<div class="card-match-banner">🎉 Mutual Match! Both Want To Do This</div>` 
         : '';
 
       // Tip HTML
       const tipHtml = ev.insider_tip 
-        ? `<div class="card-tip"><strong>💡 Couple Tip:</strong> ${ev.insider_tip}</div>`
+        ? `<div class="card-tip"><strong>💡 ${isSolo ? 'Insider Tip:' : 'Couple Tip:'}</strong> ${ev.insider_tip}</div>`
         : '';
 
       // Love Notes HTML
@@ -344,19 +345,27 @@ const discover = {
 
             ${tipHtml}
 
-            <!-- Couple Voting Status Tracker -->
-            <div class="card-couple-status">
-              <div class="vote-partner-tag">
-                <span style="color:var(--primary)">❤️ ${u1}:</span>
-                <span>${v1 === 'love' ? 'Loves it!' : (v1 === 'maybe' ? 'Maybe' : (v1 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+            <!-- Voting Status Tracker (Solo vs Coupled) -->
+            ${isSolo ? `
+              <div class="card-solo-status" style="margin-bottom:0.75rem;">
+                <span class="solo-status-badge" style="font-size:0.84rem; font-weight:600; color:var(--text-muted); display:inline-flex; align-items:center; gap:0.35rem; background:#f8fafc; padding:0.3rem 0.65rem; border-radius:8px; border:1px solid var(--border);">
+                  ${currentVote === 'love' ? '❤️ Saved to My Loves' : (currentVote === 'maybe' ? '🤔 In Maybe list' : (currentVote === 'pass' ? '❌ Passed' : '✨ Exploring'))}
+                </span>
               </div>
-              <div class="vote-partner-tag">
-                <span style="color:var(--secondary)">💜 ${u2}:</span>
-                <span>${v2 === 'love' ? 'Loves it!' : (v2 === 'maybe' ? 'Maybe' : (v2 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+            ` : `
+              <div class="card-couple-status">
+                <div class="vote-partner-tag">
+                  <span style="color:var(--primary)">❤️ ${u1}:</span>
+                  <span>${v1 === 'love' ? 'Loves it!' : (v1 === 'maybe' ? 'Maybe' : (v1 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+                </div>
+                <div class="vote-partner-tag">
+                  <span style="color:var(--secondary)">💜 ${u2}:</span>
+                  <span>${v2 === 'love' ? 'Loves it!' : (v2 === 'maybe' ? 'Maybe' : (v2 === 'pass' ? 'Pass' : 'Thinking...'))}</span>
+                </div>
               </div>
-            </div>
+            `}
 
-            ${loveNotesHtml}
+            ${!isSolo ? loveNotesHtml : ''}
 
             <!-- Streamlined Voting & Planning Action Bar -->
             <div class="card-actions-streamlined">
@@ -373,8 +382,8 @@ const discover = {
                 </button>
               </div>
               <div class="card-utility-row">
-                ${noteBtnHtml}
-                ${chatShareBtnHtml}
+                ${!isSolo ? noteBtnHtml : ''}
+                ${!isSolo ? chatShareBtnHtml : ''}
                 ${scheduleBtnHtml}
               </div>
             </div>
@@ -496,10 +505,19 @@ const discover = {
     let customEvents = [];
     try { customEvents = JSON.parse(localStorage.getItem('twodo_custom_events') || '[]'); } catch (e) {}
     const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
-    return [...fbCustoms, ...customEvents, ...rawSeeds];
+    const appEvs = (typeof app !== 'undefined' && Array.isArray(app.events)) ? app.events : [];
+    
+    const combined = [...fbCustoms, ...customEvents, ...appEvs, ...rawSeeds];
+    const seen = new Set();
+    return combined.filter(ev => {
+      if (!ev || !ev.id || seen.has(ev.id)) return false;
+      seen.add(ev.id);
+      return true;
+    });
   },
 
   updateMatchBanner() {
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const banner = document.getElementById('matches-callout-banner');
     const title = document.getElementById('matches-banner-title');
     const moodBadge = document.getElementById('mood-matches-count');
@@ -559,7 +577,7 @@ const discover = {
     }
 
     if (!banner || !title) return;
-    if (matchesCount > 0) {
+    if (!isSolo && matchesCount > 0) {
       banner.classList.remove('hidden');
       title.textContent = `${matchesCount} Mutual Date ${matchesCount === 1 ? 'Match' : 'Matches'}!`;
     } else {

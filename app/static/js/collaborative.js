@@ -79,7 +79,7 @@ const collaborative = {
     if (window.mapView) mapView.renderMarkers();
 
     // 5. ASYNC FIREBASE FIRESTORE SYNC (non-blocking in background)
-    if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
+    if (typeof firebaseService !== 'undefined' && (firebaseService.coupleId || firebaseService.currentUser)) {
       if (isTogether) {
         firebaseService.saveVote(eventId, u1, voteType, note).catch(e => console.warn('Vote sync u1 note:', e));
         firebaseService.saveVote(eventId, u2, voteType, note).catch(e => console.warn('Vote sync u2 note:', e));

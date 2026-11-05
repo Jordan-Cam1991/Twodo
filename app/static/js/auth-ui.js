@@ -172,14 +172,14 @@ const authUI = {
     e.preventDefault();
     this.clearErrors();
 
+    const name = document.getElementById('reg-name').value;
     const email = document.getElementById('reg-email').value;
     const pass = document.getElementById('reg-password').value;
-    const u1 = document.getElementById('reg-user1').value;
-    const u2 = document.getElementById('reg-user2').value;
     const city = document.getElementById('reg-city')?.value || 'Brisbane';
+    const pairCode = document.getElementById('reg-pair-code')?.value || null;
 
-    if (!email || !pass || !u1 || !u2) {
-      this.showError('Please fill in all couple details.');
+    if (!name || !email || !pass) {
+      this.showError('Please enter your name, email, and password.');
       return;
     }
 
@@ -189,7 +189,7 @@ const authUI = {
     }
 
     this.setLoading('btn-auth-register-submit', true, 'Sign Up');
-    const result = await firebaseService.register(email, pass, u1, u2, city);
+    const result = await firebaseService.register(email, pass, name, city, pairCode);
     this.setLoading('btn-auth-register-submit', false, 'Sign Up');
 
     if (!result.success) {
@@ -204,7 +204,11 @@ const authUI = {
       this.setDeviceSession(result.user?.uid, email, pass);
       this.showApp();
       if (window.app && app.showToast) {
-        app.showToast(`🎉 TwoDo space created for ${u1} & ${u2}!`);
+        if (pairCode && !firebaseService.isSolo) {
+          app.showToast('🎉 Accounts linked! Welcome to your shared space 💕');
+        } else {
+          app.showToast(`🎉 Welcome to TwoDo, ${name}!`);
+        }
       }
     }
   },
@@ -233,11 +237,162 @@ const authUI = {
     }
   },
 
-  updateSettingsAccountUI(email, profile) {
+  // ---------------------------------------------------------------------------
+  // PAIR WITH PARTNER MODAL & CODE SHARING
+  // ---------------------------------------------------------------------------
+  openPairModal() {
+    const modal = document.getElementById('pair-partner-modal');
+    const codeDisplay = document.getElementById('my-pair-code-display');
+    const errorBox = document.getElementById('pair-error-box');
+    const input = document.getElementById('input-partner-code');
+
+    if (codeDisplay) {
+      codeDisplay.textContent = firebaseService.pairCode || 'TD-••••';
+    }
+    if (errorBox) {
+      errorBox.textContent = '';
+      errorBox.classList.add('hidden');
+    }
+    if (input) input.value = '';
+
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  },
+
+  closePairModal() {
+    const modal = document.getElementById('pair-partner-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
+
+  handlePairModalOverlayClick(e) {
+    if (e.target.id === 'pair-partner-modal') {
+      this.closePairModal();
+    }
+  },
+
+  copyMyPairCode() {
+    const code = firebaseService.pairCode;
+    if (!code) return;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('btn-copy-code');
+        if (btn) {
+          const prev = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => { btn.textContent = prev; }, 1800);
+        }
+        if (window.app && app.showToast) {
+          app.showToast(`📋 Code "${code}" copied to clipboard! Text it to your partner.`);
+        }
+      }).catch(() => {
+        prompt('Copy your invite code:', code);
+      });
+    } else {
+      prompt('Copy your invite code:', code);
+    }
+  },
+
+  async handlePairSubmit(e) {
+    e.preventDefault();
+    const input = document.getElementById('input-partner-code');
+    const errBox = document.getElementById('pair-error-box');
+    const btn = document.getElementById('btn-pair-submit');
+
+    const code = input?.value?.trim() || '';
+    if (!code) return;
+
+    if (errBox) {
+      errBox.textContent = '';
+      errBox.classList.add('hidden');
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<span class="auth-spinner"></span> Linking...`;
+    }
+
+    const res = await firebaseService.pairWithPartner(code);
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `🔗 Link Together`;
+    }
+
+    if (!res.success) {
+      if (errBox) {
+        errBox.textContent = res.error;
+        errBox.classList.remove('hidden');
+      }
+    } else {
+      this.closePairModal();
+      if (window.app && app.showToast) {
+        app.showToast(`🎉 Linked with ${res.partnerName}! Spaces combined 💕`);
+      }
+      if (window.app && app.playCelebrationSound) {
+        app.playCelebrationSound();
+      }
+    }
+  },
+
+  updatePairCodeUI(code) {
+    const disp1 = document.getElementById('my-pair-code-display');
+    const disp2 = document.getElementById('settings-my-code');
+    if (disp1 && code) disp1.textContent = code;
+    if (disp2 && code) disp2.textContent = code;
+  },
+
+  updateSettingsAccountUI(email, profile, isSolo = false, partnerName = null) {
     const accEmail = document.getElementById('settings-account-email');
     const accNames = document.getElementById('settings-account-names');
+    const badge = document.getElementById('settings-account-badge');
+    const pairSection = document.getElementById('settings-pair-section');
+    const pairTitle = document.getElementById('settings-pair-title');
+    const pairStatus = document.getElementById('settings-pair-status');
+    const pairBtn = document.getElementById('btn-settings-pair-action');
+
     if (accEmail) accEmail.textContent = email || 'Signed In';
-    if (accNames) accNames.textContent = `${profile?.user1_name || 'Partner 1'} & ${profile?.user2_name || 'Partner 2'}`;
+
+    if (isSolo) {
+      if (badge) {
+        badge.textContent = '👤 Solo Explorer';
+        badge.style.background = '#f1f5f9';
+        badge.style.color = '#475569';
+      }
+      if (accNames) accNames.textContent = profile?.user1_name || 'You';
+      if (pairTitle) pairTitle.textContent = 'Partner Connection';
+      if (pairStatus) pairStatus.textContent = 'Link with your partner to combine spaces';
+      if (pairBtn) {
+        pairBtn.textContent = 'Pair Code ✨';
+        pairBtn.onclick = () => { app.closeSettingsModal(); authUI.openPairModal(); };
+      }
+    } else {
+      if (badge) {
+        badge.textContent = '💑 Active Couple';
+        badge.style.background = '#ffe4e6';
+        badge.style.color = '#e11d48';
+      }
+      if (accNames) accNames.textContent = `${profile?.user1_name || 'Emma'} & ${profile?.user2_name || 'Jordan'}`;
+      if (pairTitle) pairTitle.textContent = `Linked with ${partnerName || profile?.user2_name || 'Partner'}`;
+      if (pairStatus) pairStatus.textContent = 'Spaces combined • Sharing likes, notes & chat';
+      if (pairBtn) {
+        pairBtn.textContent = 'Unlink';
+        pairBtn.onclick = async () => {
+          if (confirm('Are you sure you want to unlink partner? You will return to solo explorer mode.')) {
+            await firebaseService.unpairPartner();
+            app.closeSettingsModal();
+            app.showToast('Unlinked from partner space.');
+          }
+        };
+      }
+    }
+
+    this.updatePairCodeUI(firebaseService.pairCode);
   },
 
   async handleLogout() {

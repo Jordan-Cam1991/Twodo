@@ -4756,3 +4756,155 @@ html.device-authenticated #app-container {
   display: none !important;
 }
 
+/* ========================================================
+   SOLO EXPLORER MODE & PARTNER PAIRING
+   ======================================================== */
+.solo-bar-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.solo-bar-wrap.hidden {
+  display: none !important;
+}
+
+.solo-user-badge {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.solo-user-badge strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.btn-pair-partner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-pair-partner-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(225, 29, 72, 0.35);
+}
+
+.btn-pair-partner-pill:active {
+  transform: scale(0.97);
+}
+
+/* Partner Pairing Modal */
+.pair-modal-card {
+  max-width: 440px;
+  width: 92%;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.pair-code-share-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pair-code-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.pair-code-display {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--primary);
+  background: #ffffff;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #fecdd3;
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08);
+}
+
+.btn-copy-pair-code {
+  background: var(--text-main);
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.88rem;
+}
+
+.btn-copy-pair-code:hover {
+  background: #000000;
+}
+
+.pair-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.pair-divider::before,
+.pair-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.pair-divider span {
+  padding: 0 0.75rem;
+}
+
+.btn-copy-mini {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: var(--text-main);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-copy-mini:hover {
+  background: #e2e8f0;
+}
+
+

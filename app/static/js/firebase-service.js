@@ -1,21 +1,24 @@
 /**
  * TwoDo Firebase Real-Time Service
- * Manages Multi-Couple Authentication & Cloud Firestore Synchronization
+ * Manages Individual Authentication, Solo Explorer Mode, Partner Pairing & Cloud Firestore Sync
  */
 const firebaseService = {
   auth: null,
   db: null,
   currentUser: null,
-  coupleId: null,
-  profile: null,
-  
+  userProfile: null, // Individual user record { uid, name, email, pair_code, status, couple_id, partner_uid, partner_name }
+  isSolo: true,      // true when single / not paired yet, false when linked in a couple
+  coupleId: null,    // coupled document ID (or null when solo)
+  profile: null,     // active display profile { user1_name, user2_name, default_city }
+  pairCode: null,    // user's 6-character partner invite code (e.g. TD-4892)
+
   // Real-time unsubscription handles
   unsubVotes: null,
   unsubPlanner: null,
   unsubMessages: null,
   unsubCustomEvents: null,
 
-  // In-memory data store for the active couple
+  // In-memory data store
   votesMap: {},
   notesMap: {},
   plannerItems: [],
@@ -37,36 +40,39 @@ const firebaseService = {
 
     // Enable offline persistence if supported (safe non-blocking)
     try {
-      this.db.enablePersistence().catch(err => {
-        // Multi-tab or unsupported - silent catch
-      });
+      this.db.enablePersistence().catch(() => {});
     } catch (e) {}
 
-    // Check device session & restore coupleId immediately if cached
+    // Restore cached session identity immediately so UI is 0ms responsive
     const hasSession = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
     const cachedUid = localStorage.getItem('twodo_user_uid');
+    const cachedProfile = localStorage.getItem('twodo_user_profile');
 
-    if (hasSession && cachedUid) {
-      this.coupleId = cachedUid;
-      this.attachListeners(cachedUid);
+    if (hasSession && cachedProfile) {
+      try {
+        this.userProfile = JSON.parse(cachedProfile);
+        this.pairCode = this.userProfile?.pair_code;
+        if (this.userProfile?.couple_id) {
+          this.isSolo = false;
+          this.coupleId = this.userProfile.couple_id;
+          this.attachListeners(this.coupleId);
+        } else if (cachedUid) {
+          this.isSolo = true;
+          this.coupleId = null;
+          this.attachSoloListeners(cachedUid);
+        }
+      } catch (e) {}
     }
 
     // Listen for authentication state changes
     this.auth.onAuthStateChanged(async (user) => {
       if (user) {
         this.currentUser = user;
-        this.coupleId = user.uid;
         await this.handleUserSignedIn(user);
       } else {
         const stillActive = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
         if (stillActive) {
-          // Device has an active session! Restore coupleId & perform silent background re-auth
-          const savedUid = localStorage.getItem('twodo_user_uid');
-          if (savedUid && !this.coupleId) {
-            this.coupleId = savedUid;
-            this.attachListeners(savedUid);
-          }
-
+          // Silent background re-auth for mobile WebKit restarts
           let cachedAuth = null;
           try {
             const raw = localStorage.getItem('twodo_auth_cache');
@@ -74,12 +80,9 @@ const firebaseService = {
           } catch (e) {}
 
           if (cachedAuth && cachedAuth.e && cachedAuth.p) {
-            console.log('Performing silent background session restore for iPhone/mobile...');
             this.auth.signInWithEmailAndPassword(cachedAuth.e, cachedAuth.p)
               .then(cred => this.handleUserSignedIn(cred.user))
-              .catch(err => {
-                console.warn('Background re-auth note (keeping offline couple space):', err);
-              });
+              .catch(err => console.warn('Background re-auth note (keeping offline space):', err));
           }
         } else {
           this.handleUserSignedOut();
@@ -88,90 +91,120 @@ const firebaseService = {
     });
   },
 
+  generatePairCode(name = '') {
+    const letters = (name || '').replace(/[^a-zA-Z]/g, '').slice(0, 2).toUpperCase() || 'TD';
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `${letters}-${rand}`;
+  },
+
   // ---------------------------------------------------------------------------
-  // AUTHENTICATION
+  // AUTHENTICATION: LOGIN & REGISTER
   // ---------------------------------------------------------------------------
   async login(email, password) {
     try {
       try {
         await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       } catch (e) {}
-      const cred = await this.auth.signInWithEmailAndPassword(email.trim(), password);
+
+      const cleanEmail = email.trim().toLowerCase();
+      const cred = await this.auth.signInWithEmailAndPassword(cleanEmail, password);
       this.currentUser = cred.user;
-      this.coupleId = cred.user.uid;
+
       if (window.authUI && authUI.setDeviceSession) {
-        authUI.setDeviceSession(cred.user.uid, cred.user.email, password);
+        authUI.setDeviceSession(cred.user.uid, cleanEmail, password);
       }
+
+      await this.handleUserSignedIn(cred.user);
       return { success: true, user: cred.user };
     } catch (err) {
       return { success: false, error: this.formatAuthError(err) };
     }
   },
 
-  async register(email, password, user1Name, user2Name, defaultCity = 'Brisbane') {
+  async register(email, password, name, defaultCity = 'Brisbane', partnerCode = null) {
     try {
-      const u1 = (user1Name || '').trim() || 'Partner 1';
-      const u2 = (user2Name || '').trim() || 'Partner 2';
+      const cleanName = (name || '').trim() || 'Explorer';
       const city = (defaultCity || '').trim() || 'Brisbane';
+      const cleanEmail = email.trim().toLowerCase();
 
-      // Set profile immediately in memory & localStorage so UI is instant
-      const coupleDoc = {
-        user1_name: u1,
-        user1_color: '#ec4899',
-        user2_name: u2,
-        user2_color: '#8b5cf6',
-        default_city: city,
-        email: email.trim(),
-        created_at: new Date().toISOString()
-      };
-      this.profile = coupleDoc;
-      try {
-        localStorage.setItem('twodo_profile', JSON.stringify(coupleDoc));
-      } catch (e) {}
-
-      // Ensure local persistence for new accounts
       try {
         await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       } catch (e) {}
 
-      // Create Firebase Auth user
-      const cred = await this.auth.createUserWithEmailAndPassword(email.trim(), password);
+      // Create individual Firebase Auth user
+      const cred = await this.auth.createUserWithEmailAndPassword(cleanEmail, password);
       const uid = cred.user.uid;
       this.currentUser = cred.user;
-      this.coupleId = uid;
 
       if (window.authUI && authUI.setDeviceSession) {
-        authUI.setDeviceSession(uid, email.trim(), password);
+        authUI.setDeviceSession(uid, cleanEmail, password);
       }
 
-      // Update app state immediately so UI opens with registered couple names
-      if (window.app) {
-        app.profile = coupleDoc;
-        app.currentCity = city;
-        app.updateProfileUI();
-        if (window.discover && discover.loadEvents) {
-          discover.loadEvents(true);
+      // Generate unique pairing code
+      const pairCode = this.generatePairCode(cleanName);
+      this.pairCode = pairCode;
+
+      // Individual user document
+      const userDoc = {
+        uid: uid,
+        name: cleanName,
+        email: cleanEmail,
+        city: city,
+        pair_code: pairCode,
+        status: 'single',
+        couple_id: null,
+        partner_uid: null,
+        partner_name: null,
+        created_at: new Date().toISOString()
+      };
+      this.userProfile = userDoc;
+      localStorage.setItem('twodo_user_profile', JSON.stringify(userDoc));
+
+      // Save user doc & pair code index to Firestore (non-blocking in background)
+      this.db.collection('users').doc(uid).set(userDoc).catch(e => console.warn('User doc save note:', e));
+      this.db.collection('pair_codes').doc(pairCode).set({
+        code: pairCode,
+        user_uid: uid,
+        user_name: cleanName,
+        created_at: new Date().toISOString()
+      }).catch(e => console.warn('Pair code index save note:', e));
+
+      if (window.authUI && authUI.setDeviceSession) {
+        authUI.setDeviceSession(uid, cleanEmail, password);
+      }
+
+      // Default to Solo Mode
+      this.isSolo = true;
+      this.coupleId = null;
+      this.profile = {
+        user1_name: cleanName,
+        user2_name: 'Partner',
+        default_city: city
+      };
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+      this.attachSoloListeners(uid);
+
+      // If user supplied a partner invite code during registration, link immediately!
+      if (partnerCode && partnerCode.trim()) {
+        const pairRes = await this.pairWithPartner(partnerCode.trim());
+        if (!pairRes.success) {
+          console.warn('Initial partner pairing notice:', pairRes.error);
         }
       }
 
-      // Background Firestore persistence (non-blocking)
-      this.db.collection('couples').doc(uid).set({
-        ...coupleDoc,
-        created_at: firebase.firestore.FieldValue.serverTimestamp()
-      }).catch(err => console.warn('Background Firestore profile save note:', err));
+      // Update global UI state
+      if (window.app) {
+        app.profile = this.profile;
+        app.currentCity = city;
+        app.updateProfileUI();
+        if (window.discover && discover.loadEvents) discover.loadEvents(true);
+        if (window.planner && planner.loadPlanner) planner.loadPlanner();
+      }
 
-      // Background welcome chat message (non-blocking)
-      this.db.collection('couples').doc(uid).collection('messages').add({
-        sender_name: u1,
-        text: `Hey ${u2}! Welcome to our TwoDo app 💕 Ready to find some fun dates?`,
-        activity_id: null,
-        activity_title: null,
-        activity_image: null,
-        created_at: firebase.firestore.FieldValue.serverTimestamp()
-      }).catch(err => console.warn('Background Firestore message note:', err));
-
-      // Attach Firestore listeners
-      this.attachListeners(uid);
+      if (window.authUI) {
+        authUI.updatePairCodeUI(this.pairCode);
+        authUI.updateSettingsAccountUI(cleanEmail, this.profile, this.isSolo, this.userProfile?.partner_name);
+      }
 
       return { success: true, user: cred.user };
     } catch (err) {
@@ -201,7 +234,7 @@ const firebaseService = {
   formatAuthError(err) {
     const code = err.code || '';
     if (code.includes('invalid-email')) return 'Please enter a valid email address.';
-    if (code.includes('user-not-found')) return 'No couple account found with this email.';
+    if (code.includes('user-not-found')) return 'No account found with this email.';
     if (code.includes('wrong-password') || code.includes('invalid-credential')) return 'Incorrect email or password.';
     if (code.includes('email-already-in-use')) return 'This email is already registered. Try signing in.';
     if (code.includes('weak-password')) return 'Password should be at least 6 characters.';
@@ -209,74 +242,299 @@ const firebaseService = {
   },
 
   // ---------------------------------------------------------------------------
-  // AUTH STATE HANDLERS
+  // PARTNER PAIRING ENGINE (CONNECTING SPACES VIA CODE)
   // ---------------------------------------------------------------------------
-  async handleUserSignedIn(user) {
-    console.log('Couple signed in:', user.email, 'UID:', user.uid);
-    this.currentUser = user;
-    this.coupleId = user.uid;
+  async pairWithPartner(inputCode) {
+    if (!this.currentUser) return { success: false, error: 'Please log in to link accounts.' };
 
-    if (window.authUI && authUI.setDeviceSession) {
-      authUI.setDeviceSession(user.uid, user.email);
-    }
+    const cleanCode = (inputCode || '').trim().toUpperCase();
+    if (!cleanCode) return { success: false, error: 'Please enter a valid invite code.' };
 
-    // If profile is not in memory yet (e.g. reload or fresh login), check cache and Firestore
-    if (!this.profile) {
+    try {
+      // 1. Look up code in pair_codes index
+      const codeSnap = await this.db.collection('pair_codes').doc(cleanCode).get();
+      if (!codeSnap.exists) {
+        return { success: false, error: `Invite code "${cleanCode}" was not found. Please verify with your partner!` };
+      }
+
+      const pairData = codeSnap.data();
+      const partnerUid = pairData.user_uid;
+      const partnerName = pairData.user_name || 'Partner';
+      const myUid = this.currentUser.uid;
+      const myName = this.userProfile?.name || app.profile?.user1_name || 'Partner 1';
+
+      if (partnerUid === myUid) {
+        return { success: false, error: "That's your own invite code! Send it to your partner to enter on their phone." };
+      }
+
+      // 2. Check if partner is already coupled with someone else
       try {
-        const cached = localStorage.getItem('twodo_profile');
-        if (cached) {
-          this.profile = JSON.parse(cached);
+        const partnerUserSnap = await this.db.collection('users').doc(partnerUid).get();
+        if (partnerUserSnap.exists) {
+          const pUserData = partnerUserSnap.data();
+          if (pUserData.couple_id && pUserData.couple_id !== this.coupleId) {
+            return { success: false, error: `${partnerName} is already linked with another partner.` };
+          }
         }
       } catch (e) {}
 
-      // Fetch fresh profile from Firestore with 2s timeout so we never hang
+      // 3. Create or establish canonical couple ID (deterministic sort avoids duplicates)
+      const canonicalCoupleId = 'couple_' + [myUid, partnerUid].sort().join('_');
+      const coupleDoc = {
+        couple_id: canonicalCoupleId,
+        user1_uid: myUid,
+        user1_name: myName,
+        user2_uid: partnerUid,
+        user2_name: partnerName,
+        default_city: this.userProfile?.city || 'Brisbane',
+        paired_at: new Date().toISOString()
+      };
+
+      await this.db.collection('couples').doc(canonicalCoupleId).set(coupleDoc, { merge: true });
+
+      // 4. Update both user records to "coupled" status
+      await this.db.collection('users').doc(myUid).set({
+        status: 'coupled',
+        couple_id: canonicalCoupleId,
+        partner_uid: partnerUid,
+        partner_name: partnerName
+      }, { merge: true });
+
+      await this.db.collection('users').doc(partnerUid).set({
+        status: 'coupled',
+        couple_id: canonicalCoupleId,
+        partner_uid: myUid,
+        partner_name: myName
+      }, { merge: true });
+
+      // 5. Merge existing solo votes from both users into the shared couple space!
       try {
-        const fetchPromise = this.db.collection('couples').doc(user.uid).get();
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000));
-        const doc = await Promise.race([fetchPromise, timeoutPromise]);
-        if (doc && doc.exists) {
-          this.profile = doc.data();
-          try {
-            localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
-          } catch (e) {}
-        }
-      } catch (e) {
-        console.warn('Profile fetch note:', e);
+        const mySoloVotes = await this.db.collection('users').doc(myUid).collection('votes').get();
+        mySoloVotes.forEach(doc => {
+          this.db.collection('couples').doc(canonicalCoupleId).collection('votes').doc(doc.id).set({
+            event_id: doc.id,
+            [`votes.${myName}`]: doc.data().vote,
+            [`notes.${myName}`]: doc.data().note || '',
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        });
+      } catch (e) {}
+
+      // 6. Switch to Coupled Mode
+      this.isSolo = false;
+      this.coupleId = canonicalCoupleId;
+      if (this.userProfile) {
+        this.userProfile.status = 'coupled';
+        this.userProfile.couple_id = canonicalCoupleId;
+        this.userProfile.partner_uid = partnerUid;
+        this.userProfile.partner_name = partnerName;
+      }
+      this.profile = {
+        user1_name: myName,
+        user2_name: partnerName,
+        default_city: coupleDoc.default_city
+      };
+
+      localStorage.setItem('twodo_user_profile', JSON.stringify(this.userProfile));
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+
+      this.detachListeners();
+      this.attachListeners(canonicalCoupleId);
+
+      // Add welcoming chat message
+      this.db.collection('couples').doc(canonicalCoupleId).collection('messages').add({
+        sender_name: myName,
+        text: `Hey ${partnerName}! 💕 We're officially linked on TwoDo! Let's find some date ideas!`,
+        activity_id: null,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(() => {});
+
+      if (window.app) {
+        app.profile = this.profile;
+        app.updateProfileUI();
+        if (window.discover && discover.loadEvents) discover.loadEvents(true);
+        if (window.planner && planner.loadPlanner) planner.loadPlanner();
+      }
+
+      if (window.authUI) {
+        authUI.updatePairCodeUI(this.pairCode);
+        authUI.updateSettingsAccountUI(this.currentUser.email, this.profile, false, partnerName);
+      }
+
+      return { success: true, partnerName };
+    } catch (err) {
+      console.error('Pairing error:', err);
+      return { success: false, error: err.message || 'Could not link accounts. Check connection.' };
+    }
+  },
+
+  async unpairPartner() {
+    if (!this.currentUser || !this.userProfile) return { success: false };
+    const myUid = this.currentUser.uid;
+    const partnerUid = this.userProfile.partner_uid;
+
+    try {
+      await this.db.collection('users').doc(myUid).set({
+        status: 'single',
+        couple_id: null,
+        partner_uid: null,
+        partner_name: null
+      }, { merge: true });
+
+      if (partnerUid) {
+        await this.db.collection('users').doc(partnerUid).set({
+          status: 'single',
+          couple_id: null,
+          partner_uid: null,
+          partner_name: null
+        }, { merge: true });
+      }
+
+      this.isSolo = true;
+      this.coupleId = null;
+      this.userProfile.status = 'single';
+      this.userProfile.couple_id = null;
+      this.userProfile.partner_uid = null;
+      this.userProfile.partner_name = null;
+      this.profile = {
+        user1_name: this.userProfile.name || 'You',
+        user2_name: 'Partner',
+        default_city: this.userProfile.city || 'Brisbane'
+      };
+
+      localStorage.setItem('twodo_user_profile', JSON.stringify(this.userProfile));
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+
+      this.detachListeners();
+      this.attachSoloListeners(myUid);
+
+      if (window.app) {
+        app.profile = this.profile;
+        app.updateProfileUI();
+        if (window.discover && discover.loadEvents) discover.loadEvents(true);
+      }
+
+      if (window.authUI) {
+        authUI.updatePairCodeUI(this.pairCode);
+        authUI.updateSettingsAccountUI(this.currentUser.email, this.profile, true, null);
+      }
+
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  },
+
+  // ---------------------------------------------------------------------------
+  // AUTH STATE HANDLERS
+  // ---------------------------------------------------------------------------
+  async handleUserSignedIn(user) {
+    console.log('User signed in:', user.email, 'UID:', user.uid);
+    this.currentUser = user;
+    const uid = user.uid;
+
+    if (window.authUI && authUI.setDeviceSession) {
+      authUI.setDeviceSession(uid, user.email);
+    }
+
+    // 1. Fetch individual user record from Firestore / cache
+    let userDoc = null;
+    try {
+      const uDocSnap = await this.db.collection('users').doc(uid).get();
+      if (uDocSnap.exists) {
+        userDoc = uDocSnap.data();
+      }
+    } catch (e) {
+      console.warn('User doc fetch note:', e);
+    }
+
+    if (!userDoc) {
+      try {
+        const cached = localStorage.getItem('twodo_user_profile');
+        if (cached) userDoc = JSON.parse(cached);
+      } catch (e) {}
+
+      if (!userDoc) {
+        const fallbackName = (user.email || '').split('@')[0] || 'Explorer';
+        const code = this.generatePairCode(fallbackName);
+        userDoc = {
+          uid: uid,
+          name: fallbackName,
+          email: user.email,
+          city: 'Brisbane',
+          pair_code: code,
+          status: 'single',
+          couple_id: null,
+          partner_uid: null,
+          partner_name: null,
+          created_at: new Date().toISOString()
+        };
+        this.db.collection('users').doc(uid).set(userDoc).catch(() => {});
+        this.db.collection('pair_codes').doc(code).set({ code, user_uid: uid, user_name: fallbackName }).catch(() => {});
       }
     }
 
-    if (!this.profile) {
+    this.userProfile = userDoc;
+    this.pairCode = userDoc.pair_code;
+    localStorage.setItem('twodo_user_profile', JSON.stringify(userDoc));
+
+    // 2. Check if coupled or solo
+    if (userDoc.couple_id) {
+      // COUPLED MODE
+      this.isSolo = false;
+      this.coupleId = userDoc.couple_id;
+
+      try {
+        const cSnap = await this.db.collection('couples').doc(userDoc.couple_id).get();
+        if (cSnap.exists) {
+          const cData = cSnap.data();
+          this.profile = {
+            user1_name: cData.user1_name || 'Emma',
+            user2_name: cData.user2_name || 'Jordan',
+            default_city: cData.default_city || userDoc.city || 'Brisbane'
+          };
+          localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+        }
+      } catch (e) {
+        console.warn('Couple doc fetch note:', e);
+      }
+
+      if (!this.profile) {
+        this.profile = {
+          user1_name: userDoc.name || 'Partner 1',
+          user2_name: userDoc.partner_name || 'Partner 2',
+          default_city: userDoc.city || 'Brisbane'
+        };
+      }
+
+      this.attachListeners(this.coupleId);
+    } else {
+      // SOLO MODE
+      this.isSolo = true;
+      this.coupleId = null;
       this.profile = {
-        user1_name: 'Emma',
-        user1_color: '#ec4899',
-        user2_name: 'Jordan',
-        user2_color: '#8b5cf6',
-        default_city: 'Brisbane',
-        email: user.email
+        user1_name: userDoc.name || 'You',
+        user2_name: 'Partner',
+        default_city: userDoc.city || 'Brisbane'
       };
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+      this.attachSoloListeners(uid);
     }
 
-    // Update global app state with couple profile
+    // 3. Update Global UI & App State
     if (window.app) {
       app.profile = this.profile;
       app.currentCity = this.profile.default_city || 'Brisbane';
       app.updateProfileUI();
-      if (window.discover && discover.loadEvents) {
-        discover.loadEvents(true);
-      }
-      if (window.planner && planner.loadPlanner) {
-        planner.loadPlanner();
-      }
+      if (window.discover && discover.loadEvents) discover.loadEvents(true);
+      if (window.planner && planner.loadPlanner) planner.loadPlanner();
     }
 
-    // Reveal Main App & update account details in settings immediately
     if (window.authUI) {
       authUI.showApp();
-      authUI.updateSettingsAccountUI(user.email, this.profile);
+      authUI.updatePairCodeUI(this.pairCode);
+      authUI.updateSettingsAccountUI(user.email, this.profile, this.isSolo, userDoc.partner_name);
     }
-
-    // Attach real-time listeners for this couple's data
-    this.attachListeners(user.uid);
   },
 
   handleUserSignedOut() {
@@ -286,10 +544,13 @@ const firebaseService = {
       return;
     }
 
-    console.log('Couple signed out');
+    console.log('User signed out');
     this.currentUser = null;
+    this.userProfile = null;
     this.coupleId = null;
     this.profile = null;
+    this.pairCode = null;
+    this.isSolo = true;
     this.detachListeners();
 
     // Reset in-memory data
@@ -305,12 +566,13 @@ const firebaseService = {
   },
 
   // ---------------------------------------------------------------------------
-  // REAL-TIME FIRESTORE LISTENERS (SCOPED TO COUPLE UID)
+  // REAL-TIME FIRESTORE LISTENERS
   // ---------------------------------------------------------------------------
-  attachListeners(uid) {
+  attachListeners(coupleId) {
     this.detachListeners();
+    if (!coupleId) return;
 
-    const coupleRef = this.db.collection('couples').doc(uid);
+    const coupleRef = this.db.collection('couples').doc(coupleId);
 
     // 1. Live Votes & Notes Listener
     this.unsubVotes = coupleRef.collection('votes').onSnapshot((snapshot) => {
@@ -320,27 +582,32 @@ const firebaseService = {
       snapshot.forEach((doc) => {
         const data = doc.data();
         const evId = doc.id;
-        const votes = data.votes || {};
-        const notes = data.notes || {};
-
-        Object.keys(votes).forEach(userName => {
-          newVotes[`${evId}_${userName}`] = votes[userName];
-        });
-        Object.keys(notes).forEach(userName => {
-          if (notes[userName]) newNotes[`${evId}_${userName}`] = notes[userName];
-        });
+        if (data.votes) {
+          Object.keys(data.votes).forEach((userName) => {
+            newVotes[`${evId}_${userName}`] = data.votes[userName];
+          });
+        }
+        if (data.notes) {
+          Object.keys(data.notes).forEach((userName) => {
+            newNotes[`${evId}_${userName}`] = data.notes[userName];
+          });
+        }
       });
 
       this.votesMap = newVotes;
       this.notesMap = newNotes;
 
-      // Trigger Discover & Swiper UI refresh with fresh votes
-      if (window.discover && app.events) {
+      try {
+        localStorage.setItem('twodo_votes', JSON.stringify(newVotes));
+        localStorage.setItem('twodo_notes', JSON.stringify(newNotes));
+      } catch (e) {}
+
+      if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
-    }, (err) => console.error('Votes listener error:', err));
+    }, (err) => console.warn('Votes listener note:', err));
 
-    // 2. Live Planner Items Listener
+    // 2. Live Planner Listener
     this.unsubPlanner = coupleRef.collection('planner').onSnapshot((snapshot) => {
       const items = [];
       snapshot.forEach((doc) => {
@@ -370,7 +637,7 @@ const firebaseService = {
         planner.renderPlanner();
         planner.updatePlannerCountBadge();
       }
-    }, (err) => console.error('Planner listener error:', err));
+    }, (err) => console.warn('Planner listener note:', err));
 
     // 3. Live Couple Chat Messages Listener
     this.unsubMessages = coupleRef.collection('messages')
@@ -395,7 +662,7 @@ const firebaseService = {
           chatView.messages = msgs;
           chatView.renderMessages();
         }
-      }, (err) => console.error('Messages listener error:', err));
+      }, (err) => console.warn('Messages listener note:', err));
 
     // 4. Live Custom Events Listener
     this.unsubCustomEvents = coupleRef.collection('custom_events').onSnapshot((snapshot) => {
@@ -407,7 +674,25 @@ const firebaseService = {
       if (window.discover) {
         discover.loadEvents(true);
       }
-    }, (err) => console.error('Custom events error:', err));
+    }, (err) => console.warn('Custom events error:', err));
+  },
+
+  attachSoloListeners(uid) {
+    this.detachListeners();
+    if (!uid) return;
+
+    // Solo Votes Listener
+    this.unsubVotes = this.db.collection('users').doc(uid).collection('votes').onSnapshot((snapshot) => {
+      const myName = this.userProfile?.name || 'You';
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        this.votesMap[`${doc.id}_${myName}`] = d.vote;
+        if (d.note) this.notesMap[`${doc.id}_${myName}`] = d.note;
+      });
+      if (window.discover && discover.refreshWithLatestVotes) {
+        discover.refreshWithLatestVotes();
+      }
+    }, err => console.warn('Solo votes listener note:', err));
   },
 
   detachListeners() {
@@ -418,83 +703,119 @@ const firebaseService = {
   },
 
   // ---------------------------------------------------------------------------
-  // COUPLE DATA MUTATIONS
+  // DATA MUTATIONS (VOTES, PLANNER, CHAT, CUSTOM EVENTS)
   // ---------------------------------------------------------------------------
   async saveVote(eventId, userName, voteType, note = null) {
     if (!eventId || !userName) return { success: true };
 
-    // Immediately cache in local memory
+    // 1. Immediately cache in local memory
     this.votesMap[`${eventId}_${userName}`] = voteType;
     if (note !== null) {
       this.notesMap[`${eventId}_${userName}`] = note;
     }
 
-    if (!this.coupleId) return { success: true };
-
     const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
-    const docRef = this.db.collection('couples').doc(this.coupleId).collection('votes').doc(safeDocId);
-    const updatePayload = {
-      event_id: eventId,
-      [`votes.${userName}`]: voteType,
-      updated_at: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    if (note !== null) {
-      updatePayload[`notes.${userName}`] = note;
+
+    // 2. If Coupled: save to couples/{coupleId}/votes/{safeDocId}
+    if (this.coupleId) {
+      const docRef = this.db.collection('couples').doc(this.coupleId).collection('votes').doc(safeDocId);
+      const updatePayload = {
+        event_id: eventId,
+        [`votes.${userName}`]: voteType,
+        updated_at: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      if (note !== null) {
+        updatePayload[`notes.${userName}`] = note;
+      }
+      try {
+        await docRef.set(updatePayload, { merge: true });
+      } catch (e) {
+        console.warn('Firestore couple vote sync note:', e);
+      }
+      return { success: true };
     }
 
-    try {
-      await docRef.set(updatePayload, { merge: true });
-      return { success: true };
-    } catch (e) {
-      console.warn('Background Firestore saveVote warning (cached locally):', e);
-      return { success: true };
+    // 3. If Solo: save to users/{myUid}/votes/{safeDocId}
+    if (this.currentUser) {
+      const docRef = this.db.collection('users').doc(this.currentUser.uid).collection('votes').doc(safeDocId);
+      try {
+        await docRef.set({
+          event_id: eventId,
+          vote: voteType,
+          note: note || '',
+          updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } catch (e) {
+        console.warn('Firestore solo vote sync note:', e);
+      }
     }
+
+    return { success: true };
   },
 
-  async addPlannerItem(item) {
-    if (!this.coupleId) return;
+  async savePlannerItem(item) {
+    const targetColl = this.coupleId 
+      ? this.db.collection('couples').doc(this.coupleId).collection('planner')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('planner') : null);
 
-    const coll = this.db.collection('couples').doc(this.coupleId).collection('planner');
-    const docData = {
+    if (!targetColl) return { success: true };
+
+    const payload = {
       event_id: item.event_id,
-      status: item.status || 'bucket_list',
+      title: item.title,
       scheduled_date: item.scheduled_date || null,
       time_slot: item.time_slot || 'evening',
       notes: item.notes || '',
       budget: item.budget || 0,
-      title: item.title || '',
+      reservation_info: item.reservation_info || '',
       category: item.category || '',
       location_name: item.location_name || '',
-      city: item.city || '',
+      city: item.city || 'Brisbane',
       image_url: item.image_url || '',
       price_str: item.price_str || '',
-      created_at: firebase.firestore.FieldValue.serverTimestamp()
+      status: item.status || 'scheduled',
+      updated_at: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    const docRef = await coll.add(docData);
-    return { success: true, id: docRef.id };
-  },
-
-  async updatePlannerItem(id, updates) {
-    if (!this.coupleId || !id) return;
-    const docRef = this.db.collection('couples').doc(this.coupleId).collection('planner').doc(String(id));
-    await docRef.update(updates);
-    return { success: true };
+    if (item.id && !item.id.startsWith('temp_')) {
+      await targetColl.doc(String(item.id)).set(payload, { merge: true });
+      return { success: true, id: item.id };
+    } else {
+      payload.created_at = firebase.firestore.FieldValue.serverTimestamp();
+      const ref = await targetColl.add(payload);
+      return { success: true, id: ref.id };
+    }
   },
 
   async deletePlannerItem(id) {
-    if (!this.coupleId || !id) return;
-    const docRef = this.db.collection('couples').doc(this.coupleId).collection('planner').doc(String(id));
-    await docRef.delete();
+    const targetColl = this.coupleId 
+      ? this.db.collection('couples').doc(this.coupleId).collection('planner')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('planner') : null);
+
+    if (!targetColl || !id) return { success: true };
+    await targetColl.doc(String(id)).delete();
     return { success: true };
   },
 
-  async sendChatMessage(senderName, text, activity = null) {
-    if (!this.coupleId) return;
+  async updatePlannerItemStatus(id, newStatus) {
+    const targetColl = this.coupleId 
+      ? this.db.collection('couples').doc(this.coupleId).collection('planner')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('planner') : null);
+
+    if (!targetColl || !id) return { success: true };
+    await targetColl.doc(String(id)).update({
+      status: newStatus,
+      updated_at: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    return { success: true };
+  },
+
+  async sendMessage(text, senderName, activity = null) {
+    if (!this.coupleId) return { success: false, error: 'Link with a partner to send messages!' };
 
     const msgData = {
-      sender_name: senderName,
-      text: text,
+      text: text.trim(),
+      sender_name: senderName || 'Partner',
       activity_id: activity?.id || null,
       activity_title: activity?.title || null,
       activity_image: activity?.image_url || null,
@@ -506,7 +827,11 @@ const firebaseService = {
   },
 
   async addCustomActivity(data) {
-    if (!this.coupleId) return;
+    const targetColl = this.coupleId
+      ? this.db.collection('couples').doc(this.coupleId).collection('custom_events')
+      : (this.currentUser ? this.db.collection('users').doc(this.currentUser.uid).collection('custom_events') : null);
+
+    if (!targetColl) return;
 
     const slug = 'cust-' + Date.now();
     const docData = {
@@ -520,21 +845,41 @@ const firebaseService = {
       description: data.description || '',
       insider_tip: data.insider_tip || '',
       source_url: data.source_url || '',
-      source: `${this.profile?.user1_name || 'Couple'} & ${this.profile?.user2_name || ''} Custom`,
+      source: `${this.profile?.user1_name || 'My'} Custom Date`,
       image_url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
       tags: ['Custom Date', data.category || 'Activity'],
       is_custom: 1,
       created_at: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    await this.db.collection('couples').doc(this.coupleId).collection('custom_events').doc(slug).set(docData);
+    await targetColl.doc(slug).set(docData);
     return { success: true, event: docData };
   },
 
   async updateCoupleProfile(profileData) {
-    if (!this.coupleId) return;
-    await this.db.collection('couples').doc(this.coupleId).set(profileData, { merge: true });
+    if (this.coupleId) {
+      await this.db.collection('couples').doc(this.coupleId).set(profileData, { merge: true });
+    }
     this.profile = { ...this.profile, ...profileData };
     return { success: true, profile: this.profile };
+  },
+
+  async updateSoloProfile(data) {
+    if (!this.currentUser) return { success: true };
+    const uid = this.currentUser.uid;
+    const updates = {};
+    if (data.name) updates.name = data.name.trim();
+    if (data.city) updates.city = data.city.trim();
+    try {
+      await this.db.collection('users').doc(uid).set(updates, { merge: true });
+      if (this.pairCode && data.name) {
+        await this.db.collection('pair_codes').doc(this.pairCode).set({ user_name: data.name.trim() }, { merge: true });
+      }
+    } catch (e) {
+      console.warn('Solo profile update note:', e);
+    }
+    this.userProfile = { ...this.userProfile, ...updates };
+    localStorage.setItem('twodo_user_profile', JSON.stringify(this.userProfile));
+    return { success: true };
   }
 };

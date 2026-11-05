@@ -31,23 +31,70 @@ const app = {
 
   updateProfileUI() {
     if (!this.profile) return;
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = this.profile.user1_name || 'Emma';
     const u2 = this.profile.user2_name || 'Jordan';
+
+    // 1. Header voter switch vs. solo bar
+    const voterSwitch = document.getElementById('voter-switch-container');
+    const soloBar = document.getElementById('solo-bar-container');
+    const soloUserDisplay = document.getElementById('solo-user-display');
+
+    if (isSolo) {
+      if (voterSwitch) voterSwitch.classList.add('hidden');
+      if (soloBar) soloBar.classList.remove('hidden');
+      if (soloUserDisplay) soloUserDisplay.textContent = u1;
+    } else {
+      if (voterSwitch) voterSwitch.classList.remove('hidden');
+      if (soloBar) soloBar.classList.add('hidden');
+    }
 
     const v1Disp = document.getElementById('voter1-display');
     const v2Disp = document.getElementById('voter2-display');
     if (v1Disp) v1Disp.textContent = u1;
     if (v2Disp) v2Disp.textContent = u2;
 
-    const emmaLabel = document.getElementById('mood-chip-emma-label');
-    const jordanLabel = document.getElementById('mood-chip-jordan-label');
-    if (emmaLabel) emmaLabel.textContent = `${u1}'s Loves`;
-    if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
+    // 2. Mood filter chips: Solo vs. Couple
+    const matchesChip = document.getElementById('mood-chip-matches');
+    const emmaChip = document.getElementById('mood-chip-emma');
+    const emmaPassChip = document.getElementById('mood-chip-emma-passed');
+    const jordanChip = document.getElementById('mood-chip-jordan');
+    const jordanPassChip = document.getElementById('mood-chip-jordan-passed');
 
+    const emmaLabel = document.getElementById('mood-chip-emma-label');
     const emmaPassLabel = document.getElementById('mood-chip-emma-passed-label');
+    const jordanLabel = document.getElementById('mood-chip-jordan-label');
     const jordanPassLabel = document.getElementById('mood-chip-jordan-passed-label');
-    if (emmaPassLabel) emmaPassLabel.textContent = `${u1}'s Passed`;
-    if (jordanPassLabel) jordanPassLabel.textContent = `${u2}'s Passed`;
+
+    if (isSolo) {
+      if (matchesChip) matchesChip.classList.add('hidden');
+      if (jordanChip) jordanChip.classList.add('hidden');
+      if (jordanPassChip) jordanPassChip.classList.add('hidden');
+
+      if (emmaChip) emmaChip.classList.remove('hidden');
+      if (emmaPassChip) emmaPassChip.classList.remove('hidden');
+      if (emmaLabel) emmaLabel.textContent = 'My Loves';
+      if (emmaPassLabel) emmaPassLabel.textContent = 'My Passed';
+    } else {
+      if (matchesChip) matchesChip.classList.remove('hidden');
+      if (emmaChip) emmaChip.classList.remove('hidden');
+      if (emmaPassChip) emmaPassChip.classList.remove('hidden');
+      if (jordanChip) jordanChip.classList.remove('hidden');
+      if (jordanPassChip) jordanPassChip.classList.remove('hidden');
+
+      if (emmaLabel) emmaLabel.textContent = `${u1}'s Loves`;
+      if (emmaPassLabel) emmaPassLabel.textContent = `${u1}'s Passed`;
+      if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
+      if (jordanPassLabel) jordanPassLabel.textContent = `${u2}'s Passed`;
+    }
+
+    // 3. Chat View: Locked state for solo users
+    const chatActive = document.getElementById('chat-active-container');
+    const chatLocked = document.getElementById('chat-solo-locked');
+    if (chatActive && chatLocked) {
+      chatActive.classList.toggle('hidden', isSolo);
+      chatLocked.classList.toggle('hidden', !isSolo);
+    }
 
     const locDisp = document.getElementById('current-location-display');
     if (locDisp) {
@@ -58,9 +105,14 @@ const app = {
     const setU1 = document.getElementById('set-user1-name');
     const setU2 = document.getElementById('set-user2-name');
     const setCity = document.getElementById('set-default-city');
+    const setU1Label = document.getElementById('settings-user1-label');
+    const setU2Group = document.getElementById('settings-user2-group');
+
     if (setU1) setU1.value = u1;
-    if (setU2) setU2.value = u2;
+    if (setU2) setU2.value = isSolo ? '' : u2;
     if (setCity) setCity.value = this.currentCity;
+    if (setU1Label) setU1Label.textContent = isSolo ? 'Your Name' : 'Partner 1 Name';
+    if (setU2Group) setU2Group.classList.toggle('hidden', isSolo);
 
     try {
       const keys = JSON.parse(this.profile.api_keys_json || '{}');
@@ -70,6 +122,10 @@ const app = {
   },
 
   getActiveVoterName() {
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    if (isSolo) {
+      return this.profile?.user1_name || 'You';
+    }
     if (this.currentVoter === 2) {
       return this.profile?.user2_name || 'Jordan';
     }
@@ -86,7 +142,27 @@ const app = {
     const name = this.getActiveVoterName();
     this.showToast(voterIndex === 'both' ? '👥 Together Mode active!' : `Voting as ${name}`);
 
-    discover.renderEvents();
+    // Reorder mood chips so active voter's chips come first (immediately visible without scrolling)
+    const scrollEl = document.getElementById('mood-chips-scroll');
+    const emmaChip = document.getElementById('mood-chip-emma');
+    const emmaPassChip = document.getElementById('mood-chip-emma-passed');
+    const jordanChip = document.getElementById('mood-chip-jordan');
+    const jordanPassChip = document.getElementById('mood-chip-jordan-passed');
+
+    if (scrollEl && emmaChip && jordanChip && emmaPassChip && jordanPassChip) {
+      if (voterIndex === 2) {
+        // Jordan's Loves and Passed first
+        scrollEl.insertBefore(jordanChip, emmaChip);
+        scrollEl.insertBefore(jordanPassChip, emmaChip);
+      } else {
+        // Emma's Loves and Passed first (default / Together)
+        scrollEl.insertBefore(emmaChip, jordanChip);
+        scrollEl.insertBefore(emmaPassChip, jordanChip);
+      }
+      scrollEl.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+
+    discover.loadEvents(false);
     swiper.initDeck();
     if (window.chatView && chatView.updateVoterToggleUI) {
       chatView.updateVoterToggleUI();
@@ -166,9 +242,11 @@ const app = {
 
   async saveSettings(e) {
     e.preventDefault();
-    const u1 = document.getElementById('set-user1-name').value.trim();
-    const u2 = document.getElementById('set-user2-name').value.trim();
-    const city = document.getElementById('set-default-city').value.trim();
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const u1 = document.getElementById('set-user1-name').value.trim() || 'You';
+    const rawU2 = document.getElementById('set-user2-name') ? document.getElementById('set-user2-name').value.trim() : '';
+    const u2 = isSolo ? 'Partner' : (rawU2 || 'Partner');
+    const city = document.getElementById('set-default-city').value.trim() || 'Brisbane';
     const tmKey = document.getElementById('set-tm-key')?.value.trim();
     const ebKey = document.getElementById('set-eb-key')?.value.trim();
 
@@ -183,8 +261,12 @@ const app = {
         }
       };
 
-      if (typeof firebaseService !== 'undefined' && firebaseService.coupleId) {
-        await firebaseService.updateCoupleProfile(updateData);
+      if (typeof firebaseService !== 'undefined') {
+        if (firebaseService.coupleId) {
+          await firebaseService.updateCoupleProfile(updateData);
+        } else if (firebaseService.currentUser) {
+          await firebaseService.updateSoloProfile({ name: u1, city: city });
+        }
       }
 
       this.profile = await api.updateProfile(updateData);
@@ -192,7 +274,7 @@ const app = {
       this.currentCity = city;
       this.updateProfileUI();
       this.closeSettingsModal();
-      this.showToast('Couple settings saved!');
+      this.showToast(isSolo ? 'Profile settings saved!' : 'Couple settings saved!');
       await discover.loadEvents();
     } catch (err) {
       console.error(err);

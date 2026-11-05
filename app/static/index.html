@@ -95,10 +95,15 @@
       <!-- TAB 2: SIGN UP -->
       <div id="auth-section-register" class="centsauble-section hidden">
         <h1 class="centsauble-title">Sign Up</h1>
-        <p class="centsauble-subtitle">Create your shared couple space to discover and plan together.</p>
+        <p class="centsauble-subtitle">Discover date ideas solo, or link accounts to plan together.</p>
 
         <form id="auth-register-form">
           <div class="centsauble-error-box hidden" id="auth-register-error"></div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="reg-name">Your Name</label>
+            <input type="text" id="reg-name" class="centsauble-input" placeholder="e.g. Jordan" required autocomplete="name">
+          </div>
 
           <div class="centsauble-form-group">
             <label class="centsauble-label" for="reg-email">Your Email</label>
@@ -110,17 +115,6 @@
             <input type="password" id="reg-password" class="centsauble-input" placeholder="Create a password (min 6 characters)" minlength="6" required autocomplete="new-password">
           </div>
 
-          <div class="centsauble-form-row">
-            <div class="centsauble-form-group">
-              <label class="centsauble-label" for="reg-user1">Partner 1 Name</label>
-              <input type="text" id="reg-user1" class="centsauble-input" placeholder="e.g. Emma" required>
-            </div>
-            <div class="centsauble-form-group">
-              <label class="centsauble-label" for="reg-user2">Partner 2 Name</label>
-              <input type="text" id="reg-user2" class="centsauble-input" placeholder="e.g. Jordan" required>
-            </div>
-          </div>
-
           <div class="centsauble-form-group">
             <label class="centsauble-label" for="reg-city">Home City</label>
             <select id="reg-city" class="centsauble-select">
@@ -130,6 +124,11 @@
               <option value="Sydney">Sydney</option>
               <option value="Melbourne">Melbourne</option>
             </select>
+          </div>
+
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="reg-pair-code">Partner Invite Code <span style="font-weight:400; color:var(--text-muted); font-size:0.75rem;">(Optional)</span></label>
+            <input type="text" id="reg-pair-code" class="centsauble-input" placeholder="e.g. TD-8492 (or link later in app)" autocomplete="off" style="text-transform:uppercase; letter-spacing:1.5px; font-weight:600;">
           </div>
 
           <button type="submit" class="centsauble-btn-submit" id="btn-auth-register-submit">
@@ -226,8 +225,8 @@
         </div>
       </div>
 
-      <!-- Voter Mode Selector -->
-      <div class="voter-switch">
+      <!-- Coupled Voter Mode Selector (Active when paired) -->
+      <div class="voter-switch" id="voter-switch-container">
         <span class="voter-label">Voting as:</span>
         <button id="btn-voter-1" class="voter-pill active" onclick="app.setVoter(1)">
           <span class="voter-dot" id="voter1-dot"></span>
@@ -239,6 +238,16 @@
         </button>
         <button id="btn-voter-both" class="voter-pill" onclick="app.setVoter('both')">
           <span>👥 Together</span>
+        </button>
+      </div>
+
+      <!-- Solo Mode Status Bar (Active when single / exploring solo) -->
+      <div class="solo-bar-wrap hidden" id="solo-bar-container">
+        <div class="solo-user-badge">
+          <span>👤 Exploring as: <strong id="solo-user-display">You</strong></span>
+        </div>
+        <button type="button" class="btn-pair-partner-pill" onclick="authUI.openPairModal()" title="Link accounts with your partner">
+          <span>💑 Link Partner</span>
         </button>
       </div>
     </div>
@@ -269,7 +278,7 @@
       <div class="mood-chips-bar">
         <div class="mood-chips-scroll" id="mood-chips-scroll">
           <button type="button" class="mood-chip active" data-mood="all" onclick="discover.setMoodFilter('all')">✨ All</button>
-          <button type="button" class="mood-chip" data-mood="matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
+          <button type="button" class="mood-chip" data-mood="matches" id="mood-chip-matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
           <button type="button" class="mood-chip" data-mood="jordan-loves" id="mood-chip-jordan" onclick="discover.setMoodFilter('jordan-loves')">💜 <span id="mood-chip-jordan-label">Jordan's Loves</span> <span class="mood-chip-badge" id="mood-jordan-count">0</span></button>
@@ -391,7 +400,19 @@
 
     <!-- TAB 3: COUPLE CHAT -->
     <section id="view-chat" class="view-panel">
-      <div class="chat-container">
+      <!-- Solo Locked Chat State (Shown when exploring solo) -->
+      <div id="chat-solo-locked" class="chat-solo-locked hidden" style="text-align:center; padding:4rem 1.5rem; background:white; border-radius:18px; border:1px solid var(--border); margin:1rem auto; max-width:440px; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+        <span style="font-size:3.5rem; display:block; margin-bottom:1rem;">💌</span>
+        <h3 style="font-size:1.35rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-main);">Couple Chat is Locked</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin:0 auto 1.5rem auto; line-height:1.5;">
+          Link with your partner using your invite code to chat in real time, share date ideas, and plan together!
+        </p>
+        <button type="button" class="btn btn-primary" onclick="authUI.openPairModal()" style="border-radius:9999px; padding:0.65rem 1.5rem; font-weight:700;">
+          💑 Link with Partner
+        </button>
+      </div>
+
+      <div class="chat-container" id="chat-active-container">
         <!-- Chat Header -->
         <div class="chat-header-bar">
           <div class="chat-header-info">
@@ -685,12 +706,12 @@
       <form id="settings-form" onsubmit="app.saveSettings(event)">
         <div class="form-row">
           <div class="form-group flex-1">
-            <label for="set-user1-name">Partner 1 Name</label>
+            <label for="set-user1-name" id="settings-user1-label">Your Name</label>
             <input type="text" id="set-user1-name" required>
           </div>
-          <div class="form-group flex-1">
+          <div class="form-group flex-1" id="settings-user2-group">
             <label for="set-user2-name">Partner 2 Name</label>
-            <input type="text" id="set-user2-name" required>
+            <input type="text" id="set-user2-name">
           </div>
         </div>
 
@@ -728,10 +749,30 @@
           </div>
         </details>
 
+        <!-- Partner Connection & Invite Code Section -->
+        <div class="settings-pair-section" id="settings-pair-section" style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:14px; padding:0.9rem; margin-bottom:1rem;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:1.4rem;">💑</span>
+              <div>
+                <strong style="font-size:0.92rem; color:#831843; display:block;" id="settings-pair-title">Partner Connection</strong>
+                <span style="font-size:0.8rem; color:#9d174d;" id="settings-pair-status">Link with your partner to combine spaces</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-settings-pair-action" onclick="app.closeSettingsModal(); authUI.openPairModal();" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
+              Pair Code ✨
+            </button>
+          </div>
+          <div class="settings-pair-code-sub" id="settings-pair-code-sub" style="font-size:0.82rem; color:#475569; background:white; padding:0.5rem 0.75rem; border-radius:8px; display:flex; align-items:center; justify-content:space-between;">
+            <span>Your Personal Code: <strong id="settings-my-code" style="color:var(--primary); letter-spacing:1px;">TD-••••</strong></span>
+            <button type="button" class="btn-copy-mini" onclick="authUI.copyMyPairCode()" style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:700; font-size:0.8rem;">📋 Copy</button>
+          </div>
+        </div>
+
         <!-- Couple Account & Log Out Section -->
         <div class="settings-account-card">
           <div class="settings-account-info">
-            <span class="settings-account-badge">💑 Active Couple</span>
+            <span class="settings-account-badge" id="settings-account-badge">💑 Active Couple</span>
             <strong id="settings-account-names">Emma & Jordan</strong>
             <span class="settings-account-email" id="settings-account-email">Signed In</span>
           </div>
@@ -745,6 +786,49 @@
           <button type="submit" class="btn btn-primary">Save Settings</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- PARTNER PAIRING MODAL -->
+  <div id="pair-partner-modal" class="modal-overlay hidden" onclick="authUI.handlePairModalOverlayClick(event)">
+    <div class="modal-card pair-modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.5rem;">💑</span>
+          <h3 style="margin:0;">Link with Your Partner</h3>
+        </div>
+        <button class="close-btn" onclick="authUI.closePairModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding:1rem 0 0.5rem 0;">
+        <!-- Option 1: Share My Code -->
+        <div class="pair-code-share-box">
+          <label class="centsauble-label" style="text-align:center; display:block; margin-bottom:0.25rem;">Your Personal Invite Code</label>
+          <p style="text-align:center; font-size:0.84rem; color:var(--text-muted); margin-bottom:0.85rem;">Send this code to your partner to link both accounts:</p>
+          <div class="pair-code-pill-row">
+            <span class="pair-code-display" id="my-pair-code-display">TD-••••</span>
+            <button type="button" class="btn btn-secondary btn-sm btn-copy-pair-code" onclick="authUI.copyMyPairCode()" id="btn-copy-code">
+              📋 Copy Code
+            </button>
+          </div>
+        </div>
+
+        <div class="pair-divider">
+          <span>OR</span>
+        </div>
+
+        <!-- Option 2: Enter Partner's Code -->
+        <form id="pair-partner-form" onsubmit="authUI.handlePairSubmit(event)">
+          <div class="centsauble-form-group">
+            <label class="centsauble-label" for="input-partner-code">Enter Partner's Code</label>
+            <input type="text" id="input-partner-code" class="centsauble-input" placeholder="e.g. TD-8492" required autocomplete="off" style="text-transform:uppercase; letter-spacing:2px; font-weight:700; text-align:center; font-size:1.15rem;">
+          </div>
+          <div class="centsauble-error-box hidden" id="pair-error-box" style="margin-bottom:0.75rem;"></div>
+          <button type="submit" class="centsauble-btn-submit" id="btn-pair-submit">
+            🔗 Link Together
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 

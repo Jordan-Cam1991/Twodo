@@ -66,12 +66,19 @@ const swiper = {
 
     if (!deck) return;
 
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+
     if (!this.deckQueue || this.deckQueue.length === 0 || this.currentIndex >= this.deckQueue.length) {
       deck.innerHTML = '';
       empty?.classList.remove('hidden');
 
       const emptyMsg = document.getElementById('deck-empty-msg');
       const resetBtn = document.getElementById('deck-empty-reset-filter');
+      const switchPartnerBtn = otherPartnerSpan?.closest('button');
+      if (switchPartnerBtn) {
+        switchPartnerBtn.classList.toggle('hidden', isSolo);
+      }
+
       const anyActive = (typeof discover !== 'undefined') && (
         discover.activeDateRange !== 'all' ||
         discover.selectedSuburbs.length > 0 ||
@@ -81,7 +88,9 @@ const swiper = {
 
       if (emptyMsg) {
         if (anyActive) {
-          emptyMsg.textContent = 'No un-swiped activities match your current filters. Try resetting filters or switching voter to review more dates!';
+          emptyMsg.textContent = 'No un-swiped activities match your current filters. Try resetting filters to review more dates!';
+        } else if (isSolo) {
+          emptyMsg.textContent = "You've reviewed all dates! Check your My Loves list or check your planner.";
         } else {
           emptyMsg.textContent = "Switch to your partner's profile to see what matches you unlocked, or check your planner.";
         }
@@ -111,7 +120,7 @@ const swiper = {
       const partnerVote = (activeVoter === u1) ? ev.u2_vote : ev.u1_vote;
       const partnerNote = (activeVoter === u1) ? ev.u2_note : ev.u1_note;
       let partnerNoteHtml = '';
-      if (partnerVote === 'love' && partnerNote) {
+      if (!isSolo && partnerVote === 'love' && partnerNote) {
         partnerNoteHtml = `
           <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; padding:6px 10px; margin-bottom:8px; font-size:0.82rem; color:#be123c;">
             💬 <strong>${partnerName}'s Note:</strong> "${partnerNote}"
