@@ -32,7 +32,7 @@ const firebaseService = {
 
     // Ensure session persistence is explicitly LOCAL
     try {
-      this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
     } catch (e) {}
 
     // Enable offline persistence if supported (safe non-blocking)
@@ -42,6 +42,15 @@ const firebaseService = {
       });
     } catch (e) {}
 
+    // Check device session & restore coupleId immediately if cached
+    const hasSession = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
+    const cachedUid = localStorage.getItem('twodo_user_uid');
+
+    if (hasSession && cachedUid) {
+      this.coupleId = cachedUid;
+      this.attachListeners(cachedUid);
+    }
+
     // Listen for authentication state changes
     this.auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -49,7 +58,32 @@ const firebaseService = {
         this.coupleId = user.uid;
         await this.handleUserSignedIn(user);
       } else {
-        this.handleUserSignedOut();
+        const stillActive = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
+        if (stillActive) {
+          // Device has an active session! Restore coupleId & perform silent background re-auth
+          const savedUid = localStorage.getItem('twodo_user_uid');
+          if (savedUid && !this.coupleId) {
+            this.coupleId = savedUid;
+            this.attachListeners(savedUid);
+          }
+
+          let cachedAuth = null;
+          try {
+            const raw = localStorage.getItem('twodo_auth_cache');
+            if (raw) cachedAuth = JSON.parse(atob(raw));
+          } catch (e) {}
+
+          if (cachedAuth && cachedAuth.e && cachedAuth.p) {
+            console.log('Performing silent background session restore for iPhone/mobile...');
+            this.auth.signInWithEmailAndPassword(cachedAuth.e, cachedAuth.p)
+              .then(cred => this.handleUserSignedIn(cred.user))
+              .catch(err => {
+                console.warn('Background re-auth note (keeping offline couple space):', err);
+              });
+          }
+        } else {
+          this.handleUserSignedOut();
+        }
       }
     });
   },
@@ -59,9 +93,15 @@ const firebaseService = {
   // ---------------------------------------------------------------------------
   async login(email, password) {
     try {
+      try {
+        await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      } catch (e) {}
       const cred = await this.auth.signInWithEmailAndPassword(email.trim(), password);
       this.currentUser = cred.user;
       this.coupleId = cred.user.uid;
+      if (window.authUI && authUI.setDeviceSession) {
+        authUI.setDeviceSession(cred.user.uid, cred.user.email, password);
+      }
       return { success: true, user: cred.user };
     } catch (err) {
       return { success: false, error: this.formatAuthError(err) };
@@ -89,11 +129,20 @@ const firebaseService = {
         localStorage.setItem('twodo_profile', JSON.stringify(coupleDoc));
       } catch (e) {}
 
+      // Ensure local persistence for new accounts
+      try {
+        await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      } catch (e) {}
+
       // Create Firebase Auth user
       const cred = await this.auth.createUserWithEmailAndPassword(email.trim(), password);
       const uid = cred.user.uid;
       this.currentUser = cred.user;
       this.coupleId = uid;
+
+      if (window.authUI && authUI.setDeviceSession) {
+        authUI.setDeviceSession(uid, email.trim(), password);
+      }
 
       // Update app state immediately so UI opens with registered couple names
       if (window.app) {
@@ -167,10 +216,9 @@ const firebaseService = {
     this.currentUser = user;
     this.coupleId = user.uid;
 
-    try {
-      localStorage.setItem('twodo_session_active', '1');
-      localStorage.setItem('twodo_user_uid', user.uid);
-    } catch (e) {}
+    if (window.authUI && authUI.setDeviceSession) {
+      authUI.setDeviceSession(user.uid, user.email);
+    }
 
     // If profile is not in memory yet (e.g. reload or fresh login), check cache and Firestore
     if (!this.profile) {
@@ -232,6 +280,12 @@ const firebaseService = {
   },
 
   handleUserSignedOut() {
+    const hasSession = (window.authUI && authUI.hasDeviceSession) ? authUI.hasDeviceSession() : (localStorage.getItem('twodo_session_active') === '1');
+    if (hasSession) {
+      console.log('User signed out event ignored: device session is active.');
+      return;
+    }
+
     console.log('Couple signed out');
     this.currentUser = null;
     this.coupleId = null;
@@ -245,9 +299,7 @@ const firebaseService = {
     this.messages = [];
     this.customEvents = [];
 
-    // Only show auth screen if session is not active on this device
-    const hasSession = localStorage.getItem('twodo_session_active') === '1';
-    if (!hasSession && window.authUI) {
+    if (window.authUI && authUI.showAuthScreen) {
       authUI.showAuthScreen();
     }
   },

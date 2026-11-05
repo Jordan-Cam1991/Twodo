@@ -5,11 +5,45 @@
 const authUI = {
   currentTab: 'login', // 'login' | 'register' | 'forgot'
 
+  setDeviceSession(uid, email, password = null) {
+    try {
+      localStorage.setItem('twodo_session_active', '1');
+      if (uid) localStorage.setItem('twodo_user_uid', uid);
+      if (email) localStorage.setItem('twodo_user_email', email);
+      if (email && password) {
+        localStorage.setItem('twodo_auth_cache', btoa(JSON.stringify({ e: email, p: password, uid: uid })));
+      }
+      document.cookie = "twodo_session_active=1; path=/; max-age=31536000; SameSite=Lax";
+      if (uid) document.cookie = `twodo_user_uid=${uid}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch (e) {}
+    document.documentElement.classList.add('device-authenticated');
+  },
+
+  clearDeviceSession() {
+    try {
+      localStorage.removeItem('twodo_session_active');
+      localStorage.removeItem('twodo_user_uid');
+      localStorage.removeItem('twodo_user_email');
+      localStorage.removeItem('twodo_auth_cache');
+      document.cookie = "twodo_session_active=; path=/; max-age=0; SameSite=Lax";
+      document.cookie = "twodo_user_uid=; path=/; max-age=0; SameSite=Lax";
+    } catch (e) {}
+    document.documentElement.classList.remove('device-authenticated');
+  },
+
+  hasDeviceSession() {
+    try {
+      if (localStorage.getItem('twodo_session_active') === '1') return true;
+      if (document.cookie.indexOf('twodo_session_active=1') !== -1) return true;
+    } catch (e) {}
+    return false;
+  },
+
   init() {
     this.bindEvents();
 
     // Check device session persistence: remember user across visits
-    const hasSession = localStorage.getItem('twodo_session_active') === '1';
+    const hasSession = this.hasDeviceSession();
     const splash = document.getElementById('auth-loading-splash');
 
     if (hasSession) {
@@ -126,10 +160,7 @@ const authUI = {
     if (!result.success) {
       this.showError(result.error);
     } else {
-      localStorage.setItem('twodo_session_active', '1');
-      if (result.user && result.user.uid) {
-        localStorage.setItem('twodo_user_uid', result.user.uid);
-      }
+      this.setDeviceSession(result.user?.uid, email, pass);
       this.showApp();
       if (window.app && app.showToast) {
         app.showToast('Welcome back! 💕');
@@ -170,10 +201,7 @@ const authUI = {
         this.showError(result.error);
       }
     } else {
-      localStorage.setItem('twodo_session_active', '1');
-      if (result.user && result.user.uid) {
-        localStorage.setItem('twodo_user_uid', result.user.uid);
-      }
+      this.setDeviceSession(result.user?.uid, email, pass);
       this.showApp();
       if (window.app && app.showToast) {
         app.showToast(`🎉 TwoDo space created for ${u1} & ${u2}!`);
@@ -214,8 +242,7 @@ const authUI = {
 
   async handleLogout() {
     if (confirm('Are you sure you want to log out of TwoDo?')) {
-      localStorage.removeItem('twodo_session_active');
-      localStorage.removeItem('twodo_user_uid');
+      this.clearDeviceSession();
       if (window.app && app.closeSettingsModal) {
         app.closeSettingsModal();
       }

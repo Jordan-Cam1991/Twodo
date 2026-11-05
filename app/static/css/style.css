@@ -4428,8 +4428,14 @@ body {
   flex-direction: column;
 }
 
-.auth-loading-splash.hidden {
+.auth-loading-splash.hidden,
+html.device-authenticated #auth-loading-splash,
+html.device-authenticated #auth-screen {
   display: none !important;
+}
+
+html.device-authenticated #app-container {
+  display: block !important;
 }
 
 .auth-splash-box {

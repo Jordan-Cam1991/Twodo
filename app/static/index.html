@@ -23,6 +23,18 @@
   
   <!-- App Styles -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Instant Device Session Check (Zero-Flicker Persistence for iPhone & Mobile) -->
+  <script>
+    (function() {
+      try {
+        var hasSession = localStorage.getItem('twodo_session_active') === '1' || document.cookie.indexOf('twodo_session_active=1') !== -1;
+        if (hasSession) {
+          document.documentElement.classList.add('device-authenticated');
+        }
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
   <!-- INITIAL AUTH CHECK SPLASH -->
