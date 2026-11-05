@@ -30,9 +30,9 @@ const firebaseService = {
     this.auth = firebase.auth();
     this.db = firebase.firestore();
 
-    // Enable offline persistence if supported
+    // Enable offline persistence if supported (safe non-blocking)
     try {
-      this.db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+      this.db.enablePersistence().catch(err => {
         // Multi-tab or unsupported - silent catch
       });
     } catch (e) {}
@@ -55,6 +55,8 @@ const firebaseService = {
   async login(email, password) {
     try {
       const cred = await this.auth.signInWithEmailAndPassword(email.trim(), password);
+      this.currentUser = cred.user;
+      this.coupleId = cred.user.uid;
       return { success: true, user: cred.user };
     } catch (err) {
       return { success: false, error: this.formatAuthError(err) };
@@ -67,10 +69,7 @@ const firebaseService = {
       const u2 = (user2Name || '').trim() || 'Partner 2';
       const city = (defaultCity || '').trim() || 'Brisbane';
 
-      const cred = await this.auth.createUserWithEmailAndPassword(email.trim(), password);
-      const uid = cred.user.uid;
-
-      // Create couple profile in Firestore
+      // Set profile immediately in memory & localStorage so UI is instant
       const coupleDoc = {
         user1_name: u1,
         user1_color: '#ec4899',
@@ -78,20 +77,47 @@ const firebaseService = {
         user2_color: '#8b5cf6',
         default_city: city,
         email: email.trim(),
-        created_at: firebase.firestore.FieldValue.serverTimestamp()
+        created_at: new Date().toISOString()
       };
+      this.profile = coupleDoc;
+      try {
+        localStorage.setItem('twodo_profile', JSON.stringify(coupleDoc));
+      } catch (e) {}
 
-      await this.db.collection('couples').doc(uid).set(coupleDoc);
+      // Create Firebase Auth user
+      const cred = await this.auth.createUserWithEmailAndPassword(email.trim(), password);
+      const uid = cred.user.uid;
+      this.currentUser = cred.user;
+      this.coupleId = uid;
 
-      // Seed a cute welcome chat message
-      await this.db.collection('couples').doc(uid).collection('messages').add({
+      // Update app state immediately so UI opens with registered couple names
+      if (window.app) {
+        app.profile = coupleDoc;
+        app.currentCity = city;
+        app.updateProfileUI();
+        if (window.discover && discover.loadEvents) {
+          discover.loadEvents(true);
+        }
+      }
+
+      // Background Firestore persistence (non-blocking)
+      this.db.collection('couples').doc(uid).set({
+        ...coupleDoc,
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(err => console.warn('Background Firestore profile save note:', err));
+
+      // Background welcome chat message (non-blocking)
+      this.db.collection('couples').doc(uid).collection('messages').add({
         sender_name: u1,
         text: `Hey ${u2}! Welcome to our TwoDo app 💕 Ready to find some fun dates?`,
         activity_id: null,
         activity_title: null,
         activity_image: null,
         created_at: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      }).catch(err => console.warn('Background Firestore message note:', err));
+
+      // Attach Firestore listeners
+      this.attachListeners(uid);
 
       return { success: true, user: cred.user };
     } catch (err) {
@@ -106,6 +132,7 @@ const firebaseService = {
     } catch (err) {
       console.error('Logout error:', err);
     }
+    this.handleUserSignedOut();
   },
 
   async sendPasswordReset(email) {
@@ -132,27 +159,43 @@ const firebaseService = {
   // ---------------------------------------------------------------------------
   async handleUserSignedIn(user) {
     console.log('Couple signed in:', user.email, 'UID:', user.uid);
+    this.currentUser = user;
+    this.coupleId = user.uid;
 
-    // Fetch couple profile doc
-    try {
-      const doc = await this.db.collection('couples').doc(user.uid).get();
-      if (doc.exists) {
-        this.profile = doc.data();
-      } else {
-        // Fallback default profile if doc missing
-        this.profile = {
-          user1_name: 'Emma',
-          user1_color: '#ec4899',
-          user2_name: 'Jordan',
-          user2_color: '#8b5cf6',
-          default_city: 'Brisbane',
-          email: user.email
-        };
-        await this.db.collection('couples').doc(user.uid).set(this.profile);
+    // If profile is not in memory yet (e.g. reload or fresh login), check cache and Firestore
+    if (!this.profile) {
+      try {
+        const cached = localStorage.getItem('twodo_profile');
+        if (cached) {
+          this.profile = JSON.parse(cached);
+        }
+      } catch (e) {}
+
+      // Fetch fresh profile from Firestore with 2s timeout so we never hang
+      try {
+        const fetchPromise = this.db.collection('couples').doc(user.uid).get();
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000));
+        const doc = await Promise.race([fetchPromise, timeoutPromise]);
+        if (doc && doc.exists) {
+          this.profile = doc.data();
+          try {
+            localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+          } catch (e) {}
+        }
+      } catch (e) {
+        console.warn('Profile fetch note:', e);
       }
-    } catch (e) {
-      console.error('Error fetching profile:', e);
-      this.profile = { user1_name: 'Emma', user2_name: 'Jordan', default_city: 'Brisbane' };
+    }
+
+    if (!this.profile) {
+      this.profile = {
+        user1_name: 'Emma',
+        user1_color: '#ec4899',
+        user2_name: 'Jordan',
+        user2_color: '#8b5cf6',
+        default_city: 'Brisbane',
+        email: user.email
+      };
     }
 
     // Update global app state with couple profile
@@ -168,7 +211,7 @@ const firebaseService = {
       }
     }
 
-    // Reveal Main App & update account details in settings
+    // Reveal Main App & update account details in settings immediately
     if (window.authUI) {
       authUI.showApp();
       authUI.updateSettingsAccountUI(user.email, this.profile);
