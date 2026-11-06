@@ -34,8 +34,8 @@ const chatView = {
     }
   },
 
-  setChatVoter(index) {
-    app.setVoter(index);
+  // Messages are always sent as the person logged in on this device
+  setChatVoter() {
     this.updateVoterToggleUI();
   },
 
@@ -70,8 +70,9 @@ const chatView = {
     const currentVoter = app.getActiveVoterName();
 
     container.innerHTML = this.messages.map(msg => {
-      const isMine = msg.sender_name === currentVoter;
-      const isEmma = msg.sender_name === (app.profile?.user1_name || 'Emma');
+      const myUid = (typeof firebaseService !== 'undefined' && firebaseService.currentUser) ? firebaseService.currentUser.uid : null;
+      const isMine = (msg.sender_uid && myUid) ? msg.sender_uid === myUid : msg.sender_name === currentVoter;
+      const isEmma = isMine;
       const senderColor = isEmma ? 'var(--primary)' : '#8b5cf6';
       
       // Time format

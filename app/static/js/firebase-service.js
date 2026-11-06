@@ -441,6 +441,7 @@ const firebaseService = {
       // Add welcoming chat message
       this.db.collection('couples').doc(canonicalCoupleId).collection('messages').add({
         sender_name: myName,
+        sender_uid: myUid,
         text: `Hey ${partnerName}! 💕 We're officially linked on TwoDo! Let's find some date ideas!`,
         activity_id: null,
         created_at: firebase.firestore.FieldValue.serverTimestamp()
@@ -637,32 +638,28 @@ const firebaseService = {
 
       // 2. Check if coupled or solo
       if (userDoc.couple_id) {
-        // COUPLED MODE
+        // COUPLED MODE — the logged-in person is ALWAYS "user1" on this device,
+        // and their partner is "user2". You only ever act as yourself.
         this.isSolo = false;
         this.coupleId = userDoc.couple_id;
+        const myName = userDoc.name || 'You';
+        let partnerName = userDoc.partner_name || 'Partner';
+        let city = userDoc.city || 'Brisbane';
 
         try {
           const cSnap = await this.db.collection('couples').doc(userDoc.couple_id).get();
           if (cSnap.exists) {
             const cData = cSnap.data();
-            this.profile = {
-              user1_name: cData.user1_name || 'Emma',
-              user2_name: cData.user2_name || 'Jordan',
-              default_city: cData.default_city || userDoc.city || 'Brisbane'
-            };
-            localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+            if (cData.user1_uid === uid) partnerName = cData.user2_name || partnerName;
+            else if (cData.user2_uid === uid) partnerName = cData.user1_name || partnerName;
+            city = cData.default_city || city;
           }
         } catch (e) {
           console.warn('Couple doc fetch note:', e);
         }
 
-        if (!this.profile) {
-          this.profile = {
-            user1_name: userDoc.name || 'Partner 1',
-            user2_name: userDoc.partner_name || 'Partner 2',
-            default_city: userDoc.city || 'Brisbane'
-          };
-        }
+        this.profile = { user1_name: myName, user2_name: partnerName, default_city: city };
+        localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
 
         this.attachListeners(this.coupleId);
       } else {
@@ -819,6 +816,7 @@ const firebaseService = {
           msgs.push({
             id: doc.id,
             sender_name: d.sender_name || 'Partner',
+            sender_uid: d.sender_uid || null,
             text: d.text || '',
             activity_id: d.activity_id || null,
             activity_title: d.activity_title || null,
@@ -855,6 +853,19 @@ const firebaseService = {
   attachSoloListeners(uid) {
     this.detachListeners();
     if (!uid) return;
+
+    // Watch my own user record: if my partner links with my code, switch to couple mode live
+    this.unsubUserDoc = this.db.collection('users').doc(uid).onSnapshot((snap) => {
+      const data = snap.exists ? snap.data() : null;
+      if (data && data.couple_id && !this.coupleId && this.currentUser) {
+        this._syncingUid = null;
+        this.handleUserSignedIn(this.currentUser).then(() => {
+          if (typeof app !== 'undefined' && app.showToast) {
+            app.showToast(`💞 You're now linked with ${data.partner_name || 'your partner'}!`);
+          }
+        }).catch(() => {});
+      }
+    }, () => {});
 
     // 1. Live Solo Votes Listener (Cloud Firestore -> Local Storage & Memory)
     this.unsubVotes = this.db.collection('users').doc(uid).collection('votes').onSnapshot((snapshot) => {
@@ -1025,6 +1036,7 @@ const firebaseService = {
   },
 
   detachListeners() {
+    if (this.unsubUserDoc) { this.unsubUserDoc(); this.unsubUserDoc = null; }
     if (this.unsubVotes) { this.unsubVotes(); this.unsubVotes = null; }
     if (this.unsubPlanner) { this.unsubPlanner(); this.unsubPlanner = null; }
     if (this.unsubMessages) { this.unsubMessages(); this.unsubMessages = null; }
@@ -1187,7 +1199,9 @@ const firebaseService = {
 
     const msgData = {
       text: text.trim(),
-      sender_name: senderName || 'Partner',
+      // Always the logged-in person — you can't send as your partner
+      sender_name: this.userProfile?.name || senderName || 'Partner',
+      sender_uid: this.currentUser?.uid || null,
       activity_id: activity?.id || null,
       activity_title: activity?.title || null,
       activity_image: activity?.image_url || null,
@@ -1196,6 +1210,11 @@ const firebaseService = {
 
     const docRef = await this.db.collection('couples').doc(this.coupleId).collection('messages').add(msgData);
     return { success: true, id: docRef.id };
+  },
+
+  // Used by the chat screen (argument order: sender, text, activity)
+  async sendChatMessage(senderName, text, activity = null) {
+    return this.sendMessage(text, senderName, activity);
   },
 
   async addCustomActivity(data) {
@@ -1253,5 +1272,53 @@ const firebaseService = {
     this.userProfile = { ...this.userProfile, ...updates };
     localStorage.setItem('twodo_user_profile', JSON.stringify(this.userProfile));
     return { success: true };
+  },
+
+  /**
+   * Update MY name / city only. In a couple you can never change your partner's
+   * details — only your own slot on the shared couple record is touched.
+   */
+  async updateMyProfile({ name, city } = {}) {
+    const uid = this.currentUser?.uid;
+    const oldName = this.userProfile?.name;
+    const cleanName = (name || '').trim();
+    await this.updateSoloProfile({ name: cleanName, city });
+
+    if (this.coupleId && uid) {
+      try {
+        const ref = this.db.collection('couples').doc(this.coupleId);
+        const snap = await ref.get();
+        const data = snap.exists ? snap.data() : {};
+        const slot = data.user2_uid === uid ? 'user2_name' : 'user1_name';
+        const patch = {};
+        if (cleanName) patch[slot] = cleanName;
+        if (city) patch.default_city = city;
+        await ref.set(patch, { merge: true });
+        const partnerUid = this.userProfile?.partner_uid || (data.user1_uid === uid ? data.user2_uid : data.user1_uid);
+        if (partnerUid && cleanName) {
+          await this.db.collection('users').doc(partnerUid).set({ partner_name: cleanName }, { merge: true });
+        }
+      } catch (e) {
+        console.warn('Couple profile update note:', e);
+      }
+
+      // Re-save my votes under my new name so my partner still sees them
+      if (oldName && cleanName && cleanName !== oldName) {
+        const suffix = `_${oldName}`;
+        const done = new Set();
+        Object.keys(this.votesMap || {}).forEach(k => {
+          if (!k.endsWith(suffix)) return;
+          const evId = k.slice(0, -suffix.length);
+          const safe = String(evId).replace(/[\/\.]/g, '_');
+          if (done.has(safe)) return;
+          done.add(safe);
+          this.saveVote(evId, cleanName, this.votesMap[k], this.notesMap?.[k] ?? null).catch(() => {});
+        });
+      }
+    }
+
+    this.profile = { ...(this.profile || {}), ...(cleanName ? { user1_name: cleanName } : {}), ...(city ? { default_city: city } : {}) };
+    try { localStorage.setItem('twodo_profile', JSON.stringify(this.profile)); } catch (e) {}
+    return { success: true, profile: this.profile };
   }
 };

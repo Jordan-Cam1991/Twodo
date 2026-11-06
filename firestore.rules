@@ -3,8 +3,9 @@ rules_version = '2';
 // TwoDo security rules
 // - Each person owns their own user record and private (solo) data.
 // - Pair codes can be looked up by any signed-in user so partners can link.
-// - A couple's shared space is readable/writable only by the two people in it
-//   (couple IDs are "couple_<uidA>_<uidB>").
+// - A couple's shared space is readable by both partners, but each person can
+//   only ever write THEIR OWN votes, notes and chat messages — never act as their partner.
+//   (couple IDs are "couple_<uidA>_<uidB>")
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -16,12 +17,26 @@ service cloud.firestore {
       return signedIn() && coupleId.matches('couple_.*' + request.auth.uid + '.*');
     }
 
+    function myName() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.name;
+    }
+
+    // Only my own entry inside the votes / notes maps may change
+    function onlyMyVotesChange() {
+      let beforeVotes = resource == null ? {} : resource.data.get('votes', {});
+      let afterVotes = request.resource.data.get('votes', {});
+      let beforeNotes = resource == null ? {} : resource.data.get('notes', {});
+      let afterNotes = request.resource.data.get('notes', {});
+      return afterVotes.diff(beforeVotes).affectedKeys().hasOnly([myName()])
+        && afterNotes.diff(beforeNotes).affectedKeys().hasOnly([myName()]);
+    }
+
     // Individual user profiles
     match /users/{uid} {
       allow read: if signedIn();
       allow create, delete: if signedIn() && request.auth.uid == uid;
       // You can edit your own profile. Your partner may only update the
-      // link fields (status / couple / partner) when pairing or unpairing.
+      // link fields (status / couple / partner) when pairing, unpairing or renaming.
       allow update: if signedIn() && (
         request.auth.uid == uid ||
         request.resource.data.diff(resource.data).affectedKeys()
@@ -41,10 +56,28 @@ service cloud.firestore {
       allow delete: if signedIn() && resource.data.user_uid == request.auth.uid;
     }
 
-    // Shared couple space (profile, votes, planner, chat, custom events)
+    // Shared couple space
     match /couples/{coupleId} {
       allow read, write: if isCoupleMember(coupleId);
-      match /{sub=**} {
+
+      // Votes & notes: both can see, each can only set their own
+      match /votes/{voteId} {
+        allow read: if isCoupleMember(coupleId);
+        allow create, update: if isCoupleMember(coupleId) && onlyMyVotesChange();
+      }
+
+      // Chat: messages are always sent as yourself and can't be edited by the other person
+      match /messages/{messageId} {
+        allow read: if isCoupleMember(coupleId);
+        allow create: if isCoupleMember(coupleId) && request.resource.data.sender_uid == request.auth.uid;
+        allow update, delete: if isCoupleMember(coupleId) && resource.data.sender_uid == request.auth.uid;
+      }
+
+      // Shared planner & custom ideas: either partner can add / edit
+      match /planner/{itemId} {
+        allow read, write: if isCoupleMember(coupleId);
+      }
+      match /custom_events/{itemId} {
         allow read, write: if isCoupleMember(coupleId);
       }
     }

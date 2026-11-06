@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=3.3">
+  <link rel="stylesheet" href="css/style.css?v=3.4">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -235,20 +235,12 @@
         </div>
       </div>
 
-      <!-- Coupled Voter Mode Selector (Active when paired) -->
-      <div class="voter-switch" id="voter-switch-container">
-        <span class="voter-label">Voting as:</span>
-        <button id="btn-voter-1" class="voter-pill active" onclick="app.setVoter(1)">
-          <span class="voter-dot" id="voter1-dot"></span>
-          <span id="voter1-display">Emma</span>
-        </button>
-        <button id="btn-voter-2" class="voter-pill" onclick="app.setVoter(2)">
-          <span class="voter-dot" id="voter2-dot"></span>
-          <span id="voter2-display">Jordan</span>
-        </button>
-        <button id="btn-voter-both" class="voter-pill" onclick="app.setVoter('both')">
-          <span>👥 Together</span>
-        </button>
+      <!-- Couple Identity Bar (Active when paired): you always act as yourself -->
+      <div class="voter-switch identity-bar hidden" id="voter-switch-container">
+        <span class="identity-me" onclick="app.quickEditName()" title="Tap to change your name">
+          👤 <strong id="voter1-display">You</strong> <span class="identity-edit">✏️</span>
+        </span>
+        <span class="identity-linked">💞 Linked with <strong id="voter2-display">Partner</strong></span>
       </div>
 
       <!-- Solo Mode Status Bar (Active when single / exploring solo) -->
@@ -384,11 +376,8 @@
           <div id="deck-empty" class="deck-empty-state hidden">
             <span class="empty-emoji">🥳</span>
             <h3>You've reviewed all activities!</h3>
-            <p id="deck-empty-msg">Switch to your partner's profile to see what matches you unlocked, or check your planner.</p>
+            <p id="deck-empty-msg">You've reviewed everything for now! Ideas you both love show up in Matches.</p>
             <div class="deck-empty-actions">
-              <button class="btn btn-secondary" onclick="app.setVoter(app.currentVoter === 1 ? 2 : 1)">
-                Switch to <span id="other-partner-name">Partner</span>
-              </button>
               <button class="btn btn-secondary" id="deck-empty-reset-filter" onclick="discover.resetFilters()">
                 Reset Active Filters
               </button>
@@ -432,14 +421,9 @@
           <div class="chat-header-info">
             <span class="chat-header-avatar">💑</span>
             <div>
-              <h2 class="chat-header-title">Emma & Jordan's Chat</h2>
+              <h2 class="chat-header-title" id="chat-header-title">Couple Chat</h2>
               <span class="chat-header-status">🟢 Connected • Discuss date plans</span>
             </div>
-          </div>
-          <div class="chat-voter-toggle">
-            <span class="chat-sending-as">Sending as:</span>
-            <button type="button" class="chat-voter-chip active" id="chat-voter-1" onclick="chatView.setChatVoter(1)">Emma</button>
-            <button type="button" class="chat-voter-chip" id="chat-voter-2" onclick="chatView.setChatVoter(2)">Jordan</button>
           </div>
         </div>
 
@@ -1031,17 +1015,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=3.3"></script>
-  <script src="js/firebase-service.js?v=3.3"></script>
-  <script src="js/auth-ui.js?v=3.3"></script>
-  <script src="js/events_data.js?v=3.3"></script>
-  <script src="js/api.js?v=3.3"></script>
-  <script src="js/chat.js?v=3.3"></script>
-  <script src="js/collaborative.js?v=3.3"></script>
-  <script src="js/discover.js?v=3.3"></script>
-  <script src="js/swiper.js?v=3.3"></script>
-  <script src="js/planner.js?v=3.3"></script>
-  <script src="js/matches.js?v=3.3"></script>
-  <script src="js/app.js?v=3.3"></script>
+  <script src="js/firebase-config.js?v=3.4"></script>
+  <script src="js/firebase-service.js?v=3.4"></script>
+  <script src="js/auth-ui.js?v=3.4"></script>
+  <script src="js/events_data.js?v=3.4"></script>
+  <script src="js/api.js?v=3.4"></script>
+  <script src="js/chat.js?v=3.4"></script>
+  <script src="js/collaborative.js?v=3.4"></script>
+  <script src="js/discover.js?v=3.4"></script>
+  <script src="js/swiper.js?v=3.4"></script>
+  <script src="js/planner.js?v=3.4"></script>
+  <script src="js/matches.js?v=3.4"></script>
+  <script src="js/app.js?v=3.4"></script>
 </body>
 </html>

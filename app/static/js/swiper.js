@@ -101,7 +101,7 @@ const swiper = {
         } else if (isSolo) {
           emptyMsg.textContent = "You've reviewed all dates! Check your My Loves list or check your planner.";
         } else {
-          emptyMsg.textContent = "Switch to your partner's profile to see what matches you unlocked, or check your planner.";
+          emptyMsg.textContent = `You've reviewed everything for now! Ideas you and ${app.profile?.user2_name || 'your partner'} both love show up in Matches.`;
         }
       }
       if (resetBtn) {

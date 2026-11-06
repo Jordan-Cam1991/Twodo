@@ -3,7 +3,7 @@
  */
 const app = {
   currentCity: 'Brisbane',
-  currentVoter: 1, // 1 = User 1, 2 = User 2, 'both' = Together Mode
+  currentVoter: 1, // Always 1: the logged-in person (user1) — you can't act as your partner
   profile: null,
   events: [],
 
@@ -35,8 +35,8 @@ const app = {
     const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
       ? firebaseService.userProfile.name
       : (localStorage.getItem('twodo_user_name') || 'You');
-    const u1 = isSolo ? activeSoloName : (this.profile.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (this.profile.user2_name || 'Jordan');
+    const u1 = activeSoloName || this.profile.user1_name || 'You';
+    const u2 = isSolo ? 'Partner' : (this.profile.user2_name || 'Partner');
 
     // 1. Header voter switch vs. solo bar
     const voterSwitch = document.getElementById('voter-switch-container');
@@ -85,11 +85,14 @@ const app = {
       if (jordanChip) jordanChip.classList.remove('hidden');
       if (jordanPassChip) jordanPassChip.classList.remove('hidden');
 
-      if (emmaLabel) emmaLabel.textContent = `${u1}'s Loves`;
-      if (emmaPassLabel) emmaPassLabel.textContent = `${u1}'s Passed`;
+      if (emmaLabel) emmaLabel.textContent = 'My Loves';
+      if (emmaPassLabel) emmaPassLabel.textContent = 'My Passed';
       if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
       if (jordanPassLabel) jordanPassLabel.textContent = `${u2}'s Passed`;
     }
+
+    const chatTitle = document.getElementById('chat-header-title');
+    if (chatTitle) chatTitle.textContent = isSolo ? 'Couple Chat' : `${u1} & ${u2}'s Chat`;
 
     // 3. Chat View: Locked state for solo users
     const chatActive = document.getElementById('chat-active-container');
@@ -133,16 +136,10 @@ const app = {
   },
 
   getActiveVoterName() {
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    if (isSolo) {
-      return (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
-        ? firebaseService.userProfile.name
-        : (localStorage.getItem('twodo_user_name') || this.profile?.user1_name || 'You');
-    }
-    if (this.currentVoter === 2) {
-      return this.profile?.user2_name || 'Jordan';
-    }
-    return this.profile?.user1_name || 'Emma';
+    // You only ever act as yourself — the person logged in on this device
+    return (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
+      ? firebaseService.userProfile.name
+      : (this.profile?.user1_name || localStorage.getItem('twodo_user_name') || 'You');
   },
 
   async quickEditName() {
@@ -156,7 +153,6 @@ const app = {
     const clean = newName.trim();
     if (this.profile) this.profile.user1_name = clean;
     localStorage.setItem('twodo_user_name', clean);
-    localStorage.setItem('twodo_pending_name', clean);
     if (this.profile) localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
 
     // Migrate votes from currentName to clean so likes stay intact
@@ -181,11 +177,8 @@ const app = {
     }
     
     if (typeof firebaseService !== 'undefined') {
-      if (firebaseService.userProfile) {
-        firebaseService.userProfile.name = clean;
-        localStorage.setItem('twodo_user_profile', JSON.stringify(firebaseService.userProfile));
-      }
-      await firebaseService.updateSoloProfile({ name: clean });
+      // Updates my user record, my slot on the couple record and re-shares my votes under the new name
+      await firebaseService.updateMyProfile({ name: clean });
     }
     this.updateProfileUI();
     this.showToast(`Updated name to ${clean}! ✨`);
@@ -198,41 +191,11 @@ const app = {
     }
   },
 
-  setVoter(voterIndex) {
-    this.currentVoter = voterIndex;
-    
-    document.getElementById('btn-voter-1')?.classList.toggle('active', voterIndex === 1);
-    document.getElementById('btn-voter-2')?.classList.toggle('active', voterIndex === 2);
-    document.getElementById('btn-voter-both')?.classList.toggle('active', voterIndex === 'both');
-
-    const name = this.getActiveVoterName();
-    this.showToast(voterIndex === 'both' ? '👥 Together Mode active!' : `Voting as ${name}`);
-
-    // Reorder mood chips so active voter's chips come first (immediately visible without scrolling)
-    const scrollEl = document.getElementById('mood-chips-scroll');
-    const emmaChip = document.getElementById('mood-chip-emma');
-    const emmaPassChip = document.getElementById('mood-chip-emma-passed');
-    const jordanChip = document.getElementById('mood-chip-jordan');
-    const jordanPassChip = document.getElementById('mood-chip-jordan-passed');
-
-    if (scrollEl && emmaChip && jordanChip && emmaPassChip && jordanPassChip) {
-      if (voterIndex === 2) {
-        // Jordan's Loves and Passed first
-        scrollEl.insertBefore(jordanChip, emmaChip);
-        scrollEl.insertBefore(jordanPassChip, emmaChip);
-      } else {
-        // Emma's Loves and Passed first (default / Together)
-        scrollEl.insertBefore(emmaChip, jordanChip);
-        scrollEl.insertBefore(emmaPassChip, jordanChip);
-      }
-      scrollEl.scrollTo({ left: 0, behavior: 'smooth' });
-    }
-
+  // Legacy: switching who you vote as is no longer possible — you always act as yourself.
+  setVoter() {
+    this.currentVoter = 1;
     discover.loadEvents(false);
     swiper.initDeck();
-    if (window.chatView && chatView.updateVoterToggleUI) {
-      chatView.updateVoterToggleUI();
-    }
   },
 
   navigate(tabName) {
@@ -323,7 +286,8 @@ const app = {
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = document.getElementById('set-user1-name').value.trim() || 'You';
     const rawU2 = document.getElementById('set-user2-name') ? document.getElementById('set-user2-name').value.trim() : '';
-    const u2 = isSolo ? 'Partner' : (rawU2 || 'Partner');
+    // Your partner's name comes from their own account — it can't be changed here
+    const u2 = isSolo ? 'Partner' : (this.profile?.user2_name || rawU2 || 'Partner');
     const city = document.getElementById('set-default-city').value.trim() || 'Brisbane';
     const tmKey = document.getElementById('set-tm-key')?.value.trim();
     const ebKey = document.getElementById('set-eb-key')?.value.trim();
@@ -343,22 +307,12 @@ const app = {
 
       // 1. Immediately store new name in local storage
       localStorage.setItem('twodo_user_name', u1);
-      localStorage.setItem('twodo_pending_name', u1);
       localStorage.setItem('twodo_profile', JSON.stringify(updateData));
 
       // 2. Update Firebase Service
       if (typeof firebaseService !== 'undefined') {
-        if (firebaseService.userProfile) {
-          firebaseService.userProfile.name = u1;
-          firebaseService.userProfile.city = city;
-          localStorage.setItem('twodo_user_profile', JSON.stringify(firebaseService.userProfile));
-        }
-
-        if (firebaseService.coupleId) {
-          await firebaseService.updateCoupleProfile(updateData);
-        } else if (firebaseService.currentUser) {
-          await firebaseService.updateSoloProfile({ name: u1, city: city });
-        }
+        // Only ever updates YOUR details (never your partner's)
+        await firebaseService.updateMyProfile({ name: u1, city: city });
       }
 
       // 3. Migrate votes from old name to new name so user doesn't lose likes!
