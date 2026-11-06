@@ -129,10 +129,10 @@ const swiper = {
       const partnerVote = (activeVoter === u1) ? ev.u2_vote : ev.u1_vote;
       const partnerNote = (activeVoter === u1) ? ev.u2_note : ev.u1_note;
       let partnerNoteHtml = '';
-      if (!isSolo && partnerVote === 'love' && partnerNote) {
+      if (!isSolo && partnerNote) {
         partnerNoteHtml = `
           <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; padding:6px 10px; margin-bottom:8px; font-size:0.82rem; color:#be123c;">
-            💬 <strong>${partnerName}'s Note:</strong> "${partnerNote}"
+            💬 <strong>${partnerName}'s Note:</strong> "${(typeof discover !== 'undefined' && discover.escapeHtml) ? discover.escapeHtml(partnerNote) : partnerNote}"
           </div>
         `;
       }

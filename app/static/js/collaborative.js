@@ -115,6 +115,11 @@ const collaborative = {
     setTimeout(() => textarea?.focus(), 100);
   },
 
+  partnerName() {
+    return app.profile?.user2_name || 'your partner';
+  },
+
+  /** ❤️ Love & send: loves the idea and attaches the note (moves it to My Loves). */
   async saveLoveNote() {
     const eventId = document.getElementById('love-note-event-id').value;
     const text = document.getElementById('love-note-text').value.trim();
@@ -122,7 +127,41 @@ const collaborative = {
     if (!eventId) return;
 
     await this.handleVote(eventId, 'love', text);
-    app.showToast('💬 Love note saved for your partner!');
+    app.showToast(text ? `❤️ Loved & note sent to ${this.partnerName()} 💌` : '❤️ Saved to your Loves!');
+  },
+
+  /** 💬 Just send note: shares a thought WITHOUT voting, so the idea stays in your feed. */
+  async saveNoteOnly() {
+    const eventId = document.getElementById('love-note-event-id').value;
+    const text = document.getElementById('love-note-text').value.trim();
+    if (!eventId) return;
+    if (!text) {
+      app.showToast('Type a note first ✍️');
+      return;
+    }
+    this.closeLoveNoteModal();
+
+    const me = app.getActiveVoterName();
+    const key = `${eventId}_${me}`;
+
+    // 1. Instant local update (vote untouched)
+    const pool = (typeof discover !== 'undefined' && discover.getAllEventsPool) ? discover.getAllEventsPool() : [];
+    [...(app.events || []), ...pool].forEach(ev => { if (ev && ev.id === eventId) ev.u1_note = text; });
+    try {
+      const notes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
+      notes[key] = text;
+      localStorage.setItem('twodo_notes', JSON.stringify(notes));
+    } catch (e) {}
+    if (typeof firebaseService !== 'undefined') {
+      firebaseService.notesMap[key] = text;
+      // 2. Sync to the cloud so your partner sees it
+      if (firebaseService.saveNote) {
+        firebaseService.saveNote(eventId, me, text).catch(err => console.warn('Note sync note:', err));
+      }
+    }
+
+    discover.renderEvents();
+    app.showToast(`💬 Note sent to ${this.partnerName()} (still in your feed)`);
   },
 
   closeLoveNoteModal() {

@@ -881,6 +881,10 @@ const firebaseService = {
         const vote = d.vote;
         const note = d.note || '';
         if (d.match_dismissed) { dismissed.add(doc.id); dismissed.add(evId); }
+        if (note) {
+          newNotes[`${doc.id}_${myName}`] = note;
+          newNotes[`${evId}_${myName}`] = note;
+        }
         if (!vote) return;
 
         // Store under canonical ID and safeDocId with all voter aliases
@@ -1082,17 +1086,43 @@ const firebaseService = {
     if (this.currentUser) {
       const docRef = this.db.collection('users').doc(this.currentUser.uid).collection('votes').doc(safeDocId);
       try {
-        await docRef.set({
+        const soloPayload = {
           event_id: eventId,
           vote: voteType,
-          note: note || '',
           updated_at: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+        };
+        if (note !== null) soloPayload.note = note; // don't wipe an existing note when just loving
+        await docRef.set(soloPayload, { merge: true });
       } catch (e) {
         console.warn('Firestore solo vote sync note:', e);
       }
     }
 
+    return { success: true };
+  },
+
+  /** Save a note WITHOUT changing the vote (keeps the idea in your feed). */
+  async saveNote(eventId, userName, note) {
+    if (!eventId || !userName) return { success: true };
+    this.notesMap[`${eventId}_${userName}`] = note;
+    const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
+    try {
+      if (this.coupleId) {
+        await this.db.collection('couples').doc(this.coupleId).collection('votes').doc(safeDocId).set({
+          event_id: eventId,
+          notes: { [userName]: note },
+          updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } else if (this.currentUser) {
+        await this.db.collection('users').doc(this.currentUser.uid).collection('votes').doc(safeDocId).set({
+          event_id: eventId,
+          note: note,
+          updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      }
+    } catch (e) {
+      console.warn('Note save note:', e);
+    }
     return { success: true };
   },
 

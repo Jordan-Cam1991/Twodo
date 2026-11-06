@@ -411,18 +411,18 @@ const discover = {
       // Love Notes HTML
       let loveNotesHtml = '';
       const notesList = [];
-      if (ev.u1_vote === 'love' && ev.u1_note) {
+      if (ev.u1_note) {
         notesList.push(`
           <div class="card-love-note u1-note">
-            <span class="note-author-pill u1">❤️ ${u1}</span>
+            <span class="note-author-pill u1">${ev.u1_vote === 'love' ? '❤️' : '💬'} ${u1}</span>
             <span class="note-quote-text">"${discover.escapeHtml(ev.u1_note)}"</span>
           </div>
         `);
       }
-      if (ev.u2_vote === 'love' && ev.u2_note) {
+      if (ev.u2_note) {
         notesList.push(`
           <div class="card-love-note u2-note">
-            <span class="note-author-pill u2">💜 ${u2}</span>
+            <span class="note-author-pill u2">${ev.u2_vote === 'love' ? '💜' : '💬'} ${u2}</span>
             <span class="note-quote-text">"${discover.escapeHtml(ev.u2_note)}"</span>
           </div>
         `);
@@ -434,9 +434,9 @@ const discover = {
       // Add/Edit Note button for active user (compact label to fit 3-col grid)
       const myExistingNote = (activeVoter === u1) ? ev.u1_note : ev.u2_note;
       const isMyLove = (currentVote === 'love');
-      const noteLabel = myExistingNote ? 'Edit Note' : '+ Note';
+      const noteLabel = myExistingNote ? '✏️ Edit Note' : '❤️ + Note';
       const noteBtnHtml = `<button type="button" class="btn-card-extra btn-card-note ${myExistingNote ? 'has-note' : (isMyLove ? 'is-love-note' : '')}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note for partner' : 'Add a note explaining why you love this'}">
-        <span>💬 ${noteLabel}</span>
+        <span>${noteLabel}</span>
       </button>`;
 
       const chatShareBtnHtml = `<button type="button" class="btn-card-extra btn-card-chat" onclick="chatView.shareEventToChat('${ev.id}')" title="Chat about this date idea">
