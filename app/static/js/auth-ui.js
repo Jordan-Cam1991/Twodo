@@ -93,6 +93,10 @@ const authUI = {
     if (appContainer) appContainer.classList.remove('hidden');
 
     this.clearErrors();
+
+    if (window.app && app.updateCreatorButton) {
+      app.updateCreatorButton();
+    }
   },
 
   switchTab(tab) {
@@ -399,6 +403,9 @@ const authUI = {
     }
 
     this.updatePairCodeUI(firebaseService.pairCode);
+    if (window.app && app.updateCreatorButton) {
+      app.updateCreatorButton();
+    }
   },
 
   async handleLogout() {

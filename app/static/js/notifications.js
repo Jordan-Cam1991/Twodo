@@ -219,6 +219,23 @@ const notifications = {
     }
   },
 
+  async sendTestPush() {
+    if (window.app && app.showToast) app.showToast('🚀 Sending test push alert...');
+    this.sendNotification('✨ TwoDo Test Alert', {
+      body: 'Lock-screen notifications are active on this device!',
+      tag: 'twodo-test-' + Date.now(),
+      data: { tab: 'discover' }
+    });
+    const partner = (typeof firebaseService !== 'undefined' && firebaseService.getPartnerName)
+      ? firebaseService.getPartnerName() : 'partner';
+    await this.sendRemotePush({
+      targetPartnerName: partner,
+      title: '✨ TwoDo Test Alert',
+      message: 'Lock-screen notifications are working on your partner device!',
+      tab: 'discover'
+    });
+  },
+
   /** Dispatches an actual lock-screen push directly to your partner's sleeping phone via OneSignal REST API */
   async sendRemotePush({ targetPartnerName, title, message, tab = 'chat' }) {
     const cfg = this.getOneSignalConfig();

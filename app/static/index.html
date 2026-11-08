@@ -209,8 +209,11 @@
           </button>
         </nav>
 
-        <!-- Header Actions: 🔍 Search, ➕ Add Personal Plan, ⚙️ Settings, 🚪 Log Out -->
+        <!-- Header Actions: 🛠️ Creator (Jordan Only), 🔍 Search, ➕ Add Personal Plan, ⚙️ Settings, 🚪 Log Out -->
         <div class="header-actions">
+          <button type="button" class="btn-icon header-icon-btn hidden" id="btn-creator-dashboard" onclick="app.openCreatorModal()" title="Creator Dashboard (Jordan Only)" aria-label="Creator Dashboard">
+            <span>🛠️</span>
+          </button>
           <button type="button" class="btn-icon header-icon-btn" id="btn-header-search" onclick="discover.toggleHeaderSearch()" title="Search" aria-label="Search">
             <span>🔍</span>
           </button>
@@ -795,50 +798,15 @@
         </div>
       </div>
       <form id="settings-form" onsubmit="app.saveSettings(event)">
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="set-user1-name" id="settings-user1-label">Your Name</label>
-            <input type="text" id="set-user1-name" required>
-          </div>
-          <div class="form-group flex-1" id="settings-user2-group">
-            <label for="set-user2-name">Partner 2 Name</label>
-            <input type="text" id="set-user2-name">
-          </div>
+        <div class="form-group">
+          <label for="set-user1-name" id="settings-user1-label">Name</label>
+          <input type="text" id="set-user1-name" placeholder="Your Name" required>
         </div>
 
         <div class="form-group">
           <label for="set-default-city">Default City</label>
           <input type="text" id="set-default-city" required>
         </div>
-
-        <!-- Live Internet Sync Section inside Settings -->
-        <div class="settings-sync-box" style="background:#f8fafc; border:1px solid var(--border); border-radius:14px; padding:0.9rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
-          <div style="display:flex; align-items:center; gap:0.6rem;">
-            <span style="font-size:1.5rem;">🔄</span>
-            <div>
-              <strong style="font-size:0.92rem; display:block; color:var(--text-main);">Pull Live Internet Feeds</strong>
-              <span style="font-size:0.78rem; color:var(--text-muted); display:block;">Scan Reddit, TikTok, council & live gig feeds</span>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary btn-sm" id="btn-refresh-sources" onclick="app.closeSettingsModal(); discover.refreshLiveSources();" style="padding:0.45rem 0.9rem; font-weight:700; white-space:nowrap; border-radius:9999px;">
-            Sync Now ✨
-          </button>
-        </div>
-
-        <details class="advanced-settings">
-          <summary>🔑 API Keys & Live Web Connectors (Optional)</summary>
-          <div class="details-body">
-            <p class="small-text">TwoDo already searches public feeds, open street directories, and seed catalogs without keys. Add personal API keys below to unlock unlimited direct Ticketmaster/Eventbrite quotas:</p>
-            <div class="form-group">
-              <label for="set-tm-key">Ticketmaster API Key</label>
-              <input type="text" id="set-tm-key" placeholder="Ticketmaster Developer Key">
-            </div>
-            <div class="form-group">
-              <label for="set-eb-key">Eventbrite Personal Token</label>
-              <input type="text" id="set-eb-key" placeholder="Eventbrite Private Token">
-            </div>
-          </div>
-        </details>
 
         <!-- Partner Connection & Invite Code Section -->
         <div class="settings-pair-section" id="settings-pair-section" style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:14px; padding:0.9rem; margin-bottom:1rem;">
@@ -860,36 +828,6 @@
           </div>
         </div>
 
-        <!-- Lock-Screen Notifications Card (iOS & Android) -->
-        <div class="settings-notif-card" style="background:#f8fafc; border:1.5px solid var(--border); border-radius:12px; padding:0.85rem 1rem; margin-bottom:1rem;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.4rem;">
-            <div style="display:flex; align-items:center; gap:0.55rem;">
-              <span style="font-size:1.35rem;">🔔</span>
-              <div>
-                <strong style="display:block; font-size:0.92rem; color:var(--text-main);">Lock Screen Alerts</strong>
-                <span id="notif-status-badge" style="font-size:0.75rem; font-weight:700; color:#64748b;">Checking...</span>
-              </div>
-            </div>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-notifs" onclick="notifications.requestPermission()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
-              Enable 🔔
-            </button>
-          </div>
-          <p style="margin:0.25rem 0 0; font-size:0.76rem; color:#64748b; line-height:1.35;">
-            Alerts on mutual matches, partner chats &amp; new dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
-          </p>
-
-          <details style="margin-top:0.6rem; font-size:0.78rem;">
-            <summary style="cursor:pointer; color:var(--primary); font-weight:700;">⚙️ OneSignal Push Keys (Tap to enter)</summary>
-            <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
-              <input type="text" id="set-onesignal-appid" placeholder="OneSignal App ID" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
-              <input type="password" id="set-onesignal-restkey" placeholder="OneSignal REST API Key" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
-              <button type="button" class="btn btn-primary btn-sm" onclick="notifications.saveOneSignalKeys()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px; align-self:flex-end;">
-                Save &amp; Link Devices ✨
-              </button>
-            </div>
-          </details>
-        </div>
-
         <!-- Couple Account & Log Out Section -->
         <div class="settings-account-card">
           <div class="settings-account-info">
@@ -907,6 +845,136 @@
           <button type="submit" class="btn btn-primary">Save Settings</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- CREATOR DASHBOARD MODAL (Strictly for j.camilleri91@hotmail.com) -->
+  <div id="creator-modal" class="modal-overlay hidden" onclick="if(event.target.id === 'creator-modal') app.closeCreatorModal()">
+    <div class="modal-card creator-modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header" style="border-bottom:1px solid var(--border); padding-bottom:0.75rem; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#f5f3ff; color:#7c3aed; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">🛠️</div>
+          <div>
+            <h3 style="margin:0; font-size:1.15rem; color:#1e1b4b;">Creator Dashboard</h3>
+            <span style="font-size:0.75rem; color:#6b7280; font-weight:600;">j.camilleri91@hotmail.com • System Admin</span>
+          </div>
+        </div>
+        <button type="button" class="close-btn" onclick="app.closeCreatorModal()">&times;</button>
+      </div>
+
+      <!-- Live Analytics Stats Grid -->
+      <div class="creator-section" style="margin-bottom:1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.65rem;">
+          <strong style="font-size:0.9rem; color:#1e1b4b;">📊 Platform Analytics</strong>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="app.loadCreatorAnalytics()" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:9999px;">
+            Refresh 🔄
+          </button>
+        </div>
+        <div class="creator-stats-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.6rem;">
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:0.75rem;">
+            <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; display:block;">Registered Users</span>
+            <strong id="creator-stat-users" style="font-size:1.4rem; color:var(--text-main); display:block; margin-top:0.2rem;">...</strong>
+          </div>
+          <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:12px; padding:0.75rem;">
+            <span style="font-size:0.72rem; color:#9d174d; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; display:block;">Couples Linked</span>
+            <strong id="creator-stat-couples" style="font-size:1.4rem; color:#e11d48; display:block; margin-top:0.2rem;">...</strong>
+          </div>
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:0.75rem;">
+            <span style="font-size:0.72rem; color:#166534; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; display:block;">Catalog Ideas</span>
+            <strong id="creator-stat-events" style="font-size:1.4rem; color:#15803d; display:block; margin-top:0.2rem;">...</strong>
+          </div>
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:0.75rem;">
+            <span style="font-size:0.72rem; color:#1e40af; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; display:block;">Live Discovered</span>
+            <strong id="creator-stat-live" style="font-size:1.4rem; color:#2563eb; display:block; margin-top:0.2rem;">...</strong>
+          </div>
+        </div>
+
+        <!-- Recent Registered Users list expandable -->
+        <details style="margin-top:0.75rem; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:0.6rem 0.8rem; font-size:0.8rem;">
+          <summary style="cursor:pointer; font-weight:700; color:#475569;">👥 View Registered Users</summary>
+          <div id="creator-users-list" style="margin-top:0.5rem; max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:0.4rem;">
+            <span style="color:#94a3b8; font-size:0.75rem;">Loading user roster...</span>
+          </div>
+        </details>
+      </div>
+
+      <!-- 1. Pull Live Internet Feeds -->
+      <div class="creator-card" style="background:#f8fafc; border:1px solid var(--border); border-radius:14px; padding:0.9rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <span style="font-size:1.5rem;">🔄</span>
+          <div>
+            <strong style="font-size:0.92rem; display:block; color:var(--text-main);">Pull Live Internet Feeds</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted); display:block;">Scan Reddit, TikTok, council &amp; live gig feeds</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-refresh-sources" onclick="app.closeCreatorModal(); discover.refreshLiveSources();" style="padding:0.45rem 0.95rem; font-weight:700; white-space:nowrap; border-radius:9999px;">
+          Sync Now ✨
+        </button>
+      </div>
+
+      <!-- 2. Lock Screen Alerts & OneSignal Keys -->
+      <div class="creator-card" style="background:#f8fafc; border:1.5px solid var(--border); border-radius:14px; padding:0.9rem; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.4rem;">
+          <div style="display:flex; align-items:center; gap:0.55rem;">
+            <span style="font-size:1.35rem;">🔔</span>
+            <div>
+              <strong style="display:block; font-size:0.92rem; color:var(--text-main);">Lock Screen Alerts</strong>
+              <span id="notif-status-badge" style="font-size:0.75rem; font-weight:700; color:#64748b;">Checking...</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-notifs" onclick="notifications.requestPermission()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
+            Enable 🔔
+          </button>
+        </div>
+        <p style="margin:0.25rem 0 0.5rem; font-size:0.76rem; color:#64748b; line-height:1.35;">
+          Alerts on mutual matches, partner chats &amp; new dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
+        </p>
+
+        <details style="margin-top:0.5rem; font-size:0.78rem;" open>
+          <summary style="cursor:pointer; color:var(--primary); font-weight:700;">⚙️ OneSignal Push Keys</summary>
+          <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+            <input type="text" id="set-onesignal-appid" placeholder="OneSignal App ID" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+            <input type="password" id="set-onesignal-restkey" placeholder="OneSignal REST API Key" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.2rem;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="notifications.sendTestPush()" style="padding:0.4rem 0.8rem; font-weight:700; border-radius:9999px;">
+                Test Push 🚀
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="notifications.saveOneSignalKeys()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
+                Save &amp; Link Devices ✨
+              </button>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 3. API Keys & Live Web Connectors -->
+      <div class="creator-card" style="background:#f8fafc; border:1px solid var(--border); border-radius:14px; padding:0.9rem; margin-bottom:1rem;">
+        <details class="advanced-settings" open>
+          <summary style="cursor:pointer; font-weight:700; color:var(--text-main); font-size:0.9rem;">🔑 API Keys &amp; Web Connectors</summary>
+          <div class="details-body" style="margin-top:0.6rem;">
+            <p class="small-text" style="font-size:0.76rem; color:#64748b; margin-top:0;">Public feeds and open street directories work without keys. Add personal developer API keys below to unlock direct ticket search quotas:</p>
+            <div class="form-group" style="margin-bottom:0.5rem;">
+              <label for="set-tm-key" style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:0.2rem;">Ticketmaster API Key</label>
+              <input type="text" id="set-tm-key" placeholder="Ticketmaster Developer Key" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+            </div>
+            <div class="form-group" style="margin-bottom:0.6rem;">
+              <label for="set-eb-key" style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:0.2rem;">Eventbrite Personal Token</label>
+              <input type="text" id="set-eb-key" placeholder="Eventbrite Private Token" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+            </div>
+            <div style="display:flex; justify-content:flex-end;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="app.saveCreatorApiKeys()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
+                Save API Keys ✨
+              </button>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="modal-actions" style="margin-top:1rem; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary" onclick="app.closeCreatorModal()">Close</button>
+      </div>
+    </div>
+  </div>
     </div>
   </div>
 
@@ -1110,18 +1178,18 @@
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=4.9"></script>
-  <script src="js/firebase-service.js?v=4.9"></script>
-  <script src="js/notifications.js?v=4.9"></script>
-  <script src="js/auth-ui.js?v=4.9"></script>
-  <script src="js/events_data.js?v=4.9"></script>
-  <script src="js/api.js?v=4.9"></script>
-  <script src="js/chat.js?v=4.9"></script>
-  <script src="js/collaborative.js?v=4.9"></script>
-  <script src="js/discover.js?v=4.9"></script>
-  <script src="js/swiper.js?v=4.9"></script>
-  <script src="js/planner.js?v=4.9"></script>
-  <script src="js/matches.js?v=4.9"></script>
-  <script src="js/app.js?v=4.9"></script>
+  <script src="js/firebase-config.js?v=5.0"></script>
+  <script src="js/firebase-service.js?v=5.0"></script>
+  <script src="js/notifications.js?v=5.0"></script>
+  <script src="js/auth-ui.js?v=5.0"></script>
+  <script src="js/events_data.js?v=5.0"></script>
+  <script src="js/api.js?v=5.0"></script>
+  <script src="js/chat.js?v=5.0"></script>
+  <script src="js/collaborative.js?v=5.0"></script>
+  <script src="js/discover.js?v=5.0"></script>
+  <script src="js/swiper.js?v=5.0"></script>
+  <script src="js/planner.js?v=5.0"></script>
+  <script src="js/matches.js?v=5.0"></script>
+  <script src="js/app.js?v=5.0"></script>
 </body>
 </html>

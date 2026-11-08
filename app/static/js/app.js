@@ -121,16 +121,14 @@ const app = {
     }
 
     const setU1 = document.getElementById('set-user1-name');
-    const setU2 = document.getElementById('set-user2-name');
     const setCity = document.getElementById('set-default-city');
     const setU1Label = document.getElementById('settings-user1-label');
-    const setU2Group = document.getElementById('settings-user2-group');
 
     if (setU1) setU1.value = isSolo ? activeSoloName : u1;
-    if (setU2) setU2.value = isSolo ? '' : u2;
     if (setCity) setCity.value = this.currentCity;
-    if (setU1Label) setU1Label.textContent = isSolo ? 'Your Name' : 'Partner 1 Name';
-    if (setU2Group) setU2Group.classList.toggle('hidden', isSolo);
+    if (setU1Label) setU1Label.textContent = 'Name';
+
+    this.updateCreatorButton();
 
     if (window.authUI && authUI.updateSettingsAccountUI) {
       const email = (typeof firebaseService !== 'undefined' && firebaseService.currentUser) 
@@ -333,16 +331,127 @@ const app = {
     }
   },
 
+  /* ==========================================================================
+     CREATOR DASHBOARD (Exclusive to j.camilleri91@hotmail.com)
+     ========================================================================== */
+  isCreator() {
+    const email = (typeof firebaseService !== 'undefined' && firebaseService.currentUser?.email)
+      || localStorage.getItem('twodo_user_email') || '';
+    return email.toLowerCase().trim() === 'j.camilleri91@hotmail.com';
+  },
+
+  updateCreatorButton() {
+    const btn = document.getElementById('btn-creator-dashboard');
+    if (!btn) return;
+    const isOwner = this.isCreator();
+    btn.classList.toggle('hidden', !isOwner);
+  },
+
+  openCreatorModal() {
+    if (!this.isCreator()) {
+      if (this.showToast) this.showToast('Creator dashboard restricted to j.camilleri91@hotmail.com');
+      return;
+    }
+    const modal = document.getElementById('creator-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+    if (typeof notifications !== 'undefined' && notifications.updateUI) {
+      notifications.updateUI();
+    }
+    try {
+      const keys = JSON.parse(this.profile?.api_keys_json || '{}');
+      if (document.getElementById('set-tm-key')) document.getElementById('set-tm-key').value = keys.ticketmaster || '';
+      if (document.getElementById('set-eb-key')) document.getElementById('set-eb-key').value = keys.eventbrite || '';
+    } catch (e) {}
+    this.loadCreatorAnalytics();
+  },
+
+  closeCreatorModal() {
+    const modal = document.getElementById('creator-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  },
+
+  async loadCreatorAnalytics() {
+    const usersCountEl = document.getElementById('creator-stat-users');
+    const couplesCountEl = document.getElementById('creator-stat-couples');
+    const eventsCountEl = document.getElementById('creator-stat-events');
+    const liveCountEl = document.getElementById('creator-stat-live');
+    const usersListEl = document.getElementById('creator-users-list');
+
+    if (eventsCountEl) {
+      const totalEvents = (typeof app !== 'undefined' && app.events ? app.events.length : 0)
+        || ((typeof PRELOADED_EVENTS !== 'undefined' ? PRELOADED_EVENTS.length : 0));
+      eventsCountEl.textContent = totalEvents;
+    }
+
+    if (liveCountEl) {
+      let livePool = [];
+      try { livePool = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]'); } catch (e) {}
+      liveCountEl.textContent = livePool.length;
+    }
+
+    if (typeof firebaseService !== 'undefined' && firebaseService.db) {
+      try {
+        const [usersSnap, couplesSnap] = await Promise.all([
+          firebaseService.db.collection('users').get().catch(() => ({ size: 0, docs: [] })),
+          firebaseService.db.collection('couples').get().catch(() => ({ size: 0, docs: [] }))
+        ]);
+        if (usersCountEl) usersCountEl.textContent = usersSnap.size || 0;
+        if (couplesCountEl) couplesCountEl.textContent = couplesSnap.size || 0;
+
+        if (usersListEl && usersSnap.docs) {
+          const rows = usersSnap.docs.map(doc => {
+            const d = doc.data();
+            const email = d.email || 'No email';
+            const name = d.name || 'Anonymous';
+            const partner = d.partner_name ? `💞 ${d.partner_name}` : 'Solo';
+            const city = d.city || 'Brisbane';
+            return `
+              <div style="display:flex; justify-content:space-between; align-items:center; background:white; padding:0.4rem 0.6rem; border-radius:8px; border:1px solid var(--border); font-size:0.78rem;">
+                <div>
+                  <strong style="color:var(--text-main); font-size:0.8rem;">${name}</strong>
+                  <span style="display:block; font-size:0.7rem; color:#64748b;">${email}</span>
+                </div>
+                <div style="text-align:right;">
+                  <span style="font-size:0.72rem; color:var(--primary); font-weight:700;">${partner}</span>
+                  <span style="display:block; font-size:0.68rem; color:#94a3b8;">${city}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+          usersListEl.innerHTML = rows || '<p style="color:#64748b; font-size:0.75rem;">No registered users yet.</p>';
+        }
+      } catch (err) {
+        console.warn('Creator analytics load error:', err);
+      }
+    }
+  },
+
+  async saveCreatorApiKeys() {
+    const tmKey = document.getElementById('set-tm-key')?.value.trim() || '';
+    const ebKey = document.getElementById('set-eb-key')?.value.trim() || '';
+    try {
+      const existing = JSON.parse(this.profile?.api_keys_json || '{}');
+      existing.ticketmaster = tmKey;
+      existing.eventbrite = ebKey;
+      if (!this.profile) this.profile = {};
+      this.profile.api_keys_json = JSON.stringify(existing);
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+      if (this.showToast) this.showToast('API keys saved ✨');
+    } catch (e) {
+      console.warn('API key save error:', e);
+    }
+  },
+
   async saveSettings(e) {
     if (e && e.preventDefault) e.preventDefault();
     const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
     const u1 = document.getElementById('set-user1-name').value.trim() || 'You';
-    const rawU2 = document.getElementById('set-user2-name') ? document.getElementById('set-user2-name').value.trim() : '';
-    // Your partner's name comes from their own account — it can't be changed here
-    const u2 = isSolo ? 'Partner' : (this.profile?.user2_name || rawU2 || 'Partner');
+    const u2 = isSolo ? 'Partner' : (this.profile?.user2_name || 'Partner');
     const city = document.getElementById('set-default-city').value.trim() || 'Brisbane';
-    const tmKey = document.getElementById('set-tm-key')?.value.trim();
-    const ebKey = document.getElementById('set-eb-key')?.value.trim();
 
     const oldName = this.profile?.user1_name || (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name) || 'Emma';
 
@@ -350,11 +459,7 @@ const app = {
       const updateData = {
         user1_name: u1,
         user2_name: u2,
-        default_city: city,
-        api_keys: {
-          ticketmaster: tmKey,
-          eventbrite: ebKey
-        }
+        default_city: city
       };
 
       // 1. Immediately store new name in local storage
