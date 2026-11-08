@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=3.5">
+  <link rel="stylesheet" href="css/style.css?v=3.6">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -293,6 +293,9 @@
           <button type="button" class="mood-chip" data-mood="sports" onclick="discover.setMoodFilter('sports')">🏟️ Sports</button>
           <button type="button" class="mood-chip" data-mood="shows" onclick="discover.setMoodFilter('shows')">🎭 Comedy & Shows</button>
           <button type="button" class="mood-chip" data-mood="budget" onclick="discover.setMoodFilter('budget')">⚡ Budget & Free</button>
+          <button type="button" class="mood-chip" data-mood="late-night" onclick="discover.setMoodFilter('late-night')">🌙 Late Night</button>
+          <button type="button" class="mood-chip" data-mood="indoor" onclick="discover.setMoodFilter('indoor')">🌧️ Indoor & Cozy</button>
+          <button type="button" class="mood-chip" data-mood="stay-in" onclick="discover.setMoodFilter('stay-in')">🏠 Stay-In</button>
         </div>
       </div>
 
@@ -462,9 +465,14 @@
     <!-- TAB 4: SHARED PLANNER & ITINERARY -->
     <!-- TAB: MATCHES (ideas you both loved, ready to plan) -->
     <section id="view-matches" class="view-panel">
-      <div class="matches-page-header">
-        <h2 id="matches-page-title">💖 Your Matches</h2>
-        <p id="matches-page-sub" class="matches-page-sub">Ideas you both love, ready to plan</p>
+      <div class="matches-page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
+        <div>
+          <h2 id="matches-page-title">💖 Your Matches</h2>
+          <p id="matches-page-sub" class="matches-page-sub">Ideas you both love, ready to plan</p>
+        </div>
+        <button type="button" id="btn-pick-random-match" class="btn btn-primary btn-sm hidden" onclick="matchesView.pickRandomMatch()" style="border-radius:9999px; padding:0.55rem 1.1rem; font-weight:800; box-shadow:0 4px 12px rgba(244,63,94,0.25);">
+          🎲 Pick For Us
+        </button>
       </div>
 
       <div id="matches-grid" class="events-grid matches-grid">
@@ -489,15 +497,19 @@
         <!-- Dynamically injected hero card for the next upcoming date night -->
       </div>
 
-      <!-- Segmented Toggle: [🗓️ Scheduled Dates (2)] | [💡 Mutual Bucket List (8)] -->
+      <!-- Segmented Toggle: [🗓️ Scheduled Dates] | [💡 Mutual Bucket List] | [📸 Memories] -->
       <div class="planner-segmented-bar">
         <button type="button" class="planner-tab-btn active" id="tab-btn-scheduled" onclick="planner.switchView('scheduled')">
           <span>🗓️ Scheduled Dates</span>
           <span class="planner-pill-count" id="scheduled-count-badge">0</span>
         </button>
         <button type="button" class="planner-tab-btn" id="tab-btn-bucket" onclick="planner.switchView('bucket')">
-          <span>💡 Mutual Bucket List</span>
+          <span>💡 Bucket List</span>
           <span class="planner-pill-count" id="bucket-count-badge">0</span>
+        </button>
+        <button type="button" class="planner-tab-btn" id="tab-btn-memories" onclick="planner.switchView('memories')">
+          <span>📸 Memories</span>
+          <span class="planner-pill-count" id="memories-count-badge">0</span>
         </button>
       </div>
 
@@ -538,6 +550,19 @@
           <button class="btn btn-primary btn-sm" onclick="app.navigate('swiper')">Start Swiping 🔥</button>
         </div>
       </div>
+
+      <!-- Tab Content 3: Completed Couple Memories -->
+      <div id="planner-section-memories" class="planner-sub-section hidden">
+        <div id="memories-list" class="scheduled-timeline">
+          <!-- Completed memory cards -->
+        </div>
+
+        <div id="memories-empty" class="empty-state hidden">
+          <span class="empty-emoji">📸</span>
+          <h4>No completed date memories yet</h4>
+          <p>After you go on a scheduled date, tap <strong>✅ Done!</strong> to save it here with your favourite memories.</p>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -576,11 +601,12 @@
         <div class="form-group">
           <label>Activity</label>
           <div id="sched-event-title" class="static-field"></div>
+          <div id="sched-event-when-hint" class="sched-event-when-hint hidden" style="margin-top:6px; padding:8px 12px; background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; font-size:0.83rem; color:#9f1239; line-height:1.4;"></div>
         </div>
 
         <div class="form-row">
           <div class="form-group flex-1">
-            <label for="sched-date">Date</label>
+            <label for="sched-date">Pick Date</label>
             <input type="date" id="sched-date" required>
           </div>
           <div class="form-group flex-1">
@@ -589,7 +615,7 @@
               <option value="morning">🌅 Morning (10:00 AM)</option>
               <option value="afternoon">☀️ Afternoon (2:00 PM)</option>
               <option value="evening" selected>🍷 Evening (6:30 PM)</option>
-              <option value="night">🌙 Late Night (8:30 PM)</option>
+              <option value="late_night">🌙 Late Night (8:30 PM+)</option>
             </select>
           </div>
         </div>
@@ -1017,17 +1043,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=3.5"></script>
-  <script src="js/firebase-service.js?v=3.5"></script>
-  <script src="js/auth-ui.js?v=3.5"></script>
-  <script src="js/events_data.js?v=3.5"></script>
-  <script src="js/api.js?v=3.5"></script>
-  <script src="js/chat.js?v=3.5"></script>
-  <script src="js/collaborative.js?v=3.5"></script>
-  <script src="js/discover.js?v=3.5"></script>
-  <script src="js/swiper.js?v=3.5"></script>
-  <script src="js/planner.js?v=3.5"></script>
-  <script src="js/matches.js?v=3.5"></script>
-  <script src="js/app.js?v=3.5"></script>
+  <script src="js/firebase-config.js?v=3.6"></script>
+  <script src="js/firebase-service.js?v=3.6"></script>
+  <script src="js/auth-ui.js?v=3.6"></script>
+  <script src="js/events_data.js?v=3.6"></script>
+  <script src="js/api.js?v=3.6"></script>
+  <script src="js/chat.js?v=3.6"></script>
+  <script src="js/collaborative.js?v=3.6"></script>
+  <script src="js/discover.js?v=3.6"></script>
+  <script src="js/swiper.js?v=3.6"></script>
+  <script src="js/planner.js?v=3.6"></script>
+  <script src="js/matches.js?v=3.6"></script>
+  <script src="js/app.js?v=3.6"></script>
 </body>
 </html>

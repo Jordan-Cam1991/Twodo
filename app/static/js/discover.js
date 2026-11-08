@@ -66,16 +66,20 @@ const discover = {
       isMulti: true,
       options: [
         { id: 'Fortitude Valley', label: '🍸 Fortitude Valley & James St', desc: 'Laneway dining, bars, boutique bakeries' },
-        { id: 'Sunnybank', label: '🥟 Sunnybank Asian Food Hub', desc: 'Late night hotpot, dumplings, milk tea' },
-        { id: 'West End', label: '🎨 West End & South Brisbane', desc: 'QAGOMA, cultural centre, breweries & Greek eats' },
-        { id: 'Brisbane CBD', label: '🏙️ CBD & Queen\'s Wharf', desc: 'River walks, casino hub, rooftop dining' },
-        { id: 'New Farm', label: '🥐 New Farm & Teneriffe', desc: 'Powerhouse, riverwalk, Agnes bakery, picnics' },
-        { id: 'Paddington', label: '🛍️ Paddington & Milton', desc: 'Vintage shops, Queenslander cafes, craft beer' },
-        { id: 'Woolloongabba', label: '🏏 Woolloongabba & Kangaroo Point', desc: 'Cliffs sunset, antique quarter, wine bars' },
-        { id: 'Bulimba', label: '⛵ Bulimba & Hawthorne', desc: 'Oxford Street dining, cinema, riverside parks' },
-        { id: 'Hamilton', label: '🎪 Hamilton & Eat Street', desc: 'Eat Street Northshore, river food containers' },
-        { id: 'Mount Coot-tha', label: '🌄 Mount Coot-tha & Lookouts', desc: 'Botanic gardens, summit lookout, trail walks' },
-        { id: 'Day Trips', label: '🏝️ Moreton, Straddie & Day Escapes', desc: 'Tangalooma sand dunes, Point Lookout, nature' }
+        { id: 'South Bank', label: '🎭 South Bank & Fish Lane', desc: 'QAGOMA, QPAC, riverfront dining & bars' },
+        { id: 'West End', label: '🎨 West End & Highgate Hill', desc: 'Markets, craft breweries, Greek eats & parks' },
+        { id: 'Brisbane CBD', label: '🏙️ CBD & Queen\'s Wharf', desc: 'Sky Deck, river walks, hidden speakeasies' },
+        { id: 'New Farm', label: '🥐 New Farm, Teneriffe & Newstead', desc: 'Powerhouse, riverwalk, woolstores & breweries' },
+        { id: 'Paddington', label: '🛍️ Paddington, Rosalie & Milton', desc: 'Vintage shops, Queenslander cafes, Suncorp' },
+        { id: 'Woolloongabba', label: '🏏 Woolloongabba & Kangaroo Point', desc: 'Cliffs sunset, antique quarter, wine cellars' },
+        { id: 'Bulimba', label: '⛵ Bulimba & Hawthorne', desc: 'Oxford Street dining, deluxe cinema, river parks' },
+        { id: 'Hamilton', label: '🎪 Hamilton, Ascot & Eat Street', desc: 'Eat Street Northshore, Portside & Racecourse Rd' },
+        { id: 'Sunnybank', label: '🥟 Sunnybank & Southside', desc: 'Late night hotpot, dumplings, boba & forests' },
+        { id: 'Inner North', label: '🌿 Inner North & Enoggera', desc: 'Albion, Kedron, Victoria Park & reservoir swims' },
+        { id: 'Bayside', label: '🌊 Manly, Sandgate & Redcliffe', desc: 'Harbour markets, piers, fish & chips by the bay' },
+        { id: 'Mount Coot-tha', label: '🌄 Mt Coot-tha & Western Suburbs', desc: 'Botanic gardens, Planetarium, summit lookout' },
+        { id: 'SEQ Day Escape', label: '🏝️ Moreton, Straddie & Hinterland', desc: 'Island ferries, Tamborine, Maleny & waterfalls' },
+        { id: 'Stay-In', label: '🏠 At Home (Stay-In Date Nights)', desc: 'Cozy at-home cooking, board games & wine tastings' }
       ]
     },
     vibe: {
@@ -86,14 +90,14 @@ const discover = {
       allLabel: '💫 All Vibes & Styles',
       isMulti: true,
       options: [
-        { id: 'TikTok', label: '🔥 TikTok & Viral Sensation', desc: 'Viral bakeries, trending eats & photogenic spots' },
-        { id: 'Bakery', label: '🥐 Bakeries & Pastry Crawl', desc: 'Croissants, artisanal sourdough, sweet treats' },
+        { id: 'Budget', label: '⚡ Free & Under $30', desc: 'Zero-cost lookouts, cheap eats, markets & walks' },
+        { id: 'Late Night', label: '🌙 Late Night (Open Past 8pm)', desc: 'After-dinner dessert bars, speakeasies, stargazing' },
+        { id: 'Indoor', label: '🌧️ Indoor & Air-Con Friendly', desc: 'Beat the heat or rain: galleries, arcades, pottery' },
+        { id: 'Stay-In', label: '🏠 Stay-In At-Home Dates', desc: 'Romantic nights in when you don\'t want to go out' },
+        { id: 'Romantic', label: '🕯️ Romantic Date Night', desc: 'Intimate candlelit dining & scenic viewpoints' },
         { id: 'Rooftop', label: '🍸 Rooftops & Skyline Bars', desc: 'Golden hour drinks & sparkling city views' },
-        { id: 'Sunnybank', label: '🍜 Late Night Dumplings & Hotpot', desc: 'Comfort Asian suppers, dessert cafes' },
-        { id: 'Romantic', label: '🕯️ Romantic Date Night', desc: 'Intimate candlelit dining & romantic corners' },
-        { id: 'Hidden', label: '🤫 Reddit Hidden Gems', desc: 'Secret viewpoints, underground venues, locals picks' },
-        { id: 'Active', label: '🛶 Kayak & Outdoor Adventure', desc: 'River kayaking, sunset bikes, rock climbing' },
-        { id: 'Workshop', label: '🏺 Pottery & Creative Classes', desc: 'Paint & sip, clay workshops, couple cooking' }
+        { id: 'Bakery', label: '🥐 Bakeries & Brunch Crawl', desc: 'Croissants, artisanal sourdough, specialty coffee' },
+        { id: 'Pottery', label: '🏺 Hands-On Creative Workshops', desc: 'Wheel throwing, paint & sip, cooking classes' }
       ]
     },
     category: {
@@ -104,17 +108,40 @@ const discover = {
       allLabel: '🌟 All Activities & Categories',
       isMulti: true,
       options: [
-        { id: 'Food & Drink', label: '🍕 Food, Wine & Distilleries', desc: 'Top restaurants, cafes, food markets & bars' },
-        { id: 'Date Night Specials', label: '🍷 Date Night & Hidden Gems', desc: 'Curated romantic spots & date-worthy picks' },
-        { id: 'Arts & Culture', label: '🏛️ Museums & Galleries', desc: 'QAGOMA, exhibitions, science & heritage' },
-        { id: 'Music & Concerts', label: '🎵 Live Music & Gigs', desc: 'Concerts, jazz clubs, riverfront gigs' },
-        { id: 'Outdoor & Adventure', label: '🛶 Outdoor, Sports & Kayaking', desc: 'Active fun, trail walks, water sports' },
-        { id: 'Markets & Pop-ups', label: '🎪 Farmers & Night Markets', desc: 'Weekend markets, twilight food stalls' },
-        { id: 'Comedy & Shows', label: '🎭 Comedy, Theatre & Shows', desc: 'Live comedy, performing arts & stage plays' },
-        { id: 'Sightseeing & Nature', label: '🌿 Parks, Botanic & Council', desc: 'Brisbane City Council park programs & nature' },
-        { id: 'Sports & Active', label: '🏟️ Sports, Games & Active', desc: 'Live games, pickleball, squash, climbing & social sport' }
+        { id: 'Food & Drink', label: '🍕 Food, Dining & Bakeries', desc: 'Restaurants, cafes, bakeries & culinary gems' },
+        { id: 'Nightlife & Bars', label: '🍸 Bars, Rooftops & Speakeasies', desc: 'Cocktail lounges, whisky bars, breweries & wine' },
+        { id: 'Outdoors & Nature', label: '🌿 Outdoors, Lookouts & Day Trips', desc: 'River walks, botanic gardens, islands & falls' },
+        { id: 'Sports & Active', label: '🏟️ Live Sports & Play Together', desc: 'Suncorp/Gabba games, pickleball, climbing, putt-putt' },
+        { id: 'Arts & Culture', label: '🏛️ Galleries, Museums & Cinema', desc: 'QAGOMA, Planetarium, open-air & boutique cinemas' },
+        { id: 'Workshops & Classes', label: '🏺 Pottery, Cooking & Sip Classes', desc: 'Clay wheel throwing, pasta making, paint & sip' },
+        { id: 'Markets & Pop-ups', label: '🎪 Night Markets & Farmers Markets', desc: 'Eat Street, weekend farmers & artisan markets' },
+        { id: 'Music & Concerts', label: '🎵 Live Music, Jazz & Gigs', desc: 'Riverstage, Fortitude Music Hall, Tivoli & jazz' },
+        { id: 'Comedy & Shows', label: '🎭 Comedy, Theatre & QPAC', desc: 'Stand-up comedy clubs, musicals, ballet & cabaret' }
       ]
     }
+  },
+
+  /** Returns { url, label } when the event has a valid official external URL, or null otherwise. */
+  getEventLinkInfo(ev) {
+    if (!ev) return null;
+    const isValid = (typeof api !== 'undefined' && api.hasValidSourceUrl)
+      ? api.hasValidSourceUrl(ev)
+      : Boolean(ev.source_url && /^https?:\/\//i.test(ev.source_url) && !String(ev.source_url).includes('google.com/search'));
+    if (!isValid) return null;
+
+    const url = String(ev.source_url).trim();
+    const u = url.toLowerCase();
+    let label = '🔗 Website ↗';
+    if (u.includes('ticketmaster') || u.includes('ticketek') || u.includes('eventbrite') || u.includes('qpac.com.au') || u.includes('feverup') || u.includes('moshtix') || u.includes('oztix')) {
+      label = '🎟️ Tickets ↗';
+    } else if (u.includes('instagram.com') || u.includes('tiktok.com')) {
+      label = '📸 Official Page ↗';
+    } else if (u.includes('brisbane.qld.gov.au') || u.includes('parks.detsi.qld.gov.au') || u.includes('seqwater.com.au') || u.includes('visit')) {
+      label = '🏛️ Official Guide ↗';
+    } else if (u.includes('seriouseats.com') || u.includes('spanishsabores.com')) {
+      label = '📖 Recipe & Guide ↗';
+    }
+    return { url, label };
   },
 
   // ---------------------------------------------------------------------------
@@ -449,26 +476,37 @@ const discover = {
         ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', '${ev.planner_id}')"><span>✓ Planned</span></button>`
         : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)"><span>+ Plan Date</span></button>`;
 
+      const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
+      const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
+      const linkInfo = discover.getEventLinkInfo(ev);
+      const sourceBadgeHtml = linkInfo
+        ? `<a href="${discover.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-badge card-source-badge-link" onclick="event.stopPropagation()" title="Open ${discover.escapeHtml(ev.source || 'official page')}">${discover.escapeHtml(ev.source || 'Official')} ↗</a>`
+        : `<span class="card-source-badge">${discover.escapeHtml(ev.source || 'Brisbane')}</span>`;
+      const externalLinkHtml = linkInfo
+        ? `<span class="meta-dot">•</span><a href="${discover.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" title="Visit ${discover.escapeHtml(ev.source || 'official website')}">${linkInfo.label}</a>`
+        : '';
+
       return `
         <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
           <div class="card-media" ondblclick="discover.handleDoubleTap('${ev.id}')" title="Double-tap photo to Love ❤️">
-            <img class="card-img" src="${ev.image_url}" alt="${ev.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
-            <span class="card-source-badge">${ev.source}</span>
-            <span class="card-price-badge">${ev.price_str || ev.price_level}</span>
+            <img class="card-img" src="${ev.image_url}" alt="${discover.escapeHtml(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
+            ${sourceBadgeHtml}
+            <span class="card-price-badge">${discover.escapeHtml(priceLabel)}</span>
             ${matchBannerHtml}
             <div class="heart-burst-overlay" id="burst-${ev.id}">❤️</div>
           </div>
 
           <div class="card-body">
-            <div class="card-category">${ev.category}</div>
-            <h3 class="card-title">${ev.title}</h3>
+            <div class="card-category">${discover.escapeHtml(ev.category)}</div>
+            <h3 class="card-title">${discover.escapeHtml(ev.title)}</h3>
             
             <div class="card-meta-line">
-              <a href="https://maps.apple.com/?q=${encodeURIComponent((ev.location_name || ev.city || 'Brisbane') + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open in Apple / Google Maps">
-                📍 ${ev.location_name || ev.city} <span class="map-link-arrow">↗</span>
+              <a href="https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open in Apple / Google Maps">
+                📍 ${discover.escapeHtml(locLabel)} <span class="map-link-arrow">↗</span>
               </a>
               <span class="meta-dot">•</span>
               <span class="card-time-span">${discover.formatWhen(ev)}</span>
+              ${externalLinkHtml}
             </div>
 
             ${tipHtml}
@@ -573,10 +611,10 @@ const discover = {
       this.selectedCategories = ['Food & Drink'];
     } else if (mood === 'drinks') {
       this.activeFilter = 'all';
-      this.selectedVibes = ['Rooftop & Views', 'Cocktails & Wine'];
+      this.selectedCategories = ['Nightlife & Bars'];
     } else if (mood === 'outdoor') {
       this.activeFilter = 'all';
-      this.selectedCategories = ['Outdoor & Adventure', 'Sightseeing & Nature'];
+      this.selectedCategories = ['Outdoors & Nature', 'Outdoor & Adventure', 'Sightseeing & Nature'];
     } else if (mood === 'shows') {
       this.activeFilter = 'all';
       this.selectedCategories = ['Comedy & Shows', 'Music & Concerts'];
@@ -585,7 +623,16 @@ const discover = {
       this.selectedCategories = ['Sports & Active'];
     } else if (mood === 'budget') {
       this.activeFilter = 'all';
-      this.selectedVibes = ['Free / Low Cost', 'Casual & Fun'];
+      this.selectedVibes = ['Budget', 'Free'];
+    } else if (mood === 'late-night') {
+      this.activeFilter = 'all';
+      this.selectedVibes = ['Late Night'];
+    } else if (mood === 'indoor') {
+      this.activeFilter = 'all';
+      this.selectedVibes = ['Indoor'];
+    } else if (mood === 'stay-in') {
+      this.activeFilter = 'all';
+      this.selectedVibes = ['Stay-In'];
     }
 
     this.updateActiveFilterPillBar();
@@ -628,7 +675,10 @@ const discover = {
       outdoor: '🌿 Outdoors & Sun',
       shows: '🎭 Comedy & Shows',
       budget: '⚡ Budget & Free',
-      sports: '🏟️ Sports'
+      sports: '🏟️ Sports',
+      'late-night': '🌙 Late Night',
+      indoor: '🌧️ Indoor & Cozy',
+      'stay-in': '🏠 Stay-In Dates'
     };
     if (moodLabels[this.currentMood]) {
       parts.push(moodLabels[this.currentMood]);
@@ -659,20 +709,33 @@ const discover = {
   },
 
   getAllEventsPool() {
+    if (typeof api !== 'undefined' && api.purgeLegacySyntheticCustomEvents) {
+      api.purgeLegacySyntheticCustomEvents();
+    }
     const rawSeeds = (typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [];
+    const liveFeed = (typeof window !== 'undefined' && Array.isArray(window.LIVE_FEED_EVENTS)) ? window.LIVE_FEED_EVENTS : [];
     let customEvents = [];
     try { customEvents = JSON.parse(localStorage.getItem('twodo_custom_events') || '[]'); } catch (e) {}
     const fbCustoms = (typeof firebaseService !== 'undefined' && firebaseService.customEvents) ? firebaseService.customEvents : [];
     const appEvs = (typeof app !== 'undefined' && Array.isArray(app.events)) ? app.events : [];
     
-    const combined = [...fbCustoms, ...customEvents, ...appEvs, ...rawSeeds]
-      .filter(ev => !(typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev))); // hide finished events
+    const combined = [...fbCustoms, ...customEvents, ...liveFeed, ...appEvs, ...rawSeeds]
+      .filter(ev => {
+        if (!ev || !ev.id || !ev.title) return false;
+        if (/#\d+/.test(ev.title)) return false;
+        if (!ev.is_custom && typeof api !== 'undefined' && api.hasValidSourceUrl && !api.hasValidSourceUrl(ev)) return false;
+        if (typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev)) return false;
+        return true;
+      });
     const seenTitles = new Set();
     const seenIds = new Set();
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
 
     return combined.filter(ev => {
-      if (!ev || !ev.id || !ev.title) return false;
+      ev.location_name = ev.location_name || ev.location || 'Brisbane';
+      ev.location = ev.location || ev.location_name;
+      ev.price_str = ev.price_str || ev.price || '$$';
+      ev.price = ev.price || ev.price_str;
       const tKey = norm(ev.title);
       const idKey = String(ev.id);
       if (seenTitles.has(tKey) || seenIds.has(idKey)) return false;

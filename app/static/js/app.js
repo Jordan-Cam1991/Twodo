@@ -23,6 +23,15 @@ const app = {
       await discover.loadEvents(false);
       await planner.loadPlanner();
 
+      // Automatic once-a-day multi-area background event pull
+      if (typeof api !== 'undefined' && api.autoDailyPull) {
+        api.autoDailyPull(false).then(res => {
+          if (res && !res.skipped && res.newly_discovered_count > 0 && window.discover) {
+            discover.loadEvents(false);
+          }
+        }).catch(() => {});
+      }
+
       console.log('TwoDo ready!');
     } catch (e) {
       console.error('App init error:', e);

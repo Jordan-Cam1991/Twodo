@@ -137,6 +137,13 @@ const swiper = {
         `;
       }
 
+      const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
+      const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(ev) : null;
+      const extLinkHtml = linkInfo
+        ? `<a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="margin-left:8px;" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">${linkInfo.label}</a>`
+        : '';
+
       return `
         <div class="swipe-card" id="swipe-card-${idx}" style="z-index: ${zIndex}; transform: scale(${scale}) translateY(${translateY}px);">
           <div class="swipe-badge swipe-badge-love" style="position:absolute; top:20px; left:20px; z-index:20; border:3px solid #10b981; color:#10b981; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(-15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">LOVE ❤️</div>
@@ -144,13 +151,14 @@ const swiper = {
           <div class="swipe-card-media">
             <img src="${ev.image_url}" alt="${ev.title}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${ev.source}</span>
-            <span class="card-price-badge">${ev.price_str || ev.price_level}</span>
+            <span class="card-price-badge">${priceLabel}</span>
           </div>
           <div class="swipe-card-body">
             <div class="card-category">${ev.category}</div>
             <h3 style="font-size:1.25rem; font-weight:800; line-height:1.25; margin-bottom:6px;">${ev.title}</h3>
-            <div class="card-location" style="margin-bottom:6px;">
-              <span>📍</span> <span>${ev.location_name || ev.city}</span>
+            <div class="card-location" style="margin-bottom:6px; display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span>📍</span> <span>${locLabel}</span>
+              ${extLinkHtml}
             </div>
             <div class="card-location" style="margin-bottom:6px; font-weight:600;">${typeof discover !== 'undefined' && discover.formatWhen ? discover.formatWhen(ev) : ''}</div>
             ${partnerNoteHtml}

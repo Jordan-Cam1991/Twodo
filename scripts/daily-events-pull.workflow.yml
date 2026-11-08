@@ -1,0 +1,37 @@
+name: Daily Multi-Area Brisbane Events Pull
+
+on:
+  schedule:
+    # Runs daily at 18:00 UTC (4:00 AM AEST / Brisbane time)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull-and-update-events:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Daily Multi-Area Event Pull & Deduplicator
+        run: python3 scripts/daily_event_pull.py --live-pull
+
+      - name: Commit & Push Updated Event Catalog
+        run: |
+          git config user.name "TwoDo Daily Event Bot"
+          git config user.email "bot@twodoapp.web.app"
+          git add app/static/js/events_data.js app/static/data/live_events_feed.json
+          if git diff --staged --quiet; then
+            echo "No event catalog changes today."
+          else
+            git commit -m "chore(events): automated daily multi-area Brisbane event pull ($(date -u +'%Y-%m-%d'))"
+            git push
+          fi

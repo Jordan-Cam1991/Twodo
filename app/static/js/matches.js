@@ -144,8 +144,14 @@ const matchesView = {
     if (title) title.textContent = isSolo ? '❤️ My Loves' : '💖 Your Matches';
     if (sub) {
       sub.textContent = isSolo
-        ? `${active.length} saved ${active.length === 1 ? 'idea' : 'ideas'} · Link your partner to unlock mutual matches`
-        : `${active.length} ${active.length === 1 ? 'idea' : 'ideas'} you both love · ${toPlan} still to plan`;
+        ? `${active.length} saved ${active.length === 1 ? 'idea' : 'ideas'} · Tap Plan Date to pick when you want to go`
+        : `${active.length} ${active.length === 1 ? 'idea' : 'ideas'} you both love · ${toPlan} ready to pick a date`;
+    }
+
+    const pickBtn = document.getElementById('btn-pick-random-match');
+    if (pickBtn) {
+      pickBtn.classList.toggle('hidden', active.length < 2);
+      pickBtn.innerHTML = isSolo ? '🎲 Pick One For Me' : '🎲 Pick For Us';
     }
 
     if (removedWrap) {
@@ -175,7 +181,17 @@ const matchesView = {
     grid.innerHTML = list.map(({ ev, plan, when, isRemoved }) => {
       const id = this.escape(ev.id);
       const jsId = String(ev.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((ev.location_name || ev.city || 'Brisbane') + ', Brisbane')}`;
+      const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
+      const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
+      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(ev) : null;
+      const externalLinkHtml = linkInfo
+        ? `<span class="meta-dot">•</span><a href="${this.escape(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" title="Open ${this.escape(ev.source || 'official website')}">${linkInfo.label}</a>`
+        : '';
+      const sourceBadgeHtml = linkInfo
+        ? `<a href="${this.escape(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-badge card-source-badge-link" onclick="event.stopPropagation()" title="Open ${this.escape(ev.source || 'official website')}">${this.escape(ev.source || 'Official')} ↗</a>`
+        : `<span class="card-source-badge">${this.escape(ev.source || '')}</span>`;
+
       const tipHtml = ev.insider_tip
         ? `<div class="card-tip"><strong>💡 Tip:</strong> ${this.escape(ev.insider_tip)}</div>` : '';
 
@@ -184,32 +200,33 @@ const matchesView = {
         : `<span class="match-when">⏰ ${this.escape(when.label)}</span>`;
 
       const planStatus = plan
-        ? `<div class="match-plan-status">✅ Planned for ${this.escape(this.formatPlan(plan))}</div>`
+        ? `<div class="match-plan-status">✅ ${plan.status === 'completed' ? 'Completed Memory ❤️' : `Planned for ${this.escape(this.formatPlan(plan))}`}</div>`
         : '';
 
       const primaryBtn = plan
         ? `<button type="button" class="btn-match-primary is-planned" onclick="matchesView.viewInPlanner()">📅 View in Planner</button>`
-        : `<button type="button" class="btn-match-primary" onclick="matchesView.planDate('${jsId}')">📅 Plan Date</button>`;
+        : `<button type="button" class="btn-match-primary" onclick="matchesView.planDate('${jsId}')">📅 Pick Date & Plan</button>`;
 
       const secondaryBtn = isRemoved
         ? `<button type="button" class="btn-match-secondary" onclick="matchesView.restoreMatch('${jsId}')">↩️ Restore</button>`
         : (plan
-          ? `<button type="button" class="btn-match-secondary" onclick="planner.openScheduleModal('${jsId}', '${String(ev.title).replace(/'/g, "\\'")}', '${plan.id}')">✏️ Change</button>`
+          ? `<button type="button" class="btn-match-secondary" onclick="planner.openScheduleModal('${jsId}', '${String(ev.title).replace(/'/g, "\\'")}', '${plan.id}')">✏️ Change Date</button>`
           : `<button type="button" class="btn-match-secondary" onclick="matchesView.removeMatch('${jsId}')">✕ Remove</button>`);
 
       return `
         <article class="event-card match-card ${plan ? 'is-planned' : ''} ${isRemoved ? 'is-removed' : ''}" data-event-id="${id}">
           <div class="card-media">
             <img class="card-img" src="${this.escape(ev.image_url)}" alt="${this.escape(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
-            <span class="card-source-badge">${this.escape(ev.source || '')}</span>
-            <span class="card-price-badge">${this.escape(ev.price_str || ev.price_level || '')}</span>
+            ${sourceBadgeHtml}
+            <span class="card-price-badge">${this.escape(priceLabel)}</span>
             ${!isSolo ? `<div class="card-match-banner">🎉 You both love this!</div>` : ''}
           </div>
           <div class="card-body">
             <div class="card-category">${this.escape(ev.category || '')}</div>
             <h3 class="card-title">${this.escape(ev.title)}</h3>
             <div class="card-meta-line">
-              <a href="${mapsUrl}" target="_blank" rel="noopener" class="card-map-link">📍 ${this.escape(ev.location_name || ev.city || 'Brisbane')} <span class="map-link-arrow">↗</span></a>
+              <a href="${mapsUrl}" target="_blank" rel="noopener" class="card-map-link">📍 ${this.escape(locLabel)} <span class="map-link-arrow">↗</span></a>
+              ${externalLinkHtml}
             </div>
             <div class="match-when-row">${whenHtml}</div>
             ${tipHtml}
@@ -226,28 +243,34 @@ const matchesView = {
     this.updateBadge();
   },
 
-  /** One tap: use the event's own date & time and drop it straight into the Planner. */
+  /** Opens the date & time picker modal so couples can choose when they want to go. */
   async planDate(eventId) {
     const ev = planner.findEvent(eventId);
     if (!ev) return;
-    const when = this.getEventWhen(ev);
+    const existing = planner.getItemForEvent(ev.id);
+    planner.openScheduleModal(ev.id, ev.title, existing ? existing.id : null);
+  },
 
-    // No usable date (or it's already passed) → let them pick one
-    if (!when.date || when.isPast) {
-      app.showToast(when.isPast ? 'That date has passed — pick a new one 📅' : 'Pick a date for this one 📅');
-      planner.openScheduleModal(ev.id, ev.title, null);
+  /** 🎲 Decision Roulette: randomly picks an un-planned match and opens its date picker! */
+  pickRandomMatch() {
+    const { active } = this.getMatches();
+    const unplanned = active.filter(m => !m.plan);
+    const pool = unplanned.length > 0 ? unplanned : active;
+    if (pool.length === 0) {
+      app.showToast('Love a few date ideas first so we can pick one for you! ❤️');
       return;
     }
-
-    await planner.scheduleEvent(ev, {
-      status: 'scheduled',
-      scheduled_date: when.date,
-      scheduled_time: when.time,
-      time_slot: when.timeLabel || 'evening'
-    });
-    app.showToast(`🎉 Planned for ${when.label}! Find it in your Planner`);
-    this.render();
-    if (typeof discover !== 'undefined') discover.renderEvents?.();
+    const winner = pool[Math.floor(Math.random() * pool.length)];
+    const card = document.querySelector(`.match-card[data-event-id="${CSS.escape(String(winner.ev.id))}"]`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('card-highlight-pulse');
+      setTimeout(() => card.classList.remove('card-highlight-pulse'), 2600);
+    }
+    app.showToast(`🎲 Fate picked: "${winner.ev.title}"! Pick your date night 📅`);
+    setTimeout(() => {
+      this.planDate(winner.ev.id);
+    }, 650);
   },
 
   async removeMatch(eventId) {

@@ -24,8 +24,10 @@ const planner = {
     this.currentView = view;
     document.getElementById('tab-btn-scheduled')?.classList.toggle('active', view === 'scheduled');
     document.getElementById('tab-btn-bucket')?.classList.toggle('active', view === 'bucket');
+    document.getElementById('tab-btn-memories')?.classList.toggle('active', view === 'memories');
     document.getElementById('planner-section-scheduled')?.classList.toggle('hidden', view !== 'scheduled');
     document.getElementById('planner-section-bucket')?.classList.toggle('hidden', view !== 'bucket');
+    document.getElementById('planner-section-memories')?.classList.toggle('hidden', view !== 'memories');
   },
 
   updateBadges() {
@@ -33,15 +35,18 @@ const planner = {
     const mBadge = document.getElementById('m-planner-badge');
     const scheduledBadge = document.getElementById('scheduled-count-badge');
     const bucketBadge = document.getElementById('bucket-count-badge');
+    const memoriesBadge = document.getElementById('memories-count-badge');
 
     const visible = this.visibleItems();
     const scheduled = visible.filter(i => i.status === 'scheduled' && i.scheduled_date);
-    const bucket = visible.filter(i => i.status === 'bucket_list' || !i.scheduled_date);
+    const bucket = visible.filter(i => (i.status === 'bucket_list' || !i.scheduled_date) && i.status !== 'completed');
+    const memories = (this.items || []).filter(i => i.status === 'completed');
 
-    if (badge) badge.textContent = visible.length;
-    if (mBadge) mBadge.textContent = visible.length;
+    if (badge) badge.textContent = scheduled.length + bucket.length;
+    if (mBadge) mBadge.textContent = scheduled.length + bucket.length;
     if (scheduledBadge) scheduledBadge.textContent = scheduled.length;
     if (bucketBadge) bucketBadge.textContent = bucket.length;
+    if (memoriesBadge) memoriesBadge.textContent = memories.length;
   },
 
   // Legacy alias (called by older listeners)
@@ -82,10 +87,17 @@ const planner = {
       title: ev.title || 'Couple Date',
       description: ev.description || '',
       category: ev.category || 'Date Night',
-      location_name: ev.location_name || '',
+      location_name: ev.location || ev.location_name || '',
+      location: ev.location || ev.location_name || '',
+      source: ev.source || '',
+      source_url: ev.source_url || '',
+      time_str: ev.time_str || '',
       city: ev.city || (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
       image_url: ev.image_url || '',
-      price_str: ev.price_str || ev.price_level || '',
+      price_str: ev.price || ev.price_str || ev.price_level || '',
+      rating: opts.rating || existing?.rating || null,
+      memory_note: opts.memory_note || existing?.memory_note || '',
+      completed_at: opts.completed_at || existing?.completed_at || null,
       created_at: existing?.created_at || new Date().toISOString()
     };
 
@@ -107,10 +119,11 @@ const planner = {
     return item;
   },
 
-  /** Planner items still worth showing — anything dated in the past is hidden. */
+  /** Planner items still worth showing — anything dated in the past is hidden (except completed Memories). */
   visibleItems() {
     const today = (typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10);
     return (this.items || []).filter(i => {
+      if (i.status === 'completed') return false; // Rendered in the Memories tab
       if (i.scheduled_date && i.scheduled_date < today) return false;
       const ev = this.findEvent(i.event_id);
       if (ev && typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev)) return false;
@@ -125,6 +138,7 @@ const planner = {
     this.renderHeroNextDate(scheduled);
     this.renderScheduled(scheduled);
     this.renderBucketList();
+    this.renderMemories();
     if (typeof matchesView !== 'undefined') matchesView.refresh();
   },
 
@@ -157,7 +171,13 @@ const planner = {
     const monthName = target.toLocaleDateString('en-US', { month: 'short' });
     const dayNum = target.getDate();
 
-    const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((nextDate.location_name || nextDate.city || 'Brisbane') + ', Brisbane')}`;
+    const locLabel = nextDate.location || nextDate.location_name || nextDate.city || 'Brisbane';
+    const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+    const fullEv = this.findEvent(nextDate.event_id) || nextDate;
+    const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+    const heroLinkHtml = linkInfo
+      ? `<span>• <a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="hero-map-link">${linkInfo.label}</a></span>`
+      : '';
 
     heroEl.innerHTML = `
       <div class="planner-hero-inner">
@@ -168,11 +188,15 @@ const planner = {
         <h3 class="hero-title">${nextDate.title}</h3>
         <div class="hero-meta-row">
           <span>📅 ${dayName}, ${dayNum} ${monthName} • ${nextDate.time_slot || 'Evening'}</span>
-          <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="hero-map-link">${nextDate.location_name || nextDate.city} ↗</a></span>
+          <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="hero-map-link">${locLabel} ↗</a></span>
+          ${heroLinkHtml}
         </div>
         ${nextDate.notes ? `<div class="hero-notes"><strong>💌 Date Notes:</strong> "${nextDate.notes}"</div>` : ''}
         <div class="hero-actions-row">
-          <button type="button" class="btn btn-sm btn-white" onclick="planner.exportCalendar()">
+          <button type="button" class="btn btn-sm btn-white" onclick="planner.markCompleted('${nextDate.id}')">
+            ✅ We Did This!
+          </button>
+          <button type="button" class="btn btn-sm btn-hero-subtle" onclick="planner.exportCalendar()">
             🗓️ Add to Calendar
           </button>
           <button type="button" class="btn btn-sm btn-hero-subtle" onclick="planner.openScheduleModal('${nextDate.event_id}', '${nextDate.title.replace(/'/g, "\\'")}', '${nextDate.id}')">
@@ -213,7 +237,13 @@ const planner = {
         ? `<span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700;">💰 Budget: $${item.budget}</span>` 
         : '';
 
-      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((item.location_name || item.city || 'Brisbane') + ', Brisbane')}`;
+      const locLabel = item.location || item.location_name || item.city || 'Brisbane';
+      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+      const fullEv = this.findEvent(item.event_id) || item;
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+      const extLinkHtml = linkInfo
+        ? ` • <a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link">${linkInfo.label}</a>`
+        : '';
 
       return `
         <div class="itinerary-item">
@@ -230,18 +260,21 @@ const planner = {
                 ${budgetHtml}
               </div>
               <div class="itin-meta">
-                <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="itin-map-link">${item.location_name || item.city} ↗</a></span> • 
-                <span>🎟️ ${item.price_str || 'See details'}</span>
+                <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="itin-map-link">${locLabel} ↗</a></span> • 
+                <span>🎟️ ${item.price_str || 'See details'}</span>${extLinkHtml}
               </div>
               ${notesHtml}
             </div>
 
             <div class="itin-actions">
+              <button class="btn btn-sm btn-primary" onclick="planner.markCompleted('${item.id}')" title="Mark this date completed & save to Memories">
+                ✅ Done!
+              </button>
               <button class="btn btn-sm btn-outline" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', '${item.id}')">
                 ✏️ Reschedule
               </button>
               <button class="btn btn-sm btn-secondary" onclick="planner.moveToBucketList('${item.id}')">
-                📦 To Bucket List
+                📦 Bucket List
               </button>
               <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Delete from itinerary">
                 🗑️
@@ -258,7 +291,7 @@ const planner = {
     const empty = document.getElementById('bucket-empty');
     if (!list) return;
 
-    const bucket = this.visibleItems().filter(i => i.status === 'bucket_list' || !i.scheduled_date);
+    const bucket = this.visibleItems().filter(i => (i.status === 'bucket_list' || !i.scheduled_date) && i.status !== 'completed');
 
     if (bucket.length === 0) {
       list.innerHTML = '';
@@ -269,20 +302,27 @@ const planner = {
     empty?.classList.add('hidden');
 
     list.innerHTML = bucket.map(item => {
-      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent((item.location_name || item.city || 'Brisbane') + ', Brisbane')}`;
+      const locLabel = item.location || item.location_name || item.city || 'Brisbane';
+      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+      const fullEv = this.findEvent(item.event_id) || item;
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+      const extLinkHtml = linkInfo
+        ? `<a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="font-size:0.78rem;">${linkInfo.label}</a>`
+        : '';
 
       return `
         <div class="bucket-card">
           <img class="bucket-thumb" src="${item.image_url}" alt="" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=300&q=80'">
           <div class="bucket-card-body">
-            <div class="bucket-card-header">
+            <div class="bucket-card-header" style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
               <span class="bucket-cat">${item.category}</span>
-              <a href="${mapsUrl}" target="_blank" rel="noopener" class="bucket-map-link">📍 ${item.location_name || item.city} ↗</a>
+              <a href="${mapsUrl}" target="_blank" rel="noopener" class="bucket-map-link">📍 ${locLabel} ↗</a>
+              ${extLinkHtml}
             </div>
             <h5 class="bucket-title">${item.title}</h5>
             <div class="bucket-card-actions">
               <button class="btn btn-primary btn-sm btn-sched-bucket" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', '${item.id}')">
-                📅 Plan Date Night
+                📅 Pick Date & Plan
               </button>
               <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Remove">
                 🗑️
@@ -292,6 +332,104 @@ const planner = {
         </div>
       `;
     }).join('');
+  },
+
+  renderMemories() {
+    const list = document.getElementById('memories-list');
+    const empty = document.getElementById('memories-empty');
+    if (!list) return;
+
+    const memories = (this.items || [])
+      .filter(i => i.status === 'completed')
+      .sort((a, b) => String(b.completed_at || b.scheduled_date || '').localeCompare(String(a.completed_at || a.scheduled_date || '')));
+
+    if (memories.length === 0) {
+      list.innerHTML = '';
+      empty?.classList.remove('hidden');
+      return;
+    }
+
+    empty?.classList.add('hidden');
+
+    list.innerHTML = memories.map(item => {
+      const dateStr = item.scheduled_date || item.completed_at;
+      let dateFormatted = 'Completed Date';
+      if (dateStr && /^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+        const d = new Date(dateStr.slice(0, 10) + 'T00:00:00');
+        dateFormatted = d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      }
+      const hearts = item.rating ? '❤️'.repeat(Math.min(5, Math.max(1, Number(item.rating)))) : '❤️❤️❤️❤️❤️';
+      const locLabel = item.location || item.location_name || item.city || 'Brisbane';
+      const fullEv = this.findEvent(item.event_id) || item;
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+      const extLinkHtml = linkInfo
+        ? ` • <a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link">${linkInfo.label}</a>`
+        : '';
+      const memNote = item.memory_note || item.notes || '';
+
+      return `
+        <div class="itinerary-item memory-card">
+          <div class="itinerary-date-col" style="background:linear-gradient(135deg, #fdf2f8, #fce7f3); border-color:#fbcfe8;">
+            <span class="itin-day" style="color:#be185d;">MEMORY</span>
+            <span class="itin-date" style="font-size:0.95rem;">${dateFormatted}</span>
+            <span class="itin-slot">${hearts}</span>
+          </div>
+          <div class="itinerary-info-col">
+            <div>
+              <div class="itin-title-row">
+                <h4 class="itin-title">${item.title}</h4>
+                <span class="badge" style="background:#fdf2f8; color:#be185d; font-weight:700;">📸 Completed</span>
+              </div>
+              <div class="itin-meta">
+                <span>📍 ${locLabel}</span>${extLinkHtml}
+              </div>
+              ${memNote ? `<div class="itin-notes"><strong>💭 Couple Memory:</strong> "${memNote}"</div>` : ''}
+            </div>
+            <div class="itin-actions">
+              <button class="btn btn-sm btn-outline" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', null)">
+                🔁 Plan Again
+              </button>
+              <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Delete memory">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  async markCompleted(plannerId) {
+    const item = (this.items || []).find(i => String(i.id) === String(plannerId));
+    if (!item) return;
+
+    const noteInput = prompt(`🎉 Yay! How was "${item.title}"?\nAdd a quick memory note (or leave blank):`, item.memory_note || item.notes || '');
+    if (noteInput === null) return; // Cancelled
+
+    const todayStr = (typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10);
+    const changes = {
+      status: 'completed',
+      completed_at: todayStr,
+      rating: 5,
+      memory_note: noteInput.trim() || item.notes || ''
+    };
+
+    this.items = (this.items || []).map(i => String(i.id) === String(plannerId) ? { ...i, ...changes } : i);
+    if (typeof firebaseService !== 'undefined') {
+      firebaseService.plannerItems = (firebaseService.plannerItems || []).map(i => String(i.id) === String(plannerId) ? { ...i, ...changes } : i);
+    }
+    try {
+      await api.updatePlanner(plannerId, changes);
+    } catch (e) {}
+    if (this.hasCloud()) {
+      firebaseService.updatePlannerItem(plannerId, changes).catch(err => console.warn(err));
+    }
+
+    if (typeof app !== 'undefined' && app.playCelebrationSound) app.playCelebrationSound();
+    app.showToast('📸 Saved to your Couple Memories!');
+    this.renderPlanner();
+    this.updateBadges();
+    this.switchView('memories');
   },
 
   openScheduleModal(eventId, eventTitle, plannerId = null) {
@@ -308,14 +446,16 @@ const planner = {
     const existing = plannerId
       ? (this.items || []).find(i => String(i.id) === String(plannerId))
       : this.getItemForEvent(eventId);
-    const ev = this.findEvent(eventId);
-    const evDate = ((ev && ev.start_date) || '').slice(0, 10);
+    const ev = this.findEvent(eventId) || existing || {};
+    const evStart = String(ev.start_date || '').slice(0, 10);
+    const evEnd = String(ev.end_date || evStart).slice(0, 10);
+    const isOngoing = Boolean(ev.ongoing || !evStart);
 
     let defaultDateStr;
-    if (existing && existing.scheduled_date) {
+    if (existing && existing.scheduled_date && existing.scheduled_date >= todayStr) {
       defaultDateStr = existing.scheduled_date;
-    } else if (/^\d{4}-\d{2}-\d{2}$/.test(evDate) && evDate >= todayStr) {
-      defaultDateStr = evDate;
+    } else if (!isOngoing && /^\d{4}-\d{2}-\d{2}$/.test(evStart) && evStart >= todayStr) {
+      defaultDateStr = evStart;
     } else {
       const d = new Date();
       const diff = (6 - d.getDay() + 7) % 7 || 7; // next Saturday
@@ -325,7 +465,53 @@ const planner = {
 
     const dateInput = document.getElementById('sched-date');
     dateInput.value = defaultDateStr;
-    dateInput.min = todayStr;
+    dateInput.min = (!isOngoing && evStart > todayStr) ? evStart : todayStr;
+    if (!isOngoing && evEnd && evEnd >= dateInput.min && evEnd !== evStart) {
+      dateInput.max = evEnd;
+    } else {
+      dateInput.removeAttribute('max');
+    }
+
+    // Pre-select time slot based on existing plan or event's start time
+    const slotSelect = document.getElementById('sched-slot');
+    if (slotSelect) {
+      if (existing && existing.time_slot && ['morning', 'afternoon', 'evening', 'late_night'].includes(existing.time_slot)) {
+        slotSelect.value = existing.time_slot;
+      } else {
+        const timeMatch = String(ev.start_date || '').match(/[ T](\d{2}):(\d{2})/);
+        if (timeMatch) {
+          const hr = Number(timeMatch[1]);
+          slotSelect.value = hr < 12 ? 'morning' : (hr < 17 ? 'afternoon' : (hr >= 21 ? 'late_night' : 'evening'));
+        } else {
+          const ts = String(ev.time_str || '').toLowerCase();
+          if (ts.includes('am') && !ts.includes('pm')) slotSelect.value = 'morning';
+          else if (ts.includes('afternoon') || ts.includes('lunch')) slotSelect.value = 'afternoon';
+          else slotSelect.value = 'evening';
+        }
+      }
+    }
+
+    const notesInput = document.getElementById('sched-notes');
+    if (notesInput) notesInput.value = existing?.notes || '';
+    const budgetInput = document.getElementById('sched-budget');
+    if (budgetInput) budgetInput.value = existing?.budget || '';
+
+    // Populate the helpful timing & official link banner inside the Schedule Modal
+    const hintEl = document.getElementById('sched-event-when-hint');
+    if (hintEl) {
+      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(ev) : null;
+      const linkHtml = linkInfo
+        ? `<div style="margin-top:6px;"><a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="font-weight:700;">${linkInfo.label} (${ev.source || 'Official Site'})</a></div>`
+        : '';
+      if (isOngoing) {
+        hintEl.innerHTML = `<div>🕐 <strong>Open Hours:</strong> ${(ev.time_str || 'Open weekly — flexible timing')} — <em>pick any date you'd love to go!</em></div>${linkHtml}`;
+      } else if (evEnd && evEnd !== evStart) {
+        hintEl.innerHTML = `<div>📅 <strong>Multi-Day Event:</strong> ${ev.time_str || `${evStart} to ${evEnd}`} — <em>pick your preferred date below!</em></div>${linkHtml}`;
+      } else {
+        hintEl.innerHTML = `<div>🎟️ <strong>Event Session:</strong> ${ev.time_str || evStart} — <em>date pre-filled below (adjust if needed)</em></div>${linkHtml}`;
+      }
+      hintEl.classList.remove('hidden');
+    }
 
     modal.classList.remove('hidden');
   },

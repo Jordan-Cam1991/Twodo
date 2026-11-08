@@ -107,12 +107,18 @@ def fetch_all_sources(city="Brisbane", lat=None, lng=None, api_keys=None):
             except Exception as e:
                 logger.debug(f"Source fetcher error: {e}")
 
-    # Deduplicate by ID and Title
+    # Deduplicate by ID and Title, and strictly require a valid external source_url
     seen_ids = set()
     seen_titles = set()
     deduped = []
     for ev in all_events:
-        t_key = ev["title"].strip().lower()
+        title_str = (ev.get("title") or "").strip()
+        if not title_str or re.search(r"#\d+", title_str):
+            continue
+        src_url = (ev.get("source_url") or "").strip()
+        if not src_url.startswith(("http://", "https://")) or "google.com/search" in src_url or "reddit.com/r/brisbane/search" in src_url:
+            continue
+        t_key = title_str.lower()
         if ev["id"] not in seen_ids and t_key not in seen_titles:
             seen_ids.add(ev["id"])
             seen_titles.add(t_key)
