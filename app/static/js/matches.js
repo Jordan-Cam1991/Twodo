@@ -251,7 +251,7 @@ const matchesView = {
     planner.openScheduleModal(ev.id, ev.title, existing ? existing.id : null);
   },
 
-  /** 🎲 Decision Roulette: randomly picks an un-planned match and opens its date picker! */
+  /** 🎲 Decision Roulette: randomly picks an un-planned match and scrolls to its event card! */
   pickRandomMatch() {
     const { active } = this.getMatches();
     const unplanned = active.filter(m => !m.plan);
@@ -265,12 +265,9 @@ const matchesView = {
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       card.classList.add('card-highlight-pulse');
-      setTimeout(() => card.classList.remove('card-highlight-pulse'), 2600);
+      setTimeout(() => card.classList.remove('card-highlight-pulse'), 2800);
     }
-    app.showToast(`🎲 Fate picked: "${winner.ev.title}"! Pick your date night 📅`);
-    setTimeout(() => {
-      this.planDate(winner.ev.id);
-    }, 650);
+    app.showToast(`🎲 Picked for you: "${winner.ev.title}"!`);
   },
 
   async removeMatch(eventId) {

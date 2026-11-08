@@ -857,6 +857,9 @@ const discover = {
               <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
                 <span>✕ ${passActive ? 'Passed' : 'Pass'}</span>
               </button>
+              <button type="button" class="btn-card-icon" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', ${ev.planner_id ? `'${ev.planner_id}'` : 'null'})" title="Schedule this activity">
+                📅
+              </button>
               ${!isSolo ? `
                 <button type="button" class="btn-card-icon ${myExistingNote ? 'has-note' : ''}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note' : 'Add a note for your partner'}">
                   💬
@@ -1340,7 +1343,7 @@ const discover = {
             : '';
 
           return `
-            <div class="concierge-pick-card">
+            <div class="concierge-pick-card" onclick="discover.goToEventCard('${ev.id}')" style="cursor:pointer;" title="Tap to view this event card">
               <img class="concierge-pick-img" src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80'">
               <div class="concierge-pick-info">
                 <div class="concierge-pick-top">
@@ -1348,14 +1351,14 @@ const discover = {
                   ${partnerBadge}
                 </div>
                 <h4 class="concierge-pick-title">${this.escapeHtml(ev.title)}</h4>
-                <div class="concierge-pick-meta">
+                <div class="concierge-pick-meta" onclick="event.stopPropagation()">
                   <span>📍 ${this.escapeHtml(locLabel)}</span>
                   <span>• ${this.formatWhen(ev)}</span>
                   ${extHtml}
                 </div>
-                <div class="concierge-pick-actions">
-                  <button type="button" class="btn btn-sm btn-primary" onclick="collaborative.handleVote('${ev.id}', 'love'); discover.renderConcierge();">❤️ Love It</button>
-                  <button type="button" class="btn btn-sm btn-secondary" onclick="discover.closeConcierge(); planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null);">📅 Pick Date &amp; Plan</button>
+                <div class="concierge-pick-actions" onclick="event.stopPropagation()">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="discover.goToEventCard('${ev.id}')">✨ View Event Card →</button>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="collaborative.handleVote('${ev.id}', 'love'); discover.renderConcierge();">❤️ Love It</button>
                 </div>
               </div>
             </div>
@@ -1368,6 +1371,57 @@ const discover = {
         <button type="button" class="btn btn-primary btn-sm" onclick="discover.applyConciergeToFeed()">Browse All ${total} Matching Ideas →</button>
       </div>
     `;
+  },
+
+  /** Navigates directly to the event card in Discover (without opening Schedule Activity) so the user can inspect or schedule it from the card. */
+  async goToEventCard(eventId) {
+    this.closeConcierge();
+    const pool = this.getAllEventsPool();
+    const targetEv = pool.find(e => String(e.id) === String(eventId));
+    if (targetEv) {
+      this.activeFeedMode = targetEv.ongoing ? 'anytime' : 'special';
+    }
+    this.activeIntent = 'all';
+    this.activeSubIntent = 'all';
+    this.activeDateRange = 'all';
+    this.selectedSuburbs = [];
+    this.selectedVibes = [];
+    this.selectedCategories = [];
+    this.searchQuery = '';
+    ['discover-search-input', 'swiper-search-input'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (inp) inp.value = '';
+    });
+
+    if (typeof app !== 'undefined' && app.activeTab !== 'discover') {
+      app.navigate('discover');
+    }
+
+    this.syncIntentUI();
+    this.updateFilterHeaderBadges();
+    await this.loadEvents(false);
+
+    // Ensure the selected event is at the top of app.events so it is on Page 1 and immediately visible
+    if (Array.isArray(app.events)) {
+      const idx = app.events.findIndex(e => String(e.id) === String(eventId));
+      if (idx > 0) {
+        const [picked] = app.events.splice(idx, 1);
+        app.events.unshift(picked);
+        this.renderEvents();
+      } else if (idx === -1 && targetEv) {
+        app.events.unshift(targetEv);
+        this.renderEvents();
+      }
+    }
+
+    setTimeout(() => {
+      const card = document.querySelector(`#events-grid .event-card[data-event-id="${CSS.escape(String(eventId))}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('card-highlight-pulse');
+        setTimeout(() => card.classList.remove('card-highlight-pulse'), 2800);
+      }
+    }, 80);
   },
 
   getAllEventsPool() {

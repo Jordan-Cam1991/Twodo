@@ -501,7 +501,7 @@ const planner = {
     if (hintEl) {
       const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(ev) : null;
       const linkHtml = linkInfo
-        ? `<div style="margin-top:6px;"><a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="font-weight:700;">${linkInfo.label} (${ev.source || 'Official Site'})</a></div>`
+        ? `<div style="margin-top:6px;"><a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="font-weight:700;">${linkInfo.label}</a></div>`
         : '';
       if (isOngoing) {
         hintEl.innerHTML = `<div>🕐 <strong>Open Hours:</strong> ${(ev.time_str || 'Open weekly — flexible timing')} — <em>pick any date you'd love to go!</em></div>${linkHtml}`;
