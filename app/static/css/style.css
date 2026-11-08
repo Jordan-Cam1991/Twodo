@@ -5077,3 +5077,267 @@ html.device-authenticated #app-container {
 .card-source-badge-link:hover {
   background: rgba(15, 23, 42, 0.92);
 }
+
+/* ==========================================================================
+   COMPREHENSIVE MOBILE & PHONE RESPONSIVENESS (iPhone / Android / PWA)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Prevent iOS Safari auto-zoom on input focus (must be >= 16px) */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="url"],
+  select,
+  textarea,
+  .discover-search-input,
+  .chat-input,
+  .love-note-textarea,
+  .centsauble-input,
+  .centsauble-select {
+    font-size: 16px !important;
+  }
+
+  /* Discover & Matches Card Meta Line + Official Website Pill */
+  .card-meta-line {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.28rem 0.45rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .card-source-link {
+    padding: 0.18rem 0.55rem !important;
+    font-size: 0.74rem !important;
+    min-height: 24px !important;
+    max-width: 100% !important;
+  }
+
+  /* Swiper Compact Bar & Card Body on Mobile */
+  .swiper-filter-compact-bar {
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+
+  .swiper-filter-status-pill {
+    flex: 1 1 100% !important;
+    text-align: left !important;
+    font-size: 0.78rem !important;
+  }
+
+  .swiper-filter-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+  }
+
+  .card-deck-wrapper {
+    height: 465px !important;
+    max-width: 360px !important;
+    margin: 0 auto 0.85rem auto !important;
+  }
+
+  .swipe-card-media {
+    height: 40% !important;
+    flex-shrink: 0 !important;
+  }
+
+  .swipe-card-body {
+    padding: 0.85rem 1rem !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .swipe-card-body h3 {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .swipe-card-body p {
+    font-size: 0.8rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* Planner 3-Tab Segmented Toggle Bar on Mobile */
+  .planner-segmented-bar {
+    padding: 0.25rem !important;
+    gap: 0.2rem !important;
+  }
+
+  .planner-tab-btn {
+    padding: 0.52rem 0.3rem !important;
+    font-size: 0.75rem !important;
+    gap: 0.25rem !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+  }
+
+  .planner-pill-count {
+    font-size: 0.68rem !important;
+    padding: 1px 5px !important;
+  }
+
+  .planner-sub-actions {
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+
+  .btn-planner-util {
+    flex: 1 1 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.76rem !important;
+  }
+
+  /* Planner Hero Card on Mobile */
+  .planner-hero-card {
+    padding: 1rem 1.1rem !important;
+    border-radius: 16px !important;
+  }
+
+  .hero-title {
+    font-size: 1.15rem !important;
+  }
+
+  .hero-meta-row {
+    gap: 0.45rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .hero-actions-row .btn {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+  }
+
+  /* Planner Scheduled Timeline & Memory Cards: Stack Vertically on Mobile */
+  .itinerary-item {
+    flex-direction: column !important;
+  }
+
+  .itinerary-date-col {
+    width: 100% !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.6rem 0.95rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    gap: 0.5rem !important;
+  }
+
+  .itin-date {
+    font-size: 1rem !important;
+  }
+
+  .itin-slot {
+    margin-top: 0 !important;
+  }
+
+  .itinerary-info-col {
+    padding: 0.9rem 0.95rem !important;
+  }
+
+  .itin-title-row {
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+  }
+
+  .itin-title {
+    font-size: 1.02rem !important;
+  }
+
+  .itin-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.25rem 0.4rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .itin-actions {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    gap: 0.4rem !important;
+    margin-top: 0.75rem !important;
+  }
+
+  .itin-actions .btn {
+    flex: 1 1 auto !important;
+    min-height: 36px !important;
+  }
+
+  .bucket-list-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Modals on Mobile */
+  .modal-overlay {
+    padding: 0.75rem !important;
+  }
+
+  .modal-card {
+    padding: 1.15rem !important;
+    max-height: 88dvh !important;
+    border-radius: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack side-by-side form rows (Schedule Date + Time Slot, etc.) on narrow phones */
+  .form-row {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  /* Matches Page Header & Card Buttons on 320px-430px Phones */
+  .matches-page-header {
+    padding: 0.15rem 0 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .matches-page-header h2 {
+    font-size: 1.35rem !important;
+  }
+
+  .match-actions {
+    grid-template-columns: 1.25fr 1fr !important;
+    gap: 0.45rem !important;
+  }
+
+  .btn-match-primary,
+  .btn-match-secondary {
+    padding: 0.62rem 0.5rem !important;
+    font-size: 0.8rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .modal-actions,
+  .love-note-footer {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .modal-actions .btn,
+  .love-note-footer .btn {
+    flex: 1 1 auto !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+  }
+}

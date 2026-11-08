@@ -252,6 +252,7 @@ const swiper = {
 
     // Mobile touch events (iPhone & Android)
     card.addEventListener('touchstart', (e) => {
+      if (e.target && e.target.closest('a, button')) return;
       if (e.touches.length !== 1) return;
       onStart(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
@@ -266,6 +267,7 @@ const swiper = {
 
     // Desktop mouse events
     card.addEventListener('mousedown', (e) => {
+      if (e.target && e.target.closest('a, button')) return;
       onStart(e.clientX, e.clientY);
       const mouseMoveHandler = (moveEv) => onMove(moveEv.clientX, moveEv.clientY);
       const mouseUpHandler = () => {
