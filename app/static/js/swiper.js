@@ -188,6 +188,8 @@ const swiper = {
     const statusEl = document.getElementById('sw-filter-status');
     if (!statusEl) return;
     const remaining = Math.max(0, this.deckQueue.length - this.currentIndex);
+    const isSpecial = (typeof discover !== 'undefined' && discover.activeFeedMode === 'special');
+    const noun = isSpecial ? 'special events' : 'anytime places';
     const filterParts = [];
     if (typeof discover !== 'undefined') {
       if (discover.activeIntent && discover.activeIntent !== 'all') {
@@ -199,7 +201,9 @@ const swiper = {
         }
         filterParts.push(iLabel);
       }
-      if (discover.activeDateRange !== 'all') filterParts.push(`📅 ${discover.getDateChipLabel()}`);
+      if (isSpecial && discover.activeDateRange && discover.activeDateRange !== 'all') {
+        filterParts.push(`📅 ${discover.getDateChipLabel()}`);
+      }
       if (discover.selectedSuburbs && discover.selectedSuburbs.length > 0) {
         filterParts.push(discover.selectedSuburbs.length === 1 ? discover.selectedSuburbs[0] : `${discover.selectedSuburbs.length} Suburbs`);
       }
@@ -212,9 +216,9 @@ const swiper = {
     }
 
     if (filterParts.length > 0) {
-      statusEl.textContent = `🎯 ${remaining} activities matching: ${filterParts.join(' • ')}`;
+      statusEl.textContent = `🎯 ${remaining} ${noun} matching: ${filterParts.join(' • ')}`;
     } else {
-      statusEl.textContent = `⚡ ${remaining} activities ready to swipe`;
+      statusEl.textContent = `${isSpecial ? '🎟️' : '🌟'} ${remaining} ${noun} ready to swipe`;
     }
   },
 

@@ -137,6 +137,11 @@ const api = {
       this.serverAvailable = true;
       const data = await res.json();
       if (data && Array.isArray(data.events)) {
+        if (params.feed_mode === 'anytime') {
+          data.events = data.events.filter(ev => Boolean(ev.ongoing));
+        } else if (params.feed_mode === 'special') {
+          data.events = data.events.filter(ev => !ev.ongoing);
+        }
         if (params.intent && params.intent !== 'all') {
           data.events = data.events.filter(ev => this.matchEventIntent(ev, params.intent, params.sub_intent || 'all'));
         }
@@ -212,6 +217,41 @@ const api = {
       if (sub === 'active') return cat === 'sports & active' || hasAny(['pickleball', 'padel', 'tennis', 'squash', 'climb', 'boulder', 'kayak', 'run', 'social sport', 'golf', 'driving range', 'skate', 'swim', 'surf']);
       if (sub === 'culture') return cat === 'arts & culture' || hasAny(['gallery', 'museum', 'qagoma', 'planetarium', 'cinema', 'exhibition', 'tour', 'heritage', 'library']);
       if (sub === 'wellness') return hasAny(['bathhouse', 'sauna', 'spa', 'soak', 'float', 'massage', 'wellness', 'yoga', 'pilates', 'meditation', 'thermal']);
+      return true;
+    }
+
+    if (intent === 'special_music') {
+      const isMusic = cat === 'music & concerts' || hasAny(['concert', 'live music', 'candlelight', 'symphony', 'riverstage', 'fortitude music hall', 'the tivoli', 'the triffid', 'princess theatre', 'acoustic', 'tour']);
+      if (!isMusic) return false;
+      if (sub === 'candlelight') return hasAny(['candlelight', 'symphony', 'classical', 'acoustic']);
+      if (sub === 'arena_outdoor') return hasAny(['suncorp', 'riverstage', 'entertainment centre', 'outdoor']);
+      if (sub === 'club_theatre') return hasAny(['fortitude music hall', 'tivoli', 'triffid', 'princess theatre', 'powerhouse']);
+      return true;
+    }
+
+    if (intent === 'special_sports') {
+      const isSports = cat === 'sports & active' || hasAny(['nbl', 'bbl', 'wbbl', 'a-league', 'raceday', 't20', 'sheffield', 'super rugby', 'tennis', 'abl', 'bullets', 'heat', 'roar', 'reds', 'bulls']);
+      if (!isSports) return false;
+      if (sub === 'cricket') return hasAny(['heat', 'bbl', 'wbbl', 't20', 'sheffield', 'bulls', 'gabba']);
+      if (sub === 'basketball') return hasAny(['bullets', 'nbl']);
+      if (sub === 'football_rugby') return hasAny(['roar', 'a-league', 'reds', 'super rugby', 'suncorp']);
+      if (sub === 'racing_tennis') return hasAny(['raceday', 'races', 'eagle farm', 'doomben', 'tennis', 'brisbane international', 'bandits']);
+      return true;
+    }
+
+    if (intent === 'special_shows') {
+      const isShow = cat === 'comedy & shows' || hasAny(['comedy', 'theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'moonlight cinema', 'outdoor cinema', 'la boite']);
+      if (!isShow) return false;
+      if (sub === 'theatre_ballet') return hasAny(['theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'six the musical', 'la boite']);
+      if (sub === 'comedy_cinema') return hasAny(['comedy', 'gala', 'stand-up', 'cinema', 'moonlight', 'movie']);
+      return true;
+    }
+
+    if (intent === 'special_festivals') {
+      const isFest = ['arts & culture', 'markets & pop-ups'].includes(cat) || hasAny(['festival', 'exhibition', 'goma', 'qagoma', 'brisasia', 'finders keepers', 'reservoir', 'pylon', 'film festival']);
+      if (!isFest) return false;
+      if (sub === 'exhibitions') return hasAny(['exhibition', 'goma', 'qagoma', 'henson', 'mudskippers', 'smokescreen', 'film festival']);
+      if (sub === 'festivals_tours') return hasAny(['festival', 'melt', 'brisasia', 'finders keepers', 'market', 'reservoir', 'pylon', 'up late']);
       return true;
     }
 
@@ -466,6 +506,14 @@ const api = {
       ev.price_str = ev.price_str || ev.price || '$$';
       ev.price = ev.price || ev.price_str;
 
+      // Feed Mode filter: 'anytime' (always-on places) vs 'special' (dated ticketed events/matches/shows)
+      if (params.feed_mode === 'anytime' && !ev.ongoing) {
+        continue;
+      }
+      if (params.feed_mode === 'special' && ev.ongoing) {
+        continue;
+      }
+
       // Primary Intent + Sub-Intent filter (Eat & Drink, Do an Activity, What's On, Outdoors, Low-Key)
       if (params.intent && params.intent !== 'all') {
         if (!this.matchEventIntent(ev, params.intent, params.sub_intent || 'all')) {
@@ -616,7 +664,8 @@ const api = {
       results.push(ev);
     }
 
-    // Sort: double loves first, mutual matches second, planner items third
+    // Sort: in 'special' dated mode, sort chronologically by upcoming start_date (with mutual/partner love boost);
+    // in 'anytime' mode, sort by match & partner vote priority
     results.sort((a, b) => {
       const score = x => {
         let s = 0;
@@ -626,7 +675,14 @@ const api = {
         if (x.u1_vote === 'love' || x.u2_vote === 'love') s += 10;
         return s;
       };
-      return score(b) - score(a);
+      const diffScore = score(b) - score(a);
+      if (diffScore !== 0) return diffScore;
+      if (params.feed_mode === 'special') {
+        const da = String(a.start_date || '9999-12-31');
+        const db = String(b.start_date || '9999-12-31');
+        return da.localeCompare(db);
+      }
+      return 0;
     });
 
     return { events: results, count: results.length, source: 'client-storage' };

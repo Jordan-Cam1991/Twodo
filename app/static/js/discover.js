@@ -5,13 +5,14 @@
  */
 const discover = {
   // Active Filter State (empty array means "All")
+  activeFeedMode: 'anytime', // 'anytime' (always-on places) | 'special' (dated ticketed events/concerts/sports/shows)
   selectedCategories: [],
   selectedSuburbs: [],
   selectedVibes: [],
-  activeIntent: 'all',    // 'all' | 'eat_drink' | 'activity' | 'whats_on' | 'outdoors' | 'low_key'
+  activeIntent: 'all',
   activeSubIntent: 'all', // Sub-refiner within the chosen intent
-  activeDateRange: 'this_week', // Default: events happening this week (today + next 6 days)
-  defaultDateRange: 'this_week',
+  activeDateRange: 'all', // Default in Special Events: show all upcoming dated events chronologically
+  defaultDateRange: 'all',
   activeFilter: 'all',
   customStart: null,
   customEnd: null,
@@ -24,6 +25,25 @@ const discover = {
     when: 'tonight',
     vibe: 'any',
     offset: 0
+  },
+
+  modeCategoryTabs: {
+    anytime: [
+      { intent: 'all', icon: '✨', label: 'All Places' },
+      { intent: 'eat_drink', icon: '🍽️', label: 'Eat & Drink' },
+      { intent: 'activity', icon: '🎯', label: 'Activities' },
+      { intent: 'outdoors', icon: '🌿', label: 'Outdoors' },
+      { intent: 'low_key', icon: '🌙', label: 'Low-Key' },
+      { intent: 'saved', icon: '❤️', label: 'Loves & Votes' }
+    ],
+    special: [
+      { intent: 'all', icon: '✨', label: 'All Events' },
+      { intent: 'special_music', icon: '🎵', label: 'Concerts & Music' },
+      { intent: 'special_sports', icon: '🏟️', label: 'Live Sports' },
+      { intent: 'special_shows', icon: '🎭', label: 'Comedy & Theatre' },
+      { intent: 'special_festivals', icon: '🎨', label: 'Festivals & Arts' },
+      { intent: 'saved', icon: '❤️', label: 'Loves & Votes' }
+    ]
   },
 
   intentDefinitions: {
@@ -40,7 +60,7 @@ const discover = {
       ]
     },
     activity: {
-      label: '🎯 Do an Activity',
+      label: '🎯 Activities',
       subs: [
         { id: 'all', label: '✨ All Activities' },
         { id: 'games', label: '🕹️ Arcade, Mini-Golf & Games' },
@@ -48,17 +68,6 @@ const discover = {
         { id: 'active', label: '🏓 Play Sports Together' },
         { id: 'culture', label: '🏛️ Galleries, Cinema & Space' },
         { id: 'wellness', label: '🧖‍♀️ Bathhouse, Sauna & Spa' }
-      ]
-    },
-    whats_on: {
-      label: '🎟️ What\'s On',
-      subs: [
-        { id: 'all', label: '✨ All Live & Shows' },
-        { id: 'dated_only', label: '📅 Dated Upcoming Events' },
-        { id: 'shows', label: '🎭 Comedy & Theatre' },
-        { id: 'music', label: '🎵 Concerts & Live Gigs' },
-        { id: 'sports_live', label: '🏟️ Live Sports Matches' },
-        { id: 'markets', label: '🎪 Markets & Festivals' }
       ]
     },
     outdoors: {
@@ -80,7 +89,67 @@ const discover = {
         { id: 'late_night', label: '🌙 Late Night (Past 8pm)' },
         { id: 'stay_in', label: '🏠 Stay-In At Home' }
       ]
+    },
+    special_music: {
+      label: '🎵 Concerts & Music',
+      subs: [
+        { id: 'all', label: '✨ All Concerts' },
+        { id: 'candlelight', label: '🕯️ Candlelight & Symphony' },
+        { id: 'arena_outdoor', label: '🏟️ Riverstage, Suncorp & Arena' },
+        { id: 'club_theatre', label: '🎸 Fortitude Hall, Tivoli & Triffid' }
+      ]
+    },
+    special_sports: {
+      label: '🏟️ Live Sports',
+      subs: [
+        { id: 'all', label: '✨ All Live Sports' },
+        { id: 'cricket', label: '🏏 Cricket (BBL, WBBL & T20I)' },
+        { id: 'basketball', label: '🏀 Basketball (Bullets NBL)' },
+        { id: 'football_rugby', label: '⚽ Football & Rugby (Roar & Reds)' },
+        { id: 'racing_tennis', label: '🏇 Racedays, Tennis & Baseball' }
+      ]
+    },
+    special_shows: {
+      label: '🎭 Comedy & Theatre',
+      subs: [
+        { id: 'all', label: '✨ All Shows' },
+        { id: 'theatre_ballet', label: '🎭 QPAC Musicals, Theatre & Ballet' },
+        { id: 'comedy_cinema', label: '🎤 Comedy Galas & Moonlight Cinema' }
+      ]
+    },
+    special_festivals: {
+      label: '🎨 Festivals & Arts',
+      subs: [
+        { id: 'all', label: '✨ All Festivals & Arts' },
+        { id: 'exhibitions', label: '🖼️ GOMA Exhibitions & Film Fest' },
+        { id: 'festivals_tours', label: '🎪 Festivals, Markets & Special Tours' }
+      ]
+    },
+    whats_on: {
+      label: '🎟️ Special Events',
+      subs: []
     }
+  },
+
+  setFeedMode(mode) {
+    const nextMode = (mode === 'special') ? 'special' : 'anytime';
+    this.activeFeedMode = nextMode;
+    this.activeIntent = 'all';
+    this.activeSubIntent = 'all';
+    this.currentPage = 1;
+
+    // Exit personal Loves/Passed view if active so the chosen mode is shown immediately
+    if (this.isSpecialMood()) {
+      this.currentMood = 'all';
+      this.activeFilter = 'all';
+      document.querySelectorAll('.mood-chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.mood === 'all');
+      });
+    }
+
+    this.syncIntentUI();
+    this.updateFilterHeaderBadges();
+    this.loadEvents(false);
   },
 
   setIntent(intent, subIntent = 'all') {
@@ -134,19 +203,99 @@ const discover = {
   },
 
   syncIntentUI() {
+    const mode = this.activeFeedMode || 'anytime';
     const effectiveTab = this.isSpecialMood() ? 'saved' : this.activeIntent;
-    document.querySelectorAll('#discover-intent-tiles .cat-tab, #discover-intent-tiles .intent-tile').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.intent === effectiveTab);
+
+    // 1. Sync Mode Switcher buttons (Anytime Places vs Special Events)
+    document.querySelectorAll('#discover-mode-switcher .feed-mode-btn, #swiper-mode-switcher .feed-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
     });
-    document.querySelectorAll('#swiper-intent-tiles .cat-tab, #swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
-      const swIntent = (this.activeIntent === 'saved') ? 'all' : this.activeIntent;
-      btn.classList.toggle('active', btn.dataset.intent === swIntent);
+
+    // 2. Show 📅 Date pill ONLY in Special Events mode (hides it in Anytime Places!)
+    ['mood-chip-date', 'sw-date-pill'].forEach(id => {
+      const dateBtn = document.getElementById(id);
+      if (dateBtn) {
+        dateBtn.classList.toggle('hidden', mode !== 'special');
+      }
     });
+
+    // 3. Update search placeholder to match active mode
+    const placeholder = mode === 'special'
+      ? 'Search concerts, live sports, comedy, shows...'
+      : 'Search restaurants, bars, activities, walks...';
+    ['discover-search-input', 'swiper-search-input'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (inp) inp.placeholder = placeholder;
+    });
+
+    // 4. Render mode-specific Category Tabs in both Discover and Swiper
+    const tabs = this.modeCategoryTabs[mode] || this.modeCategoryTabs.anytime;
+    const discoverStrip = document.getElementById('discover-intent-tiles');
+    if (discoverStrip) {
+      discoverStrip.innerHTML = tabs.map(t => `
+        <button type="button" class="cat-tab ${t.intent === effectiveTab ? 'active' : ''}" data-intent="${t.intent}" onclick="discover.setIntent('${t.intent}')">
+          <span class="cat-tab-icon">${t.icon}</span>
+          <span class="cat-tab-label">${t.label}</span>
+        </button>
+      `).join('');
+    }
+    const swiperStrip = document.getElementById('swiper-intent-tiles');
+    if (swiperStrip) {
+      const swIntent = (effectiveTab === 'saved') ? 'all' : effectiveTab;
+      swiperStrip.innerHTML = tabs.map(t => {
+        const clickHandler = t.intent === 'saved'
+          ? "app.navigate('discover'); discover.setIntent('saved')"
+          : `discover.setIntent('${t.intent}')`;
+        return `
+          <button type="button" class="cat-tab ${t.intent === swIntent ? 'active' : ''}" data-intent="${t.intent}" onclick="${clickHandler}">
+            <span class="cat-tab-icon">${t.icon}</span>
+            <span class="cat-tab-label">${t.label}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // 5. Update unvoted counts on the two Mode Switcher buttons
+    this.updateModeSwitcherCounts();
+
     const votesBar = document.getElementById('discover-votes-bar');
     if (votesBar) {
       votesBar.classList.toggle('hidden', effectiveTab !== 'saved');
     }
     this.renderSubIntentBars();
+  },
+
+  updateModeSwitcherCounts() {
+    const pool = this.getAllEventsPool();
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
+    let votes = {};
+    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+      votes = { ...votes, ...firebaseService.votesMap };
+    }
+
+    let anytimeCount = 0;
+    let specialCount = 0;
+    pool.forEach(ev => {
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
+      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
+      const myVote = isSolo ? (votes[`${ev.id}_${activeVoter}`] || v1 || v2) : (activeVoter === u1 ? v1 : v2);
+      if (myVote === 'love' || myVote === 'pass') return;
+      if (ev.ongoing) anytimeCount++;
+      else specialCount++;
+    });
+
+    ['discover-anytime-count', 'swiper-anytime-count'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = anytimeCount;
+    });
+    ['discover-special-count', 'swiper-special-count'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = specialCount;
+    });
   },
 
   renderSubIntentBars() {
@@ -155,13 +304,14 @@ const discover = {
       document.getElementById('discover-sub-intent-bar'),
       document.getElementById('swiper-sub-intent-bar')
     ];
-    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all') {
+    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all' || this.isSpecialMood()) {
       bars.forEach(b => { if (b) { b.classList.add('hidden'); b.innerHTML = ''; } });
       return;
     }
 
-    // Compute live count per sub-intent from un-passed events in the current pool
-    const pool = this.getAllEventsPool();
+    // Compute live count per sub-intent from events in the current mode pool
+    const mode = this.activeFeedMode || 'anytime';
+    const pool = this.getAllEventsPool().filter(ev => mode === 'special' ? !ev.ongoing : Boolean(ev.ongoing));
     const html = def.subs.map(sub => {
       const count = pool.filter(ev => api.matchEventIntent(ev, this.activeIntent, sub.id)).length;
       const isActive = this.activeSubIntent === sub.id;
@@ -393,10 +543,11 @@ const discover = {
     if (range === 'this_weekend') {
       const today = this.dayOffset(0);
       const dow = today.getDay(); // 0 Sun ... 6 Sat
-      if (dow === 0) return span(0, 0);           // Sunday: just today
       if (dow === 6) return span(0, 1);           // Saturday: Sat + Sun
+      if (dow === 5) return span(0, 2);           // Friday: Fri + Sat + Sun
+      // On Sunday (or Mon–Thu), "This Weekend (Fri – Sun)" spans the upcoming Fri–Sun of the current week
       const toFri = (5 - dow + 7) % 7;
-      return span(toFri, toFri + 2);              // Fri, Sat, Sun
+      return span(toFri, toFri + 2);
     }
     if (range === 'custom') {
       const s = this.parseYMD(this.customStart);
@@ -427,10 +578,10 @@ const discover = {
     return opts;
   },
 
-  /** Short label for the calendar chip / swiper pill, e.g. "This Week", "Fri 6 Nov". */
+  /** Short label for the calendar chip / swiper pill, e.g. "All Upcoming", "This Week", "Today". */
   getDateChipLabel() {
     const r = this.activeDateRange;
-    if (!r || r === 'all') return 'Any Date';
+    if (!r || r === 'all') return 'All Upcoming';
     if (r === 'this_week') return 'This Week';
     if (r === 'today' || r === 'day_0') return 'Today';
     if (r === 'tomorrow' || r === 'day_1') return 'Tomorrow';
@@ -440,13 +591,13 @@ const discover = {
     if (r === 'this_month') return 'Next 30 Days';
     if (r === 'this_weekend') return 'This Weekend';
     const b = this.getDateBounds(r);
-    if (!b) return 'Any Date';
+    if (!b) return 'All Upcoming';
     if (b.start.getTime() === b.end.getTime()) return this.fmtShort(b.start);
     return `${this.fmtDayMonth(b.start)} – ${this.fmtDayMonth(b.end)}`;
   },
 
   isDefaultDate() {
-    return this.activeDateRange === this.defaultDateRange;
+    return !this.activeDateRange || this.activeDateRange === this.defaultDateRange;
   },
 
   isSpecialMood(mood = this.currentMood) {
@@ -456,13 +607,17 @@ const discover = {
   /** Single source of truth for filter params, shared by Discover & Swiper. */
   getFilterParams({ forSwiper = false } = {}) {
     const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('swiper-search-input')?.value || '';
-    // Loves / Passed / Matches lists show everything you've voted on, regardless of date or intent
-    const ignoreDate = !forSwiper && this.isSpecialMood();
-    const bounds = ignoreDate ? null : this.getDateBounds();
+    // Loves / Passed / Matches lists show everything you've voted on across both Anytime Places & Special Events
+    const isSavedList = !forSwiper && (this.isSpecialMood() || this.activeIntent === 'saved');
+    const mode = isSavedList ? 'all' : (this.activeFeedMode || 'anytime');
+    // Date filter applies ONLY when browsing Special Events!
+    const useDateFilter = (mode === 'special') && !isSavedList;
+    const bounds = useDateFilter ? this.getDateBounds() : null;
     return {
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
-      intent: (ignoreDate || this.activeIntent === 'saved') ? 'all' : (this.activeIntent || 'all'),
-      sub_intent: (ignoreDate || this.activeIntent === 'saved') ? 'all' : (this.activeSubIntent || 'all'),
+      feed_mode: mode,
+      intent: isSavedList ? 'all' : (this.activeIntent || 'all'),
+      sub_intent: isSavedList ? 'all' : (this.activeSubIntent || 'all'),
       category: this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All',
       suburb: this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All',
       vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
@@ -568,7 +723,9 @@ const discover = {
     this.renderSpotlights(displayEvents);
 
     if (countText) {
-      const dateLabel = (this.activeDateRange === 'all' || this.isSpecialMood()) ? '' : ` · 📅 ${this.getDateChipLabel()}`;
+      const isSpecial = (this.activeFeedMode === 'special') && !this.isSpecialMood();
+      const itemNoun = isSpecial ? 'special events' : (this.isSpecialMood() ? 'saved ideas' : 'anytime places');
+      const dateLabel = isSpecial ? ` · 📅 ${this.getDateChipLabel()}` : '';
       const filterDetails = [];
       if (this.activeIntent && this.activeIntent !== 'all' && !this.isSpecialMood()) {
         const iDef = this.intentDefinitions[this.activeIntent];
@@ -586,9 +743,9 @@ const discover = {
       const filterStr = filterDetails.length > 0 ? ` • ${filterDetails.join(' | ')}` : '';
       
       if (displayEvents.length > visibleEvents.length) {
-        countText.textContent = `Showing ${visibleEvents.length} of ${displayEvents.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
+        countText.textContent = `Showing ${visibleEvents.length} of ${displayEvents.length} ${itemNoun} in ${app.currentCity}${dateLabel}${filterStr}`;
       } else {
-        countText.textContent = `Showing ${displayEvents.length} activities in ${app.currentCity}${dateLabel}${filterStr}`;
+        countText.textContent = `Showing ${displayEvents.length} ${itemNoun} in ${app.currentCity}${dateLabel}${filterStr}`;
       }
     }
 
@@ -1021,7 +1178,13 @@ const discover = {
 
   applyConciergeToFeed() {
     const st = this.conciergeState;
-    this.activeIntent = st.intent === 'surprise' ? 'all' : st.intent;
+    if (st.intent === 'whats_on') {
+      this.activeFeedMode = 'special';
+      this.activeIntent = 'all';
+    } else {
+      this.activeFeedMode = 'anytime';
+      this.activeIntent = st.intent === 'surprise' ? 'all' : st.intent;
+    }
     this.activeSubIntent = 'all';
     if (st.when === 'tonight') {
       this.activeDateRange = 'today';
@@ -1395,7 +1558,14 @@ const discover = {
     // Populate working selection set
     this.modalSelectedSet = new Set();
     if (type === 'date') {
-      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || 'this_week'));
+      // Opening the Date Modal automatically ensures we're filtering Special Dated Events
+      if (this.activeFeedMode !== 'special') {
+        this.activeFeedMode = 'special';
+        this.activeIntent = 'all';
+        this.activeSubIntent = 'all';
+        this.syncIntentUI();
+      }
+      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || 'all'));
       this.modalSelectedSet.add(initDate);
     } else if (type === 'suburb') {
       (this.selectedSuburbs || []).forEach(s => this.modalSelectedSet.add(s));
@@ -1429,17 +1599,34 @@ const discover = {
     }
   },
 
+  /** Computes live un-voted matching activity count for a specific date range id or the current modal selection */
+  getDateRangePreviewCount(rangeId) {
+    if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return 0;
+    const params = this.getFilterParams({ forSwiper: true });
+    params.feed_mode = 'special';
+    const bounds = this.getDateBounds(rangeId);
+    params.date_range = bounds ? 'custom' : 'all';
+    params.custom_start = bounds ? this.toYMD(bounds.start) : null;
+    params.custom_end = bounds ? this.toYMD(bounds.end) : null;
+    const rawList = api.getLocalEnrichedEvents(params).events || [];
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    return rawList.filter(ev => {
+      const myVote = isSolo ? (ev.my_vote || ev.u1_vote) : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
+      return myVote !== 'love' && myVote !== 'pass';
+    }).length;
+  },
+
   /** Computes live un-voted matching activity count for the current modal selection */
   getModalPreviewCount() {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return null;
-    const params = this.getFilterParams({ forSwiper: true });
     if (this.currentModalType === 'date') {
       const selDate = Array.from(this.modalSelectedSet)[0] || 'all';
-      const bounds = this.getDateBounds(selDate);
-      params.date_range = bounds ? 'custom' : 'all';
-      params.custom_start = bounds ? this.toYMD(bounds.start) : null;
-      params.custom_end = bounds ? this.toYMD(bounds.end) : null;
-    } else if (this.currentModalType === 'suburb') {
+      return this.getDateRangePreviewCount(selDate);
+    }
+    const params = this.getFilterParams({ forSwiper: true });
+    if (this.currentModalType === 'suburb') {
       const subs = Array.from(this.modalSelectedSet).filter(s => s !== 'all' && s !== 'All');
       params.suburb = subs.length > 0 ? subs.join(',') : 'All';
     }
@@ -1463,23 +1650,29 @@ const discover = {
     const matchCount = this.getModalPreviewCount();
     if (applyBtn) {
       const actionWord = (typeof app !== 'undefined' && app.activeTab === 'swiper') ? 'Swipe' : 'Show';
+      const isSpecial = (this.currentModalType === 'date' || this.activeFeedMode === 'special');
+      const noun = isSpecial
+        ? (matchCount === 1 ? 'Special Event' : 'Special Events')
+        : (matchCount === 1 ? 'Place' : 'Places');
       if (matchCount !== null) {
-        applyBtn.textContent = `${actionWord} ${matchCount} ${matchCount === 1 ? 'Idea' : 'Ideas'} ✨`;
+        applyBtn.textContent = `${actionWord} ${matchCount} ${noun} ✨`;
       } else {
         applyBtn.textContent = 'Apply Filter ✨';
       }
     }
 
-    // 1. PURPOSE-BUILT DATE PICKER UX
+    // 1. PURPOSE-BUILT DATE PICKER UX (Exclusively for Special Dated Events)
     if (def.type === 'date') {
-      const sel = Array.from(this.modalSelectedSet)[0] || 'this_week';
+      const sel = Array.from(this.modalSelectedSet)[0] || 'all';
+      const wkndBounds = this.getDateBounds('this_weekend');
+      const wkndSub = wkndBounds ? `${this.fmtDayMonth(wkndBounds.start)} – ${this.fmtDayMonth(wkndBounds.end)}` : 'Fri – Sun';
       const presets = [
+        { id: 'all', icon: '✨', title: 'All Upcoming', sub: 'Every special event' },
         { id: 'this_week', icon: '🗓️', title: 'This Week', sub: `${this.fmtDayMonth(this.dayOffset(0))} – ${this.fmtDayMonth(this.dayOffset(6))}` },
-        { id: 'this_weekend', icon: '🥂', title: 'This Weekend', sub: 'Fri – Sun' },
+        { id: 'this_weekend', icon: '🥂', title: 'This Weekend', sub: `Fri – Sun (${wkndSub})` },
         { id: 'day_0', icon: '🔥', title: 'Today', sub: this.fmtShort(this.dayOffset(0)) },
         { id: 'day_1', icon: '🌅', title: 'Tomorrow', sub: this.fmtShort(this.dayOffset(1)) },
-        { id: 'week_1', icon: '📆', title: 'Next Week', sub: `${this.fmtDayMonth(this.dayOffset(7))} – ${this.fmtDayMonth(this.dayOffset(13))}` },
-        { id: 'all', icon: '✨', title: 'Any Date', sub: 'All upcoming' }
+        { id: 'week_1', icon: '📆', title: 'Next Week', sub: `${this.fmtDayMonth(this.dayOffset(7))} – ${this.fmtDayMonth(this.dayOffset(13))}` }
       ];
 
       let daysHtml = '';
@@ -1490,11 +1683,13 @@ const discover = {
         const wk = i === 0 ? 'Today' : (i === 1 ? 'Tmrw' : d.toLocaleDateString('en-AU', { weekday: 'short' }));
         const dayNum = d.getDate();
         const mon = d.toLocaleDateString('en-AU', { month: 'short' });
+        const dayCount = this.getDateRangePreviewCount(dayId);
         daysHtml += `
           <button type="button" class="cal-day-pill ${isDayActive ? 'active' : ''}" onclick="discover.toggleModalOption('${dayId}')">
             <span class="cal-day-wk">${wk}</span>
             <span class="cal-day-num">${dayNum}</span>
             <span class="cal-day-mon">${mon}</span>
+            <span class="cal-day-count">${dayCount}</span>
           </button>
         `;
       }
@@ -1505,15 +1700,16 @@ const discover = {
 
       container.innerHTML = `
         <div class="date-modal-layout">
-          <div class="filter-section-heading">QUICK PRESETS</div>
+          <div class="filter-section-heading">QUICK PRESETS (SPECIAL EVENTS)</div>
           <div class="date-presets-grid">
             ${presets.map(p => {
               const active = sel === p.id || (p.id === 'day_0' && sel === 'today') || (p.id === 'day_1' && sel === 'tomorrow');
+              const pCount = this.getDateRangePreviewCount(p.id);
               return `
                 <button type="button" class="date-preset-card ${active ? 'active' : ''}" onclick="discover.toggleModalOption('${p.id}')">
                   <span class="date-preset-icon">${p.icon}</span>
                   <div class="date-preset-text">
-                    <span class="date-preset-title">${p.title}</span>
+                    <span class="date-preset-title">${p.title} <span class="date-preset-badge">${pCount}</span></span>
                     <span class="date-preset-sub">${p.sub}</span>
                   </div>
                 </button>
@@ -1529,10 +1725,10 @@ const discover = {
           <div class="filter-section-heading">PLANNING FURTHER AHEAD</div>
           <div class="date-further-row">
             <button type="button" class="date-further-pill ${sel === 'week_2' ? 'active' : ''}" onclick="discover.toggleModalOption('week_2')">
-              📆 In 2 Weeks (${this.fmtDayMonth(this.dayOffset(14))}–${this.fmtDayMonth(this.dayOffset(20))})
+              📆 In 2 Weeks (${this.fmtDayMonth(this.dayOffset(14))}–${this.fmtDayMonth(this.dayOffset(20))}) · ${this.getDateRangePreviewCount('week_2')}
             </button>
             <button type="button" class="date-further-pill ${sel === 'this_month' ? 'active' : ''}" onclick="discover.toggleModalOption('this_month')">
-              🗓️ Next 30 Days
+              🗓️ Next 30 Days · ${this.getDateRangePreviewCount('this_month')}
             </button>
             <button type="button" class="date-further-pill ${sel === 'custom' ? 'active' : ''}" onclick="discover.toggleModalOption('custom')">
               🎯 Custom Dates

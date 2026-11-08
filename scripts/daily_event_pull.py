@@ -316,18 +316,360 @@ OFFICIAL_URLS = {
     "moonlight cinema": "https://www.moonlight.com.au/brisbane",
 }
 
-# Only true single-date or limited-season concerts, festivals, theatre runs, and sports games
-# should remain `ongoing: False`. Permanent venues are converted to `ongoing: True`.
-TRUE_DATED_TITLE_PATTERNS = [
-    "jack johnson",
-    "khalid",
-    "spacey jane",
-    "candlelight: tribute to adele",
-    "queensland ballet: dracula",
-    "queensland symphony orchestra: cinematic scores",
-    "melt festival",
-    "brisbane comedy festival gala",
+# Explicit schedule mapping for special ticketed shows, exhibitions, and limited-season events
+# that exist in the catalog so they always have `ongoing: False` and accurate upcoming dates.
+SPECIAL_EVENT_DATES_MAP = {
+    "jack johnson": ("2026-11-21 18:00", "2026-11-21 22:00", "Sat, 21 Nov · 6:00 PM"),
+    "khalid": ("2026-11-11 18:30", "2026-11-11 22:00", "Wed, 11 Nov · 6:30 PM"),
+    "spacey jane": ("2026-11-26 18:30", "2026-11-26 22:00", "Thu, 26 Nov · 6:30 PM"),
+    "foo fighters": ("2026-11-12 19:00", "2026-11-12 22:30", "Thu, 12 Nov · 7:00 PM"),
+    "shake & stir theatre co: dracula": ("2026-11-08 19:30", "2026-11-15 21:30", "8 Nov – 15 Nov · 7:30 PM"),
+    "queensland symphony orchestra: cinematic": ("2026-11-13 19:30", "2026-11-14 21:30", "Fri 13 & Sat 14 Nov · 7:30 PM"),
+    "melt festival": ("2026-11-08 18:00", "2026-11-15 22:00", "On now – until Sun, 15 Nov"),
+    "brisbane comedy festival opening gala": ("2026-11-08 19:00", "2026-11-08 21:30", "Sun, 8 Nov · 7:00 PM"),
+    "make, believe, magic: the worlds of the jim henson": ("2026-11-08 10:00", "2026-12-20 17:00", "Exhibition on now – until 20 Dec"),
+    "justene williams: once we were mudskippers": ("2026-11-08 10:00", "2026-11-29 17:00", "Exhibition on now – until 29 Nov"),
+    "smokescreen: a thickness of the air": ("2026-11-08 10:00", "2026-12-06 17:00", "Exhibition on now – until 6 Dec"),
+    "qagoma up late": ("2026-11-13 18:00", "2026-11-14 22:00", "Fri 13 & Sat 14 Nov · 6:00 PM – 10:00 PM"),
+    "bcc outdoor cinema: riverbank movies": ("2026-11-14 18:30", "2026-11-14 21:30", "Sat, 14 Nov · 6:30 PM"),
+    "bcc brisasia street eats & lantern parade": ("2026-11-14 16:00", "2026-11-15 21:00", "Sat 14 – Sun 15 Nov · 4:00 PM"),
+    "spring hill 1871 underground brick reservoir": ("2026-11-11 17:30", "2026-11-11 19:00", "Wed, 11 Nov · 5:30 PM"),
+    "walter taylor bridge: inside the historic": ("2026-11-14 10:00", "2026-11-14 12:00", "Sat, 14 Nov · 10:00 AM"),
+}
+
+TRUE_DATED_TITLE_PATTERNS = list(SPECIAL_EVENT_DATES_MAP.keys()) + [
+    "candlelight:",
     "moonlight cinema",
+    "six the musical",
+    "the nutcracker",
+    "finders keepers",
+    "french film festival",
+]
+
+CURATED_SPECIAL_DATED_EVENTS = [
+    {
+        "id": "special-candlelight-adele-cathedral",
+        "title": "Candlelight: Tribute to Adele by String Quartet at St John's Cathedral",
+        "description": "Experience the soaring ballads of Adele ('Someone Like You', 'Hello', 'Skyfall', 'Easy On Me') performed live by a string quartet bathed in the glow of 3,000 flickering candles inside St John's Cathedral.",
+        "insider_tip": "Doors open 45 minutes before the start time — arrive early for the best central nave seating and pre-show photos.",
+        "category": "Music & Concerts",
+        "location": "St John's Cathedral, Brisbane CBD",
+        "time_str": "Sun, 8 Nov · 7:30 PM",
+        "start_date": "2026-11-08 19:30",
+        "end_date": "2026-11-08 21:00",
+        "ongoing": False,
+        "price": "$42–$68",
+        "source": "Fever Candlelight Brisbane",
+        "source_url": "https://feverup.com/en/brisbane/candlelight",
+        "image_url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Late Night", "Live Music"]
+    },
+    {
+        "id": "special-boy-and-bear-powerhouse",
+        "title": "Boy & Bear: Sunset Acoustic Sessions at Brisbane Powerhouse",
+        "description": "ARIA chart-toppers Boy & Bear bring an intimate stripped-back acoustic evening to the Powerhouse Theatre, performing fan favourites and harmonies right on the New Farm riverfront.",
+        "insider_tip": "Grab a sunset Aperol Spritz at Mary Mae's on the river deck 45 minutes before the theatre doors open.",
+        "category": "Music & Concerts",
+        "location": "Brisbane Powerhouse, New Farm",
+        "time_str": "Sun, 8 Nov · 6:30 PM",
+        "start_date": "2026-11-08 18:30",
+        "end_date": "2026-11-08 21:00",
+        "ongoing": False,
+        "price": "$79",
+        "source": "Brisbane Powerhouse",
+        "source_url": "https://brisbanepowerhouse.org/whats-on/",
+        "image_url": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Romantic"]
+    },
+    {
+        "id": "special-genesis-owusu-princess",
+        "title": "Genesis Owusu: Struggler Live Theatre Show at The Princess",
+        "description": "Multi-ARIA winner Genesis Owusu takes over Woolloongabba's heritage Princess Theatre for an electric, theatrical Monday-night live performance blending funk, punk, and poetry.",
+        "insider_tip": "Head upstairs to the mezzanine balcony bar for the clearest view over the heritage stage.",
+        "category": "Music & Concerts",
+        "location": "The Princess Theatre, Woolloongabba",
+        "time_str": "Mon, 9 Nov · 7:30 PM",
+        "start_date": "2026-11-09 19:30",
+        "end_date": "2026-11-09 22:00",
+        "ongoing": False,
+        "price": "$69",
+        "source": "The Princess Theatre",
+        "source_url": "https://theprincesstheatre.com.au/whats-on/",
+        "image_url": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Late Night"]
+    },
+    {
+        "id": "special-la-boite-macbeth",
+        "title": "La Boite Theatre: Macbeth in the Round at Roundhouse Theatre",
+        "description": "Sit mere metres from the action inside Australia's iconic theatre-in-the-round as La Boite stages a breathless, modern-dress production of Macbeth with immersive lighting and live soundscapes.",
+        "insider_tip": "Row B in the round puts you right on the edge of the stage without craning your neck.",
+        "category": "Comedy & Shows",
+        "location": "La Boite Roundhouse Theatre, Kelvin Grove",
+        "time_str": "9 Nov – 21 Nov · 7:00 PM",
+        "start_date": "2026-11-09 19:00",
+        "end_date": "2026-11-21 21:30",
+        "ongoing": False,
+        "price": "$48–$65",
+        "source": "La Boite Theatre",
+        "source_url": "https://laboite.com.au/whats-on",
+        "image_url": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Indoor", "Theatre", "Arts & Culture"]
+    },
+    {
+        "id": "special-ocean-alley-tivoli",
+        "title": "Ocean Alley: Psych-Surf Intimate Headline Night at The Tivoli",
+        "description": "Catch Ocean Alley up close inside The Tivoli's art-deco theatre for a special warm-up show packed with velvet grooves, 'Confidence' singalongs, and vintage stage lighting.",
+        "insider_tip": "Book a pre-show dinner table on the upstairs balcony to secure prime viewing before general admission fills up.",
+        "category": "Music & Concerts",
+        "location": "The Tivoli, Fortitude Valley",
+        "time_str": "Tue, 10 Nov · 7:30 PM",
+        "start_date": "2026-11-10 19:30",
+        "end_date": "2026-11-10 22:30",
+        "ongoing": False,
+        "price": "$85",
+        "source": "The Tivoli Brisbane",
+        "source_url": "https://thetivoli.com.au/events",
+        "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Late Night"]
+    },
+    {
+        "id": "special-six-the-musical-qpac",
+        "title": "SIX The Musical: The Electrifying Pop-Concert Musical at QPAC",
+        "description": "Divorced, beheaded, live! Tudor Queens turn into pop icons in this 80-minute high-voltage West End and Broadway sensation at QPAC Playhouse.",
+        "insider_tip": "It runs 80 minutes straight with no interval — perfect to pair with late-night cocktails on Fish Lane afterwards.",
+        "category": "Comedy & Shows",
+        "location": "QPAC Playhouse, South Bank",
+        "time_str": "10 Nov – 22 Nov · Evening & Matinee",
+        "start_date": "2026-11-10 19:30",
+        "end_date": "2026-11-22 21:00",
+        "ongoing": False,
+        "price": "$89–$135",
+        "source": "QPAC What's On",
+        "source_url": "https://www.qpac.com.au/whats-on",
+        "image_url": "https://images.unsplash.com/photo-1514306191717-452ec28c7814?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Indoor", "Theatre", "Romantic", "Late Night"]
+    },
+    {
+        "id": "special-moonlight-cinema-new-farm",
+        "title": "Moonlight Cinema: Preview Week Under the Stars at New Farm Park",
+        "description": "Spread a picnic rug on the amphitheatre lawn at New Farm Park as Moonlight Cinema kicks off its summer season with cult classics, preview blockbusters, bean beds, and wood-fired pizza trucks.",
+        "insider_tip": "Upgrade to Gold Grass bean beds or BYO low-back picnic cushion and arrive at gates-open (6:00 PM) for sunset.",
+        "category": "Comedy & Shows",
+        "location": "New Farm Park Amphitheatre, New Farm",
+        "time_str": "Thu 12 Nov – Sun 15 Nov · Gates 6:00 PM",
+        "start_date": "2026-11-12 18:00",
+        "end_date": "2026-11-15 22:00",
+        "ongoing": False,
+        "price": "$24",
+        "source": "Moonlight Cinema Brisbane",
+        "source_url": "https://www.moonlight.com.au/brisbane/program/",
+        "image_url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Outdoors", "Budget", "Late Night"]
+    },
+    {
+        "id": "special-lime-cordiale-fortitude",
+        "title": "Lime Cordiale & Ball Park Music: Friday Night Live at Fortitude Music Hall",
+        "description": "Two of Australia's most joyful live bands team up under the grand chandelier of Fortitude Music Hall for a huge Friday night of brass-fuelled indie pop and crowd singalongs.",
+        "insider_tip": "Stop into Bisou Bisou or Gerard's Bar on James St beforehand, then walk 5 minutes to the Brunswick St Mall doors.",
+        "category": "Music & Concerts",
+        "location": "Fortitude Music Hall, Fortitude Valley",
+        "time_str": "Fri, 13 Nov · 7:30 PM",
+        "start_date": "2026-11-13 19:30",
+        "end_date": "2026-11-13 23:00",
+        "ongoing": False,
+        "price": "$89",
+        "source": "Fortitude Music Hall",
+        "source_url": "https://thefortitude.com.au/whats-on/",
+        "image_url": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Late Night"]
+    },
+    {
+        "id": "special-teskey-brothers-riverstage",
+        "title": "The Teskey Brothers: Soul & Blues Under the Stars at Riverstage",
+        "description": "Josh and Sam Teskey bring their velvety 1960s-inspired soul, horn section, and soaring ballads to the open-air Botanic Gardens slope at Riverstage for a magical Saturday sunset concert.",
+        "insider_tip": "Pack a waterproof picnic blanket and claim a spot halfway up the grassy hill for the best sound mix and city skyline backdrop.",
+        "category": "Music & Concerts",
+        "location": "Riverstage, Brisbane CBD",
+        "time_str": "Sat, 14 Nov · 6:00 PM",
+        "start_date": "2026-11-14 18:00",
+        "end_date": "2026-11-14 22:00",
+        "ongoing": False,
+        "price": "$99",
+        "source": "Ticketmaster Riverstage",
+        "source_url": "https://www.ticketmaster.com.au/riverstage-tickets-brisbane/venue/155825",
+        "image_url": "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Outdoors", "Romantic"]
+    },
+    {
+        "id": "special-candlelight-coldplay-powerhouse",
+        "title": "Candlelight: Coldplay vs. Imagine Dragons at Brisbane Powerhouse",
+        "description": "Hear 'Fix You', 'Yellow', 'Viva La Vida', 'A Sky Full of Stars', and 'Radioactive' reimagined by a live string ensemble surrounded by thousands of candles.",
+        "insider_tip": "The 8:30 PM late session has the moodiest candlelit atmosphere — book Zone A or B for close-up string acoustics.",
+        "category": "Music & Concerts",
+        "location": "Brisbane Powerhouse, New Farm",
+        "time_str": "Sat, 14 Nov · 8:30 PM",
+        "start_date": "2026-11-14 20:30",
+        "end_date": "2026-11-14 22:00",
+        "ongoing": False,
+        "price": "$45–$68",
+        "source": "Fever Candlelight Brisbane",
+        "source_url": "https://feverup.com/en/brisbane/candlelight",
+        "image_url": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Late Night", "Live Music"]
+    },
+    {
+        "id": "special-angus-julia-stone-qpac",
+        "title": "Angus & Julia Stone: Living Room Acoustic Tour at QPAC Concert Hall",
+        "description": "Sibling duo Angus & Julia Stone perform 'Big Jet Plane', 'Chateau', and new acoustic records inside the world-class acoustics of QPAC's Concert Hall.",
+        "insider_tip": "Enjoy pre-show wine and cheese at Maeve Wine Bar just across Grey Street before walking over to QPAC.",
+        "category": "Music & Concerts",
+        "location": "QPAC Concert Hall, South Bank",
+        "time_str": "Sun, 15 Nov · 7:00 PM",
+        "start_date": "2026-11-15 19:00",
+        "end_date": "2026-11-15 21:30",
+        "ongoing": False,
+        "price": "$95–$129",
+        "source": "QPAC Concert Hall",
+        "source_url": "https://www.qpac.com.au/whats-on",
+        "image_url": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Live Music"]
+    },
+    {
+        "id": "special-french-film-festival-encore",
+        "title": "Alliance Française French Film Festival Encore Week at Palace James St",
+        "description": "Escape to Paris for the evening with a curated encore program of French romantic comedies, Cannes award winners, and champagne arrivals at Palace Cinemas James Street.",
+        "insider_tip": "Order a glass of French bubbles and a cheese board from the Palace lounge bar to take straight into the Recliner cinema.",
+        "category": "Arts & Culture",
+        "location": "Palace James St, Fortitude Valley",
+        "time_str": "17 Nov – 22 Nov · Evening Sessions",
+        "start_date": "2026-11-17 18:30",
+        "end_date": "2026-11-22 21:30",
+        "ongoing": False,
+        "price": "$26",
+        "source": "Palace Cinemas James St",
+        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-james-st",
+        "image_url": "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Budget", "Late Night"]
+    },
+    {
+        "id": "special-matt-corby-fortitude",
+        "title": "Matt Corby: Everything's Fine Live Tour at Fortitude Music Hall",
+        "description": "Experience Matt Corby's jaw-dropping multi-instrumentalist live set and gospel-soul vocals ('Brother', 'Resolution', 'Miracle Love') live in the heart of the Valley.",
+        "insider_tip": "Arrive in time for the support act — the sound engineering inside Fortitude Music Hall is crystal clear from the Mezzanine.",
+        "category": "Music & Concerts",
+        "location": "Fortitude Music Hall, Fortitude Valley",
+        "time_str": "Wed, 18 Nov · 7:30 PM",
+        "start_date": "2026-11-18 19:30",
+        "end_date": "2026-11-18 22:30",
+        "ongoing": False,
+        "price": "$84",
+        "source": "Fortitude Music Hall",
+        "source_url": "https://thefortitude.com.au/whats-on/",
+        "image_url": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Romantic"]
+    },
+    {
+        "id": "special-candlelight-hans-zimmer-customs",
+        "title": "Candlelight: Best of Hans Zimmer Film Scores at Customs House",
+        "description": "Relive epic themes from Interstellar, Inception, Dune, Gladiator, and Pirates of the Caribbean performed by a live string quartet under the grand copper dome of heritage Customs House.",
+        "insider_tip": "Pair the concert with a riverside champagne on the Customs House terrace overlooking the Story Bridge beforehand.",
+        "category": "Music & Concerts",
+        "location": "Customs House, Brisbane CBD",
+        "time_str": "Fri, 20 Nov · 7:30 PM",
+        "start_date": "2026-11-20 19:30",
+        "end_date": "2026-11-20 21:00",
+        "ongoing": False,
+        "price": "$48–$72",
+        "source": "Fever Candlelight Brisbane",
+        "source_url": "https://feverup.com/en/brisbane/candlelight",
+        "image_url": "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Live Music"]
+    },
+    {
+        "id": "special-confidence-man-triffid",
+        "title": "Confidence Man: Hometown Club Rave & Live Set at The Triffid",
+        "description": "Brisbane's own international festival sensations Confidence Man return to Newstead's WW2 hangar for a high-energy Friday night of synchronized choreography, euro-house beats, and confetti.",
+        "insider_tip": "Cool off between sets in The Triffid's outdoor beer garden with a cold local craft tin.",
+        "category": "Music & Concerts",
+        "location": "The Triffid, Newstead",
+        "time_str": "Fri, 20 Nov · 8:00 PM",
+        "start_date": "2026-11-20 20:00",
+        "end_date": "2026-11-20 23:30",
+        "ongoing": False,
+        "price": "$65",
+        "source": "The Triffid Brisbane",
+        "source_url": "https://thetriffid.com.au/upcoming-gigs/",
+        "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Late Night"]
+    },
+    {
+        "id": "special-finders-keepers-market-showgrounds",
+        "title": "The Finders Keepers Design & Food Market Weekend at Brisbane Showgrounds",
+        "description": "Australia's flagship independent design market lands at the Exhibition Building in Bowen Hills for one weekend only — 150+ ceramicists, slow-fashion makers, live DJs, food trucks, and craft bars.",
+        "insider_tip": "Friday twilight session (4pm–9pm) is the best for a couple date night with live music, smaller crowds, and dinner trucks.",
+        "category": "Markets & Pop-ups",
+        "location": "Brisbane Showgrounds, Bowen Hills",
+        "time_str": "Fri 20 Nov – Sun 22 Nov · 4:00 PM Fri / 9:00 AM Wknd",
+        "start_date": "2026-11-20 16:00",
+        "end_date": "2026-11-22 17:00",
+        "ongoing": False,
+        "price": "$6 entry",
+        "source": "The Finders Keepers",
+        "source_url": "https://www.thefinderskeepers.com/brisbane-markets/",
+        "image_url": "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Indoor", "Budget", "Markets"]
+    },
+    {
+        "id": "special-qld-ballet-nutcracker-qpac",
+        "title": "Queensland Ballet: The Nutcracker Festive Season at QPAC Lyric Theatre",
+        "description": "A cherished Brisbane tradition: Tchaikovsky's score played live by the Queensland Symphony Orchestra as Queensland Ballet brings snow-dusted Victorian magic to the Lyric Theatre.",
+        "insider_tip": "Stalls Rows G–M centre give you the full sweep of the snowflake waltz and stage sets.",
+        "category": "Comedy & Shows",
+        "location": "QPAC Lyric Theatre, South Bank",
+        "time_str": "27 Nov – 12 Dec · 7:30 PM",
+        "start_date": "2026-11-27 19:30",
+        "end_date": "2026-12-12 21:30",
+        "ongoing": False,
+        "price": "$95–$165",
+        "source": "Queensland Ballet / QPAC",
+        "source_url": "https://www.queenslandballet.com.au/performances",
+        "image_url": "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Romantic", "Indoor", "Arts & Culture"]
+    },
+    {
+        "id": "special-gflip-entertainment-centre",
+        "title": "G Flip: DRUMMER Australian Arena Tour at Brisbane Entertainment Centre",
+        "description": "LA-based Aussie powerhouse G Flip brings explosive live drum solos, pyrotechnics, and massive pop-rock anthems ('The Worst Person Alive', 'Be Your Man') to Brisbane Entertainment Centre.",
+        "insider_tip": "Catch the direct train to Boondall Station — trains run express back to Central and Fortitude Valley right after the encore.",
+        "category": "Music & Concerts",
+        "location": "Brisbane Entertainment Centre, Boondall",
+        "time_str": "Sat, 28 Nov · 7:30 PM",
+        "start_date": "2026-11-28 19:30",
+        "end_date": "2026-11-28 22:30",
+        "ongoing": False,
+        "price": "$99–$139",
+        "source": "Brisbane Entertainment Centre",
+        "source_url": "https://www.brisent.com.au/Event-Calendar",
+        "image_url": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Late Night"]
+    },
+    {
+        "id": "special-crowded-house-brisbane",
+        "title": "Crowded House: Gravity Stairs Tour at Brisbane Entertainment Centre",
+        "description": "Neil Finn and Crowded House return to Brisbane for a timeless evening of 'Don't Dream It's Over', 'Something So Strong', 'Better Be Home Soon', and lush new harmonies.",
+        "insider_tip": "Arrive 45 minutes early to grab food from the outdoor courtyard trucks before heading into the arena bowl.",
+        "category": "Music & Concerts",
+        "location": "Brisbane Entertainment Centre, Boondall",
+        "time_str": "Sat, 5 Dec · 7:30 PM",
+        "start_date": "2026-12-05 19:30",
+        "end_date": "2026-12-05 22:30",
+        "ongoing": False,
+        "price": "$119–$169",
+        "source": "Brisbane Entertainment Centre",
+        "source_url": "https://www.brisent.com.au/Event-Calendar",
+        "image_url": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Live Music", "Indoor", "Romantic"]
+    },
 ]
 
 CURATED_STAY_IN_AND_REGIONAL_GEMS = [
@@ -565,9 +907,9 @@ def canonical_venue_key(ev: dict) -> str:
         ("citycat", "citycat_sunset_cruise"),
         ("sunset 'mystery stop' citycat", "citycat_sunset_cruise"),
     ]
-    if ev.get("category") == "Sports & Active" and not ev.get("ongoing"):
+    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-"):
         sd = (ev.get("start_date") or "")[:10]
-        return f"fixture_{tl}_{sd}"
+        return f"dated_{tl}_{sd}"
     if tl.startswith("stay-in date:"):
         return tl
     for pat, key in aliases:
@@ -643,7 +985,16 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
     cat = ev.get("category", "")
 
     is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and ev.get("start_date"))
-    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS)
+    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-")
+
+    # Apply explicit dates from SPECIAL_EVENT_DATES_MAP when matched
+    for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
+        if pat in tl:
+            ev["start_date"] = mapped_sd
+            ev["end_date"] = mapped_ed
+            ev["time_str"] = mapped_ts
+            ev["ongoing"] = False
+            break
 
     if is_sports_fixture or is_true_dated_show:
         ev["ongoing"] = False
@@ -780,8 +1131,8 @@ def build_clean_catalog(try_network: bool = False):
         raise RuntimeError("Could not parse PRELOADED_EVENTS from events_data.js")
     raw_events = json.loads(m.group(1))
 
-    # Merge curated stay-in dates and optional live network feed
-    candidates = list(raw_events) + CURATED_STAY_IN_AND_REGIONAL_GEMS
+    # Merge curated special dated events, stay-in dates, and optional live network feed
+    candidates = list(raw_events) + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS
     if try_network:
         candidates.extend(fetch_live_public_feeds(today_ymd))
 

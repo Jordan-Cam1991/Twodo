@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=4.0">
+  <link rel="stylesheet" href="css/style.css?v=4.1">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -252,6 +252,24 @@
 
     <!-- TAB 1: DISCOVER VIEW -->
     <section id="view-discover" class="view-panel active">
+      <!-- Top-Level Mode Switcher: Anytime Places vs. Special Dated Events -->
+      <div class="feed-mode-switcher" id="discover-mode-switcher" role="tablist">
+        <button type="button" class="feed-mode-btn active" data-mode="anytime" onclick="discover.setFeedMode('anytime')">
+          <span class="feed-mode-icon">🌟</span>
+          <div class="feed-mode-text">
+            <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="discover-anytime-count"></span></span>
+            <span class="feed-mode-sub">Dinners, bars, activities &amp; walks</span>
+          </div>
+        </button>
+        <button type="button" class="feed-mode-btn" data-mode="special" onclick="discover.setFeedMode('special')">
+          <span class="feed-mode-icon">🎟️</span>
+          <div class="feed-mode-text">
+            <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="discover-special-count"></span></span>
+            <span class="feed-mode-sub">Concerts, sports, shows &amp; festivals</span>
+          </div>
+        </button>
+      </div>
+
       <!-- Clean Search + Quick Context Pills (Airbnb/Fever Style) -->
       <div class="discover-unified-bar">
         <div class="discover-search-box">
@@ -267,8 +285,8 @@
           <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
         </div>
         <div class="discover-quick-filters">
-          <button type="button" class="quick-context-pill" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Choose dates">
-            📅 <span id="date-chip-label">This Week</span> ▾
+          <button type="button" class="quick-context-pill hidden" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Filter special events by date">
+            📅 <span id="date-chip-label">All Upcoming</span> ▾
           </button>
           <button type="button" class="quick-context-pill" id="mood-chip-suburb" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
             📍 <span id="suburb-chip-label">All Suburbs</span> ▾
@@ -279,12 +297,12 @@
         </div>
       </div>
 
-      <!-- Single-Line Category Tabs (Clean Airbnb-Style Strip) -->
+      <!-- Single-Line Category Tabs (Dynamically synced for Anytime Places vs. Special Events) -->
       <div class="category-strip-wrap">
         <div class="category-strip" id="discover-intent-tiles">
           <button type="button" class="cat-tab active" data-intent="all" onclick="discover.setIntent('all')">
             <span class="cat-tab-icon">✨</span>
-            <span class="cat-tab-label">All</span>
+            <span class="cat-tab-label">All Places</span>
           </button>
           <button type="button" class="cat-tab" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
             <span class="cat-tab-icon">🍽️</span>
@@ -293,10 +311,6 @@
           <button type="button" class="cat-tab" data-intent="activity" onclick="discover.setIntent('activity')">
             <span class="cat-tab-icon">🎯</span>
             <span class="cat-tab-label">Activities</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="whats_on" onclick="discover.setIntent('whats_on')">
-            <span class="cat-tab-icon">🎟️</span>
-            <span class="cat-tab-label">What's On</span>
           </button>
           <button type="button" class="cat-tab" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
             <span class="cat-tab-icon">🌿</span>
@@ -361,6 +375,24 @@
 
     <!-- TAB 2: DATE SWIPER (TINDER STYLE) -->
     <section id="view-swiper" class="view-panel">
+      <!-- Top-Level Mode Switcher: Anytime Places vs. Special Dated Events -->
+      <div class="feed-mode-switcher" id="swiper-mode-switcher" role="tablist">
+        <button type="button" class="feed-mode-btn active" data-mode="anytime" onclick="discover.setFeedMode('anytime')">
+          <span class="feed-mode-icon">🌟</span>
+          <div class="feed-mode-text">
+            <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="swiper-anytime-count"></span></span>
+            <span class="feed-mode-sub">Dinners, bars, activities &amp; walks</span>
+          </div>
+        </button>
+        <button type="button" class="feed-mode-btn" data-mode="special" onclick="discover.setFeedMode('special')">
+          <span class="feed-mode-icon">🎟️</span>
+          <div class="feed-mode-text">
+            <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="swiper-special-count"></span></span>
+            <span class="feed-mode-sub">Concerts, sports, shows &amp; festivals</span>
+          </div>
+        </button>
+      </div>
+
       <!-- Identical Unified Top Controls as Discover -->
       <div class="discover-unified-bar">
         <div class="discover-search-box">
@@ -376,8 +408,8 @@
           <button type="button" id="swiper-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
         </div>
         <div class="discover-quick-filters">
-          <button type="button" class="quick-context-pill" id="sw-date-pill" onclick="discover.onDateChipClick()" title="Choose dates">
-            📅 <span id="sw-date-pill-label">This Week</span> ▾
+          <button type="button" class="quick-context-pill hidden" id="sw-date-pill" onclick="discover.onDateChipClick()" title="Filter special events by date">
+            📅 <span id="sw-date-pill-label">All Upcoming</span> ▾
           </button>
           <button type="button" class="quick-context-pill" id="sw-suburb-pill" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
             📍 <span id="sw-suburb-pill-label">All Suburbs</span> ▾
@@ -393,7 +425,7 @@
         <div class="category-strip" id="swiper-intent-tiles">
           <button type="button" class="cat-tab active" data-intent="all" onclick="discover.setIntent('all')">
             <span class="cat-tab-icon">✨</span>
-            <span class="cat-tab-label">All</span>
+            <span class="cat-tab-label">All Places</span>
           </button>
           <button type="button" class="cat-tab" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
             <span class="cat-tab-icon">🍽️</span>
@@ -402,10 +434,6 @@
           <button type="button" class="cat-tab" data-intent="activity" onclick="discover.setIntent('activity')">
             <span class="cat-tab-icon">🎯</span>
             <span class="cat-tab-label">Activities</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="whats_on" onclick="discover.setIntent('whats_on')">
-            <span class="cat-tab-icon">🎟️</span>
-            <span class="cat-tab-label">What's On</span>
           </button>
           <button type="button" class="cat-tab" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
             <span class="cat-tab-icon">🌿</span>
@@ -1099,17 +1127,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=4.0"></script>
-  <script src="js/firebase-service.js?v=4.0"></script>
-  <script src="js/auth-ui.js?v=4.0"></script>
-  <script src="js/events_data.js?v=4.0"></script>
-  <script src="js/api.js?v=4.0"></script>
-  <script src="js/chat.js?v=4.0"></script>
-  <script src="js/collaborative.js?v=4.0"></script>
-  <script src="js/discover.js?v=4.0"></script>
-  <script src="js/swiper.js?v=4.0"></script>
-  <script src="js/planner.js?v=4.0"></script>
-  <script src="js/matches.js?v=4.0"></script>
-  <script src="js/app.js?v=4.0"></script>
+  <script src="js/firebase-config.js?v=4.1"></script>
+  <script src="js/firebase-service.js?v=4.1"></script>
+  <script src="js/auth-ui.js?v=4.1"></script>
+  <script src="js/events_data.js?v=4.1"></script>
+  <script src="js/api.js?v=4.1"></script>
+  <script src="js/chat.js?v=4.1"></script>
+  <script src="js/collaborative.js?v=4.1"></script>
+  <script src="js/discover.js?v=4.1"></script>
+  <script src="js/swiper.js?v=4.1"></script>
+  <script src="js/planner.js?v=4.1"></script>
+  <script src="js/matches.js?v=4.1"></script>
+  <script src="js/app.js?v=4.1"></script>
 </body>
 </html>
