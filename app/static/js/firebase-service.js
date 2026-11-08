@@ -662,6 +662,7 @@ const firebaseService = {
         localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
 
         this.attachListeners(this.coupleId);
+        this.syncLocalDataToCloud(uid);
       } else {
         // SOLO MODE
         this.isSolo = true;
@@ -737,10 +738,25 @@ const firebaseService = {
       const newNotes = {};
       const dismissed = new Set();
 
+      const u1Name = (this.profile?.user1_name || '').trim();
+      const u2Name = (this.profile?.user2_name || '').trim();
+      const canonicalName = (rawName) => {
+        const trimmed = String(rawName || '').trim();
+        if (u1Name && trimmed.toLowerCase() === u1Name.toLowerCase()) return u1Name;
+        if (u2Name && trimmed.toLowerCase() === u2Name.toLowerCase()) return u2Name;
+        return trimmed;
+      };
+
       snapshot.forEach((doc) => {
         const data = doc.data();
         const ids = Array.from(new Set([doc.id, data.event_id].filter(Boolean)));
-        const put = (map, userName, val) => ids.forEach(id => { map[`${id}_${userName}`] = val; });
+        const put = (map, userName, val) => {
+          const canon = canonicalName(userName);
+          ids.forEach(id => {
+            map[`${id}_${userName}`] = val;
+            if (canon) map[`${id}_${canon}`] = val;
+          });
+        };
 
         if (data.votes) {
           Object.keys(data.votes).forEach((userName) => put(newVotes, userName, data.votes[userName]));
@@ -976,34 +992,58 @@ const firebaseService = {
         localNotes = JSON.parse(localStorage.getItem('twodo_notes') || '{}');
       } catch (e) {}
 
-      const myName = this.userProfile?.name || 'You';
+      const myName = (this.userProfile?.name || 'You').trim();
       const isSolo = this.isSolo;
       const coupleId = this.coupleId;
+
+      // If coupled, also migrate any pre-link solo votes from users/{uid}/votes into couples/{coupleId}/votes
+      if (!isSolo && coupleId && myName) {
+        try {
+          const soloSnap = await this.db.collection('users').doc(uid).collection('votes').get();
+          soloSnap.forEach(doc => {
+            const d = doc.data() || {};
+            if (!d.vote) return;
+            const evId = d.event_id || doc.id;
+            const safeId = String(evId).replace(/[\/\.]/g, '_');
+            const payload = {
+              event_id: evId,
+              votes: { [myName]: d.vote },
+              updated_at: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (d.note) payload.notes = { [myName]: d.note };
+            this.db.collection('couples').doc(coupleId).collection('votes').doc(safeId).set(payload, { merge: true }).catch(() => {});
+          });
+        } catch (e) {}
+      }
 
       for (const key of Object.keys(localVotes)) {
         const parts = key.split('_');
         const eventId = parts.slice(0, -1).join('_');
-        const voterName = parts[parts.length - 1];
+        const voterName = (parts[parts.length - 1] || '').trim();
         const vote = localVotes[key];
-        const note = localNotes[key] || '';
+        const note = localNotes[key];
 
-        if (!eventId || !vote) continue;
+        if (!eventId || !vote || !voterName) continue;
+        // Each device only ever pushes its own logged-in user's local votes
+        if (myName && voterName.toLowerCase() !== myName.toLowerCase()) continue;
         const safeDocId = String(eventId).replace(/[\/\.]/g, '_');
 
         if (isSolo) {
-          this.db.collection('users').doc(uid).collection('votes').doc(safeDocId).set({
+          const soloPayload = {
             event_id: eventId,
             vote: vote,
-            note: note,
             updated_at: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true }).catch(() => {});
+          };
+          if (note !== undefined) soloPayload.note = note;
+          this.db.collection('users').doc(uid).collection('votes').doc(safeDocId).set(soloPayload, { merge: true }).catch(() => {});
         } else if (coupleId) {
-          this.db.collection('couples').doc(coupleId).collection('votes').doc(safeDocId).set({
+          const couplePayload = {
             event_id: eventId,
-            votes: { [voterName]: vote },
-            notes: { [voterName]: note },
+            votes: { [myName]: vote },
             updated_at: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true }).catch(() => {});
+          };
+          if (note !== undefined) couplePayload.notes = { [myName]: note };
+          this.db.collection('couples').doc(coupleId).collection('votes').doc(safeDocId).set(couplePayload, { merge: true }).catch(() => {});
         }
       }
 

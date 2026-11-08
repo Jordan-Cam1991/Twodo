@@ -369,6 +369,24 @@ const api = {
     // Title normalizer for deduplication & vote inheritance
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
 
+    // Case-insensitive / trimmed voter lookup so "Emma" vs "emma " never misses a vote,
+    // and NEVER cross-contaminates u1 with u2!
+    const getVoteForUser = (map, evId, userName) => {
+      if (!userName) return undefined;
+      const exact = map[`${evId}_${userName}`];
+      if (exact !== undefined) return exact;
+      const trimmed = userName.trim();
+      if (map[`${evId}_${trimmed}`] !== undefined) return map[`${evId}_${trimmed}`];
+      const prefix = `${evId}_`;
+      const targetLower = trimmed.toLowerCase();
+      for (const k of Object.keys(map)) {
+        if (k.startsWith(prefix) && k.slice(prefix.length).trim().toLowerCase() === targetLower) {
+          return map[k];
+        }
+      }
+      return undefined;
+    };
+
     // Map votes and notes by normalized title so aliases and duplicates share their votes!
     const votesByNormTitle = {};
     const notesByNormTitle = {};
@@ -378,9 +396,9 @@ const api = {
       const key = norm(raw.title);
       if (!key) continue;
 
-      const v_u1 = votes[`${raw.id}_${u1}`] || votes[`${raw.id}_Emma`];
-      const v_u2 = votes[`${raw.id}_${u2}`] || votes[`${raw.id}_Jordan`];
-      const v_solo = votes[`${raw.id}_${activeSoloName}`] || votes[`${raw.id}_Jordan`] || votes[`${raw.id}_Emma`];
+      const v_u1 = getVoteForUser(votes, raw.id, u1);
+      const v_u2 = isSolo ? undefined : getVoteForUser(votes, raw.id, u2);
+      const v_solo = getVoteForUser(votes, raw.id, activeSoloName);
 
       if (v_u1 && !votesByNormTitle[`${key}_${u1}`]) votesByNormTitle[`${key}_${u1}`] = v_u1;
       if (v_u2 && !votesByNormTitle[`${key}_${u2}`]) votesByNormTitle[`${key}_${u2}`] = v_u2;
@@ -573,29 +591,31 @@ const api = {
         continue;
       }
 
-      // Voting and Match calculation
+      // Voting and Match calculation (strictly per-user; never fall back u1 to u2 or vice versa)
       const key = norm(ev.title);
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined 
-        ? votes[`${ev.id}_${u1}`] 
-        : (votesByNormTitle[`${key}_${u1}`] !== undefined 
-          ? votesByNormTitle[`${key}_${u1}`] 
-          : (isSolo ? (votes[`${ev.id}_${activeSoloName}`] || votesByNormTitle[`${key}_solo`] || votes[`${ev.id}_Jordan`] || votes[`${ev.id}_Emma`]) : (votes[`${ev.id}_Emma`] || null)));
+      const directV1 = getVoteForUser(votes, ev.id, u1);
+      const v1 = directV1 !== undefined
+        ? directV1
+        : (votesByNormTitle[`${key}_${u1}`] !== undefined
+          ? votesByNormTitle[`${key}_${u1}`]
+          : (isSolo ? (getVoteForUser(votes, ev.id, activeSoloName) || votesByNormTitle[`${key}_solo`] || null) : null));
 
-      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined 
-        ? votes[`${ev.id}_${u2}`] 
-        : (votesByNormTitle[`${key}_${u2}`] !== undefined 
-          ? votesByNormTitle[`${key}_${u2}`] 
-          : (votes[`${ev.id}_Jordan`] || null)));
+      const directV2 = isSolo ? undefined : getVoteForUser(votes, ev.id, u2);
+      const v2 = isSolo ? null : (directV2 !== undefined
+        ? directV2
+        : (votesByNormTitle[`${key}_${u2}`] !== undefined
+          ? votesByNormTitle[`${key}_${u2}`]
+          : null));
 
       const myVote = isSolo 
-        ? (votes[`${ev.id}_${activeSoloName}`] || votesByNormTitle[`${key}_solo`] || v1)
+        ? (getVoteForUser(votes, ev.id, activeSoloName) || votesByNormTitle[`${key}_solo`] || v1)
         : ((typeof app !== 'undefined' && app.getActiveVoterName && app.getActiveVoterName() === u1) ? v1 : v2);
 
       ev.u1_vote = v1;
       ev.u2_vote = v2;
       ev.my_vote = myVote;
-      ev.u1_note = ev.u1_note || notes[`${ev.id}_${u1}`] || (isSolo ? (notes[`${ev.id}_${activeSoloName}`] || notes[`${ev.id}_Emma`]) : notes[`${ev.id}_Emma`]) || '';
-      ev.u2_note = ev.u2_note || notes[`${ev.id}_${u2}`] || notes[`${ev.id}_Jordan`] || '';
+      ev.u1_note = ev.u1_note || getVoteForUser(notes, ev.id, u1) || (isSolo ? getVoteForUser(notes, ev.id, activeSoloName) : '') || '';
+      ev.u2_note = isSolo ? '' : (ev.u2_note || getVoteForUser(notes, ev.id, u2) || '');
       ev.user1_name = u1;
       ev.user2_name = u2;
 

@@ -30,15 +30,15 @@ const swiper = {
 
     // Filter queue to items this voter hasn't decided (neither 'love' nor 'pass')
     this.deckQueue = (pool || []).filter(ev => {
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
-      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
+      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
       
       ev.u1_vote = v1;
       ev.u2_vote = v2;
       ev.is_match = Boolean(v1 === 'love' && v2 === 'love');
 
       if (isSolo) {
-        const myVote = votes[`${ev.id}_${activeVoter}`] || ev.my_vote || v1 || v2;
+        const myVote = votes[`${ev.id}_${activeVoter}`] || ev.my_vote || v1;
         return !myVote || myVote === 'maybe';
       }
 

@@ -280,9 +280,9 @@ const discover = {
     let anytimeCount = 0;
     let specialCount = 0;
     pool.forEach(ev => {
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
-      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
-      const myVote = isSolo ? (votes[`${ev.id}_${activeVoter}`] || v1 || v2) : (activeVoter === u1 ? v1 : v2);
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
+      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
+      const myVote = isSolo ? (votes[`${ev.id}_${activeVoter}`] || v1) : (activeVoter === u1 ? v1 : v2);
       if (myVote === 'love' || myVote === 'pass') return;
       if (ev.ongoing) anytimeCount++;
       else specialCount++;
@@ -1495,9 +1495,9 @@ const discover = {
     pool.forEach(ev => {
       if (!ev || !ev.id || seen.has(ev.id)) return;
       seen.add(ev.id);
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : (votes[`${ev.id}_Emma`] !== undefined ? votes[`${ev.id}_Emma`] : ev.u1_vote);
-      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : (votes[`${ev.id}_Jordan`] !== undefined ? votes[`${ev.id}_Jordan`] : ev.u2_vote);
-      const myVote = isSolo ? (votes[`${ev.id}_${activeSoloName}`] || v1 || v2) : null;
+      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
+      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
+      const myVote = isSolo ? (votes[`${ev.id}_${activeSoloName}`] || v1) : null;
 
       if (isSolo) {
         if (myVote === 'love') emmaLoveCount++;

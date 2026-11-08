@@ -55,8 +55,8 @@ const matchesView = {
     const removed = [];
     pool.forEach(ev => {
       if (typeof api !== 'undefined' && api.isPastEvent && api.isPastEvent(ev)) return; // finished events are hidden
-      const v1 = votes[`${ev.id}_${u1}`] ?? votes[`${ev.id}_Emma`] ?? ev.u1_vote;
-      const v2 = votes[`${ev.id}_${u2}`] ?? votes[`${ev.id}_Jordan`] ?? ev.u2_vote;
+      const v1 = votes[`${ev.id}_${u1}`] ?? ev.u1_vote;
+      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] ?? ev.u2_vote);
       const isMatch = isSolo
         ? (votes[`${ev.id}_${soloName}`] || v1) === 'love'
         : (v1 === 'love' && v2 === 'love');
