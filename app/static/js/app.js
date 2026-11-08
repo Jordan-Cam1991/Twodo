@@ -29,8 +29,11 @@ const app = {
           if (res && !res.skipped && res.newly_discovered_count > 0 && window.discover) {
             discover.loadEvents(false);
           }
+          this.updateThisWeekBadges();
         }).catch(() => {});
       }
+
+      this.updateThisWeekBadges();
 
       console.log('TwoDo ready!');
     } catch (e) {
@@ -222,6 +225,11 @@ const app = {
     // Scroll back to top on navigation to make mobile vertical browsing natural
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    // Clear "new this week" badge when user explores discover or swiper
+    if (tabName === 'discover' || tabName === 'swiper') {
+      this.clearThisWeekBadges();
+    }
+
     if (tabName === 'swiper') {
       swiper.initDeck();
     } else if (tabName === 'chat') {
@@ -231,6 +239,29 @@ const app = {
     } else if (tabName === 'matches') {
       if (window.matchesView) matchesView.render();
     }
+  },
+
+  updateThisWeekBadges() {
+    let count = 0;
+    try {
+      const raw = parseInt(localStorage.getItem('twodo_new_this_week_count') || '0', 10);
+      count = isNaN(raw) || raw < 0 ? 0 : raw;
+    } catch (e) {
+      count = 0;
+    }
+    ['m-discover-badge', 'm-swiper-badge', 'discover-tab-badge', 'swiper-badge'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = count;
+      el.classList.toggle('hidden', count === 0);
+    });
+  },
+
+  clearThisWeekBadges() {
+    try {
+      localStorage.removeItem('twodo_new_this_week_count');
+    } catch (e) {}
+    this.updateThisWeekBadges();
   },
 
   // Modals

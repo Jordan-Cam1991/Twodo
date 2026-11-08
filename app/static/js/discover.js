@@ -5,14 +5,14 @@
  */
 const discover = {
   // Active Filter State (empty array means "All")
-  activeFeedMode: 'anytime', // 'anytime' (always-on places) | 'special' (dated ticketed events/concerts/sports/shows)
+  activeFeedMode: 'special', // 'special' (dated ticketed events/concerts/sports/shows - default) | 'anytime' (always-on places)
   selectedCategories: [],
   selectedSuburbs: [],
   selectedVibes: [],
   activeIntent: 'all',
   activeSubIntent: 'all', // Sub-refiner within the chosen intent
-  activeDateRange: 'all', // Default in Special Events: show all upcoming dated events chronologically
-  defaultDateRange: 'all',
+  activeDateRange: 'this_week', // Default in Special Events: show this week's events
+  defaultDateRange: 'this_week',
   activeFilter: 'all',
   customStart: null,
   customEnd: null,
@@ -1644,7 +1644,7 @@ const discover = {
         this.activeSubIntent = 'all';
         this.syncIntentUI();
       }
-      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || 'all'));
+      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || this.defaultDateRange || 'this_week'));
       this.modalSelectedSet.add(initDate);
     } else if (type === 'suburb') {
       (this.selectedSuburbs || []).forEach(s => this.modalSelectedSet.add(s));
@@ -1742,7 +1742,7 @@ const discover = {
 
     // 1. PURPOSE-BUILT DATE PICKER UX (Exclusively for Special Dated Events)
     if (def.type === 'date') {
-      const sel = Array.from(this.modalSelectedSet)[0] || 'all';
+      const sel = Array.from(this.modalSelectedSet)[0] || this.defaultDateRange || 'this_week';
       const presets = [
         { id: 'all', icon: '✨', title: 'All Upcoming' },
         { id: 'this_week', icon: '🗓️', title: 'This Week' },
@@ -1971,7 +1971,7 @@ const discover = {
     if (!def) return;
 
     if (type === 'date') {
-      let selected = Array.from(this.modalSelectedSet)[0] || 'all';
+      let selected = Array.from(this.modalSelectedSet)[0] || this.defaultDateRange || 'this_week';
       if (selected === 'custom') {
         const s = document.getElementById('modal-date-start')?.value || null;
         const e = document.getElementById('modal-date-end')?.value || null;

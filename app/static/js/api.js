@@ -481,6 +481,15 @@ const api = {
       if (!target || isNaN(target.getTime())) return true; // Undated / ongoing activities always show
       const targetEnd = parseLocal(evEndStr) || target;
 
+      if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
+        const bounds = window.discover.getDateBounds(range);
+        if (bounds && bounds.start && bounds.end) {
+          const bStart = new Date(bounds.start); bStart.setHours(0, 0, 0, 0);
+          const bEnd = new Date(bounds.end); bEnd.setHours(23, 59, 59, 999);
+          return target <= bEnd && targetEnd >= bStart;
+        }
+      }
+
       const now = new Date();
       now.setHours(0, 0, 0, 0);
 
@@ -490,6 +499,8 @@ const api = {
         return diffDays === 0;
       } else if (range === 'tomorrow') {
         return diffDays === 1;
+      } else if (range === 'this_week' || range === 'next_7_days') {
+        return diffDays >= 0 && diffDays <= 6;
       } else if (range === 'this_weekend') {
         // Friday, Saturday, Sunday
         const dayOfWeek = now.getDay(); // 0 is Sunday, 5 is Friday, 6 is Sat
@@ -499,8 +510,6 @@ const api = {
         const sun = new Date(fri);
         sun.setDate(fri.getDate() + 2);
         return target >= fri && target <= sun;
-      } else if (range === 'next_7_days') {
-        return diffDays >= 0 && diffDays <= 7;
       } else if (range === 'this_month') {
         return diffDays >= 0 && diffDays <= 30;
       } else if (range === 'custom') {
@@ -725,6 +734,7 @@ const api = {
     }
 
     let newlyDiscovered = 0;
+    let newlyDiscoveredThisWeek = 0;
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
     const existingKeys = new Set(
       ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
@@ -756,6 +766,9 @@ const api = {
               existingKeys.add(k);
               livePool.push(ev);
               newlyDiscovered++;
+              if (!ev.ongoing && matchesDateRange(ev.start_date || ev.time_str, 'this_week', null, null, ev.end_date)) {
+                newlyDiscoveredThisWeek++;
+              }
             }
           }
         }
@@ -831,7 +844,37 @@ const api = {
       localStorage.setItem('twodo_last_daily_pull', today);
     } catch (e) {}
 
-    return { skipped: false, date: today, newly_discovered_count: newlyDiscovered };
+    // Badge & Push Notification when new events are pulled for this week
+    if (newlyDiscoveredThisWeek > 0) {
+      try {
+        const cur = parseInt(localStorage.getItem('twodo_new_this_week_count') || '0', 10) || 0;
+        localStorage.setItem('twodo_new_this_week_count', (cur + newlyDiscoveredThisWeek).toString());
+      } catch (e) {}
+
+      if (typeof app !== 'undefined' && app.updateThisWeekBadges) {
+        app.updateThisWeekBadges();
+      }
+
+      const notifMsg = 'New events have been added to this week, go and a look 🙂';
+      if (typeof notifications !== 'undefined') {
+        if (notifications.sendNotification) {
+          notifications.sendNotification('✨ TwoDo', {
+            body: notifMsg,
+            icon: '/icons/icon-192.png',
+            data: { tab: 'discover' }
+          });
+        }
+        if (notifications.sendRemotePush) {
+          notifications.sendRemotePush({
+            title: '✨ TwoDo',
+            message: notifMsg,
+            tab: 'discover'
+          });
+        }
+      }
+    }
+
+    return { skipped: false, date: today, newly_discovered_count: newlyDiscovered, newly_discovered_this_week: newlyDiscoveredThisWeek };
   },
 
   async refreshEvents(city, lat = null, lng = null) {
