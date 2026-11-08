@@ -331,6 +331,24 @@ const discover = {
     });
   },
 
+  toggleHeaderSearch() {
+    const drawer = document.getElementById('header-search-drawer');
+    const btn = document.getElementById('btn-header-search');
+    const input = document.getElementById('discover-search-input');
+    if (!drawer) return;
+
+    if (typeof app !== 'undefined' && app.activeTab && !['discover', 'swiper'].includes(app.activeTab)) {
+      app.navigate('discover');
+    }
+
+    const willOpen = drawer.classList.contains('hidden');
+    drawer.classList.toggle('hidden', !willOpen);
+    if (btn) btn.classList.toggle('filter-active', willOpen || Boolean(this.searchQuery));
+    if (willOpen && input) {
+      setTimeout(() => input.focus(), 50);
+    }
+  },
+
   handleSearchInput(val) {
     this.searchQuery = (val || '').trim();
     ['discover-search-input', 'swiper-search-input'].forEach(id => {
@@ -341,6 +359,9 @@ const discover = {
       const btn = document.getElementById(id);
       if (btn) btn.classList.toggle('hidden', !this.searchQuery);
     });
+    const hdrBtn = document.getElementById('btn-header-search');
+    const drawer = document.getElementById('header-search-drawer');
+    if (hdrBtn) hdrBtn.classList.toggle('filter-active', Boolean(this.searchQuery) || (drawer && !drawer.classList.contains('hidden')));
 
     clearTimeout(this.searchDebounceTimer);
     this.searchDebounceTimer = setTimeout(() => {
@@ -359,6 +380,10 @@ const discover = {
       const clearBtn = document.getElementById(id);
       if (clearBtn) clearBtn.classList.add('hidden');
     });
+    const drawer = document.getElementById('header-search-drawer');
+    if (drawer) drawer.classList.add('hidden');
+    const hdrBtn = document.getElementById('btn-header-search');
+    if (hdrBtn) hdrBtn.classList.remove('filter-active');
     this.currentPage = 1;
     this.loadEvents(false);
   },
@@ -1718,15 +1743,13 @@ const discover = {
     // 1. PURPOSE-BUILT DATE PICKER UX (Exclusively for Special Dated Events)
     if (def.type === 'date') {
       const sel = Array.from(this.modalSelectedSet)[0] || 'all';
-      const wkndBounds = this.getDateBounds('this_weekend');
-      const wkndSub = wkndBounds ? `${this.fmtDayMonth(wkndBounds.start)} – ${this.fmtDayMonth(wkndBounds.end)}` : 'Fri – Sun';
       const presets = [
-        { id: 'all', icon: '✨', title: 'All Upcoming', sub: 'Every special event' },
-        { id: 'this_week', icon: '🗓️', title: 'This Week', sub: `${this.fmtDayMonth(this.dayOffset(0))} – ${this.fmtDayMonth(this.dayOffset(6))}` },
-        { id: 'this_weekend', icon: '🥂', title: 'This Weekend', sub: `Fri – Sun (${wkndSub})` },
-        { id: 'day_0', icon: '🔥', title: 'Today', sub: this.fmtShort(this.dayOffset(0)) },
-        { id: 'day_1', icon: '🌅', title: 'Tomorrow', sub: this.fmtShort(this.dayOffset(1)) },
-        { id: 'week_1', icon: '📆', title: 'Next Week', sub: `${this.fmtDayMonth(this.dayOffset(7))} – ${this.fmtDayMonth(this.dayOffset(13))}` }
+        { id: 'all', icon: '✨', title: 'All Upcoming' },
+        { id: 'this_week', icon: '🗓️', title: 'This Week' },
+        { id: 'this_weekend', icon: '🥂', title: 'This Weekend' },
+        { id: 'day_0', icon: '🔥', title: 'Today' },
+        { id: 'day_1', icon: '🌅', title: 'Tomorrow' },
+        { id: 'week_1', icon: '📆', title: 'Next Week' }
       ];
 
       let daysHtml = '';
@@ -1754,29 +1777,26 @@ const discover = {
 
       container.innerHTML = `
         <div class="date-modal-layout">
-          <div class="filter-section-heading">QUICK PRESETS (SPECIAL EVENTS)</div>
           <div class="date-presets-grid">
             ${presets.map(p => {
               const active = sel === p.id || (p.id === 'day_0' && sel === 'today') || (p.id === 'day_1' && sel === 'tomorrow');
               const pCount = this.getDateRangePreviewCount(p.id);
               return `
                 <button type="button" class="date-preset-card ${active ? 'active' : ''}" onclick="discover.toggleModalOption('${p.id}')">
-                  <span class="date-preset-icon">${p.icon}</span>
-                  <div class="date-preset-text">
-                    <span class="date-preset-title">${p.title} <span class="date-preset-badge">${pCount}</span></span>
-                    <span class="date-preset-sub">${p.sub}</span>
-                  </div>
+                  <span class="date-preset-left">
+                    <span class="date-preset-icon">${p.icon}</span>
+                    <span class="date-preset-title">${p.title}</span>
+                  </span>
+                  <span class="date-preset-badge">${pCount}</span>
                 </button>
               `;
             }).join('')}
           </div>
 
-          <div class="filter-section-heading">PICK A DAY THIS WEEK</div>
           <div class="cal-week-strip">
             ${daysHtml}
           </div>
 
-          <div class="filter-section-heading">PLANNING FURTHER AHEAD</div>
           <div class="date-further-row">
             <button type="button" class="date-further-pill ${sel === 'week_2' ? 'active' : ''}" onclick="discover.toggleModalOption('week_2')">
               📆 In 2 Weeks (${this.fmtDayMonth(this.dayOffset(14))}–${this.fmtDayMonth(this.dayOffset(20))}) · ${this.getDateRangePreviewCount('week_2')}
@@ -1832,20 +1852,17 @@ const discover = {
               <span class="suburb-tile-name">${opt.shortLabel || opt.id}</span>
               <span class="suburb-tile-check">${isChecked ? '✓' : ''}</span>
             </div>
-            <span class="suburb-tile-desc">${opt.desc}</span>
           </button>
         `;
       }).join('');
 
       container.innerHTML = `
         <div class="suburb-modal-layout">
-          <div class="filter-section-heading">QUICK REGION SHORTCUTS</div>
           <div class="region-shortcuts-strip">
             ${regionsHtml}
           </div>
 
-          <div class="filter-section-heading-row">
-            <span class="filter-section-heading" style="margin:0;">OR PICK PRECINCTS (${isAll ? 'All Brisbane' : `${this.modalSelectedSet.size} selected`})</span>
+          <div class="filter-section-heading-row" style="justify-content:flex-end;">
             <div class="suburb-quick-links">
               <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
               <span class="dot-sep">·</span>
@@ -2345,36 +2362,37 @@ const discover = {
 
   async submitCustomEvent(e) {
     e.preventDefault();
-    const title = document.getElementById('cust-title')?.value;
-    const cat = document.getElementById('cust-category')?.value;
-    const price = document.getElementById('cust-price')?.value;
-    const loc = document.getElementById('cust-location')?.value || app.currentCity;
-    const desc = document.getElementById('cust-desc')?.value;
-    const tip = document.getElementById('cust-tip')?.value;
-    const url = document.getElementById('cust-url')?.value;
-    const addPlanner = document.getElementById('cust-add-planner')?.checked;
+    const title = document.getElementById('cust-title')?.value?.trim();
+    const scheduled_date = document.getElementById('cust-date')?.value || ((typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10));
+    const time_slot = document.getElementById('cust-slot')?.value || 'evening';
+    const location = document.getElementById('cust-location')?.value?.trim() || '';
+    const notes = document.getElementById('cust-notes')?.value?.trim() || '';
+
+    if (!title) return;
 
     try {
-      await api.addCustomEvent({
-        title,
-        category: cat,
-        price_level: price,
-        location_name: loc,
-        city: app.currentCity,
-        description: desc,
-        insider_tip: tip,
-        source_url: url,
-        add_to_planner: addPlanner
-      });
+      if (typeof planner !== 'undefined' && planner.addPersonalPlan) {
+        await planner.addPersonalPlan({
+          title,
+          scheduled_date,
+          time_slot,
+          location,
+          notes
+        });
+      }
 
       app.closeAddModal();
-      app.showToast('Activity added successfully!');
       e.target.reset();
-      await this.loadEvents(true);
-      await planner.loadPlanner();
+      app.showToast('📅 Personal plan added to Planner!');
+      if (typeof app !== 'undefined' && app.navigate) {
+        app.navigate('planner');
+      }
+      if (typeof planner !== 'undefined' && planner.switchView) {
+        planner.switchView('scheduled');
+      }
     } catch (err) {
       console.error(err);
-      app.showToast('Failed to add custom activity.');
+      app.showToast('Failed to add personal plan.');
     }
   },
 

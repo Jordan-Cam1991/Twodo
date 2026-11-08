@@ -796,6 +796,7 @@ const firebaseService = {
         items.push({
           id: doc.id,
           event_id: data.event_id,
+          is_personal: Boolean(data.is_personal || data.category === 'Personal Plan' || String(data.event_id || '').startsWith('personal_')),
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
           scheduled_time: data.scheduled_time || null,
@@ -947,6 +948,7 @@ const firebaseService = {
         items.push({
           id: doc.id,
           event_id: data.event_id,
+          is_personal: Boolean(data.is_personal || data.category === 'Personal Plan' || String(data.event_id || '').startsWith('personal_')),
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
           scheduled_time: data.scheduled_time || null,
@@ -1175,6 +1177,7 @@ const firebaseService = {
 
     const payload = {
       event_id: item.event_id,
+      is_personal: Boolean(item.is_personal || item.category === 'Personal Plan' || String(item.event_id || '').startsWith('personal_')),
       title: item.title,
       scheduled_date: item.scheduled_date || null,
       scheduled_time: item.scheduled_time || null,

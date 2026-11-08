@@ -68,6 +68,52 @@ const planner = {
   },
 
   /**
+   * Add a couple's personal plan directly into the shared Planner (scheduled tab).
+   */
+  async addPersonalPlan({ title, scheduled_date, time_slot, location, notes } = {}) {
+    const id = 'personal_' + Date.now();
+    const todayStr = (typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10);
+    const item = {
+      id,
+      event_id: id,
+      is_personal: true,
+      status: 'scheduled',
+      scheduled_date: scheduled_date || todayStr,
+      scheduled_time: null,
+      time_slot: time_slot || 'evening',
+      notes: (notes || '').trim(),
+      budget: 0,
+      title: (title || 'Personal Plan').trim(),
+      description: '',
+      category: 'Personal Plan',
+      location_name: (location || '').trim(),
+      location: (location || '').trim(),
+      source: 'Personal Plan',
+      source_url: '',
+      time_str: '',
+      city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
+      image_url: '',
+      price_str: '',
+      created_at: new Date().toISOString()
+    };
+
+    const replace = (list) => [item, ...(list || []).filter(i => String(i.id) !== String(id))];
+    this.items = replace(this.items);
+    if (typeof firebaseService !== 'undefined') firebaseService.plannerItems = replace(firebaseService.plannerItems);
+    try {
+      const local = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
+      localStorage.setItem('twodo_planner', JSON.stringify(replace(local)));
+    } catch (e) {}
+    this.renderPlanner();
+    this.updateBadges();
+
+    if (this.hasCloud()) {
+      firebaseService.savePlannerItem(item).catch(err => console.warn('Personal plan cloud sync note:', err));
+    }
+    return item;
+  },
+
+  /**
    * Add (or replace) an event in the planner. Saves instantly on this device
    * and to the cloud so your partner sees it too.
    */
@@ -171,24 +217,29 @@ const planner = {
     const monthName = target.toLocaleDateString('en-US', { month: 'short' });
     const dayNum = target.getDate();
 
-    const locLabel = nextDate.location || nextDate.location_name || nextDate.city || 'Brisbane';
-    const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+    const isPersonalHero = Boolean(nextDate.is_personal || nextDate.category === 'Personal Plan' || String(nextDate.event_id || '').startsWith('personal_'));
+    const rawLoc = (nextDate.location || nextDate.location_name || '').trim();
+    const locLabel = rawLoc || (isPersonalHero ? '' : (nextDate.city || 'Brisbane'));
+    const mapsUrl = locLabel ? `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}` : '';
     const fullEv = this.findEvent(nextDate.event_id) || nextDate;
-    const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+    const linkInfo = (!isPersonalHero && typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
     const heroLinkHtml = linkInfo
       ? `<span>• <a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="hero-map-link">${linkInfo.label}</a></span>`
+      : '';
+    const heroLocHtml = locLabel
+      ? `<span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="hero-map-link">${locLabel} ↗</a></span>`
       : '';
 
     heroEl.innerHTML = `
       <div class="planner-hero-inner">
         <div class="hero-top-row">
-          <span class="hero-tag">💖 NEXT UPCOMING DATE</span>
+          <span class="hero-tag">${isPersonalHero ? '👫 PERSONAL PLAN • NEXT UP' : '💖 NEXT UPCOMING DATE'}</span>
           <span class="hero-countdown-pill">${countdownStr}</span>
         </div>
         <h3 class="hero-title">${nextDate.title}</h3>
         <div class="hero-meta-row">
           <span>📅 ${dayName}, ${dayNum} ${monthName} • ${nextDate.time_slot || 'Evening'}</span>
-          <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="hero-map-link">${locLabel} ↗</a></span>
+          ${heroLocHtml}
           ${heroLinkHtml}
         </div>
         ${nextDate.notes ? `<div class="hero-notes"><strong>💌 Date Notes:</strong> "${nextDate.notes}"</div>` : ''}
@@ -229,6 +280,11 @@ const planner = {
       const monthName = dateObj.toLocaleDateString('en-US', { month: 'short' });
       const dayNum = dateObj.getDate();
 
+      const isPersonal = Boolean(item.is_personal || item.category === 'Personal Plan' || String(item.event_id || '').startsWith('personal_'));
+      const personalBadgeHtml = isPersonal
+        ? `<span class="badge personal-plan-badge">👫 Personal Plan</span>`
+        : '';
+
       const notesHtml = item.notes 
         ? `<div class="itin-notes"><strong>📝 Notes:</strong> ${item.notes}</div>` 
         : '';
@@ -237,16 +293,23 @@ const planner = {
         ? `<span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700;">💰 Budget: $${item.budget}</span>` 
         : '';
 
-      const locLabel = item.location || item.location_name || item.city || 'Brisbane';
-      const mapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}`;
+      const rawLoc = (item.location || item.location_name || '').trim();
+      const locLabel = rawLoc || (isPersonal ? '' : (item.city || 'Brisbane'));
+      const mapsUrl = locLabel ? `https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}` : '';
       const fullEv = this.findEvent(item.event_id) || item;
-      const linkInfo = (typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
+      const linkInfo = (!isPersonal && typeof discover !== 'undefined' && discover.getEventLinkInfo) ? discover.getEventLinkInfo(fullEv) : null;
       const extLinkHtml = linkInfo
         ? ` • <a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link">${linkInfo.label}</a>`
         : '';
+      const metaParts = [];
+      if (locLabel) metaParts.push(`<span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="itin-map-link">${locLabel} ↗</a></span>`);
+      if (!isPersonal && item.price_str) metaParts.push(`<span>🎟️ ${item.price_str}</span>`);
+      const metaLineHtml = (metaParts.length > 0 || extLinkHtml)
+        ? `<div class="itin-meta">${metaParts.join(' • ')}${extLinkHtml}</div>`
+        : '';
 
       return `
-        <div class="itinerary-item">
+        <div class="itinerary-item ${isPersonal ? 'personal-plan-item' : ''}">
           <div class="itinerary-date-col">
             <span class="itin-day">${dayName}</span>
             <span class="itin-date">${dayNum} ${monthName}</span>
@@ -257,12 +320,10 @@ const planner = {
             <div>
               <div class="itin-title-row">
                 <h4 class="itin-title">${item.title}</h4>
+                ${personalBadgeHtml}
                 ${budgetHtml}
               </div>
-              <div class="itin-meta">
-                <span>📍 <a href="${mapsUrl}" target="_blank" rel="noopener" class="itin-map-link">${locLabel} ↗</a></span> • 
-                <span>🎟️ ${item.price_str || 'See details'}</span>${extLinkHtml}
-              </div>
+              ${metaLineHtml}
               ${notesHtml}
             </div>
 
@@ -273,9 +334,11 @@ const planner = {
               <button class="btn btn-sm btn-outline" onclick="planner.openScheduleModal('${item.event_id}', '${item.title.replace(/'/g, "\\'")}', '${item.id}')">
                 ✏️ Reschedule
               </button>
+              ${!isPersonal ? `
               <button class="btn btn-sm btn-secondary" onclick="planner.moveToBucketList('${item.id}')">
                 📦 Bucket List
               </button>
+              ` : ''}
               <button class="btn btn-sm btn-outline" style="color:#ef4444;" onclick="planner.deleteItem('${item.id}')" title="Delete from itinerary">
                 🗑️
               </button>

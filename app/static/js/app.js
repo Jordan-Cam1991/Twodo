@@ -208,6 +208,7 @@ const app = {
   },
 
   navigate(tabName) {
+    this.activeTab = tabName;
     document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
@@ -264,6 +265,14 @@ const app = {
   },
 
   openAddModal() {
+    const dateInput = document.getElementById('cust-date');
+    if (dateInput) {
+      const todayStr = (typeof api !== 'undefined' && api.todayYMD) ? api.todayYMD() : new Date().toISOString().slice(0, 10);
+      dateInput.min = todayStr;
+      if (!dateInput.value || dateInput.value < todayStr) {
+        dateInput.value = todayStr;
+      }
+    }
     document.getElementById('add-modal').classList.remove('hidden');
   },
 

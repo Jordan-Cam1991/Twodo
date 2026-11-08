@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=4.3">
+  <link rel="stylesheet" href="css/style.css?v=4.4">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -178,7 +178,6 @@
           <span class="brand-icon">💑</span>
           <div class="brand-text">
             <span class="brand-title">TwoDo</span>
-            <span class="brand-subtitle">Couple Adventures</span>
           </div>
         </div>
 
@@ -209,9 +208,12 @@
           </button>
         </nav>
 
-        <!-- Header Actions: ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
+        <!-- Header Actions: 🔍 Search, ➕ Add Personal Plan, ⚙️ Settings, 🚪 Log Out -->
         <div class="header-actions">
-          <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Date Activity" aria-label="Add Custom Activity">
+          <button type="button" class="btn-icon header-icon-btn" id="btn-header-search" onclick="discover.toggleHeaderSearch()" title="Search" aria-label="Search">
+            <span>🔍</span>
+          </button>
+          <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Personal Plan to Planner" aria-label="Add Personal Plan">
             <span>➕</span>
           </button>
           <button type="button" class="btn-icon header-icon-btn btn-settings-corner" onclick="app.openSettingsModal()" title="Settings & Sync" aria-label="Couple Settings">
@@ -224,6 +226,22 @@
               <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
           </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Top Search Bar (Toggled via 🔍 icon in header) -->
+      <div id="header-search-drawer" class="header-search-drawer hidden">
+        <div class="discover-search-box">
+          <span class="discover-search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="discover-search-input" 
+            class="discover-search-input" 
+            placeholder="Search places, events, suburbs..." 
+            autocomplete="off"
+            oninput="discover.handleSearchInput(this.value)"
+          >
+          <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
         </div>
       </div>
 
@@ -256,34 +274,16 @@
       <div class="feed-mode-switcher" id="discover-mode-switcher" role="tablist">
         <button type="button" class="feed-mode-btn active" data-mode="anytime" onclick="discover.setFeedMode('anytime')">
           <span class="feed-mode-icon">🌟</span>
-          <div class="feed-mode-text">
-            <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="discover-anytime-count"></span></span>
-            <span class="feed-mode-sub">Dinners, bars, activities &amp; walks</span>
-          </div>
+          <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="discover-anytime-count"></span></span>
         </button>
         <button type="button" class="feed-mode-btn" data-mode="special" onclick="discover.setFeedMode('special')">
           <span class="feed-mode-icon">🎟️</span>
-          <div class="feed-mode-text">
-            <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="discover-special-count"></span></span>
-            <span class="feed-mode-sub">Concerts, sports, shows &amp; festivals</span>
-          </div>
+          <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="discover-special-count"></span></span>
         </button>
       </div>
 
-      <!-- Clean Search + Quick Context Pills (Airbnb/Fever Style) -->
+      <!-- Quick Context Pills -->
       <div class="discover-unified-bar">
-        <div class="discover-search-box">
-          <span class="discover-search-icon">🔍</span>
-          <input 
-            type="text" 
-            id="discover-search-input" 
-            class="discover-search-input" 
-            placeholder="Search dinners, activities, gigs..." 
-            autocomplete="off"
-            oninput="discover.handleSearchInput(this.value)"
-          >
-          <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
-        </div>
         <div class="discover-quick-filters">
           <button type="button" class="quick-context-pill hidden" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Filter special events by date">
             📅 <span id="date-chip-label">All Upcoming</span> ▾
@@ -291,7 +291,7 @@
           <button type="button" class="quick-context-pill" id="mood-chip-suburb" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
             📍 <span id="suburb-chip-label">All Suburbs</span> ▾
           </button>
-          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Answer 3 quick questions to get 3 hand-picked date ideas">
+          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Get 3 hand-picked date ideas">
             ✨ Pick For Us
           </button>
         </div>
@@ -349,10 +349,6 @@
 
       <!-- Events Grid -->
       <div class="events-grid-container">
-        <div class="results-meta-minimal" id="discover-results-meta">
-          <span id="results-count-text">Showing activities in Brisbane</span>
-        </div>
-
         <div id="events-grid" class="events-grid">
           <!-- Dynamic event cards injected here -->
         </div>
@@ -379,34 +375,16 @@
       <div class="feed-mode-switcher" id="swiper-mode-switcher" role="tablist">
         <button type="button" class="feed-mode-btn active" data-mode="anytime" onclick="discover.setFeedMode('anytime')">
           <span class="feed-mode-icon">🌟</span>
-          <div class="feed-mode-text">
-            <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="swiper-anytime-count"></span></span>
-            <span class="feed-mode-sub">Dinners, bars, activities &amp; walks</span>
-          </div>
+          <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="swiper-anytime-count"></span></span>
         </button>
         <button type="button" class="feed-mode-btn" data-mode="special" onclick="discover.setFeedMode('special')">
           <span class="feed-mode-icon">🎟️</span>
-          <div class="feed-mode-text">
-            <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="swiper-special-count"></span></span>
-            <span class="feed-mode-sub">Concerts, sports, shows &amp; festivals</span>
-          </div>
+          <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="swiper-special-count"></span></span>
         </button>
       </div>
 
       <!-- Identical Unified Top Controls as Discover -->
       <div class="discover-unified-bar">
-        <div class="discover-search-box">
-          <span class="discover-search-icon">🔍</span>
-          <input 
-            type="text" 
-            id="swiper-search-input" 
-            class="discover-search-input" 
-            placeholder="Search dinners, activities, gigs..." 
-            autocomplete="off"
-            oninput="discover.handleSearchInput(this.value)"
-          >
-          <button type="button" id="swiper-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
-        </div>
         <div class="discover-quick-filters">
           <button type="button" class="quick-context-pill hidden" id="sw-date-pill" onclick="discover.onDateChipClick()" title="Filter special events by date">
             📅 <span id="sw-date-pill-label">All Upcoming</span> ▾
@@ -414,7 +392,7 @@
           <button type="button" class="quick-context-pill" id="sw-suburb-pill" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
             📍 <span id="sw-suburb-pill-label">All Suburbs</span> ▾
           </button>
-          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Answer 3 quick questions to get 3 hand-picked date ideas">
+          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Get 3 hand-picked date ideas">
             ✨ Pick For Us
           </button>
         </div>
@@ -453,7 +431,6 @@
 
       <div class="swiper-container">
         <div class="swiper-status-minimal">
-          <span id="sw-filter-status">⚡ Ready to swipe</span>
           <button type="button" class="btn-clear-filter-pill hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
             ✕ Reset
           </button>
@@ -514,7 +491,7 @@
             <span class="chat-header-avatar">💑</span>
             <div>
               <h2 class="chat-header-title" id="chat-header-title">Couple Chat</h2>
-              <span class="chat-header-status">🟢 Connected • Discuss date plans</span>
+              <span class="chat-header-status">🟢 Connected</span>
             </div>
           </div>
         </div>
@@ -557,7 +534,6 @@
       <div class="matches-page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
         <div>
           <h2 id="matches-page-title">💖 Your Matches</h2>
-          <p id="matches-page-sub" class="matches-page-sub">Ideas you both love, ready to plan</p>
         </div>
         <button type="button" id="btn-pick-random-match" class="btn btn-primary btn-sm hidden" onclick="matchesView.pickRandomMatch()" style="border-radius:9999px; padding:0.55rem 1.1rem; font-weight:800; box-shadow:0 4px 12px rgba(244,63,94,0.25);">
           🎲 Pick For Us
@@ -760,73 +736,48 @@
     </div>
   </div>
 
-  <!-- ADD CUSTOM EVENT MODAL -->
-  <div id="add-modal" class="modal-overlay hidden">
-    <div class="modal-card">
+  <!-- ADD PERSONAL PLAN MODAL (Directly adds a couple plan to Planner) -->
+  <div id="add-modal" class="modal-overlay hidden" onclick="if(event.target.id === 'add-modal') app.closeAddModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <h3>Add Custom Activity or Recommendation</h3>
+        <h3>📅 Add Personal Plan</h3>
         <button class="close-btn" onclick="app.closeAddModal()">&times;</button>
       </div>
       <form id="custom-event-form" onsubmit="discover.submitCustomEvent(event)">
         <div class="form-group">
-          <label for="cust-title">Title / Name *</label>
-          <input type="text" id="cust-title" placeholder="e.g. Wine Tasting at Sirromet or Instagram Pasta Bar" required>
+          <label for="cust-title">Plan / Activity *</label>
+          <input type="text" id="cust-title" placeholder="e.g. Dinner with friends, Coast trip, Movie night..." required>
         </div>
 
         <div class="form-row">
           <div class="form-group flex-1">
-            <label for="cust-category">Category</label>
-            <select id="cust-category">
-              <option value="Date Night Specials">🍷 Date Night Specials</option>
-              <option value="Food & Drink">🍕 Food & Drink</option>
-              <option value="Outdoor & Adventure">🛶 Outdoor & Adventure</option>
-              <option value="Music & Concerts">🎵 Music & Concerts</option>
-              <option value="Arts & Culture">🎨 Arts & Culture</option>
-              <option value="Markets & Pop-ups">🎪 Markets & Pop-ups</option>
-              <option value="Sightseeing & Nature">🌿 Sightseeing & Nature</option>
-            </select>
+            <label for="cust-date">Date *</label>
+            <input type="date" id="cust-date" required>
           </div>
           <div class="form-group flex-1">
-            <label for="cust-price">Price Level</label>
-            <select id="cust-price">
-              <option value="Free">Free</option>
-              <option value="$">$ (Under $25)</option>
-              <option value="$$" selected>$$ ($25 - $75)</option>
-              <option value="$$$">$$$ (Splurge $75+)</option>
+            <label for="cust-slot">Time / Slot</label>
+            <select id="cust-slot">
+              <option value="morning">🌅 Morning</option>
+              <option value="afternoon">☀️ Afternoon</option>
+              <option value="evening" selected>🍷 Evening</option>
+              <option value="late_night">🌙 Late Night</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="cust-location">Location / Venue</label>
-          <input type="text" id="cust-location" placeholder="e.g. West End, Brisbane">
+          <label for="cust-location">Location (Optional)</label>
+          <input type="text" id="cust-location" placeholder="e.g. New Farm, Home, South Bank...">
         </div>
 
         <div class="form-group">
-          <label for="cust-desc">Description</label>
-          <textarea id="cust-desc" rows="2" placeholder="What makes this exciting to do together?"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="cust-tip">Couple Insider Tip</label>
-          <input type="text" id="cust-tip" placeholder="e.g. Make a reservation for the balcony at 7pm">
-        </div>
-
-        <div class="form-group">
-          <label for="cust-url">Link (Instagram, TikTok, or Website)</label>
-          <input type="url" id="cust-url" placeholder="https://...">
-        </div>
-
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="cust-add-planner" checked>
-            <span>Automatically add to our Bucket List</span>
-          </label>
+          <label for="cust-notes">Notes (Optional)</label>
+          <input type="text" id="cust-notes" placeholder="e.g. Booked for 7pm, bring wine...">
         </div>
 
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="app.closeAddModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Activity</button>
+          <button type="submit" class="btn btn-primary">Add to Planner ✨</button>
         </div>
       </form>
     </div>
@@ -978,8 +929,7 @@
         <div style="display:flex; align-items:center; gap:0.6rem;">
           <span class="concierge-header-badge">✨</span>
           <div>
-            <h3 style="margin:0; font-size:1.2rem;">15-Second Date Finder</h3>
-            <p style="margin:2px 0 0; font-size:0.8rem; color:var(--text-muted);" id="concierge-subtitle">Pick your mood and we'll hand-pick 3 winning ideas</p>
+            <h3 style="margin:0; font-size:1.2rem;">Pick For Us</h3>
           </div>
         </div>
         <button type="button" class="close-btn" onclick="discover.closeConcierge()" title="Close">✕</button>
@@ -1003,7 +953,6 @@
           <span class="filter-modal-header-icon" id="filter-modal-icon">📍</span>
           <div>
             <h3 id="filter-modal-title">Where in Brisbane?</h3>
-            <p class="filter-modal-sub" id="filter-modal-sub">Pick a region or select specific precincts</p>
           </div>
         </div>
         <button type="button" class="close-btn" onclick="discover.closeFilterModal()" title="Close">✕</button>
@@ -1053,8 +1002,7 @@
       <div class="modal-header">
         <div class="modal-header-icon-wrap" style="background: rgba(244, 63, 94, 0.12); color: #f43f5e; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">💬</div>
         <div>
-          <h3 style="margin:0; font-size:1.2rem;">Send a note about this idea</h3>
-          <p class="modal-sub" style="margin:2px 0 0; font-size:0.85rem; color:var(--text-muted);">Tell <strong id="love-note-partner">Emma</strong> what you think. Love it, or just send a thought and keep it in your feed.</p>
+          <h3 style="margin:0; font-size:1.2rem;">Send a Note</h3>
         </div>
         <button type="button" class="close-btn" onclick="collaborative.closeLoveNoteModal()" title="Close">✕</button>
       </div>
@@ -1127,17 +1075,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=4.3"></script>
-  <script src="js/firebase-service.js?v=4.3"></script>
-  <script src="js/auth-ui.js?v=4.3"></script>
-  <script src="js/events_data.js?v=4.3"></script>
-  <script src="js/api.js?v=4.3"></script>
-  <script src="js/chat.js?v=4.3"></script>
-  <script src="js/collaborative.js?v=4.3"></script>
-  <script src="js/discover.js?v=4.3"></script>
-  <script src="js/swiper.js?v=4.3"></script>
-  <script src="js/planner.js?v=4.3"></script>
-  <script src="js/matches.js?v=4.3"></script>
-  <script src="js/app.js?v=4.3"></script>
+  <script src="js/firebase-config.js?v=4.4"></script>
+  <script src="js/firebase-service.js?v=4.4"></script>
+  <script src="js/auth-ui.js?v=4.4"></script>
+  <script src="js/events_data.js?v=4.4"></script>
+  <script src="js/api.js?v=4.4"></script>
+  <script src="js/chat.js?v=4.4"></script>
+  <script src="js/collaborative.js?v=4.4"></script>
+  <script src="js/discover.js?v=4.4"></script>
+  <script src="js/swiper.js?v=4.4"></script>
+  <script src="js/planner.js?v=4.4"></script>
+  <script src="js/matches.js?v=4.4"></script>
+  <script src="js/app.js?v=4.4"></script>
 </body>
 </html>
