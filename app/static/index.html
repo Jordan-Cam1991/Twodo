@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=4.4">
+  <link rel="stylesheet" href="css/style.css?v=4.5">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -859,6 +859,25 @@
           </div>
         </div>
 
+        <!-- Lock-Screen Notifications Card (iOS & Android) -->
+        <div class="settings-notif-card" style="background:#f8fafc; border:1.5px solid var(--border); border-radius:12px; padding:0.85rem 1rem; margin-bottom:1rem;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.4rem;">
+            <div style="display:flex; align-items:center; gap:0.55rem;">
+              <span style="font-size:1.35rem;">🔔</span>
+              <div>
+                <strong style="display:block; font-size:0.92rem; color:var(--text-main);">Lock Screen Alerts</strong>
+                <span id="notif-status-badge" style="font-size:0.75rem; font-weight:700; color:#64748b;">Checking...</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-notifs" onclick="notifications.requestPermission()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px;">
+              Enable 🔔
+            </button>
+          </div>
+          <p style="margin:0.25rem 0 0; font-size:0.76rem; color:#64748b; line-height:1.35;">
+            Alerts on mutual matches, partner chats &amp; new dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
+          </p>
+        </div>
+
         <!-- Couple Account & Log Out Section -->
         <div class="settings-account-card">
           <div class="settings-account-info">
@@ -1075,17 +1094,18 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=4.4"></script>
-  <script src="js/firebase-service.js?v=4.4"></script>
-  <script src="js/auth-ui.js?v=4.4"></script>
-  <script src="js/events_data.js?v=4.4"></script>
-  <script src="js/api.js?v=4.4"></script>
-  <script src="js/chat.js?v=4.4"></script>
-  <script src="js/collaborative.js?v=4.4"></script>
-  <script src="js/discover.js?v=4.4"></script>
-  <script src="js/swiper.js?v=4.4"></script>
-  <script src="js/planner.js?v=4.4"></script>
-  <script src="js/matches.js?v=4.4"></script>
-  <script src="js/app.js?v=4.4"></script>
+  <script src="js/firebase-config.js?v=4.5"></script>
+  <script src="js/firebase-service.js?v=4.5"></script>
+  <script src="js/notifications.js?v=4.5"></script>
+  <script src="js/auth-ui.js?v=4.5"></script>
+  <script src="js/events_data.js?v=4.5"></script>
+  <script src="js/api.js?v=4.5"></script>
+  <script src="js/chat.js?v=4.5"></script>
+  <script src="js/collaborative.js?v=4.5"></script>
+  <script src="js/discover.js?v=4.5"></script>
+  <script src="js/swiper.js?v=4.5"></script>
+  <script src="js/planner.js?v=4.5"></script>
+  <script src="js/matches.js?v=4.5"></script>
+  <script src="js/app.js?v=4.5"></script>
 </body>
 </html>

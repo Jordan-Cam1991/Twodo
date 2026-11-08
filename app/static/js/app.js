@@ -286,6 +286,9 @@ const app = {
     } catch (err) {
       console.warn('updateProfileUI note in openSettingsModal:', err);
     }
+    if (typeof notifications !== 'undefined' && notifications.updateUI) {
+      notifications.updateUI();
+    }
     const modal = document.getElementById('settings-modal');
     if (modal) {
       modal.classList.remove('hidden');

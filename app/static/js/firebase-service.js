@@ -731,6 +731,12 @@ const firebaseService = {
     if (!coupleId) return;
 
     const coupleRef = this.db.collection('couples').doc(coupleId);
+    let hasLoadedVotesOnce = false;
+    let hasLoadedPlannerOnce = false;
+    let hasLoadedMessagesOnce = false;
+    let prevKnownMatches = new Set();
+    let prevKnownPlannerIds = new Set();
+    let prevKnownMessageIds = new Set();
 
     // 1. Live Votes & Notes Listener
     this.unsubVotes = coupleRef.collection('votes').onSnapshot((snapshot) => {
@@ -782,6 +788,24 @@ const firebaseService = {
         localStorage.setItem('twodo_dismissed_matches', JSON.stringify(Array.from(dismissed)));
       } catch (e) {}
 
+      // Trigger Mutual Match Alert on lock screen if partner vote created a new match
+      const currentMatchIds = new Set();
+      const allPool = (typeof discover !== 'undefined' && discover.getAllEventsPool) ? discover.getAllEventsPool() : [];
+      allPool.forEach(ev => {
+        const v1 = newVotes[`${ev.id}_${u1Name}`];
+        const v2 = newVotes[`${ev.id}_${u2Name}`];
+        if (v1 === 'love' && v2 === 'love') {
+          currentMatchIds.add(String(ev.id));
+          if (hasLoadedVotesOnce && !prevKnownMatches.has(String(ev.id))) {
+            if (window.notifications && notifications.notifyMatch) {
+              notifications.notifyMatch(ev.title, u2Name || 'Partner');
+            }
+          }
+        }
+      });
+      prevKnownMatches = currentMatchIds;
+      hasLoadedVotesOnce = true;
+
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
@@ -791,6 +815,8 @@ const firebaseService = {
     // 2. Live Planner Listener
     this.unsubPlanner = coupleRef.collection('planner').onSnapshot((snapshot) => {
       const items = [];
+      const u2Name = (this.profile?.user2_name || '').trim();
+
       snapshot.forEach((doc) => {
         const data = doc.data();
         items.push({
@@ -816,6 +842,20 @@ const firebaseService = {
 
       this.plannerItems = items;
       try { localStorage.setItem('twodo_planner', JSON.stringify(items)); } catch (e) {}
+
+      // Trigger Planner Alert on lock screen if a new date was scheduled
+      if (hasLoadedPlannerOnce) {
+        items.forEach(item => {
+          if (!prevKnownPlannerIds.has(String(item.id))) {
+            if (window.notifications && notifications.notifyPlanner) {
+              notifications.notifyPlanner(item.title, item.scheduled_date, u2Name || 'Partner');
+            }
+          }
+        });
+      }
+      prevKnownPlannerIds = new Set(items.map(i => String(i.id)));
+      hasLoadedPlannerOnce = true;
+
       if (window.planner) {
         planner.items = items;
         planner.renderPlanner();
@@ -828,6 +868,9 @@ const firebaseService = {
       .orderBy('created_at', 'asc')
       .onSnapshot((snapshot) => {
         const msgs = [];
+        const u1Name = (this.profile?.user1_name || '').trim();
+        const myUid = this.currentUser?.uid;
+
         snapshot.forEach((doc) => {
           const d = doc.data();
           msgs.push({
@@ -843,6 +886,26 @@ const firebaseService = {
         });
 
         this.messages = msgs;
+
+        // Trigger Chat Notification on lock screen when partner sends a message
+        if (hasLoadedMessagesOnce) {
+          msgs.forEach(m => {
+            if (!prevKnownMessageIds.has(String(m.id))) {
+              if (m.sender_uid && myUid && m.sender_uid !== myUid) {
+                if (window.notifications && notifications.notifyChat) {
+                  notifications.notifyChat(m.sender_name, m.text);
+                }
+              } else if (!m.sender_uid && m.sender_name && m.sender_name.toLowerCase() !== u1Name.toLowerCase()) {
+                if (window.notifications && notifications.notifyChat) {
+                  notifications.notifyChat(m.sender_name, m.text);
+                }
+              }
+            }
+          });
+        }
+        prevKnownMessageIds = new Set(msgs.map(m => String(m.id)));
+        hasLoadedMessagesOnce = true;
+
         if (window.chatView) {
           chatView.messages = msgs;
           chatView.renderMessages();

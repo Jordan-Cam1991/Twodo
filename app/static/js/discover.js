@@ -1830,19 +1830,6 @@ const discover = {
     if (def.type === 'suburb') {
       const isAll = this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all');
 
-      // Check if a region preset exactly matches current selection
-      const isRegionActive = (reg) => {
-        if (reg.id === 'all') return isAll;
-        if (isAll || this.modalSelectedSet.size !== reg.suburbs.length) return false;
-        return reg.suburbs.every(s => this.modalSelectedSet.has(s));
-      };
-
-      const regionsHtml = this.suburbRegions.map(reg => `
-        <button type="button" class="region-shortcut-pill ${isRegionActive(reg) ? 'active' : ''}" onclick="discover.selectSuburbRegion('${reg.id}')">
-          ${reg.label}
-        </button>
-      `).join('');
-
       const precinctsHtml = def.options.map(opt => {
         const isChecked = !isAll && this.modalSelectedSet.has(opt.id);
         return `
@@ -1858,11 +1845,7 @@ const discover = {
 
       container.innerHTML = `
         <div class="suburb-modal-layout">
-          <div class="region-shortcuts-strip">
-            ${regionsHtml}
-          </div>
-
-          <div class="filter-section-heading-row" style="justify-content:flex-end;">
+          <div class="filter-section-heading-row" style="justify-content:flex-end; margin-bottom:0.25rem;">
             <div class="suburb-quick-links">
               <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
               <span class="dot-sep">·</span>
