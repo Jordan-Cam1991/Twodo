@@ -144,27 +144,33 @@ const swiper = {
       const extLinkHtml = linkInfo
         ? `<a href="${linkInfo.url}" target="_blank" rel="noopener noreferrer" class="card-source-link" style="margin-left:8px;" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">${linkInfo.label}</a>`
         : '';
+      const partnerSignalHtml = (!isSolo && partnerVote === 'love')
+        ? `<div class="card-partner-loved-banner">💜 ${partnerName} loves this — swipe ❤️ to Match!</div>`
+        : '';
 
       return `
         <div class="swipe-card" id="swipe-card-${idx}" style="z-index: ${zIndex}; transform: scale(${scale}) translateY(${translateY}px);">
           <div class="swipe-badge swipe-badge-love" style="position:absolute; top:20px; left:20px; z-index:20; border:3px solid #10b981; color:#10b981; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(-15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">LOVE ❤️</div>
           <div class="swipe-badge swipe-badge-pass" style="position:absolute; top:20px; right:20px; z-index:20; border:3px solid #ef4444; color:#ef4444; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">PASS ❌</div>
-          <div class="swipe-card-media">
+          <div class="swipe-card-media" style="position:relative;">
             <img src="${ev.image_url}" alt="${ev.title}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${ev.source}</span>
             <span class="card-price-badge">${priceLabel}</span>
+            ${partnerSignalHtml}
           </div>
           <div class="swipe-card-body">
-            <div class="card-category">${ev.category}</div>
-            <h3 style="font-size:1.25rem; font-weight:800; line-height:1.25; margin-bottom:6px;">${ev.title}</h3>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.4rem; margin-bottom:4px;">
+              <div class="card-category" style="margin:0;">${ev.category}</div>
+              <div style="font-size:0.76rem; font-weight:700; color:#475569;">${typeof discover !== 'undefined' && discover.formatWhen ? discover.formatWhen(ev) : ''}</div>
+            </div>
+            <h3 style="font-size:1.2rem; font-weight:800; line-height:1.25; margin-bottom:5px;">${ev.title}</h3>
             <div class="card-location" style="margin-bottom:6px; display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
               <span>📍</span> <span>${locLabel}</span>
               ${extLinkHtml}
             </div>
-            <div class="card-location" style="margin-bottom:6px; font-weight:600;">${typeof discover !== 'undefined' && discover.formatWhen ? discover.formatWhen(ev) : ''}</div>
             ${partnerNoteHtml}
-            <p style="font-size:0.88rem; color:#475569; margin-bottom:10px; line-height:1.4;">${ev.description}</p>
-            ${ev.insider_tip ? `<div class="card-tip"><strong>💡 Tip:</strong> ${ev.insider_tip}</div>` : ''}
+            <p style="font-size:0.86rem; color:#475569; margin-bottom:6px; line-height:1.4;">${ev.description}</p>
+            ${ev.insider_tip ? `<div class="card-tip-clean">💡 ${ev.insider_tip}</div>` : ''}
           </div>
         </div>
       `;

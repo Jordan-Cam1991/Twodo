@@ -138,7 +138,7 @@ const discover = {
     document.querySelectorAll('#discover-intent-tiles .cat-tab, #discover-intent-tiles .intent-tile').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.intent === effectiveTab);
     });
-    document.querySelectorAll('#swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
+    document.querySelectorAll('#swiper-intent-tiles .cat-tab, #swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
       const swIntent = (this.activeIntent === 'saved') ? 'all' : this.activeIntent;
       btn.classList.toggle('active', btn.dataset.intent === swIntent);
     });
@@ -183,10 +183,14 @@ const discover = {
 
   handleSearchInput(val) {
     this.searchQuery = (val || '').trim();
-    const clearBtn = document.getElementById('discover-search-clear');
-    if (clearBtn) {
-      clearBtn.classList.toggle('hidden', !this.searchQuery);
-    }
+    ['discover-search-input', 'swiper-search-input'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.value !== val) el.value = val || '';
+    });
+    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.toggle('hidden', !this.searchQuery);
+    });
 
     clearTimeout(this.searchDebounceTimer);
     this.searchDebounceTimer = setTimeout(() => {
@@ -197,10 +201,14 @@ const discover = {
 
   clearSearch() {
     this.searchQuery = '';
-    const input = document.getElementById('discover-search-input');
-    if (input) input.value = '';
-    const clearBtn = document.getElementById('discover-search-clear');
-    if (clearBtn) clearBtn.classList.add('hidden');
+    ['discover-search-input', 'swiper-search-input'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) input.value = '';
+    });
+    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
+      const clearBtn = document.getElementById(id);
+      if (clearBtn) clearBtn.classList.add('hidden');
+    });
     this.currentPage = 1;
     this.loadEvents(false);
   },
@@ -209,40 +217,48 @@ const discover = {
   currentModalType: null, // 'date' | 'suburb' | 'vibe' | 'category'
   modalSelectedSet: new Set(),
 
+  suburbRegions: [
+    { id: 'all', label: '🗺️ Everywhere', suburbs: [] },
+    { id: 'inner', label: '🏙️ Inner City & River', suburbs: ['Fortitude Valley', 'South Bank', 'West End', 'Brisbane CBD', 'New Farm', 'Woolloongabba'] },
+    { id: 'ring', label: '🌿 Inner Ring & West', suburbs: ['Paddington', 'Bulimba', 'Hamilton', 'Inner North', 'Mount Coot-tha'] },
+    { id: 'coastal', label: '🌊 South, Bay & Escapes', suburbs: ['Sunnybank', 'Bayside', 'SEQ Day Escape'] },
+    { id: 'home', label: '🏠 Stay-In At Home', suburbs: ['Stay-In'] }
+  ],
+
   // Filter Catalog Configurations
   filterDefinitions: {
     date: {
       type: 'date',
-      title: 'Date Range',
+      title: 'When are you going?',
       icon: '📅',
-      subtitle: 'Pick a day, a week, or your own date range',
+      subtitle: 'Pick a quick preset, a specific day, or custom dates',
       allLabel: '✨ Any Date (Show Everything)',
       isMulti: false,
       options: [] // Built dynamically from today's date by buildDateOptions()
     },
     suburb: {
       type: 'suburb',
-      title: 'Suburb / Precinct',
+      title: 'Where in Brisbane?',
       icon: '📍',
-      subtitle: 'Select "All" or multi-select multiple Brisbane areas',
+      subtitle: 'Tap a region shortcut or pick specific precincts',
       allLabel: '🗺️ All Suburbs (Everywhere in Brisbane)',
       isMulti: true,
       options: [
-        { id: 'Fortitude Valley', label: '🍸 Fortitude Valley & James St', desc: 'Laneway dining, bars, boutique bakeries' },
-        { id: 'South Bank', label: '🎭 South Bank & Fish Lane', desc: 'QAGOMA, QPAC, riverfront dining & bars' },
-        { id: 'West End', label: '🎨 West End & Highgate Hill', desc: 'Markets, craft breweries, Greek eats & parks' },
-        { id: 'Brisbane CBD', label: '🏙️ CBD & Queen\'s Wharf', desc: 'Sky Deck, river walks, hidden speakeasies' },
-        { id: 'New Farm', label: '🥐 New Farm, Teneriffe & Newstead', desc: 'Powerhouse, riverwalk, woolstores & breweries' },
-        { id: 'Paddington', label: '🛍️ Paddington, Rosalie & Milton', desc: 'Vintage shops, Queenslander cafes, Suncorp' },
-        { id: 'Woolloongabba', label: '🏏 Woolloongabba & Kangaroo Point', desc: 'Cliffs sunset, antique quarter, wine cellars' },
-        { id: 'Bulimba', label: '⛵ Bulimba & Hawthorne', desc: 'Oxford Street dining, deluxe cinema, river parks' },
-        { id: 'Hamilton', label: '🎪 Hamilton, Ascot & Eat Street', desc: 'Eat Street Northshore, Portside & Racecourse Rd' },
-        { id: 'Sunnybank', label: '🥟 Sunnybank & Southside', desc: 'Late night hotpot, dumplings, boba & forests' },
-        { id: 'Inner North', label: '🌿 Inner North & Enoggera', desc: 'Albion, Kedron, Victoria Park & reservoir swims' },
-        { id: 'Bayside', label: '🌊 Manly, Sandgate & Redcliffe', desc: 'Harbour markets, piers, fish & chips by the bay' },
-        { id: 'Mount Coot-tha', label: '🌄 Mt Coot-tha & Western Suburbs', desc: 'Botanic gardens, Planetarium, summit lookout' },
-        { id: 'SEQ Day Escape', label: '🏝️ Moreton, Straddie & Hinterland', desc: 'Island ferries, Tamborine, Maleny & waterfalls' },
-        { id: 'Stay-In', label: '🏠 At Home (Stay-In Date Nights)', desc: 'Cozy at-home cooking, board games & wine tastings' }
+        { id: 'Fortitude Valley', icon: '🍸', shortLabel: 'Fortitude Valley', label: '🍸 Fortitude Valley & James St', desc: 'James St, laneway dining & bars' },
+        { id: 'South Bank', icon: '🎭', shortLabel: 'South Bank & Fish Ln', label: '🎭 South Bank & Fish Lane', desc: 'QAGOMA, QPAC & riverfront' },
+        { id: 'West End', icon: '🎨', shortLabel: 'West End', label: '🎨 West End & Highgate Hill', desc: 'Markets, breweries & Greek eats' },
+        { id: 'Brisbane CBD', icon: '🏙️', shortLabel: 'CBD & Queen\'s Wharf', label: '🏙️ CBD & Queen\'s Wharf', desc: 'Sky Deck, river & speakeasies' },
+        { id: 'New Farm', icon: '🥐', shortLabel: 'New Farm & Teneriffe', label: '🥐 New Farm, Teneriffe & Newstead', desc: 'Powerhouse, riverwalk & cafes' },
+        { id: 'Paddington', icon: '🛍️', shortLabel: 'Paddington & Milton', label: '🛍️ Paddington, Rosalie & Milton', desc: 'Vintage shops, cafes & Suncorp' },
+        { id: 'Woolloongabba', icon: '🏏', shortLabel: 'Kangaroo Pt & Gabba', label: '🏏 Woolloongabba & Kangaroo Point', desc: 'Cliffs sunset & wine bars' },
+        { id: 'Bulimba', icon: '⛵', shortLabel: 'Bulimba & Hawthorne', label: '⛵ Bulimba & Hawthorne', desc: 'Oxford St dining & river parks' },
+        { id: 'Hamilton', icon: '🎪', shortLabel: 'Hamilton & Eat St', label: '🎪 Hamilton, Ascot & Eat Street', desc: 'Eat Street Northshore & Portside' },
+        { id: 'Sunnybank', icon: '🥟', shortLabel: 'Sunnybank & South', label: '🥟 Sunnybank & Southside', desc: 'Hotpot, dumplings, boba & parks' },
+        { id: 'Inner North', icon: '🌿', shortLabel: 'Inner North & Enoggera', label: '🌿 Inner North & Enoggera', desc: 'Albion, Victoria Park & reservoir' },
+        { id: 'Bayside', icon: '🌊', shortLabel: 'Manly & Bayside', label: '🌊 Manly, Sandgate & Redcliffe', desc: 'Harbour markets & seaside piers' },
+        { id: 'Mount Coot-tha', icon: '🌄', shortLabel: 'Mt Coot-tha & West', label: '🌄 Mt Coot-tha & Western Suburbs', desc: 'Botanic gardens & Planetarium' },
+        { id: 'SEQ Day Escape', icon: '🏝️', shortLabel: 'Islands & Hinterland', label: '🏝️ Moreton, Straddie & Hinterland', desc: 'Straddie, Tamborine & waterfalls' },
+        { id: 'Stay-In', icon: '🏠', shortLabel: 'At Home (Stay-In)', label: '🏠 At Home (Stay-In Date Nights)', desc: 'Cozy at-home cooking & games' }
       ]
     },
     vibe: {
@@ -419,8 +435,9 @@ const discover = {
     if (r === 'today' || r === 'day_0') return 'Today';
     if (r === 'tomorrow' || r === 'day_1') return 'Tomorrow';
     if (r === 'week_1') return 'Next Week';
-    if (r === 'week_2') return 'Week After';
+    if (r === 'week_2') return 'In 2 Weeks';
     if (r === 'week_3') return 'In 3 Weeks';
+    if (r === 'this_month') return 'Next 30 Days';
     if (r === 'this_weekend') return 'This Weekend';
     const b = this.getDateBounds(r);
     if (!b) return 'Any Date';
@@ -438,7 +455,7 @@ const discover = {
 
   /** Single source of truth for filter params, shared by Discover & Swiper. */
   getFilterParams({ forSwiper = false } = {}) {
-    const searchVal = forSwiper ? '' : (this.searchQuery || document.getElementById('discover-search-input')?.value || '');
+    const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('swiper-search-input')?.value || '';
     // Loves / Passed / Matches lists show everything you've voted on, regardless of date or intent
     const ignoreDate = !forSwiper && this.isSpecialMood();
     const bounds = ignoreDate ? null : this.getDateBounds();
@@ -467,9 +484,14 @@ const discover = {
 
   updateDateChipLabels() {
     const label = this.getDateChipLabel();
+    const isDateFiltered = !this.isDefaultDate();
     ['date-chip-label', 'sw-date-pill-label'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.textContent = label;
+    });
+    ['mood-chip-date', 'sw-date-pill'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.toggle('active', isDateFiltered);
     });
   },
 
@@ -1348,7 +1370,7 @@ const discover = {
   },
 
   // ---------------------------------------------------------------------------
-  // FILTER MODAL POPUP & MULTI-SELECT ENGINE
+  // FILTER MODAL POPUP & MULTI-SELECT ENGINE (Airbnb / Fever Inspired v4.0)
   // ---------------------------------------------------------------------------
   openFilterModal(type) {
     // Stay on Swiper if opened from there (filters apply to both views)
@@ -1359,37 +1381,22 @@ const discover = {
     const def = this.filterDefinitions[type];
     if (!def) return;
     if (type === 'date') {
-      def.options = this.buildDateOptions(); // Rebuilt each time so day names stay current
+      def.options = this.buildDateOptions();
     }
 
     const iconEl = document.getElementById('filter-modal-icon');
     const titleEl = document.getElementById('filter-modal-title');
     const subEl = document.getElementById('filter-modal-sub');
-    const allTextEl = document.getElementById('modal-btn-all-text');
-    const quickLinks = document.getElementById('filter-quick-links');
-    const customSection = document.getElementById('modal-custom-date-section');
 
     if (iconEl) iconEl.textContent = def.icon;
-    if (titleEl) titleEl.textContent = `Filter ${def.title}`;
+    if (titleEl) titleEl.textContent = def.title;
     if (subEl) subEl.textContent = def.subtitle;
-    if (allTextEl) allTextEl.textContent = def.allLabel;
-
-    if (quickLinks) {
-      quickLinks.style.display = def.isMulti ? 'flex' : 'none';
-    }
-
-    if (customSection) {
-      customSection.classList.toggle('hidden', type !== 'date' || this.activeDateRange !== 'custom');
-      const sInput = document.getElementById('modal-date-start');
-      const eInput = document.getElementById('modal-date-end');
-      if (sInput) sInput.value = this.customStart || '';
-      if (eInput) eInput.value = this.customEnd || '';
-    }
 
     // Populate working selection set
     this.modalSelectedSet = new Set();
     if (type === 'date') {
-      this.modalSelectedSet.add(this.activeDateRange || 'all');
+      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || 'this_week'));
+      this.modalSelectedSet.add(initDate);
     } else if (type === 'suburb') {
       (this.selectedSuburbs || []).forEach(s => this.modalSelectedSet.add(s));
     } else if (type === 'vibe') {
@@ -1403,7 +1410,7 @@ const discover = {
     const modal = document.getElementById('filter-modal');
     if (modal) {
       modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden'; // Lock background scroll on mobile
+      document.body.style.overflow = 'hidden';
     }
   },
 
@@ -1422,56 +1429,200 @@ const discover = {
     }
   },
 
+  /** Computes live un-voted matching activity count for the current modal selection */
+  getModalPreviewCount() {
+    if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return null;
+    const params = this.getFilterParams({ forSwiper: true });
+    if (this.currentModalType === 'date') {
+      const selDate = Array.from(this.modalSelectedSet)[0] || 'all';
+      const bounds = this.getDateBounds(selDate);
+      params.date_range = bounds ? 'custom' : 'all';
+      params.custom_start = bounds ? this.toYMD(bounds.start) : null;
+      params.custom_end = bounds ? this.toYMD(bounds.end) : null;
+    } else if (this.currentModalType === 'suburb') {
+      const subs = Array.from(this.modalSelectedSet).filter(s => s !== 'all' && s !== 'All');
+      params.suburb = subs.length > 0 ? subs.join(',') : 'All';
+    }
+    const rawList = api.getLocalEnrichedEvents(params).events || [];
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    return rawList.filter(ev => {
+      const myVote = isSolo ? (ev.my_vote || ev.u1_vote) : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
+      return myVote !== 'love' && myVote !== 'pass';
+    }).length;
+  },
+
   renderModalOptions() {
     const def = this.filterDefinitions[this.currentModalType];
     const container = document.getElementById('filter-modal-options-list');
-    const allBtn = document.getElementById('modal-btn-all');
-    const allCheck = document.getElementById('modal-all-check');
-    const statusText = document.getElementById('filter-modal-status');
+    const applyBtn = document.getElementById('filter-modal-apply-btn');
     if (!def || !container) return;
 
-    let isAll = false;
-    if (def.type === 'date') {
-      isAll = this.modalSelectedSet.has('all') || this.modalSelectedSet.size === 0;
-    } else {
-      isAll = this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all');
-    }
-
-    if (allBtn) {
-      allBtn.classList.toggle('active', isAll);
-    }
-    if (allCheck) {
-      allCheck.textContent = isAll ? '✓' : '';
-    }
-
-    if (statusText) {
-      if (def.type === 'date') {
-        const sel = Array.from(this.modalSelectedSet)[0] || 'all';
-        const found = def.options.find(o => o.id === sel);
-        statusText.textContent = found ? `${found.label} · ${found.desc.replace(' (default)', '')}` : 'Any Date';
+    // Update live count on the footer CTA button
+    const matchCount = this.getModalPreviewCount();
+    if (applyBtn) {
+      const actionWord = (typeof app !== 'undefined' && app.activeTab === 'swiper') ? 'Swipe' : 'Show';
+      if (matchCount !== null) {
+        applyBtn.textContent = `${actionWord} ${matchCount} ${matchCount === 1 ? 'Idea' : 'Ideas'} ✨`;
       } else {
-        if (isAll) {
-          statusText.textContent = `Showing All ${def.title}`;
-        } else {
-          statusText.textContent = `${this.modalSelectedSet.size} selected`;
-        }
+        applyBtn.textContent = 'Apply Filter ✨';
       }
     }
 
+    // 1. PURPOSE-BUILT DATE PICKER UX
+    if (def.type === 'date') {
+      const sel = Array.from(this.modalSelectedSet)[0] || 'this_week';
+      const presets = [
+        { id: 'this_week', icon: '🗓️', title: 'This Week', sub: `${this.fmtDayMonth(this.dayOffset(0))} – ${this.fmtDayMonth(this.dayOffset(6))}` },
+        { id: 'this_weekend', icon: '🥂', title: 'This Weekend', sub: 'Fri – Sun' },
+        { id: 'day_0', icon: '🔥', title: 'Today', sub: this.fmtShort(this.dayOffset(0)) },
+        { id: 'day_1', icon: '🌅', title: 'Tomorrow', sub: this.fmtShort(this.dayOffset(1)) },
+        { id: 'week_1', icon: '📆', title: 'Next Week', sub: `${this.fmtDayMonth(this.dayOffset(7))} – ${this.fmtDayMonth(this.dayOffset(13))}` },
+        { id: 'all', icon: '✨', title: 'Any Date', sub: 'All upcoming' }
+      ];
+
+      let daysHtml = '';
+      for (let i = 0; i <= 6; i++) {
+        const d = this.dayOffset(i);
+        const dayId = `day_${i}`;
+        const isDayActive = sel === dayId || (i === 0 && sel === 'today') || (i === 1 && sel === 'tomorrow');
+        const wk = i === 0 ? 'Today' : (i === 1 ? 'Tmrw' : d.toLocaleDateString('en-AU', { weekday: 'short' }));
+        const dayNum = d.getDate();
+        const mon = d.toLocaleDateString('en-AU', { month: 'short' });
+        daysHtml += `
+          <button type="button" class="cal-day-pill ${isDayActive ? 'active' : ''}" onclick="discover.toggleModalOption('${dayId}')">
+            <span class="cal-day-wk">${wk}</span>
+            <span class="cal-day-num">${dayNum}</span>
+            <span class="cal-day-mon">${mon}</span>
+          </button>
+        `;
+      }
+
+      const defaultStart = this.customStart || this.toYMD(this.dayOffset(0));
+      const defaultEnd = this.customEnd || this.toYMD(this.dayOffset(13));
+      const minDate = this.toYMD(this.dayOffset(0));
+
+      container.innerHTML = `
+        <div class="date-modal-layout">
+          <div class="filter-section-heading">QUICK PRESETS</div>
+          <div class="date-presets-grid">
+            ${presets.map(p => {
+              const active = sel === p.id || (p.id === 'day_0' && sel === 'today') || (p.id === 'day_1' && sel === 'tomorrow');
+              return `
+                <button type="button" class="date-preset-card ${active ? 'active' : ''}" onclick="discover.toggleModalOption('${p.id}')">
+                  <span class="date-preset-icon">${p.icon}</span>
+                  <div class="date-preset-text">
+                    <span class="date-preset-title">${p.title}</span>
+                    <span class="date-preset-sub">${p.sub}</span>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="filter-section-heading">PICK A DAY THIS WEEK</div>
+          <div class="cal-week-strip">
+            ${daysHtml}
+          </div>
+
+          <div class="filter-section-heading">PLANNING FURTHER AHEAD</div>
+          <div class="date-further-row">
+            <button type="button" class="date-further-pill ${sel === 'week_2' ? 'active' : ''}" onclick="discover.toggleModalOption('week_2')">
+              📆 In 2 Weeks (${this.fmtDayMonth(this.dayOffset(14))}–${this.fmtDayMonth(this.dayOffset(20))})
+            </button>
+            <button type="button" class="date-further-pill ${sel === 'this_month' ? 'active' : ''}" onclick="discover.toggleModalOption('this_month')">
+              🗓️ Next 30 Days
+            </button>
+            <button type="button" class="date-further-pill ${sel === 'custom' ? 'active' : ''}" onclick="discover.toggleModalOption('custom')">
+              🎯 Custom Dates
+            </button>
+          </div>
+
+          <div id="modal-custom-date-section" class="custom-date-box-clean ${sel === 'custom' ? '' : 'hidden'}">
+            <div class="custom-date-grid">
+              <div class="custom-date-field">
+                <label for="modal-date-start">Start Date</label>
+                <input type="date" id="modal-date-start" value="${defaultStart}" min="${minDate}" onchange="discover.onCustomDateChange()">
+              </div>
+              <div class="custom-date-field">
+                <label for="modal-date-end">End Date</label>
+                <input type="date" id="modal-date-end" value="${defaultEnd}" min="${minDate}" onchange="discover.onCustomDateChange()">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // 2. PURPOSE-BUILT SUBURB / LOCATION PICKER UX
+    if (def.type === 'suburb') {
+      const isAll = this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all');
+
+      // Check if a region preset exactly matches current selection
+      const isRegionActive = (reg) => {
+        if (reg.id === 'all') return isAll;
+        if (isAll || this.modalSelectedSet.size !== reg.suburbs.length) return false;
+        return reg.suburbs.every(s => this.modalSelectedSet.has(s));
+      };
+
+      const regionsHtml = this.suburbRegions.map(reg => `
+        <button type="button" class="region-shortcut-pill ${isRegionActive(reg) ? 'active' : ''}" onclick="discover.selectSuburbRegion('${reg.id}')">
+          ${reg.label}
+        </button>
+      `).join('');
+
+      const precinctsHtml = def.options.map(opt => {
+        const isChecked = !isAll && this.modalSelectedSet.has(opt.id);
+        return `
+          <button type="button" class="suburb-tile-card ${isChecked ? 'selected' : ''}" onclick="discover.toggleModalOption('${opt.id}')">
+            <div class="suburb-tile-top">
+              <span class="suburb-tile-icon">${opt.icon || '📍'}</span>
+              <span class="suburb-tile-name">${opt.shortLabel || opt.id}</span>
+              <span class="suburb-tile-check">${isChecked ? '✓' : ''}</span>
+            </div>
+            <span class="suburb-tile-desc">${opt.desc}</span>
+          </button>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="suburb-modal-layout">
+          <div class="filter-section-heading">QUICK REGION SHORTCUTS</div>
+          <div class="region-shortcuts-strip">
+            ${regionsHtml}
+          </div>
+
+          <div class="filter-section-heading-row">
+            <span class="filter-section-heading" style="margin:0;">OR PICK PRECINCTS (${isAll ? 'All Brisbane' : `${this.modalSelectedSet.size} selected`})</span>
+            <div class="suburb-quick-links">
+              <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
+              <span class="dot-sep">·</span>
+              <button type="button" class="btn-text-link" onclick="discover.modalClearAllOptions()">Clear</button>
+            </div>
+          </div>
+
+          <div class="suburb-grid-2col">
+            ${precinctsHtml}
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // Fallback for vibe / category modals
+    const isAll = this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all');
     let html = '';
     def.options.forEach(opt => {
-      if (def.type === 'date' && opt.id === 'all') return; // Handled by top button
       if (opt.header) {
         html += `<div class="filter-option-section">${opt.label}</div>`;
         return;
       }
-
       const isChecked = !isAll && this.modalSelectedSet.has(opt.id);
       html += `
         <div class="filter-option-row ${isChecked ? 'selected' : ''}" onclick="discover.toggleModalOption('${opt.id}')">
-          <div class="filter-option-checkbox">
-            ${isChecked ? '✓' : ''}
-          </div>
+          <div class="filter-option-checkbox">${isChecked ? '✓' : ''}</div>
           <div class="filter-option-content">
             <span class="filter-option-label">${opt.label}</span>
             <span class="filter-option-desc">${opt.desc}</span>
@@ -1479,8 +1630,22 @@ const discover = {
         </div>
       `;
     });
-
     container.innerHTML = html;
+  },
+
+  selectSuburbRegion(regionId) {
+    const reg = this.suburbRegions.find(r => r.id === regionId);
+    if (!reg || regionId === 'all') {
+      this.modalSelectedSet.clear();
+      this.renderModalOptions();
+      return;
+    }
+    const alreadyExact = this.modalSelectedSet.size === reg.suburbs.length && reg.suburbs.every(s => this.modalSelectedSet.has(s));
+    this.modalSelectedSet.clear();
+    if (!alreadyExact) {
+      reg.suburbs.forEach(s => this.modalSelectedSet.add(s));
+    }
+    this.renderModalOptions();
   },
 
   toggleModalOption(id) {
@@ -1490,23 +1655,14 @@ const discover = {
     if (def.type === 'date') {
       this.modalSelectedSet.clear();
       this.modalSelectedSet.add(id);
-      const customSection = document.getElementById('modal-custom-date-section');
-      if (customSection) {
-        customSection.classList.toggle('hidden', id !== 'custom');
-        if (id === 'custom') {
-          const sInput = document.getElementById('modal-date-start');
-          const eInput = document.getElementById('modal-date-end');
-          if (sInput && !sInput.value) sInput.value = this.toYMD(this.dayOffset(0));
-          if (eInput && !eInput.value) eInput.value = this.toYMD(this.dayOffset(13));
-          if (sInput) sInput.min = this.toYMD(this.dayOffset(0));
-          if (eInput) eInput.min = this.toYMD(this.dayOffset(0));
-        }
+      if (id === 'custom') {
+        if (!this.customStart) this.customStart = this.toYMD(this.dayOffset(0));
+        if (!this.customEnd) this.customEnd = this.toYMD(this.dayOffset(13));
       }
     } else {
       if (this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all')) {
         this.modalSelectedSet.clear();
       }
-
       if (this.modalSelectedSet.has(id)) {
         this.modalSelectedSet.delete(id);
       } else {
@@ -1521,7 +1677,6 @@ const discover = {
     this.modalSelectedSet.clear();
     if (this.currentModalType === 'date') {
       this.modalSelectedSet.add('all');
-      document.getElementById('modal-custom-date-section')?.classList.add('hidden');
     }
     this.renderModalOptions();
   },
@@ -1544,17 +1699,16 @@ const discover = {
     const s = document.getElementById('modal-date-start')?.value;
     const e = document.getElementById('modal-date-end')?.value;
     if (s && e) {
-      this.customStart = s;
-      this.customEnd = e;
+      this.customStart = s <= e ? s : e;
+      this.customEnd = s <= e ? e : s;
+      this.renderModalOptions();
     }
   },
 
   resetCurrentModalCategory() {
     if (this.currentModalType === 'date') {
-      // Reset the calendar back to the default "This Week"
       this.modalSelectedSet.clear();
       this.modalSelectedSet.add(this.defaultDateRange);
-      document.getElementById('modal-custom-date-section')?.classList.add('hidden');
       this.renderModalOptions();
       return;
     }
@@ -1647,19 +1801,25 @@ const discover = {
 
     // 2. Suburb
     const subCount = this.selectedSuburbs.length;
-    let subLabel = '🗺️ All Suburbs';
+    let subLabel = 'All Suburbs';
     if (subCount === 1) {
       const found = this.filterDefinitions.suburb.options.find(o => o.id === this.selectedSuburbs[0]);
-      subLabel = found ? found.label.split(' ')[1] || this.selectedSuburbs[0] : this.selectedSuburbs[0];
+      subLabel = found ? (found.shortLabel || this.selectedSuburbs[0]) : this.selectedSuburbs[0];
     } else if (subCount === 2) {
       subLabel = `${this.selectedSuburbs[0]} + 1`;
     } else if (subCount > 2) {
-      subLabel = `${subCount} Suburbs`;
+      // Check if selection matches a named region shortcut
+      const regMatch = (this.suburbRegions || []).find(r => r.suburbs.length === subCount && r.suburbs.every(s => this.selectedSuburbs.includes(s)));
+      subLabel = regMatch ? regMatch.label.replace(/^[^\w]+/, '').trim() : `${subCount} Areas`;
     }
-    const subChipLabelEl = document.getElementById('suburb-chip-label');
-    const subChipBtn = document.getElementById('mood-chip-suburb');
-    if (subChipLabelEl) subChipLabelEl.textContent = subCount === 0 ? 'All Suburbs' : subLabel;
-    if (subChipBtn) subChipBtn.classList.toggle('active', subCount > 0);
+    ['suburb-chip-label', 'sw-suburb-pill-label'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = subCount === 0 ? 'All Suburbs' : subLabel;
+    });
+    ['mood-chip-suburb', 'sw-suburb-pill'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.toggle('active', subCount > 0);
+    });
 
     ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const subVal = document.getElementById(`${prefix}-val-suburb`);
@@ -1773,10 +1933,14 @@ const discover = {
       c.classList.toggle('active', c.dataset.mood === 'all');
     });
 
-    const sInput = document.getElementById('discover-search-input');
-    if (sInput) sInput.value = '';
-    const clearSearchBtn = document.getElementById('discover-search-clear');
-    if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+    ['discover-search-input', 'swiper-search-input'].forEach(id => {
+      const sInput = document.getElementById(id);
+      if (sInput) sInput.value = '';
+    });
+    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
+      const clearSearchBtn = document.getElementById(id);
+      if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+    });
     const sel = document.getElementById('vote-filter-select');
     if (sel) sel.value = 'all';
 

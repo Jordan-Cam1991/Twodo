@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=3.9">
+  <link rel="stylesheet" href="css/style.css?v=4.0">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -361,33 +361,74 @@
 
     <!-- TAB 2: DATE SWIPER (TINDER STYLE) -->
     <section id="view-swiper" class="view-panel">
-      <div class="swiper-container">
-        <!-- Compact Top Bar for Swiper -->
-        <div class="swiper-top-compact">
-          <div class="swiper-intent-deck-bar" id="swiper-intent-tiles">
-            <button type="button" class="swiper-deck-pill active" data-intent="all" onclick="discover.setIntent('all')">✨ All</button>
-            <button type="button" class="swiper-deck-pill" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">🍽️ Eat &amp; Drink</button>
-            <button type="button" class="swiper-deck-pill" data-intent="activity" onclick="discover.setIntent('activity')">🎯 Activities</button>
-            <button type="button" class="swiper-deck-pill" data-intent="whats_on" onclick="discover.setIntent('whats_on')">🎟️ What's On</button>
-            <button type="button" class="swiper-deck-pill" data-intent="outdoors" onclick="discover.setIntent('outdoors')">🌿 Outdoors</button>
-            <button type="button" class="swiper-deck-pill" data-intent="low_key" onclick="discover.setIntent('low_key')">🌙 Low-Key</button>
-          </div>
-          <div id="swiper-sub-intent-bar" class="sub-intent-bar swiper-sub-bar hidden"></div>
+      <!-- Identical Unified Top Controls as Discover -->
+      <div class="discover-unified-bar">
+        <div class="discover-search-box">
+          <span class="discover-search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="swiper-search-input" 
+            class="discover-search-input" 
+            placeholder="Search dinners, activities, gigs..." 
+            autocomplete="off"
+            oninput="discover.handleSearchInput(this.value)"
+          >
+          <button type="button" id="swiper-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
+        </div>
+        <div class="discover-quick-filters">
+          <button type="button" class="quick-context-pill" id="sw-date-pill" onclick="discover.onDateChipClick()" title="Choose dates">
+            📅 <span id="sw-date-pill-label">This Week</span> ▾
+          </button>
+          <button type="button" class="quick-context-pill" id="sw-suburb-pill" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
+            📍 <span id="sw-suburb-pill-label">All Suburbs</span> ▾
+          </button>
+          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Answer 3 quick questions to get 3 hand-picked date ideas">
+            ✨ Pick For Us
+          </button>
+        </div>
+      </div>
 
-          <div class="swiper-filter-compact-bar">
-            <span class="swiper-filter-status-pill" id="sw-filter-status">⚡ Ready to swipe</span>
-            <div class="swiper-filter-actions">
-              <button type="button" class="btn-swiper-filter-pill" id="sw-date-pill" onclick="discover.openFilterModal('date')">
-                📅 <span id="sw-date-pill-label">This Week</span> ▾
-              </button>
-              <button type="button" class="btn-swiper-filter-pill" onclick="discover.openFilterModal('suburb')">
-                📍 Area ▾
-              </button>
-              <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
-                ✕ Reset
-              </button>
-            </div>
-          </div>
+      <!-- Identical Single-Line Category Tabs as Discover -->
+      <div class="category-strip-wrap">
+        <div class="category-strip" id="swiper-intent-tiles">
+          <button type="button" class="cat-tab active" data-intent="all" onclick="discover.setIntent('all')">
+            <span class="cat-tab-icon">✨</span>
+            <span class="cat-tab-label">All</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
+            <span class="cat-tab-icon">🍽️</span>
+            <span class="cat-tab-label">Eat &amp; Drink</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="activity" onclick="discover.setIntent('activity')">
+            <span class="cat-tab-icon">🎯</span>
+            <span class="cat-tab-label">Activities</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="whats_on" onclick="discover.setIntent('whats_on')">
+            <span class="cat-tab-icon">🎟️</span>
+            <span class="cat-tab-label">What's On</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
+            <span class="cat-tab-icon">🌿</span>
+            <span class="cat-tab-label">Outdoors</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="low_key" onclick="discover.setIntent('low_key')">
+            <span class="cat-tab-icon">🌙</span>
+            <span class="cat-tab-label">Low-Key</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="saved" onclick="app.navigate('discover'); discover.setIntent('saved')">
+            <span class="cat-tab-icon">❤️</span>
+            <span class="cat-tab-label">Loves &amp; Votes</span>
+          </button>
+        </div>
+        <div id="swiper-sub-intent-bar" class="sub-intent-bar hidden"></div>
+      </div>
+
+      <div class="swiper-container">
+        <div class="swiper-status-minimal">
+          <span id="sw-filter-status">⚡ Ready to swipe</span>
+          <button type="button" class="btn-clear-filter-pill hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
+            ✕ Reset
+          </button>
         </div>
 
         <!-- The Card Stack -->
@@ -933,47 +974,22 @@
         <div class="filter-modal-header-left">
           <span class="filter-modal-header-icon" id="filter-modal-icon">📍</span>
           <div>
-            <h3 id="filter-modal-title">Filter Suburb / Precinct</h3>
-            <p class="filter-modal-sub" id="filter-modal-sub">Choose 'All' or multi-select multiple options</p>
+            <h3 id="filter-modal-title">Where in Brisbane?</h3>
+            <p class="filter-modal-sub" id="filter-modal-sub">Pick a region or select specific precincts</p>
           </div>
         </div>
         <button type="button" class="close-btn" onclick="discover.closeFilterModal()" title="Close">✕</button>
       </div>
 
-      <!-- Quick 'All' Toggle and Multi Actions -->
-      <div class="filter-modal-actions-bar">
-        <button type="button" class="btn-filter-all active" id="modal-btn-all" onclick="discover.modalSelectAll()">
-          <span class="check-box-icon" id="modal-all-check">✓</span>
-          <span id="modal-btn-all-text">✨ All Suburbs (Show Everywhere)</span>
-        </button>
-        <div class="filter-quick-links" id="filter-quick-links">
-          <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
-          <span class="dot-sep">•</span>
-          <button type="button" class="btn-text-link" onclick="discover.modalClearAllOptions()">Clear</button>
-        </div>
-      </div>
-
-      <!-- Custom Date Picker Fields (only visible when type === 'date' and custom is chosen) -->
-      <div id="modal-custom-date-section" class="modal-custom-date-section hidden">
-        <span class="custom-date-title">🎯 Pick Custom Date Range:</span>
-        <div class="custom-date-inputs-row">
-          <label>From: <input type="date" id="modal-date-start" onchange="discover.onCustomDateChange()"></label>
-          <label>To: <input type="date" id="modal-date-end" onchange="discover.onCustomDateChange()"></label>
-        </div>
-      </div>
-
-      <!-- Scrollable Multi-Select Options List -->
+      <!-- Purpose-Built Interactive Body (Date Calendar Grid OR Suburb Precinct Grid) -->
       <div class="filter-modal-body" id="filter-modal-options-list">
-        <!-- Rendered dynamically with checkmarks & details -->
+        <!-- Rendered dynamically by discover.renderModalOptions() -->
       </div>
 
-      <!-- Modal Footer -->
+      <!-- Clean Airbnb-Style Sticky Footer -->
       <div class="filter-modal-footer">
-        <div class="filter-modal-count-status" id="filter-modal-status">Showing All</div>
-        <div class="filter-modal-footer-btns">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="discover.resetCurrentModalCategory()">Reset</button>
-          <button type="button" class="btn btn-primary" onclick="discover.applyModalFilter()">Apply Filter ✨</button>
-        </div>
+        <button type="button" class="btn-filter-reset-clean" onclick="discover.resetCurrentModalCategory()">Reset</button>
+        <button type="button" class="btn-filter-apply-clean" id="filter-modal-apply-btn" onclick="discover.applyModalFilter()">Show Ideas ✨</button>
       </div>
     </div>
   </div>
@@ -1083,17 +1099,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=3.9"></script>
-  <script src="js/firebase-service.js?v=3.9"></script>
-  <script src="js/auth-ui.js?v=3.9"></script>
-  <script src="js/events_data.js?v=3.9"></script>
-  <script src="js/api.js?v=3.9"></script>
-  <script src="js/chat.js?v=3.9"></script>
-  <script src="js/collaborative.js?v=3.9"></script>
-  <script src="js/discover.js?v=3.9"></script>
-  <script src="js/swiper.js?v=3.9"></script>
-  <script src="js/planner.js?v=3.9"></script>
-  <script src="js/matches.js?v=3.9"></script>
-  <script src="js/app.js?v=3.9"></script>
+  <script src="js/firebase-config.js?v=4.0"></script>
+  <script src="js/firebase-service.js?v=4.0"></script>
+  <script src="js/auth-ui.js?v=4.0"></script>
+  <script src="js/events_data.js?v=4.0"></script>
+  <script src="js/api.js?v=4.0"></script>
+  <script src="js/chat.js?v=4.0"></script>
+  <script src="js/collaborative.js?v=4.0"></script>
+  <script src="js/discover.js?v=4.0"></script>
+  <script src="js/swiper.js?v=4.0"></script>
+  <script src="js/planner.js?v=4.0"></script>
+  <script src="js/matches.js?v=4.0"></script>
+  <script src="js/app.js?v=4.0"></script>
 </body>
 </html>
