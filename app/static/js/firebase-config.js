@@ -19,8 +19,8 @@ if (typeof firebase !== 'undefined') {
   }
 }
 
-// Global OneSignal Web Push Configuration (Optional default fallback)
+// Global OneSignal Web Push Configuration (Public App ID)
 window.TWODO_ONESIGNAL_CONFIG = {
-  appId: "",
+  appId: "48096509-e094-47aa-96f1-c36f671c8048",
   restKey: ""
 };

@@ -738,6 +738,20 @@ const firebaseService = {
     let prevKnownPlannerIds = new Set();
     let prevKnownMessageIds = new Set();
 
+    // 0. Live Couple Meta Doc Listener (syncs OneSignal keys & couple profiles across both phones)
+    this.unsubCoupleDoc = coupleRef.onSnapshot((docSnap) => {
+      if (docSnap && docSnap.exists) {
+        this.coupleData = docSnap.data() || {};
+        if (this.coupleData.onesignal_app_id && this.coupleData.onesignal_rest_key) {
+          localStorage.setItem('twodo_onesignal_app_id', this.coupleData.onesignal_app_id);
+          localStorage.setItem('twodo_onesignal_rest_key', this.coupleData.onesignal_rest_key);
+        }
+        if (window.notifications && notifications.updateUI) {
+          notifications.updateUI();
+        }
+      }
+    }, (err) => console.warn('Couple doc listener note:', err));
+
     // 1. Live Votes & Notes Listener
     this.unsubVotes = coupleRef.collection('votes').onSnapshot((snapshot) => {
       const newVotes = {};
@@ -1145,6 +1159,7 @@ const firebaseService = {
   },
 
   detachListeners() {
+    if (this.unsubCoupleDoc) { this.unsubCoupleDoc(); this.unsubCoupleDoc = null; }
     if (this.unsubUserDoc) { this.unsubUserDoc(); this.unsubUserDoc = null; }
     if (this.unsubVotes) { this.unsubVotes(); this.unsubVotes = null; }
     if (this.unsubPlanner) { this.unsubPlanner(); this.unsubPlanner = null; }
@@ -1185,9 +1200,7 @@ const firebaseService = {
         // If this vote created a mutual match, send lock-screen push to partner
         if (voteType === 'love') {
           const myName = userName.trim();
-          const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
-            ? (this.coupleData?.user2_name || 'Partner')
-            : (this.coupleData?.user1_name || 'Partner');
+          const partnerName = this.getPartnerName();
           const partnerVote = this.votesMap[`${eventId}_${partnerName}`];
           if (partnerVote === 'love') {
             if (window.notifications && notifications.sendRemotePush) {
@@ -1292,9 +1305,7 @@ const firebaseService = {
       if (this.coupleId && window.notifications && notifications.sendRemotePush) {
         try {
           const myName = (this.userProfile?.name || localStorage.getItem('twodo_user_name') || 'Partner').trim();
-          const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
-            ? (this.coupleData?.user2_name || 'Partner')
-            : (this.coupleData?.user1_name || 'Partner');
+          const partnerName = this.getPartnerName();
           const dateStr = item.scheduled_date ? ` for ${item.scheduled_date}` : '';
           notifications.sendRemotePush({
             targetPartnerName: partnerName,
@@ -1391,9 +1402,7 @@ const firebaseService = {
     try {
       if (window.notifications && notifications.sendRemotePush) {
         const myName = msgData.sender_name || 'Partner';
-        const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
-          ? (this.coupleData?.user2_name || 'Partner')
-          : (this.coupleData?.user1_name || 'Partner');
+        const partnerName = this.getPartnerName();
         notifications.sendRemotePush({
           targetPartnerName: partnerName,
           title: `💬 ${myName}`,
@@ -1404,6 +1413,18 @@ const firebaseService = {
     } catch (e) {}
 
     return { success: true, id: docRef.id };
+  },
+
+  getPartnerName() {
+    const myName = (this.userProfile?.name || localStorage.getItem('twodo_user_name') || 'Jordan').trim();
+    if (this.userProfile?.partner_name) return this.userProfile.partner_name.trim();
+    if (this.profile?.user2_name && this.profile.user2_name.toLowerCase() !== myName.toLowerCase()) {
+      return this.profile.user2_name.trim();
+    }
+    if (this.profile?.user1_name && this.profile.user1_name.toLowerCase() !== myName.toLowerCase()) {
+      return this.profile.user1_name.trim();
+    }
+    return (myName.toLowerCase() === 'emma' ? 'Jordan' : 'Emma');
   },
 
   // Used by the chat screen (argument order: sender, text, activity)

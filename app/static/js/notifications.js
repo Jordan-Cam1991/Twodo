@@ -231,11 +231,15 @@ const notifications = {
     const partnerName = (targetPartnerName || '').toLowerCase().trim();
     if (!partnerName) return;
 
+    // Send to partner's specific alias, plus lowercase and canonical fallback aliases
     const targetAlias = `twodo_${coupleId}_${partnerName}`;
+    const fallbackAlias = (partnerName === 'emma') ? `twodo_${coupleId}_emma` : `twodo_${coupleId}_jordan`;
+    const aliases = Array.from(new Set([targetAlias, fallbackAlias]));
+
     const payload = {
       app_id: cfg.appId,
       include_aliases: {
-        external_id: [targetAlias]
+        external_id: aliases
       },
       target_channel: "push",
       headings: { en: title },
