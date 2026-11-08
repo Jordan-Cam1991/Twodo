@@ -137,6 +137,9 @@ const api = {
       this.serverAvailable = true;
       const data = await res.json();
       if (data && Array.isArray(data.events)) {
+        if (params.intent && params.intent !== 'all') {
+          data.events = data.events.filter(ev => this.matchEventIntent(ev, params.intent, params.sub_intent || 'all'));
+        }
         return data;
       }
       throw new Error('Invalid events payload');
@@ -174,6 +177,75 @@ const api = {
     ) {
       return false;
     }
+    return true;
+  },
+
+  /**
+   * Purposeful Intent & Sub-Intent Classifier shared across Discover, Swiper, and the 15s Date Concierge.
+   * Intents: 'all' | 'eat_drink' | 'activity' | 'whats_on' | 'outdoors' | 'low_key'
+   */
+  matchEventIntent(ev, intent = 'all', subIntent = 'all') {
+    if (!ev || !intent || intent === 'all') return true;
+    const sub = subIntent || 'all';
+    const tagsStr = Array.isArray(ev.tags) ? ev.tags.join(' ') : '';
+    const t = `${ev.title || ''} ${ev.description || ''} ${ev.category || ''} ${ev.vibe || ''} ${tagsStr} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
+    const cat = String(ev.category || '').toLowerCase();
+    const price = String(ev.price_str || ev.price || '');
+    const hasAny = (keywords) => keywords.some(k => t.includes(k));
+
+    if (intent === 'eat_drink') {
+      const isEat = cat === 'food & drink' || hasAny(['restaurant', 'dining', 'dinner', 'bar', 'rooftop', 'cocktail', 'wine', 'brewery', 'cafe', 'bakery', 'brunch', 'gelato', 'dessert', 'eat street', 'tapas', 'bistro', 'omakase', 'ramen', 'pizza', 'steak']);
+      if (!isEat) return false;
+      if (sub === 'dinner') return hasAny(['dinner', 'restaurant', 'bistro', 'steak', 'italian', 'japanese', 'omakase', 'fine dining', 'candle', 'degustation', 'wine bar', 'tapas', 'french', 'greek', 'dining']);
+      if (sub === 'drinks') return hasAny(['bar', 'rooftop', 'cocktail', 'wine', 'brewery', 'speakeasy', 'whisky', 'gin', 'pub', 'cellar', 'drinks', 'sunset']);
+      if (sub === 'brunch') return hasAny(['cafe', 'bakery', 'coffee', 'brunch', 'croissant', 'breakfast', 'pastry', 'matcha', 'tea']);
+      if (sub === 'casual') return hasAny(['casual', 'street food', 'market', 'burger', 'pizza', 'ramen', 'dumpling', 'hotpot', 'taco', 'cheap', 'under $', 'eat street', 'food truck']);
+      if (sub === 'dessert') return hasAny(['dessert', 'gelato', 'ice cream', 'chocolate', 'sweet', 'late night', 'bingsu', 'cookie', 'crepe']);
+      return true;
+    }
+
+    if (intent === 'activity') {
+      const isAct = ['sports & active', 'arts & culture', 'workshops & classes'].includes(cat) || hasAny(['arcade', 'mini golf', 'putt', 'bowling', 'pottery', 'paint', 'class', 'workshop', 'escape', 'axe', 'kart', 'climb', 'pickleball', 'padel', 'tennis', 'squash', 'museum', 'gallery', 'planetarium', 'cinema', 'bathhouse', 'sauna', 'spa', 'trivia', 'board game', 'karaoke', 'kayak', 'roller']);
+      if (!isAct) return false;
+      if (sub === 'games') return hasAny(['arcade', 'golf', 'putt', 'bowling', 'escape', 'axe', 'darts', 'billiards', 'pool', 'karaoke', 'board game', 'trivia', 'laser', 'vr', 'kart']);
+      if (sub === 'creative') return hasAny(['pottery', 'clay', 'paint', 'wheel', 'class', 'workshop', 'cooking', 'candle', 'tufting', 'art', 'ceramic', 'florist', 'terrarium']);
+      if (sub === 'active') return cat === 'sports & active' || hasAny(['pickleball', 'padel', 'tennis', 'squash', 'climb', 'boulder', 'kayak', 'run', 'social sport', 'golf', 'driving range', 'skate', 'swim', 'surf']);
+      if (sub === 'culture') return cat === 'arts & culture' || hasAny(['gallery', 'museum', 'qagoma', 'planetarium', 'cinema', 'exhibition', 'tour', 'heritage', 'library']);
+      if (sub === 'wellness') return hasAny(['bathhouse', 'sauna', 'spa', 'soak', 'float', 'massage', 'wellness', 'yoga', 'pilates', 'meditation', 'thermal']);
+      return true;
+    }
+
+    if (intent === 'whats_on') {
+      const isLive = !ev.ongoing || ['music & concerts', 'comedy & shows', 'markets & pop-ups'].includes(cat) || hasAny(['live music', 'concert', 'comedy', 'theatre', 'musical', 'qpac', 'festival', 'gig', 'jazz', 'candlelight', 'stadium', 'suncorp', 'gabba', 'market']);
+      if (!isLive) return false;
+      if (sub === 'dated_only') return !ev.ongoing;
+      if (sub === 'shows') return cat === 'comedy & shows' || hasAny(['comedy', 'stand-up', 'theatre', 'musical', 'qpac', 'cabaret', 'ballet', 'opera', 'improv', 'trivia']);
+      if (sub === 'music') return cat === 'music & concerts' || hasAny(['music', 'concert', 'gig', 'jazz', 'band', 'candlelight', 'tivoli', 'triffid', 'symphony', 'acoustic']);
+      if (sub === 'sports_live') return (!ev.ongoing && cat === 'sports & active') || hasAny(['broncos', 'lions', 'roar', 'bullets', 'heat', 'reds', 'firebirds', 'suncorp', 'gabba', 'stadium', 'raceday', 'match', 'vs ']);
+      if (sub === 'markets') return cat === 'markets & pop-ups' || hasAny(['market', 'pop-up', 'festival', 'fair', 'twilight', 'bazaar']);
+      return true;
+    }
+
+    if (intent === 'outdoors') {
+      const isOut = ['sightseeing & nature', 'outdoor & adventure', 'markets & pop-ups'].includes(cat) || hasAny(['walk', 'hike', 'lookout', 'picnic', 'botanic', 'park', 'river', 'island', 'beach', 'waterfall', 'sunset', 'kayak', 'ferry', 'day trip', 'hinterland', 'gardens', 'koala', 'wildlife']);
+      if (!isOut) return false;
+      if (sub === 'picnic') return hasAny(['lookout', 'picnic', 'sunset', 'cliffs', 'botanic', 'garden', 'lawn', 'riverwalk', 'citycat', 'ferry']);
+      if (sub === 'walks') return hasAny(['walk', 'hike', 'trail', 'waterfall', 'national park', 'forest', 'summit', 'gorge', 'mount ', 'mt ']);
+      if (sub === 'water') return hasAny(['beach', 'island', 'moreton', 'stradbroke', 'bayside', 'manly', 'redcliffe', 'sandgate', 'kayak', 'river', 'swim', 'lagoon', 'creek', 'reservoir']);
+      if (sub === 'daytrip') return hasAny(['day trip', 'hinterland', 'tamborine', 'maleny', 'montville', 'noosa', 'gold coast', 'sunshine coast', 'moreton', 'stradbroke', 'scenic rim', 'winery']);
+      return true;
+    }
+
+    if (intent === 'low_key') {
+      const isLow = ['Free', '$'].includes(price) || hasAny(['free', 'budget', 'under $', 'late night', 'indoor', 'stay-in', 'at home', 'cozy', 'cinema', 'board game', 'stargazing', 'lookout', 'walk', 'dessert', 'gelato']);
+      if (!isLow) return false;
+      if (sub === 'free_budget') return ['Free', '$'].includes(price) || hasAny(['free', 'budget', 'under $25', 'under $30', 'cheap']);
+      if (sub === 'indoor') return hasAny(['indoor', 'air-con', 'rainy', 'cinema', 'gallery', 'museum', 'arcade', 'pottery', 'bowling', 'planetarium', 'bathhouse']);
+      if (sub === 'late_night') return hasAny(['late night', 'after-dinner', 'speakeasy', 'dessert', 'stargazing', '10pm', '11pm', 'midnight', 'late']);
+      if (sub === 'stay_in') return hasAny(['stay-in', 'at-home', 'at home', 'cook together', 'living room']);
+      return true;
+    }
+
     return true;
   },
 
@@ -393,6 +465,13 @@ const api = {
       ev.location = ev.location || ev.location_name;
       ev.price_str = ev.price_str || ev.price || '$$';
       ev.price = ev.price || ev.price_str;
+
+      // Primary Intent + Sub-Intent filter (Eat & Drink, Do an Activity, What's On, Outdoors, Low-Key)
+      if (params.intent && params.intent !== 'all') {
+        if (!this.matchEventIntent(ev, params.intent, params.sub_intent || 'all')) {
+          continue;
+        }
+      }
 
       // Category filter (matches any of the selected categories)
       if (selectedCats.length > 0 && !selectedCats.includes(ev.category)) {

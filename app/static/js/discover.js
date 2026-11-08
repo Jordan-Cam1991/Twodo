@@ -8,6 +8,8 @@ const discover = {
   selectedCategories: [],
   selectedSuburbs: [],
   selectedVibes: [],
+  activeIntent: 'all',    // 'all' | 'eat_drink' | 'activity' | 'whats_on' | 'outdoors' | 'low_key'
+  activeSubIntent: 'all', // Sub-refiner within the chosen intent
   activeDateRange: 'this_week', // Default: events happening this week (today + next 6 days)
   defaultDateRange: 'this_week',
   activeFilter: 'all',
@@ -17,6 +19,139 @@ const discover = {
   searchQuery: '',
   pageSize: 24,
   currentPage: 1,
+  conciergeState: {
+    intent: 'eat_drink',
+    when: 'tonight',
+    vibe: 'any',
+    offset: 0
+  },
+
+  intentDefinitions: {
+    all: { label: '✨ All Ideas', subs: [] },
+    eat_drink: {
+      label: '🍽️ Eat & Drink',
+      subs: [
+        { id: 'all', label: '✨ All Eat & Drink' },
+        { id: 'dinner', label: '🍷 Romantic Dinner' },
+        { id: 'drinks', label: '🍹 Bars & Rooftops' },
+        { id: 'brunch', label: '☕ Cafes & Bakeries' },
+        { id: 'casual', label: '🌮 Casual & Street Food' },
+        { id: 'dessert', label: '🍦 Dessert & Late Treats' }
+      ]
+    },
+    activity: {
+      label: '🎯 Do an Activity',
+      subs: [
+        { id: 'all', label: '✨ All Activities' },
+        { id: 'games', label: '🕹️ Arcade, Mini-Golf & Games' },
+        { id: 'creative', label: '🏺 Pottery, Paint & Classes' },
+        { id: 'active', label: '🏓 Play Sports Together' },
+        { id: 'culture', label: '🏛️ Galleries, Cinema & Space' },
+        { id: 'wellness', label: '🧖‍♀️ Bathhouse, Sauna & Spa' }
+      ]
+    },
+    whats_on: {
+      label: '🎟️ What\'s On',
+      subs: [
+        { id: 'all', label: '✨ All Live & Shows' },
+        { id: 'dated_only', label: '📅 Dated Upcoming Events' },
+        { id: 'shows', label: '🎭 Comedy & Theatre' },
+        { id: 'music', label: '🎵 Concerts & Live Gigs' },
+        { id: 'sports_live', label: '🏟️ Live Sports Matches' },
+        { id: 'markets', label: '🎪 Markets & Festivals' }
+      ]
+    },
+    outdoors: {
+      label: '🌿 Outdoors',
+      subs: [
+        { id: 'all', label: '✨ All Outdoors' },
+        { id: 'picnic', label: '🧺 Lookouts, Picnics & Sunset' },
+        { id: 'walks', label: '🥾 Walks, Hikes & Waterfalls' },
+        { id: 'water', label: '🌊 River, Bay & Islands' },
+        { id: 'daytrip', label: '🚗 Scenic Rim & Day Trips' }
+      ]
+    },
+    low_key: {
+      label: '🌙 Low-Key',
+      subs: [
+        { id: 'all', label: '✨ All Low-Key' },
+        { id: 'free_budget', label: '⚡ Free & Under $30' },
+        { id: 'indoor', label: '🌧️ Indoor & Air-Con' },
+        { id: 'late_night', label: '🌙 Late Night (Past 8pm)' },
+        { id: 'stay_in', label: '🏠 Stay-In At Home' }
+      ]
+    }
+  },
+
+  setIntent(intent, subIntent = 'all') {
+    // Tapping the already-active intent (when no sub-intent is narrowed) toggles back to 'all'
+    if (this.activeIntent === intent && intent !== 'all' && subIntent === 'all' && this.activeSubIntent === 'all') {
+      this.activeIntent = 'all';
+      this.activeSubIntent = 'all';
+    } else {
+      this.activeIntent = intent || 'all';
+      this.activeSubIntent = subIntent || 'all';
+    }
+    // If user was viewing a personal Loves/Passed list, switch back to live discovery
+    if (this.isSpecialMood()) {
+      this.currentMood = 'all';
+      this.activeFilter = 'all';
+      document.querySelectorAll('.mood-chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.mood === 'all');
+      });
+    }
+    this.currentPage = 1;
+    this.syncIntentUI();
+    this.updateActiveFilterPillBar();
+    this.loadEvents(false);
+  },
+
+  setSubIntent(subIntent) {
+    this.activeSubIntent = (this.activeSubIntent === subIntent && subIntent !== 'all') ? 'all' : (subIntent || 'all');
+    this.currentPage = 1;
+    this.syncIntentUI();
+    this.updateActiveFilterPillBar();
+    this.loadEvents(false);
+  },
+
+  syncIntentUI() {
+    document.querySelectorAll('#discover-intent-tiles .intent-tile, #swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.intent === this.activeIntent);
+    });
+    this.renderSubIntentBars();
+  },
+
+  renderSubIntentBars() {
+    const def = this.intentDefinitions[this.activeIntent];
+    const bars = [
+      document.getElementById('discover-sub-intent-bar'),
+      document.getElementById('swiper-sub-intent-bar')
+    ];
+    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all') {
+      bars.forEach(b => { if (b) { b.classList.add('hidden'); b.innerHTML = ''; } });
+      return;
+    }
+
+    // Compute live count per sub-intent from un-passed events in the current pool
+    const pool = this.getAllEventsPool();
+    const html = def.subs.map(sub => {
+      const count = pool.filter(ev => api.matchEventIntent(ev, this.activeIntent, sub.id)).length;
+      const isActive = this.activeSubIntent === sub.id;
+      return `
+        <button type="button" class="sub-intent-pill ${isActive ? 'active' : ''}" onclick="discover.setSubIntent('${sub.id}')">
+          <span>${sub.label}</span>
+          <span class="sub-intent-count">${count}</span>
+        </button>
+      `;
+    }).join('');
+
+    bars.forEach(b => {
+      if (b) {
+        b.innerHTML = `<div class="sub-intent-scroll">${html}</div>`;
+        b.classList.remove('hidden');
+      }
+    });
+  },
 
   handleSearchInput(val) {
     this.searchQuery = (val || '').trim();
@@ -276,11 +411,13 @@ const discover = {
   /** Single source of truth for filter params, shared by Discover & Swiper. */
   getFilterParams({ forSwiper = false } = {}) {
     const searchVal = forSwiper ? '' : (this.searchQuery || document.getElementById('discover-search-input')?.value || '');
-    // Loves / Passed / Matches lists show everything you've voted on, regardless of date
+    // Loves / Passed / Matches lists show everything you've voted on, regardless of date or intent
     const ignoreDate = !forSwiper && this.isSpecialMood();
     const bounds = ignoreDate ? null : this.getDateBounds();
     return {
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
+      intent: ignoreDate ? 'all' : (this.activeIntent || 'all'),
+      sub_intent: ignoreDate ? 'all' : (this.activeSubIntent || 'all'),
       category: this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All',
       suburb: this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All',
       vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
@@ -378,10 +515,20 @@ const discover = {
     });
 
     const visibleEvents = displayEvents.slice(0, this.pageSize * this.currentPage);
+    this.renderSpotlights(displayEvents);
 
     if (countText) {
       const dateLabel = (this.activeDateRange === 'all' || this.isSpecialMood()) ? '' : ` · 📅 ${this.getDateChipLabel()}`;
       const filterDetails = [];
+      if (this.activeIntent && this.activeIntent !== 'all' && !this.isSpecialMood()) {
+        const iDef = this.intentDefinitions[this.activeIntent];
+        let iLabel = iDef ? iDef.label : this.activeIntent;
+        if (this.activeSubIntent && this.activeSubIntent !== 'all' && iDef?.subs) {
+          const sDef = iDef.subs.find(s => s.id === this.activeSubIntent);
+          if (sDef) iLabel += ` → ${sDef.label}`;
+        }
+        filterDetails.push(iLabel);
+      }
       if (this.searchQuery) filterDetails.push(`Search: "${this.searchQuery}"`);
       if (this.selectedSuburbs.length > 0) filterDetails.push(this.selectedSuburbs.join(', '));
       if (this.selectedVibes.length > 0) filterDetails.push(this.selectedVibes.join(', '));
@@ -653,6 +800,15 @@ const discover = {
     const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
 
     const parts = [];
+    if (this.activeIntent && this.activeIntent !== 'all' && !this.isSpecialMood()) {
+      const iDef = this.intentDefinitions[this.activeIntent];
+      let iLabel = iDef ? iDef.label : this.activeIntent;
+      if (this.activeSubIntent && this.activeSubIntent !== 'all' && iDef?.subs) {
+        const sDef = iDef.subs.find(s => s.id === this.activeSubIntent);
+        if (sDef) iLabel += ` (${sDef.label})`;
+      }
+      parts.push(iLabel);
+    }
     if (this.selectedSuburbs && this.selectedSuburbs.length > 0) {
       parts.push(`📍 ${this.selectedSuburbs.join(', ')}`);
     }
@@ -706,6 +862,336 @@ const discover = {
     } else {
       bar.classList.add('hidden');
     }
+  },
+
+  /**
+   * Renders 3 horizontal Curated Spotlight Carousels when browsing 'All Ideas' with no active search/filter,
+   * drawing couples in immediately without forcing them to scroll through a flat 368-card wall.
+   */
+  renderSpotlights(displayEvents = []) {
+    const wrap = document.getElementById('discover-spotlights');
+    if (!wrap) return;
+
+    const showSpotlights = (
+      this.activeIntent === 'all' &&
+      this.currentMood === 'all' &&
+      !this.searchQuery &&
+      this.selectedSuburbs.length === 0 &&
+      this.selectedCategories.length === 0 &&
+      this.selectedVibes.length === 0 &&
+      this.currentPage === 1 &&
+      displayEvents.length > 12
+    );
+
+    if (!showSpotlights) {
+      wrap.classList.add('hidden');
+      wrap.innerHTML = '';
+      return;
+    }
+
+    const upcomingDated = displayEvents.filter(ev => !ev.ongoing).slice(0, 8);
+    const dinnerAndDrinks = displayEvents.filter(ev => api.matchEventIntent(ev, 'eat_drink', 'all')).slice(0, 8);
+    const funActivities = displayEvents.filter(ev => api.matchEventIntent(ev, 'activity', 'all')).slice(0, 8);
+
+    const sections = [
+      {
+        title: '🎟️ Happening Soon in Brisbane',
+        subtitle: 'Upcoming live shows, gigs, comedy & matches',
+        intent: 'whats_on',
+        cta: 'See All What\'s On →',
+        items: upcomingDated
+      },
+      {
+        title: '🍽️ Date-Night Eats & Rooftops',
+        subtitle: 'Romantic dinners, hidden cocktail bars & dessert spots',
+        intent: 'eat_drink',
+        cta: 'Explore Eat & Drink →',
+        items: dinnerAndDrinks
+      },
+      {
+        title: '🎯 Fun Activities (Not Just Dinner)',
+        subtitle: 'Pottery, mini-golf, arcades, bathhouses & games',
+        intent: 'activity',
+        cta: 'Explore Activities →',
+        items: funActivities
+      }
+    ].filter(s => s.items.length > 0);
+
+    if (sections.length === 0) {
+      wrap.classList.add('hidden');
+      wrap.innerHTML = '';
+      return;
+    }
+
+    wrap.innerHTML = sections.map(sec => `
+      <div class="spotlight-row-block">
+        <div class="spotlight-row-header">
+          <div>
+            <h3 class="spotlight-row-title">${sec.title}</h3>
+            <p class="spotlight-row-sub">${sec.subtitle}</p>
+          </div>
+          <button type="button" class="btn-spotlight-more" onclick="discover.setIntent('${sec.intent}')">${sec.cta}</button>
+        </div>
+        <div class="spotlight-carousel">
+          ${sec.items.map(ev => {
+            const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
+            const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
+            const linkInfo = this.getEventLinkInfo(ev);
+            const extHtml = linkInfo
+              ? `<a href="${this.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" onclick="event.stopPropagation()">${linkInfo.label}</a>`
+              : '';
+            return `
+              <div class="spotlight-mini-card" data-event-id="${ev.id}">
+                <div class="spotlight-mini-media" ondblclick="discover.handleDoubleTap('${ev.id}')">
+                  <img src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'">
+                  <span class="card-price-badge">${this.escapeHtml(priceLabel)}</span>
+                </div>
+                <div class="spotlight-mini-body">
+                  <div class="spotlight-mini-cat">${this.escapeHtml(ev.category)}</div>
+                  <h4 class="spotlight-mini-title">${this.escapeHtml(ev.title)}</h4>
+                  <div class="spotlight-mini-meta">
+                    <span>📍 ${this.escapeHtml(locLabel)}</span>
+                    ${extHtml}
+                  </div>
+                  <div class="spotlight-mini-when">${this.formatWhen(ev)}</div>
+                  <div class="spotlight-mini-actions">
+                    <button type="button" class="btn-spot-love" onclick="collaborative.handleVote('${ev.id}', 'love')">❤️ Love</button>
+                    <button type="button" class="btn-spot-pass" onclick="collaborative.handleVote('${ev.id}', 'pass')">✕ Pass</button>
+                    <button type="button" class="btn-spot-plan" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)" title="Pick Date & Plan">📅</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `).join('');
+    wrap.classList.remove('hidden');
+  },
+
+  // ---------------------------------------------------------------------------
+  // 15-SECOND COUPLE DATE CONCIERGE (3 Quick Choices → Top 3 Hand-Picked Ideas)
+  // ---------------------------------------------------------------------------
+  openConcierge() {
+    this.conciergeState = {
+      intent: this.activeIntent !== 'all' ? this.activeIntent : 'eat_drink',
+      when: 'tonight',
+      vibe: 'any',
+      offset: 0
+    };
+    this.renderConcierge();
+    const modal = document.getElementById('concierge-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  },
+
+  closeConcierge() {
+    const modal = document.getElementById('concierge-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
+
+  setConciergeOption(key, val) {
+    this.conciergeState[key] = val;
+    this.conciergeState.offset = 0;
+    this.renderConcierge();
+  },
+
+  dealConciergePicks() {
+    this.conciergeState.offset += 3;
+    this.renderConcierge();
+  },
+
+  applyConciergeToFeed() {
+    const st = this.conciergeState;
+    this.activeIntent = st.intent === 'surprise' ? 'all' : st.intent;
+    this.activeSubIntent = 'all';
+    if (st.when === 'tonight') {
+      this.activeDateRange = 'today';
+    } else if (st.when === 'weekend') {
+      this.activeDateRange = 'this_weekend';
+    } else {
+      this.activeDateRange = this.defaultDateRange;
+    }
+    this.selectedVibes = [];
+    if (st.vibe === 'budget') this.selectedVibes = ['Budget'];
+    else if (st.vibe === 'indoor') this.selectedVibes = ['Indoor'];
+    this.closeConcierge();
+    this.syncIntentUI();
+    this.updateActiveFilterPillBar();
+    this.updateFilterHeaderBadges();
+    this.loadEvents(false);
+    if (typeof app !== 'undefined' && app.activeTab !== 'discover') {
+      app.navigate('discover');
+    }
+  },
+
+  getConciergeMatches() {
+    const st = this.conciergeState;
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = app.getActiveVoterName();
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
+
+    const enriched = api.getLocalEnrichedEvents({
+      city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
+      intent: st.intent === 'surprise' ? 'all' : st.intent,
+      date_range: 'all'
+    }).events || [];
+
+    // Filter out anything already passed or loved by active user
+    const candidates = enriched.filter(ev => {
+      const myVote = isSolo ? ev.my_vote : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
+      if (myVote === 'pass' || myVote === 'love') return false;
+      const t = `${ev.title || ''} ${ev.description || ''} ${ev.time_str || ''} ${(ev.tags || []).join(' ')} ${ev.vibe || ''}`.toLowerCase();
+      const price = String(ev.price || ev.price_str || '');
+
+      // Vibe filter
+      if (st.vibe === 'budget' && !(['Free', '$'].includes(price) || t.includes('free') || t.includes('under $') || t.includes('budget'))) {
+        return false;
+      }
+      if (st.vibe === 'treat' && ['Free', '$'].includes(price)) {
+        return false;
+      }
+      if (st.vibe === 'indoor' && !['indoor', 'cinema', 'gallery', 'museum', 'pottery', 'arcade', 'bowling', 'restaurant', 'bar', 'bistro', 'theatre', 'qpac', 'bathhouse'].some(k => t.includes(k))) {
+        return false;
+      }
+      return true;
+    });
+
+    // Score candidates (partner already loved = huge boost, timing match = boost)
+    const scored = candidates.map(ev => {
+      let score = 0;
+      const partnerVote = !isSolo ? (activeVoter === u1 ? ev.u2_vote : ev.u1_vote) : null;
+      if (partnerVote === 'love') score += 50;
+      const t = `${ev.title || ''} ${ev.description || ''} ${ev.time_str || ''} ${(ev.tags || []).join(' ')}`.toLowerCase();
+      if (st.when === 'tonight' && ['evening', 'night', 'dinner', 'bar', 'pm', 'late'].some(k => t.includes(k))) score += 15;
+      if (st.when === 'day' && ['morning', 'day', 'brunch', 'cafe', 'bakery', 'walk', 'picnic', 'market', 'am'].some(k => t.includes(k))) score += 15;
+      if (st.when === 'late_night' && ['late', '10pm', '11pm', 'midnight', 'speakeasy', 'dessert', 'stargazing'].some(k => t.includes(k))) score += 20;
+      if (st.when === 'weekend' && !ev.ongoing) score += 20;
+      return { ev, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.map(s => s.ev);
+  },
+
+  renderConcierge() {
+    const body = document.getElementById('concierge-body');
+    if (!body) return;
+    const st = this.conciergeState;
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = app.getActiveVoterName();
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
+    const partnerName = activeVoter === u1 ? u2 : u1;
+
+    const intentOpts = [
+      { id: 'eat_drink', label: '🍽️ Eat & Drink' },
+      { id: 'activity', label: '🎯 Fun Activity' },
+      { id: 'whats_on', label: '🎟️ Live Show / Event' },
+      { id: 'outdoors', label: '🌿 Outdoors' },
+      { id: 'low_key', label: '🌙 Low-Key' },
+      { id: 'surprise', label: '🎲 Surprise Us' }
+    ];
+    const whenOpts = [
+      { id: 'tonight', label: '🔥 Tonight / Evening' },
+      { id: 'day', label: '☀️ Day Date / Brunch' },
+      { id: 'weekend', label: '🥂 This Weekend' },
+      { id: 'late_night', label: '🌙 Late Night' }
+    ];
+    const vibeOpts = [
+      { id: 'any', label: '💫 Any Budget' },
+      { id: 'budget', label: '⚡ Free / Under $30' },
+      { id: 'treat', label: '🍷 Treat Ourselves' },
+      { id: 'indoor', label: '🌧️ Indoor & Cozy' }
+    ];
+
+    const matches = this.getConciergeMatches();
+    const total = matches.length;
+    const startIdx = total > 0 ? (st.offset % total) : 0;
+    const picks = [];
+    for (let i = 0; i < Math.min(3, total); i++) {
+      picks.push(matches[(startIdx + i) % total]);
+    }
+
+    body.innerHTML = `
+      <div class="concierge-steps">
+        <div class="concierge-step-row">
+          <span class="concierge-step-label">1. What are you feeling?</span>
+          <div class="concierge-pills">
+            ${intentOpts.map(o => `<button type="button" class="concierge-opt-pill ${st.intent === o.id ? 'active' : ''}" onclick="discover.setConciergeOption('intent', '${o.id}')">${o.label}</button>`).join('')}
+          </div>
+        </div>
+        <div class="concierge-step-row">
+          <span class="concierge-step-label">2. When?</span>
+          <div class="concierge-pills">
+            ${whenOpts.map(o => `<button type="button" class="concierge-opt-pill ${st.when === o.id ? 'active' : ''}" onclick="discover.setConciergeOption('when', '${o.id}')">${o.label}</button>`).join('')}
+          </div>
+        </div>
+        <div class="concierge-step-row">
+          <span class="concierge-step-label">3. Vibe &amp; Budget?</span>
+          <div class="concierge-pills">
+            ${vibeOpts.map(o => `<button type="button" class="concierge-opt-pill ${st.vibe === o.id ? 'active' : ''}" onclick="discover.setConciergeOption('vibe', '${o.id}')">${o.label}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="concierge-results-header">
+        <span>🎯 Top 3 Picks For You (${total} matching)</span>
+        ${total > 3 ? `<button type="button" class="btn-concierge-shuffle" onclick="discover.dealConciergePicks()">🔄 Deal 3 New Picks</button>` : ''}
+      </div>
+
+      <div class="concierge-picks-list">
+        ${picks.length === 0 ? `
+          <div style="text-align:center; padding:1.5rem; color:var(--text-muted);">
+            No exact matches for that combo — try tapping <strong>💫 Any Budget</strong> or <strong>🎲 Surprise Us</strong>!
+          </div>
+        ` : picks.map((ev, idx) => {
+          const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
+          const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
+          const partnerVote = !isSolo ? (activeVoter === u1 ? ev.u2_vote : ev.u1_vote) : null;
+          const partnerBadge = partnerVote === 'love'
+            ? `<span class="concierge-partner-love-pill">💜 ${this.escapeHtml(partnerName)} already loves this!</span>`
+            : '';
+          const linkInfo = this.getEventLinkInfo(ev);
+          const extHtml = linkInfo
+            ? `<a href="${this.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link">${linkInfo.label}</a>`
+            : '';
+
+          return `
+            <div class="concierge-pick-card">
+              <img class="concierge-pick-img" src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80'">
+              <div class="concierge-pick-info">
+                <div class="concierge-pick-top">
+                  <span class="concierge-pick-rank">#${idx + 1} Pick · ${this.escapeHtml(priceLabel)}</span>
+                  ${partnerBadge}
+                </div>
+                <h4 class="concierge-pick-title">${this.escapeHtml(ev.title)}</h4>
+                <div class="concierge-pick-meta">
+                  <span>📍 ${this.escapeHtml(locLabel)}</span>
+                  <span>• ${this.formatWhen(ev)}</span>
+                  ${extHtml}
+                </div>
+                <div class="concierge-pick-actions">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="collaborative.handleVote('${ev.id}', 'love'); discover.renderConcierge();">❤️ Love It</button>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="discover.closeConcierge(); planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null);">📅 Pick Date &amp; Plan</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="concierge-footer">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="discover.closeConcierge()">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="discover.applyConciergeToFeed()">Browse All ${total} Matching Ideas →</button>
+      </div>
+    `;
   },
 
   getAllEventsPool() {
@@ -1179,6 +1665,10 @@ const discover = {
     } else if (subCount > 2) {
       subLabel = `${subCount} Suburbs`;
     }
+    const subChipLabelEl = document.getElementById('suburb-chip-label');
+    const subChipBtn = document.getElementById('mood-chip-suburb');
+    if (subChipLabelEl) subChipLabelEl.textContent = subCount === 0 ? 'All Suburbs' : subLabel;
+    if (subChipBtn) subChipBtn.classList.toggle('active', subCount > 0);
 
     ['f', 'sw-f', 'map-f'].forEach(prefix => {
       const subVal = document.getElementById(`${prefix}-val-suburb`);
@@ -1241,13 +1731,16 @@ const discover = {
     });
 
     // Show/hide clear all filters buttons on discover, swiper, and map views
-    const anyActive = isDateFiltered || subCount > 0 || vibeCount > 0 || catCount > 0 || this.activeFilter !== 'all';
+    const anyActive = isDateFiltered || subCount > 0 || vibeCount > 0 || catCount > 0 || this.activeFilter !== 'all' || this.activeIntent !== 'all';
     const clearBtn = document.getElementById('btn-clear-all-filters');
     if (clearBtn) clearBtn.classList.toggle('hidden', !anyActive);
     const swClearBtn = document.getElementById('sw-btn-clear-filters');
     if (swClearBtn) swClearBtn.classList.toggle('hidden', !anyActive);
     const mapClearBtn = document.getElementById('map-btn-clear-filters');
     if (mapClearBtn) mapClearBtn.classList.toggle('hidden', !anyActive);
+
+    this.syncIntentUI();
+    this.updateActiveFilterPillBar();
 
     // Synchronize Swiper filter counter if available
     if (typeof swiper !== 'undefined' && swiper.updateSwiperFilterStatus) {
@@ -1276,21 +1769,27 @@ const discover = {
     this.selectedCategories = [];
     this.selectedSuburbs = [];
     this.selectedVibes = [];
+    this.activeIntent = 'all';
+    this.activeSubIntent = 'all';
     this.activeDateRange = this.defaultDateRange;
     this.customStart = null;
     this.customEnd = null;
     this.activeFilter = 'all';
     this.currentMood = 'all';
+    this.searchQuery = '';
     
     document.querySelectorAll('.mood-chip').forEach(c => {
       c.classList.toggle('active', c.dataset.mood === 'all');
     });
 
-    const sInput = document.getElementById('search-input');
+    const sInput = document.getElementById('discover-search-input');
     if (sInput) sInput.value = '';
+    const clearSearchBtn = document.getElementById('discover-search-clear');
+    if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
     const sel = document.getElementById('vote-filter-select');
     if (sel) sel.value = 'all';
 
+    this.syncIntentUI();
     this.updateActiveFilterPillBar();
     this.updateFilterHeaderBadges();
     this.loadEvents(true);

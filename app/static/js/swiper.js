@@ -90,6 +90,7 @@ const swiper = {
 
       const anyActive = (typeof discover !== 'undefined') && (
         !discover.isDefaultDate() ||
+        (discover.activeIntent && discover.activeIntent !== 'all') ||
         discover.selectedSuburbs.length > 0 ||
         discover.selectedVibes.length > 0 ||
         discover.selectedCategories.length > 0
@@ -183,6 +184,15 @@ const swiper = {
     const remaining = Math.max(0, this.deckQueue.length - this.currentIndex);
     const filterParts = [];
     if (typeof discover !== 'undefined') {
+      if (discover.activeIntent && discover.activeIntent !== 'all') {
+        const iDef = discover.intentDefinitions?.[discover.activeIntent];
+        let iLabel = iDef ? iDef.label : discover.activeIntent;
+        if (discover.activeSubIntent && discover.activeSubIntent !== 'all' && iDef?.subs) {
+          const sDef = iDef.subs.find(s => s.id === discover.activeSubIntent);
+          if (sDef) iLabel += ` (${sDef.label})`;
+        }
+        filterParts.push(iLabel);
+      }
       if (discover.activeDateRange !== 'all') filterParts.push(`📅 ${discover.getDateChipLabel()}`);
       if (discover.selectedSuburbs && discover.selectedSuburbs.length > 0) {
         filterParts.push(discover.selectedSuburbs.length === 1 ? discover.selectedSuburbs[0] : `${discover.selectedSuburbs.length} Suburbs`);
