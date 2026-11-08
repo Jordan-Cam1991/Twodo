@@ -84,6 +84,25 @@ const discover = {
   },
 
   setIntent(intent, subIntent = 'all') {
+    if (intent === 'saved') {
+      if (this.activeIntent === 'saved') {
+        this.activeIntent = 'all';
+        this.activeSubIntent = 'all';
+        this.currentMood = 'all';
+        this.activeFilter = 'all';
+        document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+        this.syncIntentUI();
+        this.updateActiveFilterPillBar();
+        this.loadEvents(false);
+        return;
+      }
+      this.activeIntent = 'saved';
+      this.activeSubIntent = 'all';
+      this.syncIntentUI();
+      this.setMoodFilter('emma-loves');
+      return;
+    }
+
     // Tapping the already-active intent (when no sub-intent is narrowed) toggles back to 'all'
     if (this.activeIntent === intent && intent !== 'all' && subIntent === 'all' && this.activeSubIntent === 'all') {
       this.activeIntent = 'all';
@@ -115,9 +134,18 @@ const discover = {
   },
 
   syncIntentUI() {
-    document.querySelectorAll('#discover-intent-tiles .intent-tile, #swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.intent === this.activeIntent);
+    const effectiveTab = this.isSpecialMood() ? 'saved' : this.activeIntent;
+    document.querySelectorAll('#discover-intent-tiles .cat-tab, #discover-intent-tiles .intent-tile').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.intent === effectiveTab);
     });
+    document.querySelectorAll('#swiper-intent-tiles .swiper-deck-pill').forEach(btn => {
+      const swIntent = (this.activeIntent === 'saved') ? 'all' : this.activeIntent;
+      btn.classList.toggle('active', btn.dataset.intent === swIntent);
+    });
+    const votesBar = document.getElementById('discover-votes-bar');
+    if (votesBar) {
+      votesBar.classList.toggle('hidden', effectiveTab !== 'saved');
+    }
     this.renderSubIntentBars();
   },
 
@@ -416,8 +444,8 @@ const discover = {
     const bounds = ignoreDate ? null : this.getDateBounds();
     return {
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
-      intent: ignoreDate ? 'all' : (this.activeIntent || 'all'),
-      sub_intent: ignoreDate ? 'all' : (this.activeSubIntent || 'all'),
+      intent: (ignoreDate || this.activeIntent === 'saved') ? 'all' : (this.activeIntent || 'all'),
+      sub_intent: (ignoreDate || this.activeIntent === 'saved') ? 'all' : (this.activeSubIntent || 'all'),
       category: this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All',
       suburb: this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All',
       vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
@@ -565,24 +593,28 @@ const discover = {
       const v1 = ev.u1_vote;
       const v2 = ev.u2_vote;
 
-      // Active voter's current vote
+      // Active voter's current vote & partner's vote
       const currentVote = (activeVoter === u1) ? v1 : v2;
+      const partnerName = (activeVoter === u1) ? u2 : u1;
+      const partnerVote = (activeVoter === u1) ? v2 : v1;
 
       const loveActive = currentVote === 'love' ? 'active-love' : '';
-      const maybeActive = currentVote === 'maybe' ? 'active-maybe' : '';
       const passActive = currentVote === 'pass' ? 'active-pass' : '';
 
-      // Match banner (only shown in Coupled Mode)
-      const matchBannerHtml = (!isSolo && isMatch)
-        ? `<div class="card-match-banner">🎉 Mutual Match! Both Want To Do This</div>` 
-        : '';
+      // Match or Partner-Loved Signal (Zero noise when nobody has voted yet!)
+      let signalBadgeHtml = '';
+      if (!isSolo && isMatch) {
+        signalBadgeHtml = `<div class="card-match-banner">🎉 Mutual Match! Both Love This</div>`;
+      } else if (!isSolo && partnerVote === 'love') {
+        signalBadgeHtml = `<div class="card-partner-loved-banner">💜 ${discover.escapeHtml(partnerName)} loves this — tap ❤️ to Match!</div>`;
+      }
 
-      // Tip HTML
+      // Clean 1-line tip
       const tipHtml = ev.insider_tip 
-        ? `<div class="card-tip"><strong>💡 ${isSolo ? 'Insider Tip:' : 'Couple Tip:'}</strong> ${ev.insider_tip}</div>`
+        ? `<div class="card-tip-clean">💡 ${discover.escapeHtml(ev.insider_tip)}</div>`
         : '';
 
-      // Love Notes HTML
+      // Love Notes HTML (only shown if someone wrote a note)
       let loveNotesHtml = '';
       const notesList = [];
       if (ev.u1_note) {
@@ -605,30 +637,10 @@ const discover = {
         loveNotesHtml = `<div class="card-love-notes-box">${notesList.join('')}</div>`;
       }
 
-      // Add/Edit Note button for active user (compact label to fit 3-col grid)
       const myExistingNote = (activeVoter === u1) ? ev.u1_note : ev.u2_note;
-      const isMyLove = (currentVote === 'love');
-      const noteLabel = myExistingNote ? '✏️ Edit Note' : '❤️ + Note';
-      const noteBtnHtml = `<button type="button" class="btn-card-extra btn-card-note ${myExistingNote ? 'has-note' : (isMyLove ? 'is-love-note' : '')}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note for partner' : 'Add a note explaining why you love this'}">
-        <span>${noteLabel}</span>
-      </button>`;
-
-      const chatShareBtnHtml = `<button type="button" class="btn-card-extra btn-card-chat" onclick="chatView.shareEventToChat('${ev.id}')" title="Chat about this date idea">
-        <span>💬 Chat</span>
-      </button>`;
-
-      // Planner action button (compact label to fit 3-col grid)
-      const isInPlanner = !!ev.planner_id;
-      const scheduleBtnHtml = isInPlanner
-        ? `<button class="btn-schedule-pill in-itinerary" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', '${ev.planner_id}')"><span>✓ Planned</span></button>`
-        : `<button class="btn-schedule-pill" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)"><span>+ Plan Date</span></button>`;
-
       const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
       const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
       const linkInfo = discover.getEventLinkInfo(ev);
-      const sourceBadgeHtml = linkInfo
-        ? `<a href="${discover.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-badge card-source-badge-link" onclick="event.stopPropagation()" title="Open ${discover.escapeHtml(ev.source || 'official page')}">${discover.escapeHtml(ev.source || 'Official')} ↗</a>`
-        : `<span class="card-source-badge">${discover.escapeHtml(ev.source || 'Brisbane')}</span>`;
       const externalLinkHtml = linkInfo
         ? `<span class="meta-dot">•</span><a href="${discover.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" title="Visit ${discover.escapeHtml(ev.source || 'official website')}">${linkInfo.label}</a>`
         : '';
@@ -637,18 +649,17 @@ const discover = {
         <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
           <div class="card-media" ondblclick="discover.handleDoubleTap('${ev.id}')" title="Double-tap photo to Love ❤️">
             <img class="card-img" src="${ev.image_url}" alt="${discover.escapeHtml(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
-            ${sourceBadgeHtml}
+            <span class="card-source-badge">${discover.escapeHtml(ev.category || 'Date Idea')}</span>
             <span class="card-price-badge">${discover.escapeHtml(priceLabel)}</span>
-            ${matchBannerHtml}
+            ${signalBadgeHtml}
             <div class="heart-burst-overlay" id="burst-${ev.id}">❤️</div>
           </div>
 
           <div class="card-body">
-            <div class="card-category">${discover.escapeHtml(ev.category)}</div>
             <h3 class="card-title">${discover.escapeHtml(ev.title)}</h3>
             
             <div class="card-meta-line">
-              <a href="https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open in Apple / Google Maps">
+              <a href="https://maps.apple.com/?q=${encodeURIComponent(locLabel + ', Brisbane')}" target="_blank" rel="noopener" class="card-map-link" title="Open in Maps">
                 📍 ${discover.escapeHtml(locLabel)} <span class="map-link-arrow">↗</span>
               </a>
               <span class="meta-dot">•</span>
@@ -657,44 +668,24 @@ const discover = {
             </div>
 
             ${tipHtml}
-
-            <!-- Voting Status Tracker (Solo vs Coupled) -->
-            ${isSolo ? `
-              <div class="card-solo-status" style="margin-bottom:0.75rem;">
-                <span class="solo-status-badge" style="font-size:0.84rem; font-weight:600; color:var(--text-muted); display:inline-flex; align-items:center; gap:0.35rem; background:#f8fafc; padding:0.3rem 0.65rem; border-radius:8px; border:1px solid var(--border);">
-                  ${currentVote === 'love' ? '❤️ Saved to My Loves' : (currentVote === 'pass' ? '❌ Passed' : '✨ Exploring')}
-                </span>
-              </div>
-            ` : `
-              <div class="card-couple-status">
-                <div class="vote-partner-tag">
-                  <span style="color:var(--primary)">❤️ ${u1}:</span>
-                  <span>${v1 === 'love' ? 'Loves it!' : (v1 === 'pass' ? 'Pass' : 'Thinking...')}</span>
-                </div>
-                <div class="vote-partner-tag">
-                  <span style="color:var(--secondary)">💜 ${u2}:</span>
-                  <span>${v2 === 'love' ? 'Loves it!' : (v2 === 'pass' ? 'Pass' : 'Thinking...')}</span>
-                </div>
-              </div>
-            `}
-
             ${!isSolo ? loveNotesHtml : ''}
 
-            <!-- Streamlined Voting & Planning Action Bar -->
-            <div class="card-actions-streamlined">
-              <div class="vote-btn-row two-col">
-                <button class="btn-vote-pill btn-vote-love ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
-                  <span>❤️ ${loveActive ? 'Loved' : 'Love'}</span>
+            <!-- Single-Row Clean Action Bar -->
+            <div class="card-actions-clean">
+              <button class="btn-vote-pill btn-vote-love ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
+                <span>❤️ ${loveActive ? 'Loved' : 'Love'}</span>
+              </button>
+              <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
+                <span>✕ ${passActive ? 'Passed' : 'Pass'}</span>
+              </button>
+              ${!isSolo ? `
+                <button type="button" class="btn-card-icon ${myExistingNote ? 'has-note' : ''}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note' : 'Add a note for your partner'}">
+                  💬
                 </button>
-                <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass on this idea">
-                  <span class="pass-icon">✕</span>
-                  <span>${passActive ? 'Passed' : 'Pass'}</span>
+                <button type="button" class="btn-card-icon" onclick="chatView.shareEventToChat('${ev.id}')" title="Share to Couple Chat">
+                  ↗
                 </button>
-              </div>
-              ${!isSolo ? `<div class="card-utility-row two-col">
-                ${noteBtnHtml}
-                ${chatShareBtnHtml}
-              </div>` : ''}
+              ` : ''}
             </div>
           </div>
         </article>

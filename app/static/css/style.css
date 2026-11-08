@@ -6003,3 +6003,248 @@ html.device-authenticated #app-container {
     height: 66px;
   }
 }
+
+/* ==========================================================================
+   AIRBNB / FEVER-INSPIRED STREAMLINED UX (v3.9 ZERO-CLUTTER REDESIGN)
+   ========================================================================== */
+
+/* 1. Unified Search + Context Filter Row */
+.discover-unified-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.discover-unified-bar .discover-search-box {
+  flex: 1 1 240px;
+  border-radius: 9999px;
+  padding: 0.48rem 0.95rem;
+  background: white;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.discover-quick-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.discover-quick-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-context-pill {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-context-pill:hover,
+.quick-context-pill.active {
+  border-color: #0f172a;
+  background: #f8fafc;
+}
+
+.btn-concierge-pill {
+  background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.46rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.25);
+  transition: transform 0.15s ease;
+}
+
+.btn-concierge-pill:hover {
+  transform: translateY(-1px);
+}
+
+/* 2. Single-Line Airbnb-Style Category Strip */
+.category-strip-wrap {
+  margin-bottom: 0.75rem;
+}
+
+.category-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: 8px 8px 0 0;
+}
+
+.cat-tab:hover {
+  color: var(--text-main);
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.cat-tab.active {
+  color: var(--text-main);
+  border-bottom-color: var(--primary);
+  font-weight: 800;
+}
+
+.cat-tab-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* 3. Minimal Results Count Text (No Heavy Box) */
+.results-meta-minimal {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0.15rem 0 0.75rem 0.15rem;
+}
+
+/* 4. Clean Event Card (3-Second Rule) */
+.event-card .card-media {
+  height: 165px;
+}
+
+.card-partner-loved-banner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(109, 40, 217, 0.92);
+  backdrop-filter: blur(6px);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  padding: 0.28rem 0.5rem;
+}
+
+.card-tip-clean {
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.35;
+  margin: 0.2rem 0 0.45rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-actions-clean {
+  margin-top: auto;
+  padding-top: 0.55rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.card-actions-clean .btn-vote-pill {
+  flex: 1;
+  height: 36px !important;
+  font-size: 0.8rem !important;
+}
+
+.btn-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-card-icon:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--text-main);
+}
+
+.btn-card-icon.has-note {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+/* 5. Compact Swiper Header */
+.swiper-top-compact {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .discover-unified-bar {
+    gap: 0.45rem;
+  }
+
+  .discover-unified-bar .discover-search-box {
+    flex: 1 1 100%;
+  }
+
+  .discover-quick-filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .quick-context-pill,
+  .btn-concierge-pill {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.42rem 0.5rem;
+    font-size: 0.76rem;
+  }
+
+  .cat-tab {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}

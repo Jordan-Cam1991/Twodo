@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=3.8">
+  <link rel="stylesheet" href="css/style.css?v=3.9">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -209,16 +209,8 @@
           </button>
         </nav>
 
-        <!-- Header Actions: 📅 Date Filter, 🎯 Suburb/Category Filter, ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
+        <!-- Header Actions: ➕ Add Custom Date, ⚙️ Settings, 🚪 Log Out -->
         <div class="header-actions">
-          <button type="button" class="btn-icon header-icon-btn" id="btn-header-date" onclick="discover.openFilterModal('date')" title="Filter by Date" aria-label="Filter by Date">
-            <span>📅</span>
-            <span class="header-date-active-dot hidden" id="header-date-dot"></span>
-          </button>
-          <button type="button" class="btn-icon header-icon-btn" id="btn-header-filter" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb & Category" aria-label="Filters">
-            <span>🎯</span>
-            <span class="header-filter-active-dot hidden" id="header-filter-dot"></span>
-          </button>
           <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Custom Date Activity" aria-label="Add Custom Activity">
             <span>➕</span>
           </button>
@@ -260,123 +252,91 @@
 
     <!-- TAB 1: DISCOVER VIEW -->
     <section id="view-discover" class="view-panel active">
-      <!-- Dedicated Real-Time Search Bar + 15s Date Concierge Trigger -->
-      <div class="discover-top-bar">
-        <div class="discover-search-wrap">
-          <div class="discover-search-box">
-            <span class="discover-search-icon">🔍</span>
-            <input 
-              type="text" 
-              id="discover-search-input" 
-              class="discover-search-input" 
-              placeholder="Search dinners, activities, gigs, suburbs..." 
-              autocomplete="off"
-              oninput="discover.handleSearchInput(this.value)"
-            >
-            <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
+      <!-- Clean Search + Quick Context Pills (Airbnb/Fever Style) -->
+      <div class="discover-unified-bar">
+        <div class="discover-search-box">
+          <span class="discover-search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="discover-search-input" 
+            class="discover-search-input" 
+            placeholder="Search dinners, activities, gigs..." 
+            autocomplete="off"
+            oninput="discover.handleSearchInput(this.value)"
+          >
+          <button type="button" id="discover-search-clear" class="discover-search-clear hidden" onclick="discover.clearSearch()" title="Clear search">✕</button>
+        </div>
+        <div class="discover-quick-filters">
+          <button type="button" class="quick-context-pill" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Choose dates">
+            📅 <span id="date-chip-label">This Week</span> ▾
+          </button>
+          <button type="button" class="quick-context-pill" id="mood-chip-suburb" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
+            📍 <span id="suburb-chip-label">All Suburbs</span> ▾
+          </button>
+          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Answer 3 quick questions to get 3 hand-picked date ideas">
+            ✨ Pick For Us
+          </button>
+        </div>
+      </div>
+
+      <!-- Single-Line Category Tabs (Clean Airbnb-Style Strip) -->
+      <div class="category-strip-wrap">
+        <div class="category-strip" id="discover-intent-tiles">
+          <button type="button" class="cat-tab active" data-intent="all" onclick="discover.setIntent('all')">
+            <span class="cat-tab-icon">✨</span>
+            <span class="cat-tab-label">All</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
+            <span class="cat-tab-icon">🍽️</span>
+            <span class="cat-tab-label">Eat &amp; Drink</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="activity" onclick="discover.setIntent('activity')">
+            <span class="cat-tab-icon">🎯</span>
+            <span class="cat-tab-label">Activities</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="whats_on" onclick="discover.setIntent('whats_on')">
+            <span class="cat-tab-icon">🎟️</span>
+            <span class="cat-tab-label">What's On</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
+            <span class="cat-tab-icon">🌿</span>
+            <span class="cat-tab-label">Outdoors</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="low_key" onclick="discover.setIntent('low_key')">
+            <span class="cat-tab-icon">🌙</span>
+            <span class="cat-tab-label">Low-Key</span>
+          </button>
+          <button type="button" class="cat-tab" data-intent="saved" onclick="discover.setIntent('saved')">
+            <span class="cat-tab-icon">❤️</span>
+            <span class="cat-tab-label">Loves &amp; Votes</span>
+          </button>
+        </div>
+
+        <!-- Contextual Sub-Filter Pills (Only shown when a category tab is active) -->
+        <div id="discover-sub-intent-bar" class="sub-intent-bar hidden"></div>
+
+        <!-- Saved / Votes Filter Strip (Only shown when '❤️ Loves & Votes' tab is active) -->
+        <div id="discover-votes-bar" class="sub-intent-bar hidden">
+          <div class="sub-intent-scroll" id="mood-chips-scroll">
+            <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
+            <button type="button" class="mood-chip" data-mood="jordan-loves" id="mood-chip-jordan" onclick="discover.setMoodFilter('jordan-loves')">💜 <span id="mood-chip-jordan-label">Jordan's Loves</span> <span class="mood-chip-badge" id="mood-jordan-count">0</span></button>
+            <button type="button" class="mood-chip" data-mood="matches" id="mood-chip-matches" onclick="discover.setMoodFilter('matches')">💖 Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
+            <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
+            <button type="button" class="mood-chip" data-mood="jordan-passed" id="mood-chip-jordan-passed" onclick="discover.setMoodFilter('jordan-passed')">❌ <span id="mood-chip-jordan-passed-label">Jordan's Passed</span> <span class="mood-chip-badge" id="mood-jordan-passed-count">0</span></button>
           </div>
         </div>
-        <button type="button" class="btn-concierge-trigger" onclick="discover.openConcierge()" title="Answer 3 quick questions to get 3 hand-picked date ideas">
-          <span class="concierge-sparkle">✨</span>
-          <span>Help Us Decide <small>(15s)</small></span>
-        </button>
       </div>
 
-      <!-- STEP 1: Primary "What's the Plan?" Intent Tiles (Reusable across Discover & Swiper) -->
-      <div class="intent-hub-wrap">
-        <div class="intent-tiles-grid" id="discover-intent-tiles">
-          <button type="button" class="intent-tile active" data-intent="all" onclick="discover.setIntent('all')">
-            <span class="intent-tile-icon">✨</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">All Ideas</span>
-              <span class="intent-tile-sub">Everything</span>
-            </div>
-          </button>
-          <button type="button" class="intent-tile" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
-            <span class="intent-tile-icon">🍽️</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">Eat &amp; Drink</span>
-              <span class="intent-tile-sub">Dinner, bars, brunch</span>
-            </div>
-          </button>
-          <button type="button" class="intent-tile" data-intent="activity" onclick="discover.setIntent('activity')">
-            <span class="intent-tile-icon">🎯</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">Do an Activity</span>
-              <span class="intent-tile-sub">Games, make, play</span>
-            </div>
-          </button>
-          <button type="button" class="intent-tile" data-intent="whats_on" onclick="discover.setIntent('whats_on')">
-            <span class="intent-tile-icon">🎟️</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">What's On</span>
-              <span class="intent-tile-sub">Shows, gigs, sports</span>
-            </div>
-          </button>
-          <button type="button" class="intent-tile" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
-            <span class="intent-tile-icon">🌿</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">Outdoors</span>
-              <span class="intent-tile-sub">Picnics, walks, bay</span>
-            </div>
-          </button>
-          <button type="button" class="intent-tile" data-intent="low_key" onclick="discover.setIntent('low_key')">
-            <span class="intent-tile-icon">🌙</span>
-            <div class="intent-tile-text">
-              <span class="intent-tile-title">Low-Key</span>
-              <span class="intent-tile-sub">Free, cozy, stay-in</span>
-            </div>
-          </button>
-        </div>
-
-        <!-- STEP 2: Dynamic Sub-Refiner Pills (Appears when an Intent Tile is chosen) -->
-        <div id="discover-sub-intent-bar" class="sub-intent-bar hidden">
-          <!-- Populated dynamically by discover.renderSubIntentBar() -->
-        </div>
-      </div>
-
-      <!-- Couple Lists, Date & Suburb Strip -->
-      <div class="mood-chips-bar">
-        <div class="mood-chips-scroll" id="mood-chips-scroll">
-          <button type="button" class="mood-chip date-chip active" data-mood="all" id="mood-chip-date" onclick="discover.onDateChipClick()" title="Choose dates" aria-label="Choose date range">📅 <span id="date-chip-label">This Week</span> <span class="date-chip-caret">▾</span></button>
-          <button type="button" class="mood-chip" id="mood-chip-suburb" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">📍 <span id="suburb-chip-label">All Suburbs</span> <span class="date-chip-caret">▾</span></button>
-          <button type="button" class="mood-chip" data-mood="tonight" onclick="discover.setMoodFilter('tonight')">🔥 Tonight</button>
-          <button type="button" class="mood-chip" data-mood="weekend" onclick="discover.setMoodFilter('weekend')">🥂 This Weekend</button>
-          <button type="button" class="mood-chip" data-mood="matches" id="mood-chip-matches" onclick="discover.setMoodFilter('matches')">❤️ Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
-          <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
-          <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
-          <button type="button" class="mood-chip" data-mood="jordan-loves" id="mood-chip-jordan" onclick="discover.setMoodFilter('jordan-loves')">💜 <span id="mood-chip-jordan-label">Jordan's Loves</span> <span class="mood-chip-badge" id="mood-jordan-count">0</span></button>
-          <button type="button" class="mood-chip" data-mood="jordan-passed" id="mood-chip-jordan-passed" onclick="discover.setMoodFilter('jordan-passed')">❌ <span id="mood-chip-jordan-passed-label">Jordan's Passed</span> <span class="mood-chip-badge" id="mood-jordan-passed-count">0</span></button>
-        </div>
-      </div>
-
-      <!-- Active Filter Status Pill (Visible whenever an intent, mood, date, or suburb filter is active) -->
+      <!-- Minimal Filter Status Bar (Only visible when filtered) -->
       <div id="active-filter-pill-bar" class="active-filter-pill-bar hidden">
-        <span class="active-filter-summary" id="active-filter-summary">🎯 Filtered by: South Bank</span>
-        <button type="button" class="btn-clear-filter-pill" onclick="discover.resetFilters()" title="Reset to all">✕ Clear</button>
-      </div>
-
-      <!-- Live Match Banner (if matches exist) - Compact Ribbon -->
-      <div id="matches-callout-banner" class="matches-banner hidden">
-        <div class="matches-content">
-          <span class="banner-heart">🎉</span>
-          <div class="banner-text">
-            <strong id="matches-banner-title">2 Mutual Date Matches!</strong>
-            <span class="banner-subtext">Both love these ideas</span>
-          </div>
-        </div>
-        <button class="btn btn-sm btn-white banner-btn" onclick="app.navigate('matches')">View Matches ✨</button>
-      </div>
-
-      <!-- Curated Spotlight Collections (Shown in default 'All Ideas' mode to prevent scroll fatigue) -->
-      <div id="discover-spotlights" class="discover-spotlights">
-        <!-- Dynamically rendered horizontal spotlight rows -->
+        <span class="active-filter-summary" id="active-filter-summary">Filtered</span>
+        <button type="button" class="btn-clear-filter-pill" onclick="discover.resetFilters()" title="Reset to all">✕ Reset</button>
       </div>
 
       <!-- Events Grid -->
       <div class="events-grid-container">
-        <div class="results-meta" id="discover-results-meta">
-          <span id="results-count-text">Showing activities in Brisbane...</span>
+        <div class="results-meta-minimal" id="discover-results-meta">
+          <span id="results-count-text">Showing activities in Brisbane</span>
         </div>
 
         <div id="events-grid" class="events-grid">
@@ -386,15 +346,15 @@
         <!-- Load More Pagination Button -->
         <div id="load-more-wrap" class="load-more-wrap hidden" style="text-align: center; margin: 2.5rem 0;">
           <button id="btn-load-more" class="btn btn-secondary btn-lg" onclick="discover.loadMore()" style="padding: 0.9rem 2.2rem; font-size: 1rem; border-radius: 50px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); font-weight: 600;">
-            ⚡ Load More Activities (<span id="load-more-remaining">0</span> left)
+            ⚡ Load More (<span id="load-more-remaining">0</span> more)
           </button>
         </div>
 
         <div id="events-empty" class="empty-state hidden">
           <span class="empty-emoji">🔍</span>
-          <h3>No activities found</h3>
-          <p>Try clearing your search filters or switching to another category above.</p>
-          <button class="btn btn-primary" onclick="discover.resetFilters()">Reset Filters</button>
+          <h3>No activities match that filter</h3>
+          <p>Try resetting your filters or switching to another category above.</p>
+          <button class="btn btn-primary" onclick="discover.resetFilters()">Reset All Filters</button>
         </div>
       </div>
     </section>
@@ -402,41 +362,31 @@
     <!-- TAB 2: DATE SWIPER (TINDER STYLE) -->
     <section id="view-swiper" class="view-panel">
       <div class="swiper-container">
-        <div class="swiper-header">
-          <h2>Couple Date Swiper</h2>
-          <p>Pick a deck below (like <strong>🍽️ Eat &amp; Drink</strong> or <strong>🎯 Activities</strong>) so you both swipe the same mood!</p>
-          <div class="swiper-voter-indicator">
-            Currently Swiping: <strong id="swiper-current-user">Emma</strong>
+        <!-- Compact Top Bar for Swiper -->
+        <div class="swiper-top-compact">
+          <div class="swiper-intent-deck-bar" id="swiper-intent-tiles">
+            <button type="button" class="swiper-deck-pill active" data-intent="all" onclick="discover.setIntent('all')">✨ All</button>
+            <button type="button" class="swiper-deck-pill" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">🍽️ Eat &amp; Drink</button>
+            <button type="button" class="swiper-deck-pill" data-intent="activity" onclick="discover.setIntent('activity')">🎯 Activities</button>
+            <button type="button" class="swiper-deck-pill" data-intent="whats_on" onclick="discover.setIntent('whats_on')">🎟️ What's On</button>
+            <button type="button" class="swiper-deck-pill" data-intent="outdoors" onclick="discover.setIntent('outdoors')">🌿 Outdoors</button>
+            <button type="button" class="swiper-deck-pill" data-intent="low_key" onclick="discover.setIntent('low_key')">🌙 Low-Key</button>
           </div>
-        </div>
+          <div id="swiper-sub-intent-bar" class="sub-intent-bar swiper-sub-bar hidden"></div>
 
-        <!-- Reusable Intent Deck Picker for Swiper -->
-        <div class="swiper-intent-deck-bar" id="swiper-intent-tiles">
-          <button type="button" class="swiper-deck-pill active" data-intent="all" onclick="discover.setIntent('all')">✨ All</button>
-          <button type="button" class="swiper-deck-pill" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">🍽️ Eat &amp; Drink</button>
-          <button type="button" class="swiper-deck-pill" data-intent="activity" onclick="discover.setIntent('activity')">🎯 Activities</button>
-          <button type="button" class="swiper-deck-pill" data-intent="whats_on" onclick="discover.setIntent('whats_on')">🎟️ What's On</button>
-          <button type="button" class="swiper-deck-pill" data-intent="outdoors" onclick="discover.setIntent('outdoors')">🌿 Outdoors</button>
-          <button type="button" class="swiper-deck-pill" data-intent="low_key" onclick="discover.setIntent('low_key')">🌙 Low-Key</button>
-        </div>
-        <div id="swiper-sub-intent-bar" class="sub-intent-bar swiper-sub-bar hidden"></div>
-
-        <!-- Compact Swiper Mood & Filter Bar (Keeps Cards Tall & Uncluttered) -->
-        <div class="swiper-filter-compact-bar">
-          <span class="swiper-filter-status-pill" id="sw-filter-status">⚡ Swiping activities in Brisbane</span>
-          <div class="swiper-filter-actions">
-            <button type="button" class="btn-swiper-filter-pill" onclick="discover.openConcierge()">
-              <span>✨ 15s Finder</span>
-            </button>
-            <button type="button" class="btn-swiper-filter-pill" id="sw-date-pill" onclick="discover.openFilterModal('date')">
-              <span>📅 <span id="sw-date-pill-label">This Week</span> ▾</span>
-            </button>
-            <button type="button" class="btn-swiper-filter-pill" onclick="discover.openFilterModal('suburb')">
-              <span>📍 Suburb ▾</span>
-            </button>
-            <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
-              ✕ Clear
-            </button>
+          <div class="swiper-filter-compact-bar">
+            <span class="swiper-filter-status-pill" id="sw-filter-status">⚡ Ready to swipe</span>
+            <div class="swiper-filter-actions">
+              <button type="button" class="btn-swiper-filter-pill" id="sw-date-pill" onclick="discover.openFilterModal('date')">
+                📅 <span id="sw-date-pill-label">This Week</span> ▾
+              </button>
+              <button type="button" class="btn-swiper-filter-pill" onclick="discover.openFilterModal('suburb')">
+                📍 Area ▾
+              </button>
+              <button type="button" class="btn-clear-filters-mini hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
+                ✕ Reset
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1133,17 +1083,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=3.8"></script>
-  <script src="js/firebase-service.js?v=3.8"></script>
-  <script src="js/auth-ui.js?v=3.8"></script>
-  <script src="js/events_data.js?v=3.8"></script>
-  <script src="js/api.js?v=3.8"></script>
-  <script src="js/chat.js?v=3.8"></script>
-  <script src="js/collaborative.js?v=3.8"></script>
-  <script src="js/discover.js?v=3.8"></script>
-  <script src="js/swiper.js?v=3.8"></script>
-  <script src="js/planner.js?v=3.8"></script>
-  <script src="js/matches.js?v=3.8"></script>
-  <script src="js/app.js?v=3.8"></script>
+  <script src="js/firebase-config.js?v=3.9"></script>
+  <script src="js/firebase-service.js?v=3.9"></script>
+  <script src="js/auth-ui.js?v=3.9"></script>
+  <script src="js/events_data.js?v=3.9"></script>
+  <script src="js/api.js?v=3.9"></script>
+  <script src="js/chat.js?v=3.9"></script>
+  <script src="js/collaborative.js?v=3.9"></script>
+  <script src="js/discover.js?v=3.9"></script>
+  <script src="js/swiper.js?v=3.9"></script>
+  <script src="js/planner.js?v=3.9"></script>
+  <script src="js/matches.js?v=3.9"></script>
+  <script src="js/app.js?v=3.9"></script>
 </body>
 </html>
