@@ -1181,6 +1181,30 @@ const firebaseService = {
       }
       try {
         await docRef.set(updatePayload, { merge: true });
+
+        // If this vote created a mutual match, send lock-screen push to partner
+        if (voteType === 'love') {
+          const myName = userName.trim();
+          const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
+            ? (this.coupleData?.user2_name || 'Partner')
+            : (this.coupleData?.user1_name || 'Partner');
+          const partnerVote = this.votesMap[`${eventId}_${partnerName}`];
+          if (partnerVote === 'love') {
+            if (window.notifications && notifications.sendRemotePush) {
+              let evTitle = 'Date Idea';
+              if (window.api && api.getEventById) {
+                const ev = api.getEventById(eventId);
+                if (ev && ev.title) evTitle = ev.title;
+              }
+              notifications.sendRemotePush({
+                targetPartnerName: partnerName,
+                title: "💖 It's a Match!",
+                message: `You and ${myName} both love "${evTitle}"!`,
+                tab: 'matches'
+              });
+            }
+          }
+        }
       } catch (e) {
         console.warn('Firestore couple vote sync note:', e);
       }
@@ -1264,6 +1288,23 @@ const firebaseService = {
     } else {
       payload.created_at = firebase.firestore.FieldValue.serverTimestamp();
       const ref = await targetColl.add(payload);
+
+      if (this.coupleId && window.notifications && notifications.sendRemotePush) {
+        try {
+          const myName = (this.userProfile?.name || localStorage.getItem('twodo_user_name') || 'Partner').trim();
+          const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
+            ? (this.coupleData?.user2_name || 'Partner')
+            : (this.coupleData?.user1_name || 'Partner');
+          const dateStr = item.scheduled_date ? ` for ${item.scheduled_date}` : '';
+          notifications.sendRemotePush({
+            targetPartnerName: partnerName,
+            title: `📅 New Date in Planner!`,
+            message: `${myName} scheduled "${item.title}"${dateStr}!`,
+            tab: 'planner'
+          });
+        } catch (e) {}
+      }
+
       return { success: true, id: ref.id };
     }
   },
@@ -1345,6 +1386,23 @@ const firebaseService = {
     };
 
     const docRef = await this.db.collection('couples').doc(this.coupleId).collection('messages').add(msgData);
+
+    // Send OneSignal background push to partner's lock screen
+    try {
+      if (window.notifications && notifications.sendRemotePush) {
+        const myName = msgData.sender_name || 'Partner';
+        const partnerName = (this.coupleData?.user1_name?.toLowerCase() === myName.toLowerCase())
+          ? (this.coupleData?.user2_name || 'Partner')
+          : (this.coupleData?.user1_name || 'Partner');
+        notifications.sendRemotePush({
+          targetPartnerName: partnerName,
+          title: `💬 ${myName}`,
+          message: msgData.text,
+          tab: 'chat'
+        });
+      }
+    } catch (e) {}
+
     return { success: true, id: docRef.id };
   },
 

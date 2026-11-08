@@ -18,3 +18,9 @@ if (typeof firebase !== 'undefined') {
     firebase.initializeApp(firebaseConfig);
   }
 }
+
+// Global OneSignal Web Push Configuration (Optional default fallback)
+window.TWODO_ONESIGNAL_CONFIG = {
+  appId: "",
+  restKey: ""
+};

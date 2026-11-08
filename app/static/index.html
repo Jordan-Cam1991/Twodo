@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=4.5">
+  <link rel="stylesheet" href="css/style.css?v=4.6">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -876,6 +876,17 @@
           <p style="margin:0.25rem 0 0; font-size:0.76rem; color:#64748b; line-height:1.35;">
             Alerts on mutual matches, partner chats &amp; new dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
           </p>
+
+          <details style="margin-top:0.6rem; font-size:0.78rem;">
+            <summary style="cursor:pointer; color:var(--primary); font-weight:700;">⚙️ OneSignal Push Keys (Tap to enter)</summary>
+            <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+              <input type="text" id="set-onesignal-appid" placeholder="OneSignal App ID" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+              <input type="password" id="set-onesignal-restkey" placeholder="OneSignal REST API Key" style="padding:0.45rem 0.65rem; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; width:100%; box-sizing:border-box;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="notifications.saveOneSignalKeys()" style="padding:0.4rem 0.85rem; font-weight:700; border-radius:9999px; align-self:flex-end;">
+                Save &amp; Link Devices ✨
+              </button>
+            </div>
+          </details>
         </div>
 
         <!-- Couple Account & Log Out Section -->
@@ -1093,19 +1104,22 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
+  <!-- OneSignal Web Push SDK (v16) for True Lock-Screen Alerts -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
   <!-- App Scripts -->
-  <script src="js/firebase-config.js?v=4.5"></script>
-  <script src="js/firebase-service.js?v=4.5"></script>
-  <script src="js/notifications.js?v=4.5"></script>
-  <script src="js/auth-ui.js?v=4.5"></script>
-  <script src="js/events_data.js?v=4.5"></script>
-  <script src="js/api.js?v=4.5"></script>
-  <script src="js/chat.js?v=4.5"></script>
-  <script src="js/collaborative.js?v=4.5"></script>
-  <script src="js/discover.js?v=4.5"></script>
-  <script src="js/swiper.js?v=4.5"></script>
-  <script src="js/planner.js?v=4.5"></script>
-  <script src="js/matches.js?v=4.5"></script>
-  <script src="js/app.js?v=4.5"></script>
+  <script src="js/firebase-config.js?v=4.6"></script>
+  <script src="js/firebase-service.js?v=4.6"></script>
+  <script src="js/notifications.js?v=4.6"></script>
+  <script src="js/auth-ui.js?v=4.6"></script>
+  <script src="js/events_data.js?v=4.6"></script>
+  <script src="js/api.js?v=4.6"></script>
+  <script src="js/chat.js?v=4.6"></script>
+  <script src="js/collaborative.js?v=4.6"></script>
+  <script src="js/discover.js?v=4.6"></script>
+  <script src="js/swiper.js?v=4.6"></script>
+  <script src="js/planner.js?v=4.6"></script>
+  <script src="js/matches.js?v=4.6"></script>
+  <script src="js/app.js?v=4.6"></script>
 </body>
 </html>
