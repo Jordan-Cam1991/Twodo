@@ -362,7 +362,7 @@ const app = {
     try {
       const keys = JSON.parse(this.profile?.api_keys_json || '{}');
       if (document.getElementById('set-tm-key')) document.getElementById('set-tm-key').value = keys.ticketmaster || '';
-      if (document.getElementById('set-eb-key')) document.getElementById('set-eb-key').value = keys.eventbrite || '';
+      if (document.getElementById('set-eb-key')) document.getElementById('set-eb-key').value = keys.eventbrite || '5TTFX4W5VV3Q374CKAZ2';
     } catch (e) {}
     this.loadCreatorAnalytics();
   },
