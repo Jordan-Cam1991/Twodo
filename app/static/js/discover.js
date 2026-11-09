@@ -2343,6 +2343,118 @@ const discover = {
     }
   },
 
+  handleQuickLinkInput(val) {
+    if (!val || val.length < 10) return;
+    if (/https?:\/\//i.test(val) || val.includes('facebook.com') || val.includes('fb.me') || val.includes('oztix') || val.includes('humanitix') || val.includes('eventbrite')) {
+      this.autoFillFromLink();
+    }
+  },
+
+  autoFillFromLink() {
+    const linkInput = document.getElementById('cust-link-input');
+    const titleInput = document.getElementById('cust-title');
+    const notesInput = document.getElementById('cust-notes');
+    const locInput = document.getElementById('cust-location');
+
+    if (!linkInput) return;
+    const raw = linkInput.value.trim();
+    if (!raw) {
+      if (typeof app !== 'undefined' && app.showToast) app.showToast('Paste an event URL or share text first 🔗');
+      return;
+    }
+
+    // 1. Extract URL from pasted text (handles when users copy full share text e.g. "Check out this event: https://...")
+    const urlMatch = raw.match(/https?:\/\/[^\s]+/i);
+    const eventUrl = urlMatch ? urlMatch[0] : (raw.startsWith('www.') ? `https://${raw}` : raw);
+
+    const titleEl = titleInput;
+    const notesEl = notesInput;
+    const locEl = locInput;
+
+    const toTitleCase = (str) => {
+      return (str || '')
+        .replace(/[-_+]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase())
+        .trim();
+    };
+
+    // 2. Identify Facebook Events
+    if (/facebook\.com\/events|fb\.me\/e\//i.test(eventUrl)) {
+      let slug = '';
+      const fbSlugMatch = eventUrl.match(/events\/([^\/?#]+)/i);
+      if (fbSlugMatch && isNaN(Number(fbSlugMatch[1]))) {
+        slug = fbSlugMatch[1];
+      }
+      let userPrefix = raw.replace(eventUrl, '').trim().replace(/Check out this event:?|Take a look at:?/i, '').trim();
+
+      if (titleEl && !titleEl.value) {
+        if (slug) {
+          titleEl.value = toTitleCase(slug);
+        } else if (userPrefix) {
+          titleEl.value = userPrefix;
+        } else {
+          titleEl.value = 'Facebook Event';
+        }
+      }
+
+      if (notesEl) {
+        const existing = notesEl.value.trim();
+        notesEl.value = existing ? `${existing} • 🔗 Facebook: ${eventUrl}` : `🔗 Facebook Event: ${eventUrl}`;
+      }
+
+      if (locEl && !locEl.value) {
+        locEl.value = 'Brisbane';
+      }
+
+      if (typeof app !== 'undefined' && app.showToast) {
+        app.showToast('✨ Facebook Event linked & filled!');
+      }
+      return;
+    }
+
+    // 3. Identify Oztix / Moshtix / Humanitix / Eventbrite
+    if (/oztix|humanitix|moshtix|eventbrite|ticketmaster|ticketek|qpac/i.test(eventUrl)) {
+      let slug = '';
+      try {
+        const u = new URL(eventUrl);
+        const parts = u.pathname.split('/').filter(Boolean);
+        const lastPart = parts[parts.length - 1] || parts[parts.length - 2] || '';
+        slug = lastPart.replace(/-tickets-\d+.*$|\d+$/i, '').replace(/^[a-z0-9]{8,}-/i, '');
+      } catch (e) {}
+
+      if (titleEl && !titleEl.value && slug) {
+        titleEl.value = toTitleCase(slug);
+      }
+
+      if (notesEl) {
+        const existing = notesEl.value.trim();
+        notesEl.value = existing ? `${existing} • 🎟️ Tickets: ${eventUrl}` : `🎟️ Tickets & details: ${eventUrl}`;
+      }
+
+      if (locEl && !locEl.value) {
+        if (/the-triffid/i.test(eventUrl)) locEl.value = 'The Triffid, Newstead';
+        else if (/the-tivoli/i.test(eventUrl)) locEl.value = 'The Tivoli, Fortitude Valley';
+        else if (/powerhouse/i.test(eventUrl)) locEl.value = 'Brisbane Powerhouse, New Farm';
+        else if (/qpac/i.test(eventUrl)) locEl.value = 'QPAC, South Bank';
+        else locEl.value = 'Brisbane';
+      }
+
+      if (typeof app !== 'undefined' && app.showToast) {
+        app.showToast('✨ Event details auto-filled from link!');
+      }
+      return;
+    }
+
+    // 4. Fallback for other websites
+    if (notesEl) {
+      const existing = notesEl.value.trim();
+      notesEl.value = existing ? `${existing} • 🔗 ${eventUrl}` : `🔗 ${eventUrl}`;
+    }
+    if (typeof app !== 'undefined' && app.showToast) {
+      app.showToast('✨ Link added to notes!');
+    }
+  },
+
   async submitCustomEvent(e) {
     e.preventDefault();
     const title = document.getElementById('cust-title')?.value?.trim();

@@ -1053,6 +1053,7 @@ def fetch_live_public_feeds(today_ymd: str) -> list[dict]:
     discovered = []
     rss_feeds = [
         ("https://www.MustDoBrisbane.com/rss.xml", "Must Do Brisbane", "Brisbane"),
+        ("https://concreteplayground.com/brisbane/feed", "Concrete Playground", "Brisbane"),
     ]
     req_headers = {"User-Agent": "TwoDoBrisbaneDateApp/3.6 (+https://twodoapp.web.app)"}
     for url, source_name, default_loc in rss_feeds:
