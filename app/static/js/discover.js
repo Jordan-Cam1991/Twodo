@@ -277,16 +277,20 @@ const discover = {
       votes = { ...votes, ...firebaseService.votesMap };
     }
 
+    // 1. Anytime places: unvoted ongoing venues
     let anytimeCount = 0;
-    let specialCount = 0;
     pool.forEach(ev => {
+      if (!ev.ongoing) return;
       const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
       const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
       const myVote = isSolo ? (votes[`${ev.id}_${activeVoter}`] || v1) : (activeVoter === u1 ? v1 : v2);
       if (myVote === 'love' || myVote === 'pass') return;
-      if (ev.ongoing) anytimeCount++;
-      else specialCount++;
+      anytimeCount++;
     });
+
+    // 2. Special Events: accurately reflects the currently active date filter (e.g. This Week = 16)
+    const activeRange = this.activeDateRange || this.defaultDateRange || 'this_week';
+    const specialCount = this.getDateRangePreviewCount(activeRange);
 
     ['discover-anytime-count', 'swiper-anytime-count'].forEach(id => {
       const el = document.getElementById(id);
@@ -898,6 +902,7 @@ const discover = {
         </article>
       `;
     }).join('');
+    this.updateModeSwitcherCounts();
   },
 
   currentMood: 'all',
