@@ -319,7 +319,16 @@ OFFICIAL_URLS = {
 # Explicit schedule mapping for special ticketed shows, exhibitions, and limited-season events
 # that exist in the catalog so they always have `ongoing: False` and accurate upcoming dates.
 SPECIAL_EVENT_DATES_MAP = {
-    "jack johnson": ("2026-11-21 18:00", "2026-11-21 22:00", "Sat, 21 Nov · 6:00 PM"),
+    "six the musical": ("2027-01-02 19:30", "2027-02-14 21:00", "2 Jan – 14 Feb 2027 · Evening & Matinee"),
+    "melanie c": ("2026-11-14 19:30", "2026-11-14 22:30", "Sat, 14 Nov · 7:30 PM"),
+    "keith noud stakes": ("2026-11-14 11:30", "2026-11-14 17:30", "Sat, 14 Nov · 11:30 AM"),
+    "brisbane bullets vs tasmania": ("2026-11-15 15:30", "2026-11-15 18:00", "Sun, 15 Nov · 3:30 PM"),
+    "iron maiden": ("2026-11-18 19:00", "2026-11-19 22:30", "Wed 18 & Thu 19 Nov · 7:00 PM"),
+    "des bishop": ("2026-11-19 19:30", "2026-11-19 22:00", "Thu, 19 Nov · 7:30 PM"),
+    "kim wilde": ("2026-11-20 19:30", "2026-11-20 22:30", "Fri, 20 Nov · 7:30 PM"),
+    "robbie williams": ("2026-11-20 19:00", "2026-11-20 23:00", "Fri, 20 Nov · 7:00 PM"),
+    "j. cole": ("2026-11-25 19:30", "2026-11-25 22:30", "Wed, 25 Nov · 7:30 PM"),
+    "cat power": ("2026-11-30 19:30", "2026-11-30 22:30", "Mon, 30 Nov · 7:30 PM"),
     "khalid": ("2026-11-11 18:30", "2026-11-11 22:00", "Wed, 11 Nov · 6:30 PM"),
     "spacey jane": ("2026-11-26 18:30", "2026-11-26 22:00", "Thu, 26 Nov · 6:30 PM"),
     "foo fighters": ("2026-11-12 19:00", "2026-11-12 22:30", "Thu, 12 Nov · 7:00 PM"),
@@ -439,13 +448,13 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "insider_tip": "It runs 80 minutes straight with no interval — perfect to pair with late-night cocktails on Fish Lane afterwards.",
         "category": "Comedy & Shows",
         "location": "QPAC Playhouse, South Bank",
-        "time_str": "10 Nov – 22 Nov · Evening & Matinee",
-        "start_date": "2026-11-10 19:30",
-        "end_date": "2026-11-22 21:00",
+        "time_str": "2 Jan – 14 Feb 2027 · Evening & Matinee",
+        "start_date": "2027-01-02 19:30",
+        "end_date": "2027-02-14 21:00",
         "ongoing": False,
         "price": "$89–$135",
         "source": "QPAC What's On",
-        "source_url": "https://www.qpac.com.au/whats-on",
+        "source_url": "https://www.qpac.com.au/whats-on/2027/six-the-musical",
         "image_url": "https://images.unsplash.com/photo-1514306191717-452ec28c7814?auto=format&fit=crop&w=900&q=80",
         "tags": ["Indoor", "Theatre", "Romantic", "Late Night"]
     },
@@ -907,7 +916,7 @@ def canonical_venue_key(ev: dict) -> str:
         ("citycat", "citycat_sunset_cruise"),
         ("sunset 'mystery stop' citycat", "citycat_sunset_cruise"),
     ]
-    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-"):
+    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-"):
         sd = (ev.get("start_date") or "")[:10]
         return f"dated_{tl}_{sd}"
     if tl.startswith("stay-in date:"):
@@ -985,7 +994,7 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
     cat = ev.get("category", "")
 
     is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and ev.get("start_date"))
-    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-")
+    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or "in cinemas" in tl
 
     # Apply explicit dates from SPECIAL_EVENT_DATES_MAP when matched
     for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
@@ -1000,21 +1009,9 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
         ev["ongoing"] = False
         sd = (ev.get("start_date") or "")[:10]
         ed = (ev.get("end_date") or sd)[:10]
-        # If a concert/festival had an early November date that just passed, roll it forward 14 days if it's a show
-        if is_true_dated_show and ed and ed < today_ymd:
-            try:
-                dt = datetime.strptime(sd, "%Y-%m-%d")
-                while dt.strftime("%Y-%m-%d") < today_ymd:
-                    dt += timedelta(days=14)
-                time_part = (ev.get("start_date") or "19:30")[11:] or "19:30"
-                ev["start_date"] = f"{dt.strftime('%Y-%m-%d')} {time_part}".strip()
-                ev["end_date"] = ev["start_date"]
-                ev["time_str"] = dt.strftime("%a, %d %b · ") + (ev.get("time_str", "").split("·")[-1].strip() if "·" in ev.get("time_str", "") else "7:30 PM")
-                ed = dt.strftime("%Y-%m-%d")
-            except Exception:
-                pass
+        # Only keep events whose end date is today or in the future
         if ed and ed < today_ymd:
-            return None  # Past sports fixture — drop it
+            return None  # Past event — drop it so obsolete dates never pollute feeds
         return ev
 
     # Otherwise, this is an ongoing Brisbane venue, restaurant, bar, park, market, gallery, class, or social sport
@@ -1123,6 +1120,155 @@ def classify_area_and_fix_location(ev: dict) -> str:
     return "Brisbane CBD & Riverfront"
 
 
+CURATED_CURRENT_CINEMA_MOVIES = [
+    {
+        "id": "movie-wicked-cinemas",
+        "title": "Wicked: In Cinemas at Palace James St & Dendy",
+        "description": "Experience the long-awaited cinematic musical event starring Cynthia Erivo and Ariana Grande as Elphaba and Glinda. Stunning visuals, iconic songs ('Defying Gravity'), and sweeping romance make this the ultimate couple date-night movie.",
+        "insider_tip": "Book the luxury leather recliners at Palace James St or Dendy Portside with a bottle of sparkling wine and artisanal choc-tops.",
+        "category": "Comedy & Shows",
+        "location": "Palace James St & Dendy Cinemas",
+        "time_str": "Now Showing in Cinemas · Daily Screenings",
+        "start_date": "2026-11-11 12:00",
+        "end_date": "2026-12-31 23:00",
+        "ongoing": False,
+        "price": "$18–$28",
+        "source": "Palace & Dendy Cinemas",
+        "source_url": "https://www.flicks.com.au/brisbane/in-cinemas/",
+        "image_url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Romantic", "Indoor"]
+    },
+    {
+        "id": "movie-gladiator-2-cinemas",
+        "title": "Gladiator II: Epic Roman Date Night in Cinemas",
+        "description": "Ridley Scott returns to ancient Rome in this thunderous spectacle starring Paul Mescal, Pedro Pascal, and Denzel Washington. Colosseum naval battles, fierce politics, and heart-pounding big-screen action.",
+        "insider_tip": "Catch it on the superscreen at Palace Barracks or Dendy Coorparoo — pre-order hot sliders and craft beer brought directly to your cinema recliner.",
+        "category": "Comedy & Shows",
+        "location": "Palace Barracks & Dendy Coorparoo",
+        "time_str": "Now Showing in Cinemas · Daily Screenings",
+        "start_date": "2026-11-11 13:00",
+        "end_date": "2026-12-31 23:00",
+        "ongoing": False,
+        "price": "$18–$26",
+        "source": "Palace & Dendy Cinemas",
+        "source_url": "https://www.flicks.com.au/brisbane/in-cinemas/",
+        "image_url": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor", "Action"]
+    },
+    {
+        "id": "movie-anora-cinemas",
+        "title": "Anora: Palme d'Or Romantic Sensation at Palace James St",
+        "description": "Winner of the Cannes Palme d'Or, Sean Baker's runaway romance comedy-drama follows a vibrant Brooklyn dancer and an adventurous heir on an unpredictable whirlwind adventure. Hilarious, chaotic, and deeply touching.",
+        "insider_tip": "Showing exclusively at boutique indie screens like Palace James St and New Farm Cinema. Pair with pre-show cocktails at Gerard's Bar or Hellenika.",
+        "category": "Comedy & Shows",
+        "location": "Palace James St, Fortitude Valley",
+        "time_str": "Now Showing in Cinemas · Evening Screenings",
+        "start_date": "2026-11-11 18:00",
+        "end_date": "2026-12-31 22:30",
+        "ongoing": False,
+        "price": "$17–$24",
+        "source": "Palace Cinemas James St",
+        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-james-st",
+        "image_url": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Romantic", "Late Night"]
+    },
+    {
+        "id": "movie-wild-robot-cinemas",
+        "title": "The Wild Robot: Heartfelt Animation at Elizabeth Picture Theatre",
+        "description": "DreamWorks' universally acclaimed visual triumph tells the story of shipwrecked robot Roz who bonds with an orphaned gosling. Breathtaking painterly animation that will have both of you wiping happy tears.",
+        "insider_tip": "Head to Elizabeth Picture Theatre in the CBD — an intimate heritage cinema with plush vintage leather armchairs and wine service.",
+        "category": "Comedy & Shows",
+        "location": "Elizabeth Picture Theatre, Brisbane CBD",
+        "time_str": "Now Showing in Cinemas · Daily Screenings",
+        "start_date": "2026-11-11 14:00",
+        "end_date": "2026-12-31 21:00",
+        "ongoing": False,
+        "price": "$15–$22",
+        "source": "Five Star Cinemas",
+        "source_url": "https://fivestarcinemas.com.au/the-elizabeth",
+        "image_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor", "Heartfelt"]
+    },
+    {
+        "id": "movie-heretic-cinemas",
+        "title": "Heretic: Hugh Grant Psychological Thriller at Blue Room Cinebar",
+        "description": "Hugh Grant turns deliciously sinister in A24's psychological maze thriller. Two young visitors are lured into a deadly battle of wits inside a secluded, atmospheric house. Gripping date-night suspense.",
+        "insider_tip": "Catch an 8:30pm evening session at Blue Room Cinebar in Rosalie — order fresh wood-fired pizza and craft tap beer brought right to your leather armchair.",
+        "category": "Comedy & Shows",
+        "location": "Blue Room Cinebar, Rosalie",
+        "time_str": "Now Showing in Cinemas · Late Screenings",
+        "start_date": "2026-11-11 20:30",
+        "end_date": "2026-12-31 22:30",
+        "ongoing": False,
+        "price": "$17–$24",
+        "source": "Blue Room Cinebar Rosalie",
+        "source_url": "https://blueroomcinebar.com",
+        "image_url": "https://images.unsplash.com/photo-1509281373149-e957c6296406?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Late Night", "Thriller"]
+    },
+    {
+        "id": "movie-a-real-pain-cinemas",
+        "title": "A Real Pain: Jesse Eisenberg & Kieran Culkin at Palace Barracks",
+        "description": "Mismatched cousins David and Benji reunite for a tour through Poland in honour of their grandmother. A witty, emotionally resonant exploration of family connection starring Kieran Culkin in a career-best performance.",
+        "insider_tip": "Book a cozy double booth at Palace Barracks with a glass of Pinot Noir from their cinema foyer bar.",
+        "category": "Comedy & Shows",
+        "location": "Palace Barracks, Paddington",
+        "time_str": "Now Showing in Cinemas · Afternoon & Evening",
+        "start_date": "2026-11-11 15:30",
+        "end_date": "2026-12-31 21:30",
+        "ongoing": False,
+        "price": "$18–$25",
+        "source": "Palace Cinemas Barracks",
+        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-barracks",
+        "image_url": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor", "Comedy"]
+    }
+]
+
+
+def fetch_tmdb_now_playing(api_key: str = None) -> list:
+    """Live integration with The Movie Database (TMDB) for theatrical releases in Australia."""
+    key = api_key or os.environ.get("TMDB_API_KEY", "")
+    if not key:
+        return []
+    try:
+        url = f"https://api.themoviedb.org/3/movie/now_playing?api_key={key}&region=AU&language=en-AU&page=1"
+        req = urllib.request.Request(url, headers={"User-Agent": "TwoDo/5.3 (Brisbane)"})
+        with urllib.request.urlopen(req, timeout=8) as res:
+            data = json.loads(res.read().decode("utf-8"))
+        results = data.get("results", [])
+        movies = []
+        today_ymd = datetime.now().strftime("%Y-%m-%d")
+        for m in results[:10]:
+            title = m.get("title")
+            overview = m.get("overview", "")
+            poster_path = m.get("poster_path")
+            img = f"https://image.tmdb.org/t/p/w780{poster_path}" if poster_path else "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80"
+            rating = m.get("vote_average", 0)
+            mid = f"movie-tmdb-{m.get('id')}"
+            movies.append({
+                "id": mid,
+                "title": f"{title} (Now Showing in Brisbane Cinemas)",
+                "description": overview[:220] + "..." if len(overview) > 220 else overview,
+                "insider_tip": f"Rated {rating:.1f}/10 by cinema-goers. Grab tickets at Palace James St, Dendy, or Five Star Cinemas.",
+                "category": "Comedy & Shows",
+                "location": "Brisbane Cinemas (Palace, Dendy & Five Star)",
+                "time_str": "Now Showing in Cinemas · Daily Screenings",
+                "start_date": f"{today_ymd} 13:00",
+                "end_date": "2026-12-31 23:00",
+                "ongoing": False,
+                "price": "$17–$26",
+                "source": "TMDB & Australian Cinemas",
+                "source_url": "https://www.flicks.com.au/brisbane/in-cinemas/",
+                "image_url": img,
+                "tags": ["Cinema", "Date Night", "Indoor"]
+            })
+        return movies
+    except Exception as e:
+        print(f"TMDB fetch warning: {e}")
+        return []
+
+
 def build_clean_catalog(try_network: bool = False):
     today_ymd = datetime.now().strftime("%Y-%m-%d")
     with open(EVENTS_JS_PATH, "r", encoding="utf-8") as f:
@@ -1132,17 +1278,22 @@ def build_clean_catalog(try_network: bool = False):
         raise RuntimeError("Could not parse PRELOADED_EVENTS from events_data.js")
     raw_events = json.loads(m.group(1))
 
-    # Merge curated special dated events, stay-in dates, and optional live network feed
-    candidates = list(raw_events) + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS
+    # Merge cinema movies and curated special dated events first so they take precedence over stale cache
+    candidates = CURATED_CURRENT_CINEMA_MOVIES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS + list(raw_events)
     if try_network:
         candidates.extend(fetch_live_public_feeds(today_ymd))
+        candidates.extend(fetch_tmdb_now_playing())
 
     kept = []
     seen_keys = set()
+    seen_ids = set()
 
     for ev in candidates:
         t = (ev.get("title") or "").strip()
         if not t:
+            continue
+        ev_id = (ev.get("id") or "").strip()
+        if ev_id and ev_id in seen_ids:
             continue
         # 1. Strip numbered synthetic filler (#1..#742)
         if re.search(r"#\d+", t):
@@ -1175,6 +1326,8 @@ def build_clean_catalog(try_network: bool = False):
         normalized["tags"] = enrich_tags(normalized)
 
         seen_keys.add(k)
+        if ev_id:
+            seen_ids.add(ev_id)
         kept.append(normalized)
 
     # Diversify adjacent duplicate Unsplash URLs so cards next to each other look distinct

@@ -64,9 +64,10 @@ const discover = {
       subs: [
         { id: 'all', label: '✨ All Activities' },
         { id: 'games', label: '🕹️ Arcade, Mini-Golf & Games' },
+        { id: 'cinema', label: '🎬 Boutique Cinemas & Movies' },
         { id: 'creative', label: '🏺 Pottery, Paint & Classes' },
         { id: 'active', label: '🏓 Play Sports Together' },
-        { id: 'culture', label: '🏛️ Galleries, Cinema & Space' },
+        { id: 'culture', label: '🏛️ Galleries, Museums & Space' },
         { id: 'wellness', label: '🧖‍♀️ Bathhouse, Sauna & Spa' }
       ]
     },
@@ -110,11 +111,12 @@ const discover = {
       ]
     },
     special_shows: {
-      label: '🎭 Comedy & Theatre',
+      label: '🎭 Shows & Cinema',
       subs: [
-        { id: 'all', label: '✨ All Shows' },
+        { id: 'all', label: '✨ All Shows & Cinema' },
         { id: 'theatre_ballet', label: '🎭 QPAC Musicals, Theatre & Ballet' },
-        { id: 'comedy_cinema', label: '🎤 Comedy Galas & Moonlight Cinema' }
+        { id: 'comedy', label: '🎤 Comedy Galas & Stand-Up' },
+        { id: 'cinema_movies', label: '🎬 In Cinemas & Movies' }
       ]
     },
     special_festivals: {

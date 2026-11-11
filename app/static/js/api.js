@@ -210,12 +210,13 @@ const api = {
     }
 
     if (intent === 'activity') {
-      const isAct = ['sports & active', 'arts & culture', 'workshops & classes'].includes(cat) || hasAny(['arcade', 'mini golf', 'putt', 'bowling', 'pottery', 'paint', 'class', 'workshop', 'escape', 'axe', 'kart', 'climb', 'pickleball', 'padel', 'tennis', 'squash', 'museum', 'gallery', 'planetarium', 'cinema', 'bathhouse', 'sauna', 'spa', 'trivia', 'board game', 'karaoke', 'kayak', 'roller']);
+      const isAct = ['sports & active', 'arts & culture', 'workshops & classes'].includes(cat) || hasAny(['arcade', 'mini golf', 'putt', 'bowling', 'pottery', 'paint', 'class', 'workshop', 'escape', 'axe', 'kart', 'climb', 'pickleball', 'padel', 'tennis', 'squash', 'museum', 'gallery', 'planetarium', 'cinema', 'movie', 'film', 'bathhouse', 'sauna', 'spa', 'trivia', 'board game', 'karaoke', 'kayak', 'roller']);
       if (!isAct) return false;
       if (sub === 'games') return hasAny(['arcade', 'golf', 'putt', 'bowling', 'escape', 'axe', 'darts', 'billiards', 'pool', 'karaoke', 'board game', 'trivia', 'laser', 'vr', 'kart']);
+      if (sub === 'cinema') return hasAny(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'screen', 'flicks']);
       if (sub === 'creative') return hasAny(['pottery', 'clay', 'paint', 'wheel', 'class', 'workshop', 'cooking', 'candle', 'tufting', 'art', 'ceramic', 'florist', 'terrarium']);
       if (sub === 'active') return cat === 'sports & active' || hasAny(['pickleball', 'padel', 'tennis', 'squash', 'climb', 'boulder', 'kayak', 'run', 'social sport', 'golf', 'driving range', 'skate', 'swim', 'surf']);
-      if (sub === 'culture') return cat === 'arts & culture' || hasAny(['gallery', 'museum', 'qagoma', 'planetarium', 'cinema', 'exhibition', 'tour', 'heritage', 'library']);
+      if (sub === 'culture') return cat === 'arts & culture' || hasAny(['gallery', 'museum', 'qagoma', 'planetarium', 'exhibition', 'tour', 'heritage', 'library']);
       if (sub === 'wellness') return hasAny(['bathhouse', 'sauna', 'spa', 'soak', 'float', 'massage', 'wellness', 'yoga', 'pilates', 'meditation', 'thermal']);
       return true;
     }
@@ -240,10 +241,12 @@ const api = {
     }
 
     if (intent === 'special_shows') {
-      const isShow = cat === 'comedy & shows' || hasAny(['comedy', 'theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'moonlight cinema', 'outdoor cinema', 'la boite']);
+      const isShow = cat === 'comedy & shows' || hasAny(['comedy', 'theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'moonlight cinema', 'outdoor cinema', 'la boite', 'cinema', 'movie', 'film', 'screening']);
       if (!isShow) return false;
       if (sub === 'theatre_ballet') return hasAny(['theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'six the musical', 'la boite']);
-      if (sub === 'comedy_cinema') return hasAny(['comedy', 'gala', 'stand-up', 'cinema', 'moonlight', 'movie']);
+      if (sub === 'comedy') return hasAny(['comedy', 'gala', 'stand-up', 'des bishop', 'good chat']);
+      if (sub === 'cinema_movies') return hasAny(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'moonlight', 'flicks', 'screen']);
+      if (sub === 'comedy_cinema') return hasAny(['comedy', 'gala', 'stand-up', 'cinema', 'moonlight', 'movie', 'film']);
       return true;
     }
 

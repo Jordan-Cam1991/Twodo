@@ -142,6 +142,7 @@ const app = {
       const keys = JSON.parse(this.profile.api_keys_json || '{}');
       if (document.getElementById('set-tm-key')) document.getElementById('set-tm-key').value = keys.ticketmaster || '';
       if (document.getElementById('set-eb-key')) document.getElementById('set-eb-key').value = keys.eventbrite || '';
+      if (document.getElementById('set-tmdb-key')) document.getElementById('set-tmdb-key').value = keys.tmdb || '';
     } catch (e) {}
   },
 
@@ -363,6 +364,7 @@ const app = {
       const keys = JSON.parse(this.profile?.api_keys_json || '{}');
       if (document.getElementById('set-tm-key')) document.getElementById('set-tm-key').value = keys.ticketmaster || '';
       if (document.getElementById('set-eb-key')) document.getElementById('set-eb-key').value = keys.eventbrite || '5TTFX4W5VV3Q374CKAZ2';
+      if (document.getElementById('set-tmdb-key')) document.getElementById('set-tmdb-key').value = keys.tmdb || '';
     } catch (e) {}
     this.loadCreatorAnalytics();
   },
@@ -433,10 +435,12 @@ const app = {
   async saveCreatorApiKeys() {
     const tmKey = document.getElementById('set-tm-key')?.value.trim() || '';
     const ebKey = document.getElementById('set-eb-key')?.value.trim() || '';
+    const tmdbKey = document.getElementById('set-tmdb-key')?.value.trim() || '';
     try {
       const existing = JSON.parse(this.profile?.api_keys_json || '{}');
       existing.ticketmaster = tmKey;
       existing.eventbrite = ebKey;
+      existing.tmdb = tmdbKey;
       if (!this.profile) this.profile = {};
       this.profile.api_keys_json = JSON.stringify(existing);
       localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
