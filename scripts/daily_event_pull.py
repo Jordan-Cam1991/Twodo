@@ -1042,7 +1042,7 @@ def canonical_venue_key(ev: dict) -> str:
         ("citycat", "citycat_sunset_cruise"),
         ("sunset 'mystery stop' citycat", "citycat_sunset_cruise"),
     ]
-    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-"):
+    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-"):
         sd = (ev.get("start_date") or "")[:10]
         return f"dated_{tl}_{sd}"
     if tl.startswith("stay-in date:"):
@@ -1120,7 +1120,7 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
     cat = ev.get("category", "")
 
     is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and ev.get("start_date"))
-    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or "in cinemas" in tl
+    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-") or "in cinemas" in tl
 
     # Apply explicit dates from SPECIAL_EVENT_DATES_MAP when matched
     for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
@@ -1395,6 +1395,71 @@ def fetch_tmdb_now_playing(api_key: str = None) -> list:
         return []
 
 
+def fetch_facebook_events_apify(apify_token: str = None) -> list:
+    """
+    Scrapes live Brisbane events from Facebook using Apify's Facebook Events Scraper actor.
+    Accepts an APIFY_TOKEN from environment or passed directly from Creator Dashboard.
+    """
+    token = apify_token or os.environ.get("APIFY_TOKEN", "") or os.environ.get("FACEBOOK_APIFY_TOKEN", "")
+    if not token:
+        return []
+    try:
+        url = f"https://api.apify.com/v2/acts/apify~facebook-events-scraper/run-sync-get-dataset-items?token={token}"
+        payload = json.dumps({
+            "searchQueries": ["Brisbane", "Fortitude Valley", "South Bank", "West End"],
+            "location": "Brisbane, Queensland, Australia",
+            "maxEvents": 40,
+            "dateFilter": "this_week"
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "TwoDo/5.3 (Brisbane)"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=30) as res:
+            items = json.loads(res.read().decode("utf-8"))
+        
+        events = []
+        for it in items:
+            title = it.get("title") or it.get("name")
+            if not title:
+                continue
+            fbid = it.get("id") or str(abs(hash(title)))
+            raw_url = it.get("url") or f"https://www.facebook.com/events/{fbid}/"
+            sd = it.get("startDate") or it.get("start_date") or ""
+            ed = it.get("endDate") or it.get("end_date") or sd
+            loc_data = it.get("location") or {}
+            venue_name = loc_data.get("name") if isinstance(loc_data, dict) else str(loc_data)
+            venue = venue_name or "Brisbane, QLD"
+            desc = it.get("description") or "Live local event discovered on Facebook Events."
+            img = it.get("imageUrl") or it.get("photo") or "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80"
+            events.append({
+                "id": f"fb-{fbid}",
+                "title": title.strip(),
+                "description": desc[:280] + "..." if len(desc) > 280 else desc,
+                "insider_tip": f"Discovered on Facebook Events · Popular with locals in {venue}.",
+                "category": "Comedy & Shows" if any(w in title.lower() for w in ["theatre", "comedy", "show"]) else ("Music & Concerts" if any(w in title.lower() for w in ["live", "tour", "band", "music", "dj", "party"]) else "Markets & Pop-ups"),
+                "location": venue,
+                "time_str": sd[:16].replace("T", " ") if sd else "This Week",
+                "start_date": sd[:16].replace("T", " ") if sd else None,
+                "end_date": ed[:16].replace("T", " ") if ed else None,
+                "ongoing": False,
+                "price": "$15–$35",
+                "source": "Facebook Events",
+                "source_url": raw_url,
+                "image_url": img,
+                "tags": ["Facebook Event", "Community", "Date Night"]
+            })
+        return events
+    except Exception as e:
+        print(f"Apify Facebook Events fetch notice: {e}")
+        return []
+
+
 def build_clean_catalog(try_network: bool = False):
     today_ymd = datetime.now().strftime("%Y-%m-%d")
     with open(EVENTS_JS_PATH, "r", encoding="utf-8") as f:
@@ -1409,6 +1474,7 @@ def build_clean_catalog(try_network: bool = False):
     if try_network:
         candidates.extend(fetch_live_public_feeds(today_ymd))
         candidates.extend(fetch_tmdb_now_playing())
+        candidates.extend(fetch_facebook_events_apify())
 
     kept = []
     seen_keys = set()
