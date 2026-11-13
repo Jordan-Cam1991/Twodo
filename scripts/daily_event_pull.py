@@ -1246,108 +1246,91 @@ def classify_area_and_fix_location(ev: dict) -> str:
     return "Brisbane CBD & Riverfront"
 
 
-CURATED_CURRENT_CINEMA_MOVIES = [
+CURATED_CURRENT_CINEMA_EXPERIENCES = [
     {
-        "id": "movie-wicked-cinemas",
-        "title": "Wicked: In Cinemas at Palace James St & Dendy",
-        "description": "Experience the long-awaited cinematic musical event starring Cynthia Erivo and Ariana Grande as Elphaba and Glinda. Stunning visuals, iconic songs ('Defying Gravity'), and sweeping romance make this the ultimate couple date-night movie.",
-        "insider_tip": "Book the luxury leather recliners at Palace James St or Dendy Portside with a bottle of sparkling wine and artisanal choc-tops.",
+        "id": "special-palace-james-st-cinema-wine",
+        "title": "Palace Cinemas James St: Boutique Date-Night Cinema & Wine Bar",
+        "description": "The quintessential Fortitude Valley date night: sink into plush leather recliners with a glass of prosecco or pinot noir and a curated cheese board while watching the latest releases and international film festival highlights.",
+        "insider_tip": "Grab a drink at the stylish cinema foyer bar 20 minutes before your screening and take your wine straight to your seat.",
         "category": "Comedy & Shows",
-        "location": "Palace James St & Dendy Cinemas",
-        "time_str": "Now Showing in Cinemas · Daily Screenings",
-        "start_date": "2026-11-11 12:00",
-        "end_date": "2026-12-31 23:00",
+        "location": "Palace James St, Fortitude Valley",
+        "time_str": "Now Showing · Daily Screenings",
+        "start_date": "2026-11-01 10:00",
+        "end_date": "2027-12-31 23:00",
         "ongoing": False,
-        "price": "$18–$28",
-        "source": "Palace & Dendy Cinemas",
-        "source_url": "https://www.flicks.com.au/brisbane/in-cinemas/",
+        "price": "$19–$26",
+        "source": "Palace Cinemas James St",
+        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-james-st",
         "image_url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80",
         "tags": ["Cinema", "Date Night", "Romantic", "Indoor"]
     },
     {
-        "id": "movie-gladiator-2-cinemas",
-        "title": "Gladiator II: Epic Roman Date Night in Cinemas",
-        "description": "Ridley Scott returns to ancient Rome in this thunderous spectacle starring Paul Mescal, Pedro Pascal, and Denzel Washington. Colosseum naval battles, fierce politics, and heart-pounding big-screen action.",
-        "insider_tip": "Catch it on the superscreen at Palace Barracks or Dendy Coorparoo — pre-order hot sliders and craft beer brought directly to your cinema recliner.",
+        "id": "special-now-showing-brisbane-cinemas",
+        "title": "Now Showing in Brisbane Cinemas: Live Session Times & Tickets",
+        "description": "Discover what's currently playing across all Brisbane screens tonight — from boutique independent indie films at New Farm and Dendy to blockbuster experiences at Palace Barracks and Event Cinemas.",
+        "insider_tip": "Browse today's real-time Brisbane sessions and reviews across all nearby theatres in one tap.",
         "category": "Comedy & Shows",
-        "location": "Palace Barracks & Dendy Coorparoo",
-        "time_str": "Now Showing in Cinemas · Daily Screenings",
-        "start_date": "2026-11-11 13:00",
-        "end_date": "2026-12-31 23:00",
+        "location": "Brisbane Cinemas (Palace, Dendy, Five Star & Event)",
+        "time_str": "Daily Sessions · Today & This Week",
+        "start_date": "2026-11-01 10:00",
+        "end_date": "2027-12-31 23:00",
         "ongoing": False,
-        "price": "$18–$26",
-        "source": "Palace & Dendy Cinemas",
+        "price": "$17–$26",
+        "source": "Flicks Brisbane In Cinemas",
         "source_url": "https://www.flicks.com.au/brisbane/in-cinemas/",
-        "image_url": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80",
-        "tags": ["Cinema", "Date Night", "Indoor", "Action"]
+        "image_url": "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor"]
     },
     {
-        "id": "movie-anora-cinemas",
-        "title": "Anora: Palme d'Or Romantic Sensation at Palace James St",
-        "description": "Winner of the Cannes Palme d'Or, Sean Baker's runaway romance comedy-drama follows a vibrant Brooklyn dancer and an adventurous heir on an unpredictable whirlwind adventure. Hilarious, chaotic, and deeply touching.",
-        "insider_tip": "Showing exclusively at boutique indie screens like Palace James St and New Farm Cinema. Pair with pre-show cocktails at Gerard's Bar or Hellenika.",
-        "category": "Comedy & Shows",
-        "location": "Palace James St, Fortitude Valley",
-        "time_str": "Now Showing in Cinemas · Evening Screenings",
-        "start_date": "2026-11-11 18:00",
-        "end_date": "2026-12-31 22:30",
-        "ongoing": False,
-        "price": "$17–$24",
-        "source": "Palace Cinemas James St",
-        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-james-st",
-        "image_url": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=900&q=80",
-        "tags": ["Cinema", "Date Night", "Romantic", "Late Night"]
-    },
-    {
-        "id": "movie-wild-robot-cinemas",
-        "title": "The Wild Robot: Heartfelt Animation at Elizabeth Picture Theatre",
-        "description": "DreamWorks' universally acclaimed visual triumph tells the story of shipwrecked robot Roz who bonds with an orphaned gosling. Breathtaking painterly animation that will have both of you wiping happy tears.",
-        "insider_tip": "Head to Elizabeth Picture Theatre in the CBD — an intimate heritage cinema with plush vintage leather armchairs and wine service.",
-        "category": "Comedy & Shows",
-        "location": "Elizabeth Picture Theatre, Brisbane CBD",
-        "time_str": "Now Showing in Cinemas · Daily Screenings",
-        "start_date": "2026-11-11 14:00",
-        "end_date": "2026-12-31 21:00",
-        "ongoing": False,
-        "price": "$15–$22",
-        "source": "Five Star Cinemas",
-        "source_url": "https://fivestarcinemas.com.au/the-elizabeth",
-        "image_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",
-        "tags": ["Cinema", "Date Night", "Indoor", "Heartfelt"]
-    },
-    {
-        "id": "movie-heretic-cinemas",
-        "title": "Heretic: Hugh Grant Psychological Thriller at Blue Room Cinebar",
-        "description": "Hugh Grant turns deliciously sinister in A24's psychological maze thriller. Two young visitors are lured into a deadly battle of wits inside a secluded, atmospheric house. Gripping date-night suspense.",
-        "insider_tip": "Catch an 8:30pm evening session at Blue Room Cinebar in Rosalie — order fresh wood-fired pizza and craft tap beer brought right to your leather armchair.",
+        "id": "special-blue-room-cinebar-rosalie",
+        "title": "Blue Room Cinebar: In-Seat Pizza & Craft Beer Dining in Rosalie",
+        "description": "Brisbane's original boutique cinema dining destination: kick back in plush leather armchairs with a private side table, ordering hot wood-fired pizzas, gourmet sliders, and craft beers delivered directly to your seat during the film.",
+        "insider_tip": "Order their signature truffle fries and a local craft beer from the menu 10 minutes before the opening credits roll.",
         "category": "Comedy & Shows",
         "location": "Blue Room Cinebar, Rosalie",
-        "time_str": "Now Showing in Cinemas · Late Screenings",
-        "start_date": "2026-11-11 20:30",
-        "end_date": "2026-12-31 22:30",
+        "time_str": "Now Showing · Daily Screenings & Dining",
+        "start_date": "2026-11-01 12:00",
+        "end_date": "2027-12-31 23:00",
         "ongoing": False,
-        "price": "$17–$24",
+        "price": "$18–$28",
         "source": "Blue Room Cinebar Rosalie",
         "source_url": "https://blueroomcinebar.com",
         "image_url": "https://images.unsplash.com/photo-1509281373149-e957c6296406?auto=format&fit=crop&w=900&q=80",
-        "tags": ["Cinema", "Date Night", "Late Night", "Thriller"]
+        "tags": ["Cinema", "Date Night", "Late Night", "Romantic"]
     },
     {
-        "id": "movie-a-real-pain-cinemas",
-        "title": "A Real Pain: Jesse Eisenberg & Kieran Culkin at Palace Barracks",
-        "description": "Mismatched cousins David and Benji reunite for a tour through Poland in honour of their grandmother. A witty, emotionally resonant exploration of family connection starring Kieran Culkin in a career-best performance.",
-        "insider_tip": "Book a cozy double booth at Palace Barracks with a glass of Pinot Noir from their cinema foyer bar.",
+        "id": "special-elizabeth-picture-theatre",
+        "title": "Elizabeth Picture Theatre: Heritage Leather Cinema & Wine in the CBD",
+        "description": "Housed inside the heritage 1919 Tara House in the heart of Brisbane CBD. Features magnificent high ceilings, antique stained glass, full bar service, and plush leather reclining armchairs.",
+        "insider_tip": "Book the Royal Lounge for fully motorized reclining armchairs and table service.",
         "category": "Comedy & Shows",
-        "location": "Palace Barracks, Paddington",
-        "time_str": "Now Showing in Cinemas · Afternoon & Evening",
-        "start_date": "2026-11-11 15:30",
-        "end_date": "2026-12-31 21:30",
+        "location": "Elizabeth Picture Theatre, Brisbane CBD",
+        "time_str": "Now Showing · Daily Screenings",
+        "start_date": "2026-11-01 11:00",
+        "end_date": "2027-12-31 23:00",
         "ongoing": False,
-        "price": "$18–$25",
-        "source": "Palace Cinemas Barracks",
-        "source_url": "https://www.palacecinemas.com.au/cinemas/palace-barracks",
-        "image_url": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=900&q=80",
-        "tags": ["Cinema", "Date Night", "Indoor", "Comedy"]
+        "price": "$16–$22",
+        "source": "Five Star Cinemas",
+        "source_url": "https://fivestarcinemas.com.au/the-elizabeth",
+        "image_url": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor", "Romantic"]
+    },
+    {
+        "id": "special-dendy-portside-cinema",
+        "title": "Dendy Cinemas Portside: Waterfront Movie Night & Wine Lounge",
+        "description": "Pair a river breeze walk along Hamilton Harbour with boutique cinema comfort at Dendy Portside. Grab gourmet choc-tops, local Queensland wines, and watch new releases in intimate theatres.",
+        "insider_tip": "Pair a twilight movie with dinner at Byblos or Sono Japanese downstairs in the Portside wharf precinct.",
+        "category": "Comedy & Shows",
+        "location": "Dendy Cinemas Portside, Hamilton",
+        "time_str": "Now Showing · Daily Screenings",
+        "start_date": "2026-11-01 11:00",
+        "end_date": "2027-12-31 23:00",
+        "ongoing": False,
+        "price": "$17–$25",
+        "source": "Dendy Cinemas Portside",
+        "source_url": "https://www.dendy.com.au/cinemas/portside",
+        "image_url": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80",
+        "tags": ["Cinema", "Date Night", "Indoor"]
     }
 ]
 
@@ -1469,8 +1452,8 @@ def build_clean_catalog(try_network: bool = False):
         raise RuntimeError("Could not parse PRELOADED_EVENTS from events_data.js")
     raw_events = json.loads(m.group(1))
 
-    # Merge cinema movies and curated special dated events first so they take precedence over stale cache
-    candidates = CURATED_CURRENT_CINEMA_MOVIES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS + list(raw_events)
+    # Merge boutique cinema experiences and curated special dated events first
+    candidates = CURATED_CURRENT_CINEMA_EXPERIENCES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS + list(raw_events)
     if try_network:
         candidates.extend(fetch_live_public_feeds(today_ymd))
         candidates.extend(fetch_tmdb_now_playing())
@@ -1485,6 +1468,9 @@ def build_clean_catalog(try_network: bool = False):
         if not t:
             continue
         ev_id = (ev.get("id") or "").strip()
+        # Drop stale hardcoded movie cards that are past being in cinemas!
+        if ev_id in {"movie-wicked-cinemas", "movie-gladiator-2-cinemas", "movie-anora-cinemas", "movie-wild-robot-cinemas", "movie-heretic-cinemas", "movie-a-real-pain-cinemas"}:
+            continue
         if ev_id and ev_id in seen_ids:
             continue
         # 1. Strip numbered synthetic filler (#1..#742)
