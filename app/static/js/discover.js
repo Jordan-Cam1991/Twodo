@@ -399,11 +399,14 @@ const discover = {
   modalSelectedSet: new Set(),
 
   suburbRegions: [
-    { id: 'all', label: '🗺️ Everywhere', suburbs: [] },
-    { id: 'inner', label: '🏙️ Inner City & River', suburbs: ['Fortitude Valley', 'South Bank', 'West End', 'Brisbane CBD', 'New Farm', 'Woolloongabba'] },
-    { id: 'ring', label: '🌿 Inner Ring & West', suburbs: ['Paddington', 'Bulimba', 'Hamilton', 'Inner North', 'Mount Coot-tha'] },
-    { id: 'coastal', label: '🌊 South, Bay & Escapes', suburbs: ['Sunnybank', 'Bayside', 'SEQ Day Escape'] },
-    { id: 'home', label: '🏠 Stay-In At Home', suburbs: ['Stay-In'] }
+    { id: 'all', label: '🗺️ All South East QLD', suburbs: [] },
+    { id: 'brisbane', label: '🏙️ Brisbane', suburbs: ['Fortitude Valley', 'South Bank', 'West End', 'Brisbane CBD', 'New Farm', 'Paddington', 'Woolloongabba', 'Bulimba', 'Hamilton', 'Sunnybank', 'Inner North', 'Bayside', 'Mount Coot-tha'] },
+    { id: 'gold_coast', label: '🏄 Gold Coast', suburbs: ['Gold Coast'] },
+    { id: 'sunshine_coast', label: '🏖️ Sunshine Coast', suburbs: ['Sunshine Coast'] },
+    { id: 'ipswich', label: '🚂 Ipswich & West', suburbs: ['Ipswich'] },
+    { id: 'logan', label: '🌿 Logan & South', suburbs: ['Logan'] },
+    { id: 'coastal', label: '🏝️ Islands & Day Trips', suburbs: ['SEQ Day Escape'] },
+    { id: 'home', label: '🏠 Stay-In', suburbs: ['Stay-In'] }
   ],
 
   // Filter Catalog Configurations
@@ -419,10 +422,10 @@ const discover = {
     },
     suburb: {
       type: 'suburb',
-      title: 'Where in Brisbane?',
+      title: 'Where in South East QLD?',
       icon: '📍',
-      subtitle: 'Tap a region shortcut or pick specific precincts',
-      allLabel: '🗺️ All Suburbs (Everywhere in Brisbane)',
+      subtitle: 'Pick a region or select specific precincts',
+      allLabel: '🗺️ All South East QLD (Brisbane, Gold Coast & Sunshine Coast)',
       isMulti: true,
       options: [
         { id: 'Fortitude Valley', icon: '🍸', shortLabel: 'Fortitude Valley', label: '🍸 Fortitude Valley & James St', desc: 'James St, laneway dining & bars' },
@@ -438,6 +441,10 @@ const discover = {
         { id: 'Inner North', icon: '🌿', shortLabel: 'Inner North & Enoggera', label: '🌿 Inner North & Enoggera', desc: 'Albion, Victoria Park & reservoir' },
         { id: 'Bayside', icon: '🌊', shortLabel: 'Manly & Bayside', label: '🌊 Manly, Sandgate & Redcliffe', desc: 'Harbour markets & seaside piers' },
         { id: 'Mount Coot-tha', icon: '🌄', shortLabel: 'Mt Coot-tha & West', label: '🌄 Mt Coot-tha & Western Suburbs', desc: 'Botanic gardens & Planetarium' },
+        { id: 'Gold Coast', icon: '🏄', shortLabel: 'Gold Coast', label: '🏄 Gold Coast & Burleigh', desc: 'Burleigh Pavilion, HOTA, beaches & dining' },
+        { id: 'Sunshine Coast', icon: '🏖️', shortLabel: 'Sunshine Coast', label: '🏖️ Sunshine Coast & Noosa', desc: 'Noosa riverfront, Eumundi & Mooloolaba' },
+        { id: 'Ipswich', icon: '🚂', shortLabel: 'Ipswich & West', label: '🚂 Ipswich & Greater West', desc: 'Steam railway, heritage & parks' },
+        { id: 'Logan', icon: '🌿', shortLabel: 'Logan & South', label: '🌿 Logan & Southern Suburbs', desc: 'Daisy Hill koalas, festivals & food' },
         { id: 'SEQ Day Escape', icon: '🏝️', shortLabel: 'Islands & Hinterland', label: '🏝️ Moreton, Straddie & Hinterland', desc: 'Straddie, Tamborine & waterfalls' },
         { id: 'Stay-In', icon: '🏠', shortLabel: 'At Home (Stay-In)', label: '🏠 At Home (Stay-In Date Nights)', desc: 'Cozy at-home cooking & games' }
       ]
@@ -1837,6 +1844,22 @@ const discover = {
     if (def.type === 'suburb') {
       const isAll = this.modalSelectedSet.size === 0 || this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all');
 
+      const shortcutsHtml = (this.suburbRegions && this.suburbRegions.length) ? `
+        <div class="filter-section-heading" style="margin-top:0.2rem; margin-bottom:0.35rem;">Quick Regions</div>
+        <div class="region-shortcuts-strip">
+          ${this.suburbRegions.map(reg => {
+            const isRegActive = reg.id === 'all'
+              ? isAll
+              : (reg.suburbs.length > 0 && reg.suburbs.length === this.modalSelectedSet.size && reg.suburbs.every(s => this.modalSelectedSet.has(s)));
+            return `
+              <button type="button" class="region-shortcut-pill ${isRegActive ? 'active' : ''}" onclick="discover.selectSuburbRegion('${reg.id}')">
+                ${reg.label}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      ` : '';
+
       const precinctsHtml = def.options.map(opt => {
         const isChecked = !isAll && this.modalSelectedSet.has(opt.id);
         return `
@@ -1852,7 +1875,9 @@ const discover = {
 
       container.innerHTML = `
         <div class="suburb-modal-layout">
-          <div class="filter-section-heading-row" style="justify-content:flex-end; margin-bottom:0.25rem;">
+          ${shortcutsHtml}
+          <div class="filter-section-heading-row" style="margin-top:0.5rem; margin-bottom:0.25rem;">
+            <div class="filter-section-heading" style="margin:0;">Precincts & Areas</div>
             <div class="suburb-quick-links">
               <button type="button" class="btn-text-link" onclick="discover.modalCheckAllOptions()">Select All</button>
               <span class="dot-sep">·</span>
@@ -2056,9 +2081,9 @@ const discover = {
       if (dateCard) dateCard.classList.toggle('filter-active', isDateFiltered);
     });
 
-    // 2. Suburb
+    // 2. Suburb / Region
     const subCount = this.selectedSuburbs.length;
-    let subLabel = 'All Suburbs';
+    let subLabel = 'South East QLD';
     if (subCount === 1) {
       const found = this.filterDefinitions.suburb.options.find(o => o.id === this.selectedSuburbs[0]);
       subLabel = found ? (found.shortLabel || this.selectedSuburbs[0]) : this.selectedSuburbs[0];
@@ -2071,7 +2096,7 @@ const discover = {
     }
     ['suburb-chip-label', 'sw-suburb-pill-label'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = subCount === 0 ? 'All Suburbs' : subLabel;
+      if (el) el.textContent = subCount === 0 ? 'South East QLD' : subLabel;
     });
     ['mood-chip-suburb', 'sw-suburb-pill'].forEach(id => {
       const btn = document.getElementById(id);

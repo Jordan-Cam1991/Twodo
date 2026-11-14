@@ -556,15 +556,20 @@ const api = {
         continue;
       }
 
-      // Suburb filter (matches any of the selected suburbs)
+      // Suburb / Region filter (matches any of the selected suburbs or SEQ regions)
       if (selectedSubs.length > 0) {
         const evSub = `${ev.suburb || ''} ${ev.area || ''} ${ev.location_name || ''} ${ev.description || ''}`.toLowerCase();
         const evTitle = (ev.title || '').toLowerCase();
         const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
+        const evArea = (ev.area || '').toLowerCase();
 
-        const matchesAnySub = selectedSubs.some(s => 
-          evSub.includes(s) || evTitle.includes(s) || evTags.includes(s)
-        );
+        const matchesAnySub = selectedSubs.some(s => {
+          if (s === 'brisbane') {
+            const isNonBrisbane = evArea.includes('gold coast') || evArea.includes('sunshine coast') || evArea.includes('ipswich') || evArea.includes('logan');
+            if (!isNonBrisbane) return true;
+          }
+          return evSub.includes(s) || evTitle.includes(s) || evTags.includes(s);
+        });
         if (!matchesAnySub) {
           continue;
         }
