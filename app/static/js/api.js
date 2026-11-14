@@ -14,6 +14,30 @@ const isStaticHosting = typeof window !== 'undefined' && (
 const api = {
   baseUrl: '',
   serverAvailable: isStaticHosting ? false : null,
+  FALLBACK_IMAGE_URL: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+  BROKEN_IMAGE_REPLACEMENTS: {
+    'photo-1508098682722-e99c43a406b2': 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80',
+    'photo-1531415074868-036b107e775a': 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=900&q=80',
+    'photo-1579783902614-a3fb3927b675': 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80',
+    'photo-1528198642977-832168953180': 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=900&q=80'
+  },
+
+  sanitizeImageUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return this.FALLBACK_IMAGE_URL;
+    for (const [brokenId, replacement] of Object.entries(this.BROKEN_IMAGE_REPLACEMENTS)) {
+      if (raw.includes(brokenId)) return replacement;
+    }
+    return raw;
+  },
+
+  onImgError(img) {
+    if (!img) return;
+    img.onerror = null;
+    if (img.src !== this.FALLBACK_IMAGE_URL) {
+      img.src = this.FALLBACK_IMAGE_URL;
+    }
+  },
 
   async safeFetch(url, options = {}) {
     if (this.serverAvailable === false) {
@@ -473,6 +497,7 @@ const api = {
 
     for (const raw of allEvents) {
       const ev = { ...raw };
+      ev.image_url = this.sanitizeImageUrl(ev.image_url);
       ev.location_name = ev.location_name || ev.location || 'Brisbane';
       ev.location = ev.location || ev.location_name;
       ev.price_str = ev.price_str || ev.price || '$$';

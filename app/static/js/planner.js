@@ -375,7 +375,7 @@ const planner = {
 
       return `
         <div class="bucket-card">
-          <img class="bucket-thumb" src="${item.image_url}" alt="" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=300&q=80'">
+          <img class="bucket-thumb" src="${item.image_url}" alt="" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
           <div class="bucket-card-body">
             <div class="bucket-card-header" style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
               <span class="bucket-cat">${item.category}</span>

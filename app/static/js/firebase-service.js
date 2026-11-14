@@ -932,9 +932,14 @@ const firebaseService = {
       snapshot.forEach((doc) => {
         custom.push({ id: doc.id, ...doc.data() });
       });
+      const prevSig = this._customEventsSig || '';
+      const nextSig = custom.map(c => `${c.id || ''}:${c.title || ''}`).join('|');
       this.customEvents = custom;
-      if (window.discover) {
-        discover.loadEvents(true);
+      this._customEventsSig = nextSig;
+      const shouldReload = this._customEventsLoaded ? (prevSig !== nextSig) : (custom.length > 0);
+      this._customEventsLoaded = true;
+      if (shouldReload && window.discover) {
+        discover.loadEvents(false);
       }
     }, (err) => console.warn('Custom events error:', err));
 

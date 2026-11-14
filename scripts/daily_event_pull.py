@@ -710,7 +710,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "price": "$49–$145",
         "source": "Suncorp Stadium & NRL",
         "source_url": "https://www.suncorpstadium.com.au/whats-on/",
-        "image_url": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=900&q=80",
+        "image_url": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Sports", "Outdoors"]
     },
     {
@@ -1866,6 +1866,24 @@ def fetch_facebook_events_apify(apify_token: str = None) -> list:
         return []
 
 
+BROKEN_IMAGE_REPLACEMENTS = {
+    "photo-1508098682722-e99c43a406b2": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80",
+    "photo-1531415074868-036b107e775a": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=900&q=80",
+    "photo-1579783902614-a3fb3927b675": "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80",
+    "photo-1528198642977-832168953180": "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=900&q=80",
+}
+
+
+def sanitize_image_url(url: str) -> str:
+    raw = (url or "").strip()
+    if not raw:
+        return "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80"
+    for broken_id, replacement in BROKEN_IMAGE_REPLACEMENTS.items():
+        if broken_id in raw:
+            return replacement
+    return raw
+
+
 def build_clean_catalog(try_network: bool = False):
     today_ymd = datetime.now().strftime("%Y-%m-%d")
     with open(EVENTS_JS_PATH, "r", encoding="utf-8") as f:
@@ -1923,9 +1941,10 @@ def build_clean_catalog(try_network: bool = False):
         if normalized is None:
             continue
 
-        # 7. Enrich area & practical tags
+        # 7. Enrich area, practical tags & verified image URL
         normalized["area"] = classify_area_and_fix_location(normalized)
         normalized["tags"] = enrich_tags(normalized)
+        normalized["image_url"] = sanitize_image_url(normalized.get("image_url"))
 
         seen_keys.add(k)
         if ev_id:

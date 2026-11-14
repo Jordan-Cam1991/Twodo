@@ -153,7 +153,7 @@ const swiper = {
           <div class="swipe-badge swipe-badge-love" style="position:absolute; top:20px; left:20px; z-index:20; border:3px solid #10b981; color:#10b981; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(-15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">LOVE ❤️</div>
           <div class="swipe-badge swipe-badge-pass" style="position:absolute; top:20px; right:20px; z-index:20; border:3px solid #ef4444; color:#ef4444; font-size:1.35rem; font-weight:800; padding:4px 14px; border-radius:10px; transform:rotate(15deg); opacity:0; pointer-events:none; background:rgba(255,255,255,0.85);">PASS ❌</div>
           <div class="swipe-card-media" style="position:relative;">
-            <img src="${ev.image_url}" alt="${ev.title}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
+            <img src="${ev.image_url}" alt="${ev.title}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${ev.source}</span>
             <span class="card-price-badge">${priceLabel}</span>
             ${partnerSignalHtml}

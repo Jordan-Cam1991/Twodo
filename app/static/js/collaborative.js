@@ -73,6 +73,7 @@ const collaborative = {
 
     // 4. RE-RENDER VIEWS IMMEDIATELY (Instantly updates cards, badge counts, and swiper!)
     discover.renderEvents();
+    if (discover.syncRenderSignature) discover.syncRenderSignature();
     discover.updateMatchBanner();
     if (window.planner) planner.loadPlanner();
     if (window.swiper && !fromSwiper) swiper.initDeck();
@@ -161,6 +162,7 @@ const collaborative = {
     }
 
     discover.renderEvents();
+    if (discover.syncRenderSignature) discover.syncRenderSignature();
     app.showToast(`💬 Note sent to ${this.partnerName()} (still in your feed)`);
   },
 

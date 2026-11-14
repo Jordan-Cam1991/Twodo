@@ -688,7 +688,42 @@ const discover = {
     });
   },
 
+  getCatalogRenderSignature(eventsList = app.events, paramsObj = null, pageOverride = null) {
+    const p = paramsObj || (this.getFilterParams ? this.getFilterParams() : {});
+    const prof = (typeof app !== 'undefined' && app.profile) ? app.profile : {};
+    const head = JSON.stringify({
+      p,
+      fm: this.activeFeedMode || '',
+      ai: this.activeIntent || '',
+      asi: this.activeSubIntent || '',
+      pg: pageOverride != null ? pageOverride : (this.currentPage || 1),
+      u1: prof.user1_name || '',
+      u2: prof.user2_name || '',
+      cid: prof.couple_id || '',
+      dc: prof.default_city || '',
+      av: (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : '',
+      cv: (typeof app !== 'undefined') ? (app.currentVoter || '') : ''
+    });
+    const list = Array.isArray(eventsList) ? eventsList : [];
+    const parts = [head, String(list.length)];
+    for (let i = 0; i < list.length; i++) {
+      const e = list[i];
+      parts.push(`${e.id || ''}:${e.u1_vote || ''}:${e.u2_vote || ''}:${e.u1_note || ''}:${e.u2_note || ''}:${e.is_match ? 1 : 0}:${e.planner_id || ''}:${e.image_url || ''}:${e.time_str || ''}`);
+    }
+    return parts.join('|');
+  },
+
+  syncRenderSignature() {
+    this._lastRenderSig = this.getCatalogRenderSignature(app.events);
+  },
+
+  hasStableRenderedGrid() {
+    const grid = document.getElementById('events-grid');
+    return Boolean(grid && grid.children.length > 0 && !grid.querySelector('.spin-icon'));
+  },
+
   async loadEvents(showLoading = false) {
+    const reqId = (this._loadEventsReqId = (this._loadEventsReqId || 0) + 1);
     const grid = document.getElementById('events-grid');
     if (showLoading && grid && (!app.events || app.events.length === 0)) {
       grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;"><span class="spin-icon" style="font-size:2rem; display:inline-block; animation:spin 1s infinite linear;">🔄</span><p style="margin-top:10px; color:var(--text-muted);">Searching councils, venues, galleries, Reddit, and live feeds...</p></div>';
@@ -696,14 +731,27 @@ const discover = {
 
     this.currentPage = 1;
     const params = this.getFilterParams();
+    let nextEvents = [];
     try {
       const data = await api.getEvents(params);
-      app.events = data.events || [];
+      nextEvents = data.events || [];
     } catch (e) {
       console.warn('API fetch warning, using offline activities vault:', e);
-      app.events = (api.getLocalEnrichedEvents(params).events) || [];
+      nextEvents = (api.getLocalEnrichedEvents(params).events) || [];
     }
 
+    if (reqId !== this._loadEventsReqId) return;
+
+    const nextSig = this.getCatalogRenderSignature(nextEvents, params, 1);
+    app.events = nextEvents;
+
+    if (this._lastRenderSig && nextSig === this._lastRenderSig && this.hasStableRenderedGrid()) {
+      this.updateMatchBanner();
+      this.updateFilterHeaderBadges();
+      return;
+    }
+
+    this._lastRenderSig = nextSig;
     this.renderEvents();
     this.updateMatchBanner();
     this.updateFilterHeaderBadges();
@@ -865,7 +913,7 @@ const discover = {
       return `
         <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
           <div class="card-media" ondblclick="discover.handleDoubleTap('${ev.id}')" title="Double-tap photo to Love ❤️">
-            <img class="card-img" src="${ev.image_url}" alt="${discover.escapeHtml(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
+            <img class="card-img" src="${ev.image_url}" alt="${discover.escapeHtml(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${discover.escapeHtml(ev.category || 'Date Idea')}</span>
             <span class="card-price-badge">${discover.escapeHtml(priceLabel)}</span>
             ${signalBadgeHtml}
@@ -1155,7 +1203,7 @@ const discover = {
             return `
               <div class="spotlight-mini-card" data-event-id="${ev.id}">
                 <div class="spotlight-mini-media" ondblclick="discover.handleDoubleTap('${ev.id}')">
-                  <img src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'">
+                  <img src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
                   <span class="card-price-badge">${this.escapeHtml(priceLabel)}</span>
                 </div>
                 <div class="spotlight-mini-body">
@@ -1383,7 +1431,7 @@ const discover = {
 
           return `
             <div class="concierge-pick-card" onclick="discover.goToEventCard('${ev.id}')" style="cursor:pointer;" title="Tap to view this event card">
-              <img class="concierge-pick-img" src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80'">
+              <img class="concierge-pick-img" src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
               <div class="concierge-pick-info">
                 <div class="concierge-pick-top">
                   <span class="concierge-pick-rank">#${idx + 1} Pick · ${this.escapeHtml(priceLabel)}</span>
@@ -1611,6 +1659,13 @@ const discover = {
       }
     });
 
+    if (!app.events || app.events.length === 0) return;
+    const nextSig = this.getCatalogRenderSignature(app.events);
+    if (this._lastRenderSig && nextSig === this._lastRenderSig && this.hasStableRenderedGrid()) {
+      this.updateMatchBanner();
+      return;
+    }
+    this._lastRenderSig = nextSig;
     this.renderEvents();
     this.updateMatchBanner();
     if (window.swiper) swiper.initDeck();

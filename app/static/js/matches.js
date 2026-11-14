@@ -216,7 +216,7 @@ const matchesView = {
       return `
         <article class="event-card match-card ${plan ? 'is-planned' : ''} ${isRemoved ? 'is-removed' : ''}" data-event-id="${id}">
           <div class="card-media">
-            <img class="card-img" src="${this.escape(ev.image_url)}" alt="${this.escape(ev.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
+            <img class="card-img" src="${this.escape(ev.image_url)}" alt="${this.escape(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             ${sourceBadgeHtml}
             <span class="card-price-badge">${this.escape(priceLabel)}</span>
             ${!isSolo ? `<div class="card-match-banner">🎉 You both love this!</div>` : ''}
