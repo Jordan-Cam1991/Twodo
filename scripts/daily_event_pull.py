@@ -1310,7 +1310,9 @@ def canonical_venue_key(ev: dict) -> str:
     ]
     if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-") or str(ev.get("id", "")).startswith("live-"):
         sd = (ev.get("start_date") or "")[:10]
-        return f"dated_{tl}_{sd}"
+        base_tl = re.sub(r"\s+(?:live\s+)?(?:at|@)\s+[^:|\-]+$", "", tl).strip()
+        base_tl = re.sub(r"[^a-z0-9]+", "", base_tl)
+        return f"dated_{base_tl}_{sd}"
     if tl.startswith("stay-in date:"):
         return tl
     for pat, key in aliases:
@@ -1468,14 +1470,15 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
         or (not ev.get("ongoing") and bool(ev.get("start_date")))
     )
 
-    # Apply explicit dates from SPECIAL_EVENT_DATES_MAP when matched
-    for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
-        if pat in tl:
-            ev["start_date"] = mapped_sd
-            ev["end_date"] = mapped_ed
-            ev["time_str"] = mapped_ts
-            ev["ongoing"] = False
-            break
+    # Apply explicit dates from SPECIAL_EVENT_DATES_MAP only as a fallback (never overwrite real live-scraped dates/times)
+    if not (ev_id_str.startswith(("live-", "bcc-trumba-")) and bool(ev.get("start_date"))):
+        for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
+            if pat in tl:
+                ev["start_date"] = mapped_sd
+                ev["end_date"] = mapped_ed
+                ev["time_str"] = mapped_ts
+                ev["ongoing"] = False
+                break
 
     if is_sports_fixture or is_true_dated_show:
         ev["ongoing"] = False
@@ -1568,7 +1571,7 @@ def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
     req_headers = {"User-Agent": "TwoDoBrisbaneDateApp/3.6 (+https://twodoapp.web.app)"}
     try:
         req = urllib.request.Request(url, headers=req_headers)
-        with urllib.request.urlopen(req, timeout=12) as resp:
+        with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode("utf-8"))
     except Exception as e:
         print(f"[Council Feed] Network fetch failed or offline: {e}")
@@ -1780,6 +1783,13 @@ def fetch_live_public_feeds(today_ymd: str) -> list[dict]:
 
 
 def classify_area_and_fix_location(ev: dict) -> str:
+    # Ensure HTML entities from external feeds (e.g. Trumba dateTimeFormatted) never leak into catalog
+    for fld in ("title", "description", "location", "time_str", "insider_tip"):
+        val = ev.get(fld)
+        if isinstance(val, str) and "&" in val:
+            cleaned = html.unescape(val).replace("\xa0", " ").replace("\u202f", " ").replace("\u2013", "-").replace("\u2014", "-")
+            ev[fld] = re.sub(r"\s+", " ", cleaned).strip()
+
     loc = (ev.get("location") or "").strip()
     title = (ev.get("title") or "").strip()
     desc = (ev.get("description") or "").strip()
@@ -1787,23 +1797,23 @@ def classify_area_and_fix_location(ev: dict) -> str:
 
     area_rules = [
         ("At Home (Stay-In)", "At Home · Stay-In Date", ["stay-in date", "at home · stay-in"]),
-        ("Gold Coast & Burleigh", "Gold Coast, QLD", ["gold coast", "burleigh", "surfers paradise", "broadbeach", "coolangatta", "southport", "biggera waters", "miami marketta", "currumbin", "palm beach", "mermaid beach", "robina", "hota", "home of the arts", "labrador"]),
-        ("Sunshine Coast & Noosa", "Sunshine Coast, QLD", ["sunshine coast", "noosa", "noosa heads", "mooloolaba", "maroochydore", "caloundra", "coolum", "eumundi"]),
-        ("Ipswich & Greater West", "Ipswich, QLD", ["ipswich", "swanbank", "springfield", "brookwater", "inala", "oxley", "ripley", "queens park ipswich", "qpsr", "kilrie", "cooneana"]),
-        ("Logan & Southern Suburbs", "Logan, QLD", ["flagstone", "daisy hill", "logan central", "springwood", "beenleigh", "parkinson", "acacia ridge", "brendale"]),
-        ("Sunnybank & South", "Sunnybank, Brisbane", ["sunnybank", "market square", "macgregor", "robertson", "eight mile plains", "runcorn", "karawatha", "toohey forest", "mt gravatt", "mount gravatt"]),
-        ("Fortitude Valley & James St", "Fortitude Valley, Brisbane", ["fortitude valley", "james st", "calile", "bowen hills", "chinatown", "brunswick st", "winn lane", "bakery lane", "california lane", "gerard's", "same same", "biànca", "bianca", "agnes", "soko", "maya mexican", "cielo", "iris rooftop", "savile row", "finney isles", "baedeker", "dutch courage", "the triffid", "fortitude music hall", "the tivoli", "netherworld", "good chat comedy", "honto", "bisou bisou", "mosconi", "joy restaurant"]),
+        ("Gold Coast & Burleigh", "Gold Coast, QLD", ["gold coast", "burleigh", "surfers paradise", "broadbeach", "coolangatta", "southport", "biggera waters", "miami marketta", "currumbin", "palm beach", "mermaid beach", "robina", "cbus super stadium", "people first stadium", "carrara", "main beach", "nerang", "varsity lakes", "helensvale", "hota", "home of the arts", "labrador"]),
+        ("Sunshine Coast & Noosa", "Sunshine Coast, QLD", ["sunshine coast", "noosa", "noosa heads", "mooloolaba", "maroochydore", "caloundra", "coolum", "eumundi", "nightquarter", "birtinya", "nambour", "buderim"]),
+        ("Ipswich & Greater West", "Ipswich, QLD", ["ipswich", "swanbank", "springfield", "brookwater", "inala", "oxley", "ripley", "goodna", "queens park ipswich", "qpsr", "kilrie", "cooneana"]),
+        ("Logan & Southern Suburbs", "Logan, QLD", ["flagstone", "daisy hill", "logan central", "logan,", ", logan", "loganholme", "slacks creek", "springwood", "beenleigh", "parkinson", "acacia ridge", "brendale"]),
+        ("Sunnybank & South", "Sunnybank, Brisbane", ["sunnybank", "market square", "macgregor", "robertson", "eight mile plains", "runcorn", "karawatha", "toohey forest", "mt gravatt", "mount gravatt", "qsac", "nathan"]),
+        ("Fortitude Valley & James St", "Fortitude Valley, Brisbane", ["fortitude valley", "james st", "calile", "bowen hills", "chinatown", "brunswick st", "winn lane", "bakery lane", "california lane", "gerard's", "same same", "biànca", "bianca", "agnes", "soko", "maya mexican", "cielo", "iris rooftop", "savile row", "finney isles", "baedeker", "dutch courage", "the triffid", "triffid", "fortitude music hall", "the tivoli", "tivoli", "brightside", "the zoo", "crowbar", "tomcat", "wonderland brisbane", "netherworld", "good chat comedy", "honto", "bisou bisou", "mosconi", "joy restaurant"]),
         ("South Bank & Fish Lane", "South Bank, Brisbane", ["south bank", "south brisbane", "qpac", "qagoma", "goma", "cultural precinct", "fish lane", "julius pizzeria", "maeve wine", "lina rooftop", "emporium terrace", "next episode", "queensland museum", "cork & chroma", "brisbane convention"]),
         ("West End & Highgate Hill", "West End, Brisbane", ["west end", "highgate hill", "davies park", "montague rd", "boundary st", "brisbane distillery", "anita gelato", "brisbane brewing co", "morning after", "greek taverna", "gunshop cafe", "catchment brewing", "archive beer", "rumpus room", "little greek"]),
         ("New Farm, Teneriffe & Newstead", "New Farm & Newstead, Brisbane", ["new farm", "teneriffe", "newstead", "gasworks", "powerhouse", "merthyr", "wilson outlook", "range brewing", "green beacon", "zero fox", "beccofino", "new farm deli", "mary mae's", "clayschool", "mas & miek"]),
-        ("Paddington, Rosalie & Milton", "Paddington & Milton, Brisbane", ["paddington", "rosalie", "milton", "red hill", "bardon", "latrobe terrace", "given terrace", "caxton st", "suncorp stadium", "xxxx brewery", "anouk", "shouk", "kettle & tin", "hope & anchor", "il posto", "blue room cinebar", "fritzenberger", "empire revival", "leftys"]),
-        ("Woolloongabba & Kangaroo Point", "Woolloongabba & Kangaroo Point", ["woolloongabba", "kangaroo point", "the gabba", "gabba", "east brisbane", "coorparoo", "stones corner", "logan rd", "1889 enoteca", "c'est bon", "detour", "electric avenue", "norman hotel", "brown dog", "captain burke", "story bridge", "sea legs", "riverlife", "brisbane jazz club", "princess theatre", "pawpaw"]),
+        ("Paddington, Rosalie & Milton", "Paddington & Milton, Brisbane", ["paddington", "rosalie", "milton", "red hill", "bardon", "latrobe terrace", "given terrace", "caxton st", "suncorp stadium", "xxxx brewery", "anouk", "shouk", "kettle & tin", "hope & anchor", "il posto", "blue room cinebar", "fritzenberger", "empire revival", "leftys", "lefty's"]),
+        ("Woolloongabba & Kangaroo Point", "Woolloongabba & Kangaroo Point", ["woolloongabba", "kangaroo point", "the gabba", "east brisbane", "coorparoo", "stones corner", "logan rd", "1889 enoteca", "c'est bon", "detour", "electric avenue", "norman hotel", "brown dog", "captain burke", "story bridge", "sea legs", "riverlife", "brisbane jazz club", "princess theatre", "pawpaw"]),
         ("Bulimba & Hawthorne", "Bulimba & Hawthorne, Brisbane", ["bulimba", "hawthorne", "morningside", "balmoral", "oxford st", "murarrie", "brewdog", "revel brewing", "melrose", "riverbend books", "the jetty oxford", "darvella", "flour & chocolate", "bellissimo"]),
         ("Hamilton, Ascot & Northshore", "Hamilton & Ascot, Brisbane", ["hamilton", "ascot", "northshore", "eat street", "portside", "racecourse rd", "hendra", "eagle farm", "doomben", "one fish two fish", "byblos", "dendy portside"]),
         ("Inner North & Enoggera", "Inner North, Brisbane", ["albion", "windsor", "kedron", "nundah", "clayfield", "newmarket", "enoggera", "walkabout creek", "ashgrove", "everton park", "wilston", "northgate", "herston", "victoria park", "northey st", "golden pig", "farmhouse kedron", "willow & spoon", "craft'd grounds", "vaquero"]),
-        ("Bayside, Manly & Redcliffe", "Bayside & Peninsula, Brisbane", ["manly", "wynnum", "sandgate", "shorncliffe", "redcliffe", "scarborough", "woody point", "wellington point", "cleveland", "boondall", "ormiston", "stradbroke", "moreton bay"]),
+        ("Bayside, Manly & Redcliffe", "Bayside & Peninsula, Brisbane", ["manly", "wynnum", "sandgate", "shorncliffe", "redcliffe", "scarborough", "woody point", "wellington point", "cleveland", "boondall", "entertainment centre", "sleeman", "chandler", "ormiston", "stradbroke", "moreton bay"]),
         ("Mt Coot-tha & Western Suburbs", "Mt Coot-tha & West, Brisbane", ["coot-tha", "planetarium", "toowong", "st lucia", "indooroopilly", "graceville", "sherwood", "sumner", "yeerongpilly", "brookfield", "gold creek", "regatta hotel", "walter taylor", "hundred acre", "slipstream"]),
-        ("Islands, Coast & Hinterland", "SEQ Day Escape", ["moreton island", "tangalooma", "north stradbroke", "point lookout", "tamborine", "maleny", "montville", "glass house", "springbrook", "burleigh", "kooroomba", "canungra", "o'reilly's"]),
+        ("Islands, Coast & Hinterland", "SEQ Day Escape", ["moreton island", "tangalooma", "north stradbroke", "point lookout", "tamborine", "maleny", "montville", "glass house", "springbrook", "kooroomba", "canungra", "o'reilly's"]),
     ]
 
     for area_name, nice_loc, keywords in area_rules:
@@ -2041,19 +2051,40 @@ def build_clean_catalog(try_network: bool = False):
         raise RuntimeError("Could not parse PRELOADED_EVENTS from events_data.js")
     raw_events = json.loads(m.group(1))
 
-    # Merge boutique cinema experiences and curated special dated events first
-    candidates = CURATED_CURRENT_CINEMA_EXPERIENCES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS
+    # Merge boutique cinema experiences, fresh live SEQ scrapers, and curated fallback events
+    candidates = list(CURATED_CURRENT_CINEMA_EXPERIENCES)
     trumba_live_urls = {}
+    seq_live_events: list[dict] = []
     if try_network:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        if script_dir not in sys.path:
+            sys.path.insert(0, script_dir)
+        from live_scrapers import pull_all_seq_live_events
+
+        seq_live_events = pull_all_seq_live_events(today_ymd)
         trumba_events = fetch_brisbane_city_council_trumba(today_ymd)
+        if not trumba_events:
+            # Offline/timeout fallback — preserve non-expired bcc-trumba-* records
+            trumba_events = [r for r in raw_events if str(r.get("id", "")).startswith("bcc-trumba-")]
         for tev in trumba_events:
             if tev.get("id") and tev.get("source_url"):
                 trumba_live_urls[tev["id"]] = tev["source_url"]
+        candidates.extend(seq_live_events)
+        candidates.extend(CURATED_SPECIAL_DATED_EVENTS)
+        candidates.extend(CURATED_STAY_IN_AND_REGIONAL_GEMS)
         candidates.extend(trumba_events)
         candidates.extend(fetch_live_public_feeds(today_ymd))
         candidates.extend(fetch_tmdb_now_playing())
         candidates.extend(fetch_facebook_events_apify())
-    candidates.extend(list(raw_events))
+    else:
+        candidates.extend(CURATED_SPECIAL_DATED_EVENTS)
+        candidates.extend(CURATED_STAY_IN_AND_REGIONAL_GEMS)
+
+    if seq_live_events:
+        # Refresh live-scraped records cleanly instead of retaining stale prior live-* entries
+        candidates.extend(r for r in raw_events if not str(r.get("id", "")).startswith("live-"))
+    else:
+        candidates.extend(list(raw_events))
 
     kept = []
     seen_keys = set()

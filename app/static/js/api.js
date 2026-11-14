@@ -343,7 +343,8 @@ const api = {
     const tagsStr = tagList.join(' ');
     const cat = String(ev.category || '').trim().toLowerCase();
     const core = `${ev.title || ''} ${ev.category || ''} ${tagsStr} ${ev.source || ''} ${ev.vibe || ''}`.toLowerCase();
-    const t = `${core} ${ev.description || ''} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
+    const locStr = `${ev.location || ''} ${ev.location_name || ''} ${ev.area || ''} ${ev.suburb || ''}`.toLowerCase();
+    const t = `${core} ${locStr} ${ev.description || ''} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
     const hasAny = (keywords) => this.matchWords(t, keywords);
     const hasCore = (keywords) => this.matchWords(core, keywords);
     const hasTag = (keywords) => tagList.some(tg => keywords.includes(tg));
@@ -352,14 +353,14 @@ const api = {
     if (intent === 'special_music') {
       if (cat !== 'music & concerts') return false;
       if (sub === 'candlelight') return hasAny(['candlelight', 'symphony', 'classical', 'orchestra', 'brass', 'chamber']);
-      if (sub === 'arena_outdoor') return hasAny(['suncorp', 'riverstage', 'entertainment centre', 'outdoor']);
-      if (sub === 'club_theatre') return hasAny(['fortitude music hall', 'tivoli', 'triffid', 'princess theatre', 'powerhouse', 'qpac', 'jazz club', 'saloon', 'basement', 'zoo', 'brightside']);
+      if (sub === 'arena_outdoor') return hasAny(['suncorp', 'riverstage', 'entertainment centre', 'boondall', 'outdoor', 'open air', 'stadium', 'amphitheatre', 'the gabba', 'cbus super stadium', 'people first stadium', 'eatons hill']);
+      if (sub === 'club_theatre') return hasAny(['fortitude music hall', 'tivoli', 'triffid', 'princess theatre', 'powerhouse', 'qpac', 'jazz club', 'saloon', 'basement', 'zoo', 'brightside', 'crowbar', 'lefty', 'felons', 'miami marketta', 'hota', 'nightquarter', 'soundgarden', 'lyric']);
       return true;
     }
 
     if (intent === 'special_sports') {
       if (cat !== 'sports & active') return false;
-      const sportText = `${ev.title || ''} ${ev.source || ''} ${tagsStr}`.toLowerCase();
+      const sportText = `${ev.title || ''} ${locStr} ${ev.source || ''} ${tagsStr}`.toLowerCase();
       const hasSport = (kws) => this.matchWords(sportText, kws);
       if (sub === 'cricket') {
         if (hasSport(['baseball', 'bandits', 'abl'])) return false;
@@ -591,7 +592,9 @@ const api = {
       if (/#\d+/.test(raw.title)) continue;
       // Enforce link requirement: catalog/scraped events must have a real official source_url
       if (!raw.is_custom && !this.hasValidSourceUrl(raw)) continue;
-      const key = norm(raw.title);
+      const normTitle = norm(raw.title);
+      const datePart = raw.ongoing ? 'ongoing' : (String(raw.start_date || '').slice(0, 10) || 'undated');
+      const key = `${normTitle}_${datePart}`;
       const idKey = String(raw.id);
 
       if (seenTitles.has(key) || seenIds.has(idKey)) {
@@ -936,7 +939,7 @@ const api = {
   async autoDailyPull(force = false) {
     this.purgeLegacySyntheticCustomEvents();
     const today = this.todayYMD();
-    const CATALOG_VERSION = '6.0';
+    const CATALOG_VERSION = '7.0';
     const lastPull = localStorage.getItem('twodo_last_daily_pull');
     const savedVer = localStorage.getItem('twodo_catalog_version');
     if (!force && lastPull === today && savedVer === CATALOG_VERSION) {
@@ -946,25 +949,27 @@ const api = {
     let newlyDiscovered = 0;
     let newlyDiscoveredThisWeek = 0;
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+    const evKey = e => `${norm(e.title)}_${e.ongoing ? 'ongoing' : (String(e.start_date || '').slice(0, 10) || 'undated')}`;
     const existingKeys = new Set(
       ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
-        .map(e => norm(e.title))
+        .map(evKey)
     );
 
     let livePool = [];
-    try {
-      const cached = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]');
-      // Only preserve truly external OSM/RSS/FB items not already superseded by fresh catalog, and sanitize all URLs
-      const preloadedIds = new Set(
-        ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
-          .map(e => String(e.id || ''))
-      );
-      livePool = cached
-        .map(e => e ? { ...e, source_url: this.sanitizeSourceUrl(e.source_url, e) } : null)
-        .filter(e => e && !preloadedIds.has(String(e.id || '')) && this.hasValidSourceUrl(e) && !this.isPastEvent(e));
-      livePool.forEach(e => existingKeys.add(norm(e.title)));
-    } catch (e) {
-      livePool = [];
+    if (savedVer === CATALOG_VERSION) {
+      try {
+        const cached = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]');
+        const preloadedIds = new Set(
+          ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
+            .map(e => String(e.id || ''))
+        );
+        livePool = cached
+          .map(e => e ? { ...e, source_url: this.sanitizeSourceUrl(e.source_url, e) } : null)
+          .filter(e => e && !preloadedIds.has(String(e.id || '')) && !existingKeys.has(evKey(e)) && this.hasValidSourceUrl(e) && !this.isPastEvent(e));
+        livePool.forEach(e => existingKeys.add(evKey(e)));
+      } catch (e) {
+        livePool = [];
+      }
     }
 
     // 1. Fetch daily CI-updated feed (try live GitHub raw feed first so nightly 4 AM updates appear without redeploy, fallback to local copy)
@@ -983,7 +988,7 @@ const api = {
             }
             for (const ev of feedData.events) {
               if (!ev || !ev.title || !this.hasValidSourceUrl(ev) || this.isPastEvent(ev)) continue;
-              const k = norm(ev.title);
+              const k = evKey(ev);
               if (!existingKeys.has(k)) {
                 existingKeys.add(k);
                 livePool.push(ev);
