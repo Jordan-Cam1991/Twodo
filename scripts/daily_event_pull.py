@@ -20,6 +20,7 @@ import os
 import re
 import sys
 import urllib.request
+import urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from collections import Counter
@@ -212,7 +213,7 @@ OFFICIAL_URLS = {
     "hope & anchor": "https://hopeandanchor.net.au",
     "il posto": "https://ilposto.com.au",
     "rosalie gourmet": "https://rosaliegourmetmarket.com.au",
-    "blue room cinebar": "https://blueroomcinebar.com",
+    "blue room cinebar": "https://www.cinebar.com.au/sites/Cinebar-Rosalie-Village/0001",
     "fritzenberger": "https://fritzenberger.com",
     "can you keep a secret": "https://canyoukeepasecret.com.au",
     "c'est bon": "https://cestbon.com.au",
@@ -437,7 +438,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$48–$65",
         "source": "La Boite Theatre",
-        "source_url": "https://laboite.com.au/whats-on",
+        "source_url": "https://laboite.com.au/",
         "image_url": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=900&q=80",
         "tags": ["Indoor", "Theatre", "Arts & Culture"]
     },
@@ -590,7 +591,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$84",
         "source": "Fortitude Music Hall",
-        "source_url": "https://thefortitude.com.au/whats-on/",
+        "source_url": "https://www.frontiertouring.com/mattcorby",
         "image_url": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Indoor", "Romantic"]
     },
@@ -641,7 +642,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "Free Entry",
         "source": "BrisStyle & Clayfield College",
-        "source_url": "https://www.brisstyle.com.au",
+        "source_url": "https://www.brisstyle.com.au/ceramic-makers-market-2/",
         "image_url": "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=900&q=80",
         "tags": ["Markets", "Outdoor", "Budget", "Date Night"]
     },
@@ -709,7 +710,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$49–$145",
         "source": "Suncorp Stadium & NRL",
-        "source_url": "https://www.suncorpstadium.com.au/whats-on/",
+        "source_url": "https://suncorpstadium.com.au/whats-on",
         "image_url": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Sports", "Outdoors"]
     },
@@ -743,7 +744,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$25–$35",
         "source": "Wonderland Brisbane",
-        "source_url": "https://oztix.com.au",
+        "source_url": "https://www.fatsoma.com/e/whdk2a98/country-day-party-brisbane-sold-out",
         "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Indoor", "Party", "Date Night"]
     },
@@ -760,7 +761,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "Free Entry",
         "source": "Ipswich City Council & Humanitix",
-        "source_url": "https://humanitix.com",
+        "source_url": "https://events.humanitix.com/pollinator-celebration",
         "image_url": "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=900&q=80",
         "tags": ["Outdoors", "Budget", "Date Night", "Nature"]
     },
@@ -777,7 +778,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$25 (Under 18 Free)",
         "source": "Logan City Council & TryBooking",
-        "source_url": "https://trybooking.com",
+        "source_url": "https://www.trybooking.com/au/event/1598131",
         "image_url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Outdoors", "Food & Drink"]
     },
@@ -794,7 +795,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$24–$38",
         "source": "Queensland Pioneer Steam Railway",
-        "source_url": "https://qpsr.org",
+        "source_url": "https://qpsr.org/events/",
         "image_url": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
         "tags": ["Outdoors", "Romantic", "Date Night", "Heritage"]
     },
@@ -811,7 +812,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "Free Entry (Bunches from $35)",
         "source": "Poco Posy Florist",
-        "source_url": "https://pocoposy.com.au",
+        "source_url": "https://pocoposy.com.au/pages/peony-market-day",
         "image_url": "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=900&q=80",
         "tags": ["Markets", "Romantic", "Budget"]
     },
@@ -828,7 +829,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "Free Entry",
         "source": "Orion Hotel Springfield",
-        "source_url": "https://orionhotel.com.au",
+        "source_url": "https://orionhotel.com.au/whats-on/",
         "image_url": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Late Night", "Indoor"]
     },
@@ -845,7 +846,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "Free Entry",
         "source": "AW Collectibles Gold Coast",
-        "source_url": "https://destinationgoldcoast.com",
+        "source_url": "https://www.awcollectibles.com.au/",
         "image_url": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=900&q=80",
         "tags": ["Indoor", "Budget"]
     },
@@ -913,7 +914,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$95–$165",
         "source": "Queensland Ballet / QPAC",
-        "source_url": "https://www.queenslandballet.com.au/performances",
+        "source_url": "https://www.qpac.com.au/whats-on/2026/queensland-ballet-the-nutcracker",
         "image_url": "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=900&q=80",
         "tags": ["Romantic", "Indoor", "Arts & Culture"]
     },
@@ -930,7 +931,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$99–$139",
         "source": "Brisbane Entertainment Centre",
-        "source_url": "https://www.brisent.com.au/Event-Calendar",
+        "source_url": "https://www.brisent.com.au/events/",
         "image_url": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Indoor", "Late Night"]
     },
@@ -947,7 +948,7 @@ CURATED_SPECIAL_DATED_EVENTS = [
         "ongoing": False,
         "price": "$119–$169",
         "source": "Brisbane Entertainment Centre",
-        "source_url": "https://www.brisent.com.au/Event-Calendar",
+        "source_url": "https://www.brisent.com.au/events/",
         "image_url": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=900&q=80",
         "tags": ["Live Music", "Indoor", "Romantic"]
     },
@@ -1322,8 +1323,82 @@ def canonical_venue_key(ev: dict) -> str:
     return tl
 
 
+CURATED_DIRECT_URLS_BY_ID = {
+    "bne-goma-henson": "https://www.qagoma.qld.gov.au/exhibition/make-believe-magic-the-worlds-of-the-jim-henson-company",
+    "bne-qag-mudskippers": "https://www.qagoma.qld.gov.au/learn/education-resources/justene-williams-once-we-were-mudskippers/",
+    "bne-goma-smokescreen": "https://www.qagoma.qld.gov.au/exhibition/smokescreen-a-thickness-of-the-air",
+    "bne-dracula-qpac": "https://www.qpac.com.au/whats-on/2026/shakestir-dracula",
+    "bne-qso-cinematic": "https://www.qpac.com.au/whats-on/2027/qso-cinematic",
+    "bne-spacey-jane": "https://www.ticketmaster.com.au/spacey-jane-heading-back-down-under-australian-tour-two-show-pass-brisbane-26-11-2026/event/130064ABC3216163",
+    "bne-melt-festival-powerhouse": "https://brisbanepowerhouse.org/melt-unveils-biggest-ever-program-for-2026/",
+    "deep-30d-31-qagoma-up-late:-twilight-": "https://www.qagoma.qld.gov.au/whats-on",
+    "bcc-bcc-outdoor-cinema-riverbank-m": "https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/budget-friendly/free-outdoor-movies-in-brisbane-parks",
+    "bcc-bcc-active-parks-free-clifftop": "https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane",
+    "bcc-bcc-brisbane-twilight-market-a": "https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane",
+    "bcc-bcc-brisasia-street-eats-&-lan": "https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane",
+    "sport-play-new-farm-parkrun": "https://www.parkrun.com.au/newfarm/",
+    "sport-play-south-bank-parkrun": "https://www.parkrun.com.au/southbank/",
+    "sport-play-spring-hill-baths-2-summer-dips": "https://springhillbaths.com.au/",
+    "sport-play-free-council-pickleball-courts": "https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/health-and-fitness/10-unique-sports-to-try-in-brisbane-including-pickleball",
+    "sport-play-gap-creek-reserve-mountain-biking": "https://www.brisbane.qld.gov.au/parks-and-recreation",
+    "sport-play-brisbane-city-council-active-healthy-move-well-b": "https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane",
+    "live-council-182353296": "https://www.museumofbrisbane.com.au/whats-on/precious/",
+}
+
+GENERIC_SPORT_HOST_UPGRADES = {
+    "https://www.brisbaneheat.com.au": "https://www.brisbaneheat.com.au/matches",
+    "https://brisbaneheat.com.au": "https://www.brisbaneheat.com.au/matches",
+    "https://www.brisbanebullets.com.au": "https://www.brisbanebullets.com.au/schedule",
+    "https://brisbanebullets.com.au": "https://www.brisbanebullets.com.au/schedule",
+    "https://www.brisbaneroar.com.au": "https://brisbaneroar.com.au/matches/",
+    "https://brisbaneroar.com.au": "https://brisbaneroar.com.au/matches/",
+    "https://www.aleagues.com.au": "https://aleagues.com.au/matches/a-league-men/",
+    "https://aleagues.com.au": "https://aleagues.com.au/matches/a-league-men/",
+    "https://brisbanebandits.com.au": "https://brisbanebandits.com.au/schedule/",
+    "https://www.brisbanebandits.com.au": "https://brisbanebandits.com.au/schedule/",
+    "https://www.brc.com.au": "https://www.brc.com.au/racing-trials-and-jumpouts-calendar/",
+    "https://brc.com.au": "https://www.brc.com.au/racing-trials-and-jumpouts-calendar/",
+    "https://www.qldcricket.com.au": "https://www.qldcricket.com.au/matches",
+    "https://thegabba.com.au": "https://thegabba.com.au/whats-on",
+    "https://reds.rugby": "https://reds.rugby/super-rugby/super-rugby-draw",
+    "https://www.brisent.com.au": "https://www.brisent.com.au/events/",
+    "https://www.brisent.com.au/Event-Calendar": "https://www.brisent.com.au/events/",
+    "https://blueroomcinebar.com": "https://www.cinebar.com.au/sites/Cinebar-Rosalie-Village/0001",
+    "https://laboite.com.au/whats-on": "https://laboite.com.au/",
+}
+
+
+def sanitize_source_url(url: str, ev: dict | None = None) -> str:
+    raw = (url or "").strip()
+    ev_id = str((ev or {}).get("id") or "").strip()
+    tl = str((ev or {}).get("title") or "").strip().lower()
+
+    if ev_id in CURATED_DIRECT_URLS_BY_ID:
+        return CURATED_DIRECT_URLS_BY_ID[ev_id]
+    if "boxing day races" in tl and ("brc.com.au" in raw or not raw):
+        return "https://www.brc.com.au/event/members-mile-day/"
+
+    # Rewrite legacy BCC Trumba embed URLs (which 301-redirect to generic what's-on & drop eventid)
+    if "brisbane.qld.gov.au/trumba" in raw.lower() or "trumbaembed=" in raw.lower():
+        decoded = urllib.parse.unquote(raw)
+        m_id = re.search(r"eventid=(\d+)", decoded, re.I)
+        if m_id:
+            return f"https://www.trumba.com/calendars/brisbane-city-council?eventid={m_id.group(1)}"
+
+    norm_raw = raw.rstrip("/")
+    for old_u, new_u in GENERIC_SPORT_HOST_UPGRADES.items():
+        if norm_raw.lower() == old_u.rstrip("/").lower():
+            return new_u
+
+    if "thestarmelb" in raw:
+        return "https://www.star.com.au/brisbane/whats-on/sky-deck"
+    if "brisbane.qld.gov.au/whats-on-in-brisbane" in raw.lower():
+        return "https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane"
+    return raw
+
+
 def resolve_official_url(ev: dict) -> str:
-    current = (ev.get("source_url") or "").strip()
+    current = sanitize_source_url((ev.get("source_url") or "").strip(), ev)
     tl = ev.get("title", "").lower()
     loc = ev.get("location", "").lower()
     combined = f"{tl} {loc}"
@@ -1332,10 +1407,7 @@ def resolve_official_url(ev: dict) -> str:
     if not is_valid_source_url(current):
         for pat, official in OFFICIAL_URLS.items():
             if pat in combined:
-                return official
-    # Even if current is valid, fix known typos
-    if "thestarmelb" in current:
-        return "https://www.star.com.au/brisbane/whats-on/sky-deck"
+                return sanitize_source_url(official, ev)
     return current if is_valid_source_url(current) else ""
 
 
@@ -1384,13 +1456,14 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
     tl = ev.get("title", "").lower()
     cat = ev.get("category", "")
 
-    is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and ev.get("start_date"))
+    is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and bool(ev.get("start_date")))
+    ev_id_str = str(ev.get("id", ""))
     is_true_dated_show = (
         any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS)
-        or str(ev.get("id", "")).startswith("special-")
-        or str(ev.get("id", "")).startswith("movie-")
-        or str(ev.get("id", "")).startswith("fb-")
-        or str(ev.get("id", "")).startswith("live-")
+        or ev_id_str.startswith("special-")
+        or ev_id_str.startswith("movie-")
+        or ev_id_str.startswith("fb-")
+        or (ev_id_str.startswith("live-council-") and bool(ev.get("start_date")))
         or "in cinemas" in tl
         or (not ev.get("ongoing") and bool(ev.get("start_date")))
     )
@@ -1439,6 +1512,49 @@ def enrich_tags(ev: dict) -> list[str]:
         if "Stay-In" not in tags:
             tags.append("Stay-In")
     return tags
+
+
+def extract_trumba_direct_url(ev: dict, custom: dict) -> str:
+    """Resolve the most specific direct URL for a BCC Trumba event (avoiding broken brisbane.qld.gov.au/trumba redirects)."""
+    event_id = str(ev.get("eventID") or "").strip()
+
+    def unwrap_href(href: str) -> str:
+        u = html.unescape((href or "").strip())
+        if "safelinks.protection.outlook.com" in u.lower():
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(u).query)
+            if qs.get("url"):
+                u = urllib.parse.unquote(qs["url"][0])
+        return u
+
+    SPECIFIC_EVENT_HOST_HINTS = (
+        "eventbrite.", "humanitix.", "trybooking.", "ticketek.", "ticketmaster.",
+        "oztix.", "qtix.", "museumofbrisbane.com.au/whats-on/", "qpac.com.au/whats-on/",
+        "qagoma.qld.gov.au/exhibition/", "brisbanepowerhouse.org/events/",
+        "slq.qld.gov.au/whats-on/", "moshtix.", "fatsoma."
+    )
+
+    candidate_blobs = [
+        ev.get("webLink") or "",
+        custom.get("Bookings") or "",
+        custom.get("More information") or "",
+        ev.get("description") or "",
+    ]
+    for blob in candidate_blobs:
+        for href in re.findall(r'href=["\'](https?://[^"\']+)["\']', blob, re.I):
+            u = unwrap_href(href)
+            ul = u.lower()
+            if not is_valid_source_url(u):
+                continue
+            if any(bad in ul for bad in ("maps.google.", "/trumba", "safelinks.protection", "facebook.com", "instagram.com")):
+                continue
+            if any(hint in ul for hint in SPECIFIC_EVENT_HOST_HINTS):
+                return u
+
+    if event_id.isdigit():
+        return f"https://www.trumba.com/calendars/brisbane-city-council?eventid={event_id}"
+
+    raw_link = ev.get("permaLinkUrl") or ev.get("webLink") or ""
+    return sanitize_source_url(raw_link, ev)
 
 
 def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
@@ -1499,7 +1615,8 @@ def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
 
     for ev in data:
         title = (ev.get("title") or "").strip()
-        link = ev.get("permaLinkUrl") or ev.get("webLink")
+        custom = {cf.get("label"): cf.get("value") for cf in ev.get("customFields", []) if isinstance(cf, dict)}
+        link = extract_trumba_direct_url(ev, custom)
         if not title or not link or not is_valid_source_url(link):
             continue
 
@@ -1520,7 +1637,6 @@ def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
         if any(w in desc_clean[:80].lower() for w in EXCLUDE_KEYWORDS):
             continue
 
-        custom = {cf.get("label"): cf.get("value") for cf in ev.get("customFields", []) if isinstance(cf, dict)}
         raw_type = (custom.get("Primary event type") or custom.get("Event type") or "").lower()
         venue = custom.get("Venue") or ev.get("location") or "Brisbane, QLD"
         cost = custom.get("Cost") or "Free"
@@ -1583,10 +1699,41 @@ def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
     return discovered
 
 
+IRRELEVANT_RSS_PATTERNS = (
+    "terms & conditions", "terms and conditions", "t&c's", "competition terms",
+    "instagram competition", "how to win", "win tickets", "free calls to santa",
+    "vinted", "ubud", "bawah reserve", "indonesia", "byron bay", "byron-bay",
+    "central coast", "saddles mount white", "melbourne cup carnival", "flixbus",
+    "in ipswich this august", "winter school holidays", "warming winter menus",
+    "kids' events", "kids’ events", "for teens",
+)
+
+
+def is_irrelevant_rss_article(ev: dict) -> bool:
+    ev_id = str(ev.get("id") or "")
+    if not ev_id.startswith("live-rss-"):
+        return False
+    combined = f"{ev.get('title', '')} {ev.get('source_url', '')}".lower()
+    return any(p in combined for p in IRRELEVANT_RSS_PATTERNS)
+
+
+def infer_rss_category(title: str, desc: str) -> str:
+    s = f"{title} {desc}".lower()
+    if any(w in s for w in ["restaurant", "dining", "brunch", "menu", "bar", "cafe", "lunch", "food", "wine", "brewery", "gin"]):
+        return "Food & Drink"
+    if any(w in s for w in ["concert", "gig", "music", "festival", "band", "live music"]):
+        return "Music & Concerts"
+    if any(w in s for w in ["market", "pop-up", "fair"]):
+        return "Markets & Pop-ups"
+    if any(w in s for w in ["walk", "trail", "park", "island", "whale", "farm", "retreat", "outdoor", "bushwalk"]):
+        return "Outdoor & Adventure"
+    return "Arts & Culture"
+
+
 def fetch_live_public_feeds(today_ymd: str) -> list[dict]:
     """
     Attempts to pull fresh Brisbane events from public RSS/JSON endpoints across Brisbane areas.
-    Only keeps events that have a valid direct `source_url`.
+    Only keeps events that have a valid direct `source_url` and relate to SEQ venues/events.
     """
     discovered = []
     rss_feeds = [
@@ -1608,23 +1755,24 @@ def fetch_live_public_feeds(today_ymd: str) -> list[dict]:
                 title = (item.findtext("title") or "").strip()
                 link = (item.findtext("link") or "").strip()
                 desc = re.sub(r"<[^>]+>", "", (item.findtext("description") or "")).strip()
-                if title and is_valid_source_url(link):
-                    discovered.append({
-                        "id": "live-rss-" + re.sub(r"[^a-z0-9]+", "-", title.lower())[:40],
-                        "title": title,
-                        "description": desc[:260] or f"Live Brisbane experience sourced from {source_name}.",
-                        "insider_tip": "Check the official event page for session times and bookings.",
-                        "category": "Arts & Culture",
-                        "location": default_loc,
-                        "time_str": "See official link for times",
-                        "start_date": None,
-                        "end_date": None,
-                        "ongoing": True,
-                        "price": "Varies",
-                        "source": source_name,
-                        "source_url": link,
-                        "image_url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80",
-                    })
+                cand = {
+                    "id": "live-rss-" + re.sub(r"[^a-z0-9]+", "-", title.lower())[:40],
+                    "title": title,
+                    "description": desc[:260] or f"Live Brisbane experience sourced from {source_name}.",
+                    "insider_tip": "Check the official event page for session times and bookings.",
+                    "category": infer_rss_category(title, desc),
+                    "location": default_loc,
+                    "time_str": "See official link for times",
+                    "start_date": None,
+                    "end_date": None,
+                    "ongoing": True,
+                    "price": "Varies",
+                    "source": source_name,
+                    "source_url": link,
+                    "image_url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80",
+                }
+                if title and is_valid_source_url(link) and not is_irrelevant_rss_article(cand):
+                    discovered.append(cand)
         except Exception:
             # Offline or sandbox environment — continue gracefully
             pass
@@ -1717,7 +1865,7 @@ CURATED_CURRENT_CINEMA_EXPERIENCES = [
         "ongoing": False,
         "price": "$18–$28",
         "source": "Blue Room Cinebar Rosalie",
-        "source_url": "https://blueroomcinebar.com",
+        "source_url": "https://www.cinebar.com.au/sites/Cinebar-Rosalie-Village/0001",
         "image_url": "https://images.unsplash.com/photo-1509281373149-e957c6296406?auto=format&fit=crop&w=900&q=80",
         "tags": ["Cinema", "Date Night", "Late Night", "Romantic"]
     },
@@ -1894,12 +2042,18 @@ def build_clean_catalog(try_network: bool = False):
     raw_events = json.loads(m.group(1))
 
     # Merge boutique cinema experiences and curated special dated events first
-    candidates = CURATED_CURRENT_CINEMA_EXPERIENCES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS + list(raw_events)
+    candidates = CURATED_CURRENT_CINEMA_EXPERIENCES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS
+    trumba_live_urls = {}
     if try_network:
-        candidates.extend(fetch_brisbane_city_council_trumba(today_ymd))
+        trumba_events = fetch_brisbane_city_council_trumba(today_ymd)
+        for tev in trumba_events:
+            if tev.get("id") and tev.get("source_url"):
+                trumba_live_urls[tev["id"]] = tev["source_url"]
+        candidates.extend(trumba_events)
         candidates.extend(fetch_live_public_feeds(today_ymd))
         candidates.extend(fetch_tmdb_now_playing())
         candidates.extend(fetch_facebook_events_apify())
+    candidates.extend(list(raw_events))
 
     kept = []
     seen_keys = set()
@@ -1909,7 +2063,14 @@ def build_clean_catalog(try_network: bool = False):
         t = (ev.get("title") or "").strip()
         if not t:
             continue
+        if is_irrelevant_rss_article(ev):
+            continue
         ev_id = (ev.get("id") or "").strip()
+        if ev_id in trumba_live_urls:
+            ev["source_url"] = trumba_live_urls[ev_id]
+        if ev_id.startswith("live-rss-") and not ev.get("start_date"):
+            ev["ongoing"] = True
+            ev["category"] = infer_rss_category(t, ev.get("description", ""))
         # Drop stale hardcoded movie cards that are past being in cinemas!
         if ev_id in {"movie-wicked-cinemas", "movie-gladiator-2-cinemas", "movie-anora-cinemas", "movie-wild-robot-cinemas", "movie-heretic-cinemas", "movie-a-real-pain-cinemas"}:
             continue

@@ -268,29 +268,16 @@ const discover = {
   },
 
   updateModeSwitcherCounts() {
-    const pool = this.getAllEventsPool();
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-    let votes = {};
-    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
-    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
-      votes = { ...votes, ...firebaseService.votesMap };
-    }
+    const anytimeCount = this.getDedupedCount({
+      feed_mode: 'anytime',
+      intent: 'all',
+      sub_intent: 'all',
+      date_range: 'all',
+      custom_start: null,
+      custom_end: null,
+      filter: 'all'
+    }, { forSwiper: true, includeVoted: false });
 
-    // 1. Anytime places: unvoted ongoing venues
-    let anytimeCount = 0;
-    pool.forEach(ev => {
-      if (!ev.ongoing) return;
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
-      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
-      const myVote = isSolo ? (votes[`${ev.id}_${activeVoter}`] || v1) : (activeVoter === u1 ? v1 : v2);
-      if (myVote === 'love' || myVote === 'pass') return;
-      anytimeCount++;
-    });
-
-    // 2. Special Events: accurately reflects the currently active date filter (e.g. This Week = 16)
     const activeRange = this.activeDateRange || this.defaultDateRange || 'this_week';
     const specialCount = this.getDateRangePreviewCount(activeRange);
 
@@ -310,16 +297,28 @@ const discover = {
       document.getElementById('discover-sub-intent-bar'),
       document.getElementById('swiper-sub-intent-bar')
     ];
-    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all' || this.isSpecialMood()) {
+    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all' || this.isSpecialMood() || this.activeIntent === 'saved') {
       bars.forEach(b => { if (b) { b.classList.add('hidden'); b.innerHTML = ''; } });
       return;
     }
 
-    // Compute live count per sub-intent from events in the current mode pool
+    // Compute live count per sub-intent using the exact same active filters (Date, Suburb, Vibe, Category, Search, unvoted)
     const mode = this.activeFeedMode || 'anytime';
-    const pool = this.getAllEventsPool().filter(ev => mode === 'special' ? !ev.ongoing : Boolean(ev.ongoing));
+    const inSwiper = (typeof app !== 'undefined' && app.activeTab === 'swiper');
+    const bounds = mode === 'special' ? this.getDateBounds() : null;
+    const modePool = this.getMatchingEvents({
+      feed_mode: mode,
+      intent: this.activeIntent,
+      sub_intent: 'all',
+      date_range: bounds ? 'custom' : 'all',
+      custom_start: bounds ? this.toYMD(bounds.start) : null,
+      custom_end: bounds ? this.toYMD(bounds.end) : null
+    }, { forSwiper: inSwiper, includeVoted: false });
+
     const html = def.subs.map(sub => {
-      const count = pool.filter(ev => api.matchEventIntent(ev, this.activeIntent, sub.id)).length;
+      const count = (sub.id === 'all')
+        ? modePool.length
+        : modePool.filter(ev => api.matchEventIntent(ev, this.activeIntent, sub.id)).length;
       const isActive = this.activeSubIntent === sub.id;
       return `
         <button type="button" class="sub-intent-pill ${isActive ? 'active' : ''}" onclick="discover.setSubIntent('${sub.id}')">
@@ -491,19 +490,23 @@ const discover = {
   /** Returns { url, label } when the event has a valid official external URL, or null otherwise. */
   getEventLinkInfo(ev) {
     if (!ev) return null;
+    const rawUrl = (typeof api !== 'undefined' && api.sanitizeSourceUrl && ev.source_url)
+      ? api.sanitizeSourceUrl(ev.source_url, ev)
+      : ev.source_url;
+    const checkEv = rawUrl !== ev.source_url ? { ...ev, source_url: rawUrl } : ev;
     const isValid = (typeof api !== 'undefined' && api.hasValidSourceUrl)
-      ? api.hasValidSourceUrl(ev)
-      : Boolean(ev.source_url && /^https?:\/\//i.test(ev.source_url) && !String(ev.source_url).includes('google.com/search'));
+      ? api.hasValidSourceUrl(checkEv)
+      : Boolean(rawUrl && /^https?:\/\//i.test(rawUrl) && !String(rawUrl).includes('google.com/search'));
     if (!isValid) return null;
 
-    const url = String(ev.source_url).trim();
+    const url = String(rawUrl).trim();
     const u = url.toLowerCase();
     let label = '🔗 Website ↗';
     if (u.includes('ticketmaster') || u.includes('ticketek') || u.includes('eventbrite') || u.includes('qpac.com.au') || u.includes('feverup') || u.includes('moshtix') || u.includes('oztix')) {
       label = '🎟️ Tickets ↗';
     } else if (u.includes('instagram.com') || u.includes('tiktok.com')) {
       label = '📸 Official Page ↗';
-    } else if (u.includes('brisbane.qld.gov.au') || u.includes('parks.detsi.qld.gov.au') || u.includes('seqwater.com.au') || u.includes('visit')) {
+    } else if (u.includes('brisbane.qld.gov.au') || u.includes('trumba.com') || u.includes('parks.detsi.qld.gov.au') || u.includes('seqwater.com.au') || u.includes('visit')) {
       label = '🏛️ Official Guide ↗';
     } else if (u.includes('seriouseats.com') || u.includes('spanishsabores.com')) {
       label = '📖 Recipe & Guide ↗';
@@ -667,6 +670,85 @@ const discover = {
     };
   },
 
+  /** Deduplicates event lists by id and canonical (title, start date) key. */
+  dedupeEvents(list) {
+    if (!Array.isArray(list)) return [];
+    const seenKeys = new Set();
+    const seenIds = new Set();
+    const norm = t => String(t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+    return list.filter(ev => {
+      if (!ev || !ev.id) return false;
+      const idKey = String(ev.id);
+      const dateKey = !ev.ongoing && ev.start_date ? String(ev.start_date).slice(0, 10) : '';
+      const titleKey = norm(ev.title);
+      const canonicalKey = `${titleKey}|${dateKey}`;
+      if (seenIds.has(idKey) || (titleKey && seenKeys.has(canonicalKey))) return false;
+      seenIds.add(idKey);
+      if (titleKey) seenKeys.add(canonicalKey);
+      return true;
+    });
+  },
+
+  /** Applies client-side search & active-voter unvoted gating consistently across views and counts. */
+  applyClientVisibilityFilter(list, { includeVoted = false, searchQuery = this.searchQuery } = {}) {
+    if (!Array.isArray(list)) return [];
+    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
+    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
+    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
+    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
+    const isTogether = (typeof app !== 'undefined') && app.currentVoter === 'both';
+    const q = String(searchQuery || '').trim().toLowerCase();
+
+    let votes = {};
+    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
+    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
+      votes = { ...votes, ...firebaseService.votesMap };
+    }
+
+    return list.filter(ev => {
+      if (q) {
+        const str = `${ev.title || ''} ${ev.description || ''} ${ev.location_name || ''} ${ev.location || ''} ${ev.insider_tip || ''} ${(ev.tags || []).join(' ')} ${ev.source || ''} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
+        if (!str.includes(q)) return false;
+      }
+
+      if (!includeVoted) {
+        const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
+        const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
+        if (isSolo) {
+          const vote = votes[`${ev.id}_${activeVoter}`] !== undefined
+            ? votes[`${ev.id}_${activeVoter}`]
+            : (ev.my_vote !== undefined ? ev.my_vote : (activeVoter === u1 ? v1 : v2));
+          if (vote === 'love' || vote === 'pass') return false;
+        } else if (isTogether) {
+          if (v1 === 'love' || v1 === 'pass' || v2 === 'love' || v2 === 'pass') return false;
+        } else {
+          const myVote = (activeVoter === u1) ? v1 : v2;
+          if (myVote === 'love' || myVote === 'pass') return false;
+        }
+      }
+
+      return true;
+    });
+  },
+
+  /** Single shared query + client-visibility + deduped pipeline used for mode counts, sub-pills, and modals. */
+  getMatchingEvents(paramOverrides = {}, { forSwiper = false, includeVoted = null } = {}) {
+    if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return [];
+    const base = this.getFilterParams({ forSwiper });
+    const params = { ...base, ...paramOverrides };
+    const rawList = api.getLocalEnrichedEvents(params).events || [];
+    const isSavedList = !forSwiper && (this.isSpecialMood() || this.activeIntent === 'saved');
+    const keepVoted = includeVoted !== null ? includeVoted : isSavedList;
+    return this.dedupeEvents(this.applyClientVisibilityFilter(rawList, {
+      includeVoted: keepVoted,
+      searchQuery: params.search
+    }));
+  },
+
+  getDedupedCount(paramOverrides = {}, opts = {}) {
+    return this.getMatchingEvents(paramOverrides, opts).length;
+  },
+
   onDateChipClick() {
     // From a Loves / Passed list, one tap takes you back to the feed and opens the calendar
     if (this.isSpecialMood()) {
@@ -748,6 +830,8 @@ const discover = {
     if (this._lastRenderSig && nextSig === this._lastRenderSig && this.hasStableRenderedGrid()) {
       this.updateMatchBanner();
       this.updateFilterHeaderBadges();
+      this.updateModeSwitcherCounts();
+      this.renderSubIntentBars();
       return;
     }
 
@@ -777,33 +861,10 @@ const discover = {
 
     // In normal feed browsing: only show items with no selection or thinking ('maybe')!
     // Loved or passed items are excluded from the main feed & search results.
-    let displayEvents = (app.events || []).filter(ev => {
-      if (this.searchQuery) {
-        const q = this.searchQuery.toLowerCase();
-        const str = `${ev.title} ${ev.description} ${ev.location_name} ${(ev.tags || []).join(' ')} ${ev.source} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
-        if (!str.includes(q)) return false;
-      }
-
-      if (!isSpecialMood) {
-        if (isSolo) {
-          const vote = ev.my_vote !== undefined ? ev.my_vote : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
-          if (vote === 'love' || vote === 'pass') {
-            return false;
-          }
-        } else if (isTogether) {
-          if (ev.u1_vote === 'love' || ev.u1_vote === 'pass' || ev.u2_vote === 'love' || ev.u2_vote === 'pass') {
-            return false;
-          }
-        } else {
-          const myVote = (activeVoter === u1) ? ev.u1_vote : ev.u2_vote;
-          if (myVote === 'love' || myVote === 'pass') {
-            return false;
-          }
-        }
-      }
-
-      return true;
-    });
+    let displayEvents = this.dedupeEvents(this.applyClientVisibilityFilter(app.events || [], {
+      includeVoted: isSpecialMood,
+      searchQuery: this.searchQuery
+    }));
 
     const visibleEvents = displayEvents.slice(0, this.pageSize * this.currentPage);
     this.renderSpotlights(displayEvents);
@@ -839,6 +900,8 @@ const discover = {
       grid.innerHTML = '';
       empty?.classList.remove('hidden');
       if (loadMoreWrap) loadMoreWrap.classList.add('hidden');
+      this.updateModeSwitcherCounts();
+      this.renderSubIntentBars();
       return;
     }
 
@@ -960,6 +1023,7 @@ const discover = {
       `;
     }).join('');
     this.updateModeSwitcherCounts();
+    this.renderSubIntentBars();
   },
 
   currentMood: 'all',
@@ -1535,6 +1599,9 @@ const discover = {
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
 
     return combined.filter(ev => {
+      if (typeof api !== 'undefined' && api.sanitizeSourceUrl && ev.source_url) {
+        ev.source_url = api.sanitizeSourceUrl(ev.source_url, ev);
+      }
       ev.location_name = ev.location_name || ev.location || 'Brisbane';
       ev.location = ev.location || ev.location_name;
       ev.price_str = ev.price_str || ev.price || '$$';
@@ -1750,42 +1817,38 @@ const discover = {
   /** Computes live un-voted matching activity count for a specific date range id or the current modal selection */
   getDateRangePreviewCount(rangeId) {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return 0;
-    const params = this.getFilterParams({ forSwiper: true });
-    params.feed_mode = 'special';
-    const bounds = this.getDateBounds(rangeId);
-    params.date_range = bounds ? 'custom' : 'all';
-    params.custom_start = bounds ? this.toYMD(bounds.start) : null;
-    params.custom_end = bounds ? this.toYMD(bounds.end) : null;
-    const rawList = api.getLocalEnrichedEvents(params).events || [];
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    return rawList.filter(ev => {
-      const myVote = isSolo ? (ev.my_vote || ev.u1_vote) : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
-      return myVote !== 'love' && myVote !== 'pass';
-    }).length;
+    let bounds = this.getDateBounds(rangeId);
+    if (rangeId === 'custom' && !bounds && typeof document !== 'undefined') {
+      const s = this.parseYMD(document.getElementById('modal-date-start')?.value || this.toYMD(this.dayOffset(0)));
+      const e = this.parseYMD(document.getElementById('modal-date-end')?.value || this.toYMD(this.dayOffset(13)));
+      if (s && e) bounds = s <= e ? { start: s, end: e } : { start: e, end: s };
+    }
+    return this.getDedupedCount({
+      feed_mode: 'special',
+      intent: 'all',
+      sub_intent: 'all',
+      filter: 'all',
+      date_range: bounds ? 'custom' : 'all',
+      custom_start: bounds ? this.toYMD(bounds.start) : null,
+      custom_end: bounds ? this.toYMD(bounds.end) : null
+    }, { forSwiper: true, includeVoted: false });
   },
 
-  /** Computes live un-voted matching activity count for the current modal selection */
+  /** Computes live matching activity count for the current modal selection */
   getModalPreviewCount() {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return null;
     if (this.currentModalType === 'date') {
       const selDate = Array.from(this.modalSelectedSet)[0] || 'all';
       return this.getDateRangePreviewCount(selDate);
     }
-    const params = this.getFilterParams({ forSwiper: true });
-    if (this.currentModalType === 'suburb') {
-      const subs = Array.from(this.modalSelectedSet).filter(s => s !== 'all' && s !== 'All');
-      params.suburb = subs.length > 0 ? subs.join(',') : 'All';
-    }
-    const rawList = api.getLocalEnrichedEvents(params).events || [];
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    return rawList.filter(ev => {
-      const myVote = isSolo ? (ev.my_vote || ev.u1_vote) : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
-      return myVote !== 'love' && myVote !== 'pass';
-    }).length;
+    const inSwiper = (typeof app !== 'undefined' && app.activeTab === 'swiper');
+    const overrides = {};
+    const selected = Array.from(this.modalSelectedSet).filter(s => s !== 'all' && s !== 'All');
+    const selectedStr = selected.length > 0 ? selected.join(',') : 'All';
+    if (this.currentModalType === 'suburb') overrides.suburb = selectedStr;
+    else if (this.currentModalType === 'vibe') overrides.vibe = selectedStr;
+    else if (this.currentModalType === 'category') overrides.category = selectedStr;
+    return this.getDedupedCount(overrides, { forSwiper: inSwiper });
   },
 
   renderModalOptions() {
@@ -1798,10 +1861,13 @@ const discover = {
     const matchCount = this.getModalPreviewCount();
     if (applyBtn) {
       const actionWord = (typeof app !== 'undefined' && app.activeTab === 'swiper') ? 'Swipe' : 'Show';
-      const isSpecial = (this.currentModalType === 'date' || this.activeFeedMode === 'special');
-      const noun = isSpecial
-        ? (matchCount === 1 ? 'Special Event' : 'Special Events')
-        : (matchCount === 1 ? 'Place' : 'Places');
+      const isSavedList = (typeof app !== 'undefined' && app.activeTab !== 'swiper') && (this.isSpecialMood() || this.activeIntent === 'saved');
+      const isSpecial = !isSavedList && (this.currentModalType === 'date' || this.activeFeedMode === 'special');
+      const noun = isSavedList
+        ? (matchCount === 1 ? 'Saved Idea' : 'Saved Ideas')
+        : (isSpecial
+          ? (matchCount === 1 ? 'Special Event' : 'Special Events')
+          : (matchCount === 1 ? 'Place' : 'Places'));
       if (matchCount !== null) {
         applyBtn.textContent = `${actionWord} ${matchCount} ${noun} ✨`;
       } else {

@@ -31,6 +31,102 @@ const api = {
     return raw;
   },
 
+  CURATED_DIRECT_URLS_BY_ID: {
+    'bne-goma-henson': 'https://www.qagoma.qld.gov.au/exhibition/make-believe-magic-the-worlds-of-the-jim-henson-company',
+    'bne-qag-mudskippers': 'https://www.qagoma.qld.gov.au/learn/education-resources/justene-williams-once-we-were-mudskippers/',
+    'bne-goma-smokescreen': 'https://www.qagoma.qld.gov.au/exhibition/smokescreen-a-thickness-of-the-air',
+    'bne-dracula-qpac': 'https://www.qpac.com.au/whats-on/2026/shakestir-dracula',
+    'bne-qso-cinematic': 'https://www.qpac.com.au/whats-on/2027/qso-cinematic',
+    'bne-spacey-jane': 'https://www.ticketmaster.com.au/spacey-jane-heading-back-down-under-australian-tour-two-show-pass-brisbane-26-11-2026/event/130064ABC3216163',
+    'bne-melt-festival-powerhouse': 'https://brisbanepowerhouse.org/melt-unveils-biggest-ever-program-for-2026/',
+    'deep-30d-31-qagoma-up-late:-twilight-': 'https://www.qagoma.qld.gov.au/whats-on',
+    'bcc-bcc-outdoor-cinema-riverbank-m': 'https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/budget-friendly/free-outdoor-movies-in-brisbane-parks',
+    'special-blue-room-cinebar-rosalie': 'https://www.cinebar.com.au/sites/Cinebar-Rosalie-Village/0001',
+    'special-la-boite-macbeth': 'https://laboite.com.au/',
+    'special-brisstyle-ceramic-makers-market-clayfield': 'https://www.brisstyle.com.au/ceramic-makers-market-2/',
+    'special-country-day-party-wonderland': 'https://www.fatsoma.com/e/whdk2a98/country-day-party-brisbane-sold-out',
+    'special-pollinator-celebration-ipswich': 'https://events.humanitix.com/pollinator-celebration',
+    'special-flagstone-flavour-sounds': 'https://www.trybooking.com/au/event/1598131',
+    'special-qpsr-steam-railway-kilrie': 'https://qpsr.org/events/',
+    'special-peony-market-day-pocoposy': 'https://pocoposy.com.au/pages/peony-market-day',
+    'special-orion-sounds-of-90s-pop': 'https://orionhotel.com.au/whats-on/',
+    'special-aw-collectibles-gold-coast': 'https://www.awcollectibles.com.au/',
+    'special-rlwc26-final-suncorp': 'https://suncorpstadium.com.au/whats-on',
+    'special-qld-ballet-nutcracker-qpac': 'https://www.qpac.com.au/whats-on/2026/queensland-ballet-the-nutcracker',
+    'special-gflip-entertainment-centre': 'https://www.brisent.com.au/events/',
+    'special-crowded-house-brisbane': 'https://www.brisent.com.au/events/',
+    'special-matt-corby-fortitude': 'https://www.frontiertouring.com/mattcorby',
+    'sport-play-new-farm-parkrun': 'https://www.parkrun.com.au/newfarm/',
+    'sport-play-south-bank-parkrun': 'https://www.parkrun.com.au/southbank/',
+    'sport-play-spring-hill-baths-2-summer-dips': 'https://springhillbaths.com.au/',
+    'sport-play-free-council-pickleball-courts': 'https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/health-and-fitness/10-unique-sports-to-try-in-brisbane-including-pickleball',
+    'sport-play-gap-creek-reserve-mountain-biking': 'https://www.brisbane.qld.gov.au/parks-and-recreation',
+    'sport-play-brisbane-city-council-active-healthy-move-well-b': 'https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane',
+    'live-council-182353296': 'https://www.museumofbrisbane.com.au/whats-on/precious/'
+  },
+
+  sanitizeSourceUrl(url, ev = null) {
+    const raw = String(url || '').trim();
+    const evId = String((ev && ev.id) || '').trim();
+    const titleLower = String((ev && ev.title) || '').trim().toLowerCase();
+
+    if (evId && this.CURATED_DIRECT_URLS_BY_ID[evId]) {
+      return this.CURATED_DIRECT_URLS_BY_ID[evId];
+    }
+    if (titleLower.includes('boxing day races') && raw.includes('brc.com.au')) {
+      return 'https://www.brc.com.au/event/members-mile-day/';
+    }
+
+    const lower = raw.toLowerCase();
+    // Legacy BCC Trumba embed URLs 301-redirect to BCC homepage & drop eventid; route directly to the exact event on Trumba
+    if (lower.includes('brisbane.qld.gov.au/trumba') || lower.includes('trumbaembed=')) {
+      let decoded = raw;
+      try { decoded = decodeURIComponent(raw); } catch (e) {}
+      const m = decoded.match(/eventid=(\d+)/i);
+      if (m) {
+        return `https://www.trumba.com/calendars/brisbane-city-council?eventid=${m[1]}`;
+      }
+    }
+
+    const norm = raw.replace(/\/+$/, '').toLowerCase();
+    const hostUpgrades = {
+      'https://www.brisbaneheat.com.au': 'https://www.brisbaneheat.com.au/matches',
+      'https://brisbaneheat.com.au': 'https://www.brisbaneheat.com.au/matches',
+      'https://www.brisbanebullets.com.au': 'https://www.brisbanebullets.com.au/schedule',
+      'https://brisbanebullets.com.au': 'https://www.brisbanebullets.com.au/schedule',
+      'https://www.brisbaneroar.com.au': 'https://brisbaneroar.com.au/matches/',
+      'https://brisbaneroar.com.au': 'https://brisbaneroar.com.au/matches/',
+      'https://www.aleagues.com.au': 'https://aleagues.com.au/matches/a-league-men/',
+      'https://aleagues.com.au': 'https://aleagues.com.au/matches/a-league-men/',
+      'https://brisbanebandits.com.au': 'https://brisbanebandits.com.au/schedule/',
+      'https://www.brisbanebandits.com.au': 'https://brisbanebandits.com.au/schedule/',
+      'https://www.brc.com.au': 'https://www.brc.com.au/racing-trials-and-jumpouts-calendar/',
+      'https://brc.com.au': 'https://www.brc.com.au/racing-trials-and-jumpouts-calendar/',
+      'https://www.qldcricket.com.au': 'https://www.qldcricket.com.au/matches',
+      'https://thegabba.com.au': 'https://thegabba.com.au/whats-on',
+      'https://reds.rugby': 'https://reds.rugby/super-rugby/super-rugby-draw',
+      'https://www.brisent.com.au': 'https://www.brisent.com.au/events/',
+      'https://www.brisent.com.au/event-calendar': 'https://www.brisent.com.au/events/',
+      'https://blueroomcinebar.com': 'https://www.cinebar.com.au/sites/Cinebar-Rosalie-Village/0001',
+      'https://laboite.com.au/whats-on': 'https://laboite.com.au/',
+      'https://www.brisbane.qld.gov.au/whats-on-in-brisbane': 'https://www.brisbane.qld.gov.au/events-arts-and-culture/what-s-on-in-brisbane'
+    };
+    if (hostUpgrades[norm]) return hostUpgrades[norm];
+    return raw;
+  },
+
+  matchWords(text, keywords) {
+    if (!text || !Array.isArray(keywords) || keywords.length === 0) return false;
+    const s = String(text).toLowerCase();
+    return keywords.some(kw => {
+      const k = String(kw || '').toLowerCase().trim();
+      if (!k) return false;
+      const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`(^|[^a-z0-9])${esc}s?(?=$|[^a-z0-9])`, 'i');
+      return re.test(s);
+    });
+  },
+
   onImgError(img) {
     if (!img) return;
     img.onerror = null;
@@ -216,11 +312,13 @@ const api = {
   matchEventIntent(ev, intent = 'all', subIntent = 'all') {
     if (!ev || !intent || intent === 'all') return true;
     const sub = subIntent || 'all';
-    const tagsStr = Array.isArray(ev.tags) ? ev.tags.join(' ') : '';
-    const t = `${ev.title || ''} ${ev.description || ''} ${ev.category || ''} ${ev.vibe || ''} ${tagsStr} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
+    const tagsStr = Array.isArray(ev.tags) ? ev.tags.join(' ') : String(ev.tags || '');
     const cat = String(ev.category || '').toLowerCase();
+    const core = `${ev.title || ''} ${ev.category || ''} ${tagsStr} ${ev.source || ''}`.toLowerCase();
+    const t = `${ev.title || ''} ${ev.description || ''} ${ev.category || ''} ${ev.vibe || ''} ${tagsStr} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
     const price = String(ev.price_str || ev.price || '');
-    const hasAny = (keywords) => keywords.some(k => t.includes(k));
+    const hasAny = (keywords) => this.matchWords(t, keywords);
+    const hasCore = (keywords) => this.matchWords(core, keywords);
 
     if (intent === 'eat_drink') {
       const isEat = cat === 'food & drink' || hasAny(['restaurant', 'dining', 'dinner', 'bar', 'rooftop', 'cocktail', 'wine', 'brewery', 'cafe', 'bakery', 'brunch', 'gelato', 'dessert', 'eat street', 'tapas', 'bistro', 'omakase', 'ramen', 'pizza', 'steak']);
@@ -255,12 +353,22 @@ const api = {
     }
 
     if (intent === 'special_sports') {
-      const isSports = cat === 'sports & active' || hasAny(['nbl', 'bbl', 'wbbl', 'a-league', 'raceday', 't20', 'sheffield', 'super rugby', 'tennis', 'abl', 'bullets', 'heat', 'roar', 'reds', 'bulls']);
+      const nonSportsCats = ['arts & culture', 'comedy & shows', 'food & drink', 'nightlife & bars', 'workshops & classes', 'markets & pop-ups'];
+      const isSports = cat === 'sports & active' || (!nonSportsCats.includes(cat) && hasCore([
+        'nbl', 'bbl', 'wbbl', 'a-league', 'raceday', 't20', 't20i', 'sheffield shield',
+        'super rugby', 'tennis', 'abl', 'bullets', 'brisbane heat', 'brisbane roar',
+        'queensland reds', 'queensland bulls', 'brisbane bandits', 'rlwc26', 'world cup'
+      ]));
       if (!isSports) return false;
-      if (sub === 'cricket') return hasAny(['heat', 'bbl', 'wbbl', 't20', 'sheffield', 'bulls', 'gabba']);
-      if (sub === 'basketball') return hasAny(['bullets', 'nbl']);
-      if (sub === 'football_rugby') return hasAny(['roar', 'a-league', 'reds', 'super rugby', 'suncorp']);
-      if (sub === 'racing_tennis') return hasAny(['raceday', 'races', 'eagle farm', 'doomben', 'tennis', 'brisbane international', 'bandits']);
+      const sportText = `${ev.title || ''} ${ev.source || ''} ${tagsStr}`.toLowerCase();
+      const hasSport = (kws) => this.matchWords(sportText, kws);
+      if (sub === 'cricket') {
+        if (hasSport(['baseball', 'bandits', 'abl'])) return false;
+        return hasSport(['brisbane heat', 'bbl', 'wbbl', 't20', 't20i', 'sheffield', 'bulls', 'cricket', 'gabba']);
+      }
+      if (sub === 'basketball') return hasSport(['bullets', 'nbl', 'basketball']);
+      if (sub === 'football_rugby') return hasSport(['roar', 'a-league', 'reds', 'super rugby', 'rugby', 'rlwc26', 'nrl', 'afl', 'football', 'soccer', 'suncorp']);
+      if (sub === 'racing_tennis') return hasSport(['raceday', 'races', 'racecourse', 'eagle farm', 'doomben', 'tennis', 'brisbane international', 'bandits', 'baseball', 'abl']);
       return true;
     }
 
@@ -498,6 +606,7 @@ const api = {
     for (const raw of allEvents) {
       const ev = { ...raw };
       ev.image_url = this.sanitizeImageUrl(ev.image_url);
+      ev.source_url = this.sanitizeSourceUrl(ev.source_url, ev);
       ev.location_name = ev.location_name || ev.location || 'Brisbane';
       ev.location = ev.location || ev.location_name;
       ev.price_str = ev.price_str || ev.price || '$$';
@@ -523,35 +632,53 @@ const api = {
         continue;
       }
 
-      // Suburb / Region filter (matches any of the selected suburbs or SEQ regions)
+      // Suburb / Region filter (matches structured area/location fields, never unrelated description prose)
       if (selectedSubs.length > 0) {
-        const evSub = `${ev.suburb || ''} ${ev.area || ''} ${ev.location_name || ''} ${ev.description || ''}`.toLowerCase();
-        const evTitle = (ev.title || '').toLowerCase();
-        const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
+        const evSubLoc = `${ev.suburb || ''} ${ev.area || ''} ${ev.location_name || ''} ${ev.location || ''}`.toLowerCase();
+        const evTitleTags = `${ev.title || ''} ${(Array.isArray(ev.tags) ? ev.tags.join(' ') : '')}`.toLowerCase();
         const evArea = (ev.area || '').toLowerCase();
+
+        const SUBURB_ALIASES = {
+          'mount coot-tha': ['mount coot-tha', 'mt coot-tha', 'coot-tha', 'toowong', 'st lucia', 'indooroopilly', 'graceville', 'sherwood', 'planetarium'],
+          'seq day escape': ['seq day escape', 'islands, coast & hinterland', 'moreton island', 'tangalooma', 'north stradbroke', 'point lookout', 'tamborine', 'maleny', 'montville', 'glass house', 'springbrook', 'canungra', 'kooroomba', "o'reilly"],
+          'inner north & coast': ['inner north', 'bayside', 'manly', 'redcliffe', 'shorncliffe', 'sandgate', 'albion', 'windsor', 'kedron', 'nundah', 'clayfield', 'enoggera', 'ascot', 'hamilton', 'northshore'],
+          'south bank': ['south bank', 'south brisbane', 'qpac', 'qagoma', 'goma', 'fish lane'],
+          'brisbane cbd': ['brisbane cbd', 'brisbane city', 'riverfront', 'queen st', 'eagle st', 'customs house', 'city hall']
+        };
 
         const matchesAnySub = selectedSubs.some(s => {
           if (s === 'brisbane') {
-            const isNonBrisbane = evArea.includes('gold coast') || evArea.includes('sunshine coast') || evArea.includes('ipswich') || evArea.includes('logan');
-            if (!isNonBrisbane) return true;
+            const isNonBrisbane = evArea.includes('gold coast') || evArea.includes('sunshine coast') || evArea.includes('ipswich') || evArea.includes('logan') || evArea.includes('islands, coast') || evArea.includes('at home');
+            return !isNonBrisbane;
           }
-          return evSub.includes(s) || evTitle.includes(s) || evTags.includes(s);
+          const terms = SUBURB_ALIASES[s] || [s];
+          return terms.some(term => evSubLoc.includes(term) || this.matchWords(`${evSubLoc} ${evTitleTags}`, [term]));
         });
         if (!matchesAnySub) {
           continue;
         }
       }
 
-      // Vibe filter (matches any of the selected vibes)
+      // Vibe filter (matches structured vibes/tags/price/time/title, avoiding false positives in long descriptions)
       if (selectedVibes.length > 0) {
-        const evVibe = `${ev.vibe || ''} ${ev.category || ''} ${ev.price_str || ''} ${ev.time_str || ''}`.toLowerCase();
-        const evDesc = (ev.description || '').toLowerCase();
-        const evTitle = (ev.title || '').toLowerCase();
         const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
+        const evStructured = `${ev.vibe || ''} ${ev.category || ''} ${ev.price_str || ''} ${ev.time_str || ''} ${evTags} ${ev.title || ''}`.toLowerCase();
+        const priceLower = String(ev.price_str || ev.price || '').toLowerCase();
+        const priceNumMatch = priceLower.match(/\$(\d+)/);
+        const minDollar = priceNumMatch ? parseInt(priceNumMatch[1], 10) : null;
 
-        const matchesAnyVibe = selectedVibes.some(v => 
-          evVibe.includes(v) || evDesc.includes(v) || evTitle.includes(v) || evTags.includes(v)
-        );
+        const matchesAnyVibe = selectedVibes.some(v => {
+          if (v === 'budget' || v === 'free') {
+            return priceLower.includes('free') || priceLower === '$' || (minDollar !== null && minDollar <= 30) || this.matchWords(evStructured, ['budget', 'free']);
+          }
+          if (v === 'late night') {
+            return this.matchWords(evStructured, ['late night', 'night', 'cocktail', 'rooftop', 'speakeasy', 'jazz', 'bar', 'bars', 'brewery']) || /\b(19|20|21|22|23):\d{2}\b|\b(7|8|9|10|11):\d{2}\s*pm\b/i.test(String(ev.time_str || ''));
+          }
+          if (v === 'stay-in') {
+            return this.matchWords(`${evStructured} ${ev.location || ''}`, ['stay-in', 'at home']);
+          }
+          return this.matchWords(evStructured, [v]) || evTags.includes(v);
+        });
         if (!matchesAnyVibe) {
           continue;
         }
@@ -571,7 +698,7 @@ const api = {
       }
 
       // Date Range filter (ongoing venues are available any day)
-      if (!ev.ongoing && !this.matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
+      if (!ev.ongoing && !this.matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date, false)) {
         continue;
       }
 
@@ -696,9 +823,9 @@ const api = {
    * Check whether an event date string falls within a filter range.
    * Uses local calendar date parsing to avoid UTC off-by-one-day issues.
    */
-  matchesDateRange(evDateStr, range, customStart, customEnd, evEndStr = null) {
+  matchesDateRange(evDateStr, range, customStart, customEnd, evEndStr = null, allowUndated = true) {
     if (!range || range === 'all') return true;
-    if (!evDateStr) return true;
+    if (!evDateStr) return allowUndated;
 
     const parseLocal = (s) => {
       const mm = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
@@ -706,7 +833,7 @@ const api = {
     };
 
     const target = parseLocal(evDateStr);
-    if (!target || isNaN(target.getTime())) return true; // Undated / ongoing activities always show
+    if (!target || isNaN(target.getTime())) return allowUndated; // Undated items excluded from dated range filters when allowUndated=false
     const targetEnd = parseLocal(evEndStr) || target;
 
     if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
@@ -761,8 +888,10 @@ const api = {
   async autoDailyPull(force = false) {
     this.purgeLegacySyntheticCustomEvents();
     const today = this.todayYMD();
+    const CATALOG_VERSION = '6.0';
     const lastPull = localStorage.getItem('twodo_last_daily_pull');
-    if (!force && lastPull === today) {
+    const savedVer = localStorage.getItem('twodo_catalog_version');
+    if (!force && lastPull === today && savedVer === CATALOG_VERSION) {
       return { skipped: true, date: today };
     }
 
@@ -776,8 +905,15 @@ const api = {
 
     let livePool = [];
     try {
-      livePool = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]');
-      livePool = livePool.filter(e => this.hasValidSourceUrl(e) && !this.isPastEvent(e));
+      const cached = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]');
+      // Only preserve truly external OSM/RSS/FB items not already superseded by fresh catalog, and sanitize all URLs
+      const preloadedIds = new Set(
+        ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
+          .map(e => String(e.id || ''))
+      );
+      livePool = cached
+        .map(e => e ? { ...e, source_url: this.sanitizeSourceUrl(e.source_url, e) } : null)
+        .filter(e => e && !preloadedIds.has(String(e.id || '')) && this.hasValidSourceUrl(e) && !this.isPastEvent(e));
       livePool.forEach(e => existingKeys.add(norm(e.title)));
     } catch (e) {
       livePool = [];
@@ -882,6 +1018,7 @@ const api = {
     try {
       localStorage.setItem('twodo_daily_live_events', JSON.stringify(livePool.slice(-150)));
       localStorage.setItem('twodo_last_daily_pull', today);
+      localStorage.setItem('twodo_catalog_version', CATALOG_VERSION);
     } catch (e) {}
 
     // Badge & Push Notification when new events are pulled for this week
