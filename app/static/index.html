@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=5.0">
+  <link rel="stylesheet" href="css/style.css?v=5.1">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -568,53 +568,111 @@
       </div>
     </section>
 
-    <section id="view-planner" class="view-panel">
-      <!-- Hero Next Date Countdown Card (Rendered if any upcoming date exists) -->
-      <div id="planner-hero-card" class="planner-hero-card hidden">
-        <!-- Dynamically injected hero card for the next upcoming date night -->
+    <section id="view-planner" class="view-panel gcal-planner-view">
+      <!-- Google Calendar Sticky Top App Bar -->
+      <header class="gcal-topbar">
+        <div class="gcal-topbar-left">
+          <button type="button" id="gcal-drawer-btn" class="gcal-icon-circle" onclick="planner.toggleDrawer()" aria-label="Calendar menu" title="Calendar menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <button type="button" id="gcal-month-btn" class="gcal-month-btn" onclick="planner.toggleMiniMonth()" aria-expanded="false">
+            <span id="gcal-header-month">November</span>
+            <svg class="gcal-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="gcal-topbar-right">
+          <div class="gcal-pill-tools">
+            <button type="button" id="gcal-search-btn" class="gcal-tool-btn" onclick="planner.toggleSearch()" aria-label="Search events" title="Search events">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+            <button type="button" id="gcal-today-btn" class="gcal-tool-btn gcal-today-btn" onclick="planner.jumpToToday()" aria-label="Jump to Today" title="Jump to Today">
+              <span class="gcal-today-glyph" id="gcal-today-num">14</span>
+            </button>
+          </div>
+          <button type="button" id="gcal-avatar-btn" class="gcal-user-avatar" onclick="planner.toggleDrawer()" title="Emma &amp; Jordan Calendar">E</button>
+        </div>
+      </header>
+
+      <!-- Collapsible Search Bar -->
+      <div id="gcal-search-bar" class="gcal-search-bar hidden">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="search" id="gcal-search-input" placeholder="Search plans, venues or notes..." oninput="planner.setSearchQuery(this.value)">
+        <button type="button" class="gcal-search-clear" onclick="planner.clearSearch()" aria-label="Clear search">&times;</button>
       </div>
 
-      <!-- Segmented Toggle: [🗓️ Scheduled] | [💡 Bucket List] | [📸 Memories] -->
-      <div class="planner-segmented-bar">
-        <button type="button" class="planner-tab-btn active" id="tab-btn-scheduled" onclick="planner.switchView('scheduled')">
-          <span>🗓️ Scheduled</span>
+      <!-- Collapsible Mini-Month Picker Drawer (under November ▾) -->
+      <div id="gcal-mini-month" class="gcal-mini-month hidden"></div>
+
+      <!-- Compact View Switcher Strip -->
+      <div class="gcal-view-strip" role="tablist">
+        <button type="button" class="planner-tab-btn gcal-view-chip active" id="tab-btn-scheduled" onclick="planner.switchView('scheduled')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <line x1="8" y1="9" x2="16" y2="9"></line>
+            <line x1="8" y1="13" x2="16" y2="13"></line>
+            <line x1="8" y1="17" x2="13" y2="17"></line>
+          </svg>
+          <span>Schedule</span>
           <span class="planner-pill-count" id="scheduled-count-badge">0</span>
         </button>
-        <button type="button" class="planner-tab-btn" id="tab-btn-bucket" onclick="planner.switchView('bucket')">
+        <button type="button" class="planner-tab-btn gcal-view-chip" id="tab-btn-month" onclick="planner.switchView('month')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <line x1="9" y1="4" x2="9" y2="22"></line>
+            <line x1="15" y1="4" x2="15" y2="22"></line>
+          </svg>
+          <span>Month</span>
+        </button>
+        <button type="button" class="planner-tab-btn gcal-view-chip" id="tab-btn-bucket" onclick="planner.switchView('bucket')">
           <span>💡 Bucket List</span>
           <span class="planner-pill-count" id="bucket-count-badge">0</span>
         </button>
-        <button type="button" class="planner-tab-btn" id="tab-btn-memories" onclick="planner.switchView('memories')">
+        <button type="button" class="planner-tab-btn gcal-view-chip" id="tab-btn-memories" onclick="planner.switchView('memories')">
           <span>📸 Memories</span>
           <span class="planner-pill-count" id="memories-count-badge">0</span>
         </button>
       </div>
 
-      <!-- Quick Action Utilities (Export / Copy Summary) as clean inline pills -->
-      <div class="planner-sub-actions">
-        <button type="button" class="btn-planner-util" onclick="planner.exportCalendar()" title="Download .ics file for Apple/Google Calendar">
-          <span>🗓️ Add to Calendar (.ics)</span>
-        </button>
-        <button type="button" class="btn-planner-util" onclick="planner.copySummary()" title="Copy formatted date summary">
-          <span>📋 Copy Date Summary</span>
-        </button>
-      </div>
+      <!-- Compact Next-Up Google Calendar Strip (Rendered if any upcoming date exists) -->
+      <div id="planner-hero-card" class="planner-hero-card gcal-nextup-banner hidden"></div>
 
-      <!-- Tab Content 1: Scheduled Dates Timeline -->
-      <div id="planner-section-scheduled" class="planner-sub-section">
-        <div id="scheduled-timeline" class="scheduled-timeline">
-          <!-- Dynamically rendered scheduled items -->
+      <!-- Tab Content 1: Schedule Agenda View (Google Calendar default) -->
+      <div id="planner-section-scheduled" class="planner-sub-section gcal-section">
+        <div id="scheduled-timeline" class="scheduled-timeline gcal-agenda-wrap">
+          <!-- Dynamically rendered Google Calendar day rows -->
         </div>
 
-        <div id="scheduled-empty" class="empty-state">
+        <div id="scheduled-empty" class="empty-state gcal-empty hidden">
           <span class="empty-emoji">📆</span>
           <h4>No dates scheduled yet</h4>
-          <p>Pick items from your Mutual Bucket List or Discover feed to lock in your next date night!</p>
-          <button class="btn btn-primary btn-sm" onclick="planner.switchView('bucket')">Browse Bucket List 💡</button>
+          <p>Tap <strong>+</strong> to add an event, or pick something from your Bucket List or Discover feed!</p>
+          <div class="gcal-empty-actions">
+            <button type="button" class="btn btn-primary btn-sm" onclick="planner.openNewEventModal()">+ New Event</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="planner.switchView('bucket')">Browse Bucket List 💡</button>
+          </div>
         </div>
       </div>
 
-      <!-- Tab Content 2: Mutual Bucket List -->
+      <!-- Tab Content 2: Full Interactive Month View -->
+      <div id="planner-section-month" class="planner-sub-section gcal-section hidden">
+        <div id="gcal-full-month" class="gcal-full-month-wrap"></div>
+      </div>
+
+      <!-- Tab Content 3: Mutual Bucket List -->
       <div id="planner-section-bucket" class="planner-sub-section hidden">
         <div id="bucket-list" class="bucket-list-cards-grid">
           <!-- Bucket list items -->
@@ -628,7 +686,7 @@
         </div>
       </div>
 
-      <!-- Tab Content 3: Completed Couple Memories -->
+      <!-- Tab Content 4: Completed Couple Memories -->
       <div id="planner-section-memories" class="planner-sub-section hidden">
         <div id="memories-list" class="scheduled-timeline">
           <!-- Completed memory cards -->
@@ -637,9 +695,61 @@
         <div id="memories-empty" class="empty-state hidden">
           <span class="empty-emoji">📸</span>
           <h4>No completed date memories yet</h4>
-          <p>After you go on a scheduled date, tap <strong>✅ Done!</strong> to save it here with your favourite memories.</p>
+          <p>After you go on a scheduled date, tap <strong>We Did This!</strong> to save it here with your favourite memories.</p>
         </div>
       </div>
+
+      <!-- Google Calendar Slide-down Menu Drawer -->
+      <div id="gcal-drawer-backdrop" class="gcal-drawer-backdrop hidden" onclick="planner.toggleDrawer(false)"></div>
+      <aside id="gcal-drawer-menu" class="gcal-drawer hidden" aria-label="Google Calendar navigation">
+        <div class="gcal-drawer-head">
+          <div class="gcal-drawer-brand">
+            <span class="gcal-drawer-logo">17</span>
+            <div>
+              <strong>TwoDo Calendar</strong>
+              <small>Shared Couple Schedule</small>
+            </div>
+          </div>
+          <button type="button" class="close-btn" onclick="planner.toggleDrawer(false)">&times;</button>
+        </div>
+
+        <div class="gcal-drawer-group">
+          <button type="button" class="gcal-drawer-item" onclick="planner.switchView('scheduled'); planner.toggleDrawer(false);">
+            <span>🗓️</span><span>Schedule View</span>
+          </button>
+          <button type="button" class="gcal-drawer-item" onclick="planner.switchView('month'); planner.toggleDrawer(false);">
+            <span>📅</span><span>Month View</span>
+          </button>
+          <button type="button" class="gcal-drawer-item" onclick="planner.switchView('bucket'); planner.toggleDrawer(false);">
+            <span>💡</span><span>Bucket List</span>
+          </button>
+          <button type="button" class="gcal-drawer-item" onclick="planner.switchView('memories'); planner.toggleDrawer(false);">
+            <span>📸</span><span>Completed Memories</span>
+          </button>
+        </div>
+
+        <div class="gcal-drawer-divider"></div>
+
+        <div class="gcal-drawer-group">
+          <button type="button" class="gcal-drawer-item" onclick="planner.toggleDrawer(false); planner.openNewEventModal();">
+            <span>➕</span><span>Create Event</span>
+          </button>
+          <button type="button" class="gcal-drawer-item" onclick="planner.exportCalendar(); planner.toggleDrawer(false);">
+            <span>📥</span><span>Export to Apple / Google (.ics)</span>
+          </button>
+          <button type="button" class="gcal-drawer-item" onclick="planner.copySummary(); planner.toggleDrawer(false);">
+            <span>📋</span><span>Copy Itinerary Summary</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Google Calendar Material 3 Floating Action Button (+) -->
+      <button type="button" id="gcal-fab-btn" class="gcal-fab" onclick="planner.openNewEventModal()" aria-label="Create event" title="Create event">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
     </section>
 
   </main>
@@ -664,31 +774,43 @@
     </div>
   </div>
 
-  <!-- SCHEDULE DATE MODAL -->
-  <div id="schedule-modal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Schedule Activity</h3>
-        <button class="close-btn" onclick="planner.closeScheduleModal()">&times;</button>
+  <!-- SCHEDULE / CREATE EVENT MODAL -->
+  <div id="schedule-modal" class="modal-overlay hidden" onclick="if(event.target===this) planner.closeScheduleModal()">
+    <div class="modal-card gcal-modal-card">
+      <div class="modal-header gcal-modal-header">
+        <h3 id="sched-modal-heading">Schedule Activity</h3>
+        <button type="button" class="close-btn" onclick="planner.closeScheduleModal()">&times;</button>
       </div>
       <form id="schedule-form" onsubmit="planner.submitSchedule(event)">
         <input type="hidden" id="sched-event-id">
         <input type="hidden" id="sched-planner-id">
+        <input type="hidden" id="sched-color" value="blueberry">
 
-        <div class="form-group">
+        <div class="form-group" id="sched-static-title-group">
           <label>Activity</label>
           <div id="sched-event-title" class="static-field"></div>
           <div id="sched-event-when-hint" class="sched-event-when-hint hidden" style="margin-top:6px; padding:8px 12px; background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; font-size:0.83rem; color:#9f1239; line-height:1.4;"></div>
         </div>
 
+        <div id="sched-custom-fields" class="hidden">
+          <div class="form-group">
+            <label for="sched-title-input">Event Title</label>
+            <input type="text" id="sched-title-input" placeholder="e.g. Lunch, Ferry to New Farm, Movie Night">
+          </div>
+          <div class="form-group">
+            <label for="sched-location-input">Location (optional)</label>
+            <input type="text" id="sched-location-input" placeholder="e.g. Howard Smith Wharves, South Bank">
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="form-group flex-1">
-            <label for="sched-date">Pick Date</label>
+            <label for="sched-date">Date</label>
             <input type="date" id="sched-date" required>
           </div>
           <div class="form-group flex-1">
-            <label for="sched-slot">Time / Slot</label>
-            <select id="sched-slot">
+            <label for="sched-slot">Time Slot</label>
+            <select id="sched-slot" onchange="planner.onSlotChange(this.value)">
               <option value="morning">🌅 Morning (10:00 AM)</option>
               <option value="afternoon">☀️ Afternoon (2:00 PM)</option>
               <option value="evening" selected>🍷 Evening (6:30 PM)</option>
@@ -697,8 +819,39 @@
           </div>
         </div>
 
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="sched-time">Start Time</label>
+            <input type="time" id="sched-time" value="18:30" onchange="planner.onTimeChange(this.value)">
+          </div>
+          <div class="form-group flex-1">
+            <label for="sched-duration">Duration</label>
+            <select id="sched-duration">
+              <option value="30">30 mins</option>
+              <option value="60">1 hour</option>
+              <option value="90" selected>1.5 hours</option>
+              <option value="120">2 hours</option>
+              <option value="180">3 hours</option>
+              <option value="all_day">All day</option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label for="sched-notes">Couple Notes / Reservations</label>
+          <label>Calendar Color &amp; Style</label>
+          <div id="sched-color-swatches" class="gcal-color-swatches">
+            <button type="button" class="gcal-swatch active" data-color="blueberry" style="--swatch:#5c6bc0" onclick="planner.selectScheduleColor('blueberry')" title="Blueberry (Default)"></button>
+            <button type="button" class="gcal-swatch" data-color="sage" style="--swatch:#0b8043" onclick="planner.selectScheduleColor('sage')" title="Sage (Outdoors)"></button>
+            <button type="button" class="gcal-swatch" data-color="peacock" style="--swatch:#039be5" onclick="planner.selectScheduleColor('peacock')" title="Peacock (Sports & Water)"></button>
+            <button type="button" class="gcal-swatch" data-color="grape" style="--swatch:#8e24aa" onclick="planner.selectScheduleColor('grape')" title="Grape (Music & Shows)"></button>
+            <button type="button" class="gcal-swatch" data-color="flamingo" style="--swatch:#d81b60" onclick="planner.selectScheduleColor('flamingo')" title="Berry (Date Night)"></button>
+            <button type="button" class="gcal-swatch" data-color="banana" style="--swatch:#d5b021" onclick="planner.selectScheduleColor('banana')" title="Banana (All Day)"></button>
+            <button type="button" class="gcal-swatch is-outline-swatch" data-color="outline" style="--swatch:#5c6bc0" onclick="planner.selectScheduleColor('outline')" title="Outlined Card">Aa</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sched-notes">Notes / Booking Details</label>
           <input type="text" id="sched-notes" placeholder="e.g. Book table under Emma, dress smart-casual">
         </div>
 
@@ -709,9 +862,16 @@
 
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="planner.closeScheduleModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save to Itinerary</button>
+          <button type="submit" class="btn btn-gcal-save">Save</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- GOOGLE CALENDAR EVENT DETAIL SHEET -->
+  <div id="gcal-detail-modal" class="modal-overlay hidden" onclick="if(event.target===this) planner.closeEventDetail()">
+    <div class="modal-card gcal-detail-card" id="gcal-detail-body">
+      <!-- Dynamically populated Google Calendar event details -->
     </div>
   </div>
 
@@ -1219,16 +1379,16 @@
 
   <!-- App Scripts -->
   <script src="js/firebase-config.js?v=5.2"></script>
-  <script src="js/firebase-service.js?v=6.1"></script>
+  <script src="js/firebase-service.js?v=6.2"></script>
   <script src="js/notifications.js?v=6.1"></script>
   <script src="js/auth-ui.js?v=6.1"></script>
   <script src="js/events_data.js?v=6.1"></script>
-  <script src="js/api.js?v=6.1"></script>
+  <script src="js/api.js?v=6.2"></script>
   <script src="js/chat.js?v=6.1"></script>
   <script src="js/collaborative.js?v=6.1"></script>
   <script src="js/discover.js?v=6.1"></script>
   <script src="js/swiper.js?v=6.1"></script>
-  <script src="js/planner.js?v=6.1"></script>
+  <script src="js/planner.js?v=6.2"></script>
   <script src="js/matches.js?v=6.1"></script>
   <script src="js/app.js?v=6.1"></script>
 </body>

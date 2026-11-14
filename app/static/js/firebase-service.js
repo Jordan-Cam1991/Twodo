@@ -1282,16 +1282,28 @@ const firebaseService = {
 
     const payload = {
       event_id: item.event_id,
-      is_personal: Boolean(item.is_personal || item.category === 'Personal Plan' || String(item.event_id || '').startsWith('personal_')),
+      is_personal: Boolean(
+        item.is_personal ||
+        item.category === 'Personal Plan' ||
+        item.category === 'Personal' ||
+        String(item.event_id || '').startsWith('personal_') ||
+        String(item.event_id || '').startsWith('personal-')
+      ),
       title: item.title,
       scheduled_date: item.scheduled_date || null,
       scheduled_time: item.scheduled_time || null,
+      duration_mins: item.duration_mins ?? null,
+      all_day: Boolean(item.all_day),
+      color: item.color || 'blueberry',
+      style: item.style || 'solid',
       time_slot: item.time_slot || 'evening',
       notes: item.notes || '',
       budget: item.budget || 0,
       reservation_info: item.reservation_info || '',
       category: item.category || '',
-      location_name: item.location_name || '',
+      location_name: item.location_name || item.location || '',
+      location: item.location || item.location_name || '',
+      source_url: item.source_url || '',
       city: item.city || 'Brisbane',
       image_url: item.image_url || '',
       price_str: item.price_str || '',
