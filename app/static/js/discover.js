@@ -38,10 +38,12 @@ const discover = {
     ],
     special: [
       { intent: 'all', icon: '✨', label: 'All Events' },
-      { intent: 'special_music', icon: '🎵', label: 'Concerts & Music' },
-      { intent: 'special_sports', icon: '🏟️', label: 'Live Sports' },
-      { intent: 'special_shows', icon: '🎭', label: 'Comedy & Theatre' },
-      { intent: 'special_festivals', icon: '🎨', label: 'Festivals & Arts' },
+      { intent: 'special_music', icon: '🎵', label: 'Music & Concerts' },
+      { intent: 'special_sports', icon: '🏟️', label: 'Sports & Active' },
+      { intent: 'special_shows', icon: '🎭', label: 'Comedy & Shows' },
+      { intent: 'special_festivals', icon: '🎨', label: 'Arts & Culture' },
+      { intent: 'special_outdoors', icon: '🌿', label: 'Outdoor & Adventure' },
+      { intent: 'special_markets', icon: '🎪', label: 'Markets & Pop-ups' },
       { intent: 'saved', icon: '❤️', label: 'Loves & Votes' }
     ]
   },
@@ -92,18 +94,18 @@ const discover = {
       ]
     },
     special_music: {
-      label: '🎵 Concerts & Music',
+      label: '🎵 Music & Concerts',
       subs: [
-        { id: 'all', label: '✨ All Concerts' },
-        { id: 'candlelight', label: '🕯️ Candlelight & Symphony' },
-        { id: 'arena_outdoor', label: '🏟️ Riverstage, Suncorp & Arena' },
-        { id: 'club_theatre', label: '🎸 Fortitude Hall, Tivoli & Triffid' }
+        { id: 'all', label: '✨ All Music & Concerts' },
+        { id: 'candlelight', label: '🕯️ Candlelight & Classical' },
+        { id: 'arena_outdoor', label: '🏟️ Riverstage, Suncorp & Outdoor' },
+        { id: 'club_theatre', label: '🎸 Concert Halls & Clubs' }
       ]
     },
     special_sports: {
-      label: '🏟️ Live Sports',
+      label: '🏟️ Sports & Active',
       subs: [
-        { id: 'all', label: '✨ All Live Sports' },
+        { id: 'all', label: '✨ All Sports & Active' },
         { id: 'cricket', label: '🏏 Cricket (BBL, WBBL & T20I)' },
         { id: 'basketball', label: '🏀 Basketball (Bullets NBL)' },
         { id: 'football_rugby', label: '⚽ Football & Rugby (Roar & Reds)' },
@@ -111,21 +113,35 @@ const discover = {
       ]
     },
     special_shows: {
-      label: '🎭 Shows & Cinema',
+      label: '🎭 Comedy & Shows',
       subs: [
-        { id: 'all', label: '✨ All Shows & Cinema' },
+        { id: 'all', label: '✨ All Comedy & Shows' },
         { id: 'theatre_ballet', label: '🎭 QPAC Musicals, Theatre & Ballet' },
         { id: 'comedy', label: '🎤 Comedy Galas & Stand-Up' },
         { id: 'cinema_movies', label: '🎬 In Cinemas & Movies' }
       ]
     },
     special_festivals: {
-      label: '🎨 Festivals & Arts',
+      label: '🎨 Arts & Culture',
       subs: [
-        { id: 'all', label: '✨ All Festivals & Arts' },
-        { id: 'exhibitions', label: '🖼️ GOMA Exhibitions & Film Fest' },
-        { id: 'festivals_tours', label: '🎪 Festivals, Markets & Special Tours' }
+        { id: 'all', label: '✨ All Arts & Culture' },
+        { id: 'exhibitions', label: '🖼️ Exhibitions, Galleries & Museums' },
+        { id: 'film_screenings', label: '🎬 Film Screenings & Festivals' },
+        { id: 'festivals_tours', label: '🎪 Cultural Events & Tours' }
       ]
+    },
+    special_outdoors: {
+      label: '🌿 Outdoor & Adventure',
+      subs: [
+        { id: 'all', label: '✨ All Outdoor & Adventure' },
+        { id: 'nature', label: '🥾 Walks, Parks & Sightseeing' },
+        { id: 'adventure', label: '🏄 Kayak, Climb & Adventure' },
+        { id: 'fitness', label: '🧘 Yoga & Outdoor Fitness' }
+      ]
+    },
+    special_markets: {
+      label: '🎪 Markets & Pop-ups',
+      subs: []
     },
     whats_on: {
       label: '🎟️ Special Events',
@@ -474,15 +490,16 @@ const discover = {
       allLabel: '🌟 All Activities & Categories',
       isMulti: true,
       options: [
-        { id: 'Food & Drink', label: '🍕 Food, Dining & Bakeries', desc: 'Restaurants, cafes, bakeries & culinary gems' },
-        { id: 'Nightlife & Bars', label: '🍸 Bars, Rooftops & Speakeasies', desc: 'Cocktail lounges, whisky bars, breweries & wine' },
-        { id: 'Outdoors & Nature', label: '🌿 Outdoors, Lookouts & Day Trips', desc: 'River walks, botanic gardens, islands & falls' },
-        { id: 'Sports & Active', label: '🏟️ Live Sports & Play Together', desc: 'Suncorp/Gabba games, pickleball, climbing, putt-putt' },
-        { id: 'Arts & Culture', label: '🏛️ Galleries, Museums & Cinema', desc: 'QAGOMA, Planetarium, open-air & boutique cinemas' },
-        { id: 'Workshops & Classes', label: '🏺 Pottery, Cooking & Sip Classes', desc: 'Clay wheel throwing, pasta making, paint & sip' },
-        { id: 'Markets & Pop-ups', label: '🎪 Night Markets & Farmers Markets', desc: 'Eat Street, weekend farmers & artisan markets' },
-        { id: 'Music & Concerts', label: '🎵 Live Music, Jazz & Gigs', desc: 'Riverstage, Fortitude Music Hall, Tivoli & jazz' },
-        { id: 'Comedy & Shows', label: '🎭 Comedy, Theatre & QPAC', desc: 'Stand-up comedy clubs, musicals, ballet & cabaret' }
+        { id: 'Outdoor & Adventure', label: '🌿 Outdoor & Adventure', desc: 'Open days, coastal cruises, trails & outdoor fitness' },
+        { id: 'Sightseeing & Nature', label: '🌄 Sightseeing & Nature', desc: 'Botanic gardens, lookouts, koala centres & island walks' },
+        { id: 'Arts & Culture', label: '🏛️ Arts & Culture', desc: 'Galleries, GOMA, museums, creative studios & cultural events' },
+        { id: 'Music & Concerts', label: '🎵 Music & Concerts', desc: 'Live gigs, Candlelight, Riverstage, Tivoli & music halls' },
+        { id: 'Comedy & Shows', label: '🎭 Comedy & Shows', desc: 'QPAC musicals, ballet, theatre, stand-up & boutique cinemas' },
+        { id: 'Sports & Active', label: '🏟️ Sports & Active', desc: 'BBL/NBL/A-League matches, climbing, padel & pickleball' },
+        { id: 'Markets & Pop-ups', label: '🎪 Markets & Pop-ups', desc: 'Eat Street, weekend farmers, artisan & night markets' },
+        { id: 'Food & Drink', label: '🍕 Food & Drink', desc: 'Restaurants, cafes, bakeries & dining spots' },
+        { id: 'Date Night Specials', label: '🕯️ Date Night Specials', desc: 'Speakeasies, wine bars, arcade nights, stargazing & spas' },
+        { id: 'Workshops & Classes', label: '🏺 Workshops & Classes', desc: 'Hands-on pottery, cooking, games & creative sessions' }
       ]
     }
   },
@@ -1082,10 +1099,10 @@ const discover = {
       this.selectedCategories = ['Food & Drink'];
     } else if (mood === 'drinks') {
       this.activeFilter = 'all';
-      this.selectedCategories = ['Nightlife & Bars'];
+      this.selectedCategories = ['Nightlife & Bars', 'Date Night Specials'];
     } else if (mood === 'outdoor') {
       this.activeFilter = 'all';
-      this.selectedCategories = ['Outdoors & Nature', 'Outdoor & Adventure', 'Sightseeing & Nature'];
+      this.selectedCategories = ['Outdoor & Adventure', 'Sightseeing & Nature'];
     } else if (mood === 'shows') {
       this.activeFilter = 'all';
       this.selectedCategories = ['Comedy & Shows', 'Music & Concerts'];

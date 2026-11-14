@@ -306,60 +306,59 @@ const api = {
   },
 
   /**
+   * Returns normalized lowercase tags array for consistent tag/filter matching.
+   */
+  getEventTags(ev) {
+    if (!ev || !ev.tags) return [];
+    const arr = Array.isArray(ev.tags) ? ev.tags : [ev.tags];
+    return arr.map(t => String(t || '').trim().toLowerCase()).filter(Boolean);
+  },
+
+  isBudgetOrFreeEvent(ev) {
+    if (!ev) return false;
+    const priceLower = String(ev.price_str || ev.price || '').toLowerCase();
+    const m = priceLower.match(/\$(\d+)/);
+    const minDollar = m ? parseInt(m[1], 10) : null;
+    const tags = this.getEventTags(ev);
+    if (priceLower.includes('free') || priceLower === '$' || (minDollar !== null && minDollar <= 30)) return true;
+    return tags.some(t => ['budget', 'free', 'free entry', 'free event', 'budget friendly', 'cheap'].includes(t));
+  },
+
+  isLateNightEvent(ev) {
+    if (!ev) return false;
+    const tags = this.getEventTags(ev);
+    if (tags.some(t => ['late night', 'late-night', 'night event', 'late night desserts'].includes(t))) return true;
+    if (/\b(19|20|21|22|23):\d{2}\b|\b(7|8|9|10|11)(:\d{2})?\s*pm\b/i.test(String(ev.time_str || ''))) return true;
+    return this.matchWords(`${ev.title || ''} ${tags.join(' ')}`, ['speakeasy', 'cocktail lounge', 'whisky den', 'piano lounge']);
+  },
+
+  /**
    * Purposeful Intent & Sub-Intent Classifier shared across Discover, Swiper, and the 15s Date Concierge.
-   * Intents: 'all' | 'eat_drink' | 'activity' | 'whats_on' | 'outdoors' | 'low_key'
+   * Aligns strictly with event category badges & structured tags so cards never appear under mismatched labels.
    */
   matchEventIntent(ev, intent = 'all', subIntent = 'all') {
     if (!ev || !intent || intent === 'all') return true;
     const sub = subIntent || 'all';
-    const tagsStr = Array.isArray(ev.tags) ? ev.tags.join(' ') : String(ev.tags || '');
-    const cat = String(ev.category || '').toLowerCase();
-    const core = `${ev.title || ''} ${ev.category || ''} ${tagsStr} ${ev.source || ''}`.toLowerCase();
-    const t = `${ev.title || ''} ${ev.description || ''} ${ev.category || ''} ${ev.vibe || ''} ${tagsStr} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
-    const price = String(ev.price_str || ev.price || '');
+    const tagList = this.getEventTags(ev);
+    const tagsStr = tagList.join(' ');
+    const cat = String(ev.category || '').trim().toLowerCase();
+    const core = `${ev.title || ''} ${ev.category || ''} ${tagsStr} ${ev.source || ''} ${ev.vibe || ''}`.toLowerCase();
+    const t = `${core} ${ev.description || ''} ${ev.price_str || ev.price || ''} ${ev.time_str || ''}`.toLowerCase();
     const hasAny = (keywords) => this.matchWords(t, keywords);
     const hasCore = (keywords) => this.matchWords(core, keywords);
+    const hasTag = (keywords) => tagList.some(tg => keywords.includes(tg));
 
-    if (intent === 'eat_drink') {
-      const isEat = cat === 'food & drink' || hasAny(['restaurant', 'dining', 'dinner', 'bar', 'rooftop', 'cocktail', 'wine', 'brewery', 'cafe', 'bakery', 'brunch', 'gelato', 'dessert', 'eat street', 'tapas', 'bistro', 'omakase', 'ramen', 'pizza', 'steak']);
-      if (!isEat) return false;
-      if (sub === 'dinner') return hasAny(['dinner', 'restaurant', 'bistro', 'steak', 'italian', 'japanese', 'omakase', 'fine dining', 'candle', 'degustation', 'wine bar', 'tapas', 'french', 'greek', 'dining']);
-      if (sub === 'drinks') return hasAny(['bar', 'rooftop', 'cocktail', 'wine', 'brewery', 'speakeasy', 'whisky', 'gin', 'pub', 'cellar', 'drinks', 'sunset']);
-      if (sub === 'brunch') return hasAny(['cafe', 'bakery', 'coffee', 'brunch', 'croissant', 'breakfast', 'pastry', 'matcha', 'tea']);
-      if (sub === 'casual') return hasAny(['casual', 'street food', 'market', 'burger', 'pizza', 'ramen', 'dumpling', 'hotpot', 'taco', 'cheap', 'under $', 'eat street', 'food truck']);
-      if (sub === 'dessert') return hasAny(['dessert', 'gelato', 'ice cream', 'chocolate', 'sweet', 'late night', 'bingsu', 'cookie', 'crepe']);
-      return true;
-    }
-
-    if (intent === 'activity') {
-      const isAct = ['sports & active', 'arts & culture', 'workshops & classes'].includes(cat) || hasAny(['arcade', 'mini golf', 'putt', 'bowling', 'pottery', 'paint', 'class', 'workshop', 'escape', 'axe', 'kart', 'climb', 'pickleball', 'padel', 'tennis', 'squash', 'museum', 'gallery', 'planetarium', 'cinema', 'movie', 'film', 'bathhouse', 'sauna', 'spa', 'trivia', 'board game', 'karaoke', 'kayak', 'roller']);
-      if (!isAct) return false;
-      if (sub === 'games') return hasAny(['arcade', 'golf', 'putt', 'bowling', 'escape', 'axe', 'darts', 'billiards', 'pool', 'karaoke', 'board game', 'trivia', 'laser', 'vr', 'kart']);
-      if (sub === 'cinema') return hasAny(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'screen', 'flicks']);
-      if (sub === 'creative') return hasAny(['pottery', 'clay', 'paint', 'wheel', 'class', 'workshop', 'cooking', 'candle', 'tufting', 'art', 'ceramic', 'florist', 'terrarium']);
-      if (sub === 'active') return cat === 'sports & active' || hasAny(['pickleball', 'padel', 'tennis', 'squash', 'climb', 'boulder', 'kayak', 'run', 'social sport', 'golf', 'driving range', 'skate', 'swim', 'surf']);
-      if (sub === 'culture') return cat === 'arts & culture' || hasAny(['gallery', 'museum', 'qagoma', 'planetarium', 'exhibition', 'tour', 'heritage', 'library']);
-      if (sub === 'wellness') return hasAny(['bathhouse', 'sauna', 'spa', 'soak', 'float', 'massage', 'wellness', 'yoga', 'pilates', 'meditation', 'thermal']);
-      return true;
-    }
-
+    // --- SPECIAL EVENTS (1-to-1 aligned with card category badges) ---
     if (intent === 'special_music') {
-      const isMusic = cat === 'music & concerts' || hasAny(['concert', 'live music', 'candlelight', 'symphony', 'riverstage', 'fortitude music hall', 'the tivoli', 'the triffid', 'princess theatre', 'acoustic', 'tour']);
-      if (!isMusic) return false;
-      if (sub === 'candlelight') return hasAny(['candlelight', 'symphony', 'classical', 'acoustic']);
+      if (cat !== 'music & concerts') return false;
+      if (sub === 'candlelight') return hasAny(['candlelight', 'symphony', 'classical', 'orchestra', 'brass', 'chamber']);
       if (sub === 'arena_outdoor') return hasAny(['suncorp', 'riverstage', 'entertainment centre', 'outdoor']);
-      if (sub === 'club_theatre') return hasAny(['fortitude music hall', 'tivoli', 'triffid', 'princess theatre', 'powerhouse']);
+      if (sub === 'club_theatre') return hasAny(['fortitude music hall', 'tivoli', 'triffid', 'princess theatre', 'powerhouse', 'qpac', 'jazz club', 'saloon', 'basement', 'zoo', 'brightside']);
       return true;
     }
 
     if (intent === 'special_sports') {
-      const nonSportsCats = ['arts & culture', 'comedy & shows', 'food & drink', 'nightlife & bars', 'workshops & classes', 'markets & pop-ups'];
-      const isSports = cat === 'sports & active' || (!nonSportsCats.includes(cat) && hasCore([
-        'nbl', 'bbl', 'wbbl', 'a-league', 'raceday', 't20', 't20i', 'sheffield shield',
-        'super rugby', 'tennis', 'abl', 'bullets', 'brisbane heat', 'brisbane roar',
-        'queensland reds', 'queensland bulls', 'brisbane bandits', 'rlwc26', 'world cup'
-      ]));
-      if (!isSports) return false;
+      if (cat !== 'sports & active') return false;
       const sportText = `${ev.title || ''} ${ev.source || ''} ${tagsStr}`.toLowerCase();
       const hasSport = (kws) => this.matchWords(sportText, kws);
       if (sub === 'cricket') {
@@ -373,51 +372,93 @@ const api = {
     }
 
     if (intent === 'special_shows') {
-      const isShow = cat === 'comedy & shows' || hasAny(['comedy', 'theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'moonlight cinema', 'outdoor cinema', 'la boite', 'cinema', 'movie', 'film', 'screening']);
-      if (!isShow) return false;
-      if (sub === 'theatre_ballet') return hasAny(['theatre', 'musical', 'ballet', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'six the musical', 'la boite']);
-      if (sub === 'comedy') return hasAny(['comedy', 'gala', 'stand-up', 'des bishop', 'good chat']);
-      if (sub === 'cinema_movies') return hasAny(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'moonlight', 'flicks', 'screen']);
-      if (sub === 'comedy_cinema') return hasAny(['comedy', 'gala', 'stand-up', 'cinema', 'moonlight', 'movie', 'film']);
+      if (cat !== 'comedy & shows') return false;
+      if (sub === 'theatre_ballet') return hasAny(['theatre', 'musical', 'ballet', 'opera', 'qpac', 'dracula', 'macbeth', 'nutcracker', 'six', 'la boite', 'maestro', 'studio sessions']);
+      if (sub === 'comedy') return hasAny(['comedy', 'gala', 'stand-up', 'standup', 'des bishop', 'good chat', 'sit down']);
+      if (sub === 'cinema_movies' || sub === 'comedy_cinema') return hasAny(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'moonlight', 'flicks', 'screen']);
       return true;
     }
 
     if (intent === 'special_festivals') {
-      const isFest = ['arts & culture', 'markets & pop-ups'].includes(cat) || hasAny(['festival', 'exhibition', 'goma', 'qagoma', 'brisasia', 'finders keepers', 'reservoir', 'pylon', 'film festival']);
-      if (!isFest) return false;
-      if (sub === 'exhibitions') return hasAny(['exhibition', 'goma', 'qagoma', 'henson', 'mudskippers', 'smokescreen', 'film festival']);
-      if (sub === 'festivals_tours') return hasAny(['festival', 'melt', 'brisasia', 'finders keepers', 'market', 'reservoir', 'pylon', 'up late']);
+      if (cat !== 'arts & culture') return false;
+      if (sub === 'exhibitions') return hasAny(['exhibition', 'gallery', 'museum', 'goma', 'qagoma', 'art', 'photography', 'sculpture', 'display', 'precious', 'craft', 'painting', 'pottery']);
+      if (sub === 'film_screenings') return hasAny(['film', 'movie', 'cinema', 'screening', 'documentary']);
+      if (sub === 'festivals_tours') return hasAny(['festival', 'tour', 'talk', 'workshop', 'heritage', 'history', 'club', 'up late', 'working bee', 'social', 'cultural', 'sunset', 'community']);
+      return true;
+    }
+
+    if (intent === 'special_outdoors') {
+      if (!['outdoor & adventure', 'sightseeing & nature'].includes(cat)) return false;
+      if (sub === 'nature') return cat === 'sightseeing & nature' || hasAny(['walk', 'trail', 'parkrun', 'garden', 'nature', 'pollinator', 'bird', 'koala', 'botanic', 'train', 'heritage', 'bush', 'wildlife', 'plant', 'park']);
+      if (sub === 'adventure') return hasAny(['kayak', 'canoe', 'paddle', 'abseil', 'climb', 'bmx', 'bike', 'cycling', 'cycle', 'camp', 'open day', '4wd', 'stunt', 'archery', 'sail', 'swim', 'aqua', 'surf', 'run', 'skate', 'scooter', 'roller', 'bowling', 'bowls', 'soccer', 'basketball', 'tennis', 'pickleball', 'martial', 'box', 'hike']);
+      if (sub === 'fitness') return hasAny(['yoga', 'tai chi', 'qigong', 'pilates', 'zumba', 'dance', 'dancing', 'fitness', 'aerobics', 'exercise', 'workout', 'gym', 'meditation', 'breathwork', 'stretching', 'strength', 'balance', 'ballet']);
+      return true;
+    }
+
+    if (intent === 'special_markets') {
+      return cat === 'markets & pop-ups';
+    }
+
+    // --- ANYTIME PLACES & SPOTLIGHTS (tag & category faithful) ---
+    if (intent === 'eat_drink') {
+      const isDiningSpecial = cat === 'date night specials'
+        && hasCore(['restaurant', 'dining', 'bar', 'wine', 'whisky', 'whiskey', 'cocktail', 'rooftop', 'speakeasy', 'italian', 'japanese', 'izakaya', 'thai', 'greek', 'french', 'mexican', 'nikkei', 'bistro', 'sushi', 'tapas', 'gelato', 'dessert', 'patisserie', 'cafe', 'coffee', 'lounge', 'lobster', 'pasta', 'terrace', 'saloon', 'cellar', 'fireplace', 'romantic date dining'])
+        && !hasCore(['arcade', 'pinball', 'bathhouse', 'onsen', 'planetarium', 'mini golf', 'putt putt']);
+      const isFoodMarket = cat === 'markets & pop-ups' && hasCore(['eat street', 'farmers', 'feast', 'street food', 'food', 'gourmet', 'marketta']);
+      const isEat = cat === 'food & drink' || cat === 'nightlife & bars' || isDiningSpecial || isFoodMarket;
+      if (!isEat) return false;
+      if (sub === 'dinner') return hasCore(['restaurant', 'dining', 'dinner', 'bistro', 'steak', 'italian', 'japanese', 'thai', 'greek', 'french', 'mexican', 'nikkei', 'izakaya', 'pasta', 'fine dining', 'degustation', 'wine bar', 'tapas', 'sashimi', 'trattoria', 'fireplace', 'romantic date dining']) || (!hasCore(['cafe', 'bakery', 'coffee', 'gelato', 'market']) && hasAny(['dinner', 'fine dining', 'degustation', 'three-course', 'set menu']));
+      if (sub === 'drinks') return hasCore(['bar', 'rooftop', 'rooftops', 'cocktail', 'cocktails', 'wine', 'brewery', 'speakeasy', 'whisky', 'whiskey', 'gin', 'pub', 'cellar', 'drinks', 'saloon', 'lounge', 'spritz', 'poolside']) || hasAny(['cocktail', 'speakeasy', 'wine bar', 'whisky', 'brewery', 'sunset drinks']);
+      if (sub === 'brunch') return hasCore(['cafe', 'bakery', 'bakeries', 'coffee', 'brunch', 'croissant', 'breakfast', 'pastry', 'pastries', 'patisserie', 'matcha', 'tea', 'sourdough']) || hasAny(['cafe', 'bakery', 'croissant', 'brunch', 'breakfast', 'coffee']);
+      if (sub === 'casual') return cat === 'markets & pop-ups' || hasCore(['casual', 'cheap eats', 'street food', 'burger', 'pizza', 'ramen', 'dumpling', 'hotpot', 'taco', 'eat street', 'food truck', 'lobster rolls', 'markets']) || this.isBudgetOrFreeEvent(ev);
+      if (sub === 'dessert') return hasCore(['dessert', 'desserts', 'gelato', 'ice cream', 'chocolate', 'sweet', 'bingsu', 'cookie', 'crepe', 'souffle', 'cake', 'choc tops']) || hasAny(['gelato', 'dessert', 'ice cream', 'chocolate', 'bingsu', 'patisserie', 'sweet treat']);
+      return true;
+    }
+
+    if (intent === 'activity') {
+      const isSpecialActivity = cat === 'date night specials' && hasCore(['arcade', 'pinball', 'board game', 'planetarium', 'stargazing', 'bathhouse', 'onsen', 'sauna', 'spa', 'mini golf', 'putt putt', 'cinema', 'piano lounge', 'jazz', 'live music', 'wine & slider']);
+      const isAct = ['sports & active', 'arts & culture', 'workshops & classes', 'comedy & shows', 'music & concerts'].includes(cat) || isSpecialActivity;
+      if (!isAct) return false;
+      if (sub === 'games') return hasCore(['arcade', 'pinball', 'mini golf', 'putt', 'bowling', 'ten-pin', 'escape', 'axe', 'darts', 'billiards', 'karaoke', 'board game', 'co-op', 'trivia', 'laser', 'vr', 'kart']);
+      if (sub === 'cinema') return hasCore(['cinema', 'movie', 'film', 'palace', 'dendy', 'cinebar', 'regal twin']);
+      if (sub === 'creative') return cat === 'workshops & classes' || hasCore(['pottery', 'clay', 'ceramic', 'paint', 'wheel', 'class', 'workshop', 'mosaic', 'cooking', 'candle', 'tufting', 'florist', 'terrarium', 'portrait']);
+      if (sub === 'active') return cat === 'sports & active' || hasCore(['mini golf', 'putt', 'pickleball', 'padel', 'tennis', 'squash', 'climb', 'bouldering', 'kayak', 'social sports', 'driving range', 'ice skating', 'barefoot bowls', 'badminton', 'beach volleyball', 'axe throwing']);
+      if (sub === 'culture') return (['arts & culture', 'comedy & shows', 'music & concerts'].includes(cat) && !hasCore(['pottery', 'clay', 'ceramic', 'paint', 'mosaic', 'wheel', 'film', 'cinema'])) || hasCore(['gallery', 'museum', 'qagoma', 'planetarium', 'comedy', 'tivoli', 'triffid', 'jazz', 'piano']);
+      if (sub === 'wellness') return hasCore(['bathhouse', 'onsen', 'sauna', 'spa', 'soak', 'float', 'massage', 'wellness', 'yoga', 'pilates', 'meditation', 'thermal']);
       return true;
     }
 
     if (intent === 'whats_on') {
-      const isLive = !ev.ongoing || ['music & concerts', 'comedy & shows', 'markets & pop-ups'].includes(cat) || hasAny(['live music', 'concert', 'comedy', 'theatre', 'musical', 'qpac', 'festival', 'gig', 'jazz', 'candlelight', 'stadium', 'suncorp', 'gabba', 'market']);
+      const isLive = !ev.ongoing || ['music & concerts', 'comedy & shows', 'markets & pop-ups'].includes(cat);
       if (!isLive) return false;
       if (sub === 'dated_only') return !ev.ongoing;
-      if (sub === 'shows') return cat === 'comedy & shows' || hasAny(['comedy', 'stand-up', 'theatre', 'musical', 'qpac', 'cabaret', 'ballet', 'opera', 'improv', 'trivia']);
-      if (sub === 'music') return cat === 'music & concerts' || hasAny(['music', 'concert', 'gig', 'jazz', 'band', 'candlelight', 'tivoli', 'triffid', 'symphony', 'acoustic']);
-      if (sub === 'sports_live') return (!ev.ongoing && cat === 'sports & active') || hasAny(['broncos', 'lions', 'roar', 'bullets', 'heat', 'reds', 'firebirds', 'suncorp', 'gabba', 'stadium', 'raceday', 'match', 'vs ']);
-      if (sub === 'markets') return cat === 'markets & pop-ups' || hasAny(['market', 'pop-up', 'festival', 'fair', 'twilight', 'bazaar']);
+      if (sub === 'shows') return cat === 'comedy & shows';
+      if (sub === 'music') return cat === 'music & concerts';
+      if (sub === 'sports_live') return !ev.ongoing && cat === 'sports & active';
+      if (sub === 'markets') return cat === 'markets & pop-ups';
       return true;
     }
 
     if (intent === 'outdoors') {
-      const isOut = ['sightseeing & nature', 'outdoor & adventure', 'markets & pop-ups'].includes(cat) || hasAny(['walk', 'hike', 'lookout', 'picnic', 'botanic', 'park', 'river', 'island', 'beach', 'waterfall', 'sunset', 'kayak', 'ferry', 'day trip', 'hinterland', 'gardens', 'koala', 'wildlife']);
+      const isOut = ['sightseeing & nature', 'outdoor & adventure'].includes(cat);
       if (!isOut) return false;
-      if (sub === 'picnic') return hasAny(['lookout', 'picnic', 'sunset', 'cliffs', 'botanic', 'garden', 'lawn', 'riverwalk', 'citycat', 'ferry']);
-      if (sub === 'walks') return hasAny(['walk', 'hike', 'trail', 'waterfall', 'national park', 'forest', 'summit', 'gorge', 'mount ', 'mt ']);
-      if (sub === 'water') return hasAny(['beach', 'island', 'moreton', 'stradbroke', 'bayside', 'manly', 'redcliffe', 'sandgate', 'kayak', 'river', 'swim', 'lagoon', 'creek', 'reservoir']);
-      if (sub === 'daytrip') return hasAny(['day trip', 'hinterland', 'tamborine', 'maleny', 'montville', 'noosa', 'gold coast', 'sunshine coast', 'moreton', 'stradbroke', 'scenic rim', 'winery']);
+      if (sub === 'picnic') return hasAny(['lookout', 'picnic', 'sunset', 'cliffs', 'botanic', 'garden', 'lawn', 'riverwalk', 'citycat', 'ferry', 'river', 'panorama', 'koala', 'rose']);
+      if (sub === 'walks') return hasAny(['walk', 'hike', 'trail', 'waterfall', 'national park', 'forest', 'summit', 'gorge', 'mount', 'mt', 'circuit', 'park']);
+      if (sub === 'water') return hasAny(['beach', 'island', 'moreton', 'stradbroke', 'bayside', 'manly', 'redcliffe', 'sandgate', 'kayak', 'river', 'swim', 'lagoon', 'creek', 'cruise', 'noosa', 'mooloolaba']);
+      if (sub === 'daytrip') return hasAny(['day trip', 'day trips', 'hinterland', 'tamborine', 'maleny', 'montville', 'noosa', 'gold coast', 'sunshine coast', 'moreton', 'stradbroke', 'scenic rim', 'winery', 'retreat', 'ipswich', 'farm']);
       return true;
     }
 
     if (intent === 'low_key') {
-      const isLow = ['Free', '$'].includes(price) || hasAny(['free', 'budget', 'under $', 'late night', 'indoor', 'stay-in', 'at home', 'cozy', 'cinema', 'board game', 'stargazing', 'lookout', 'walk', 'dessert', 'gelato']);
-      if (!isLow) return false;
-      if (sub === 'free_budget') return ['Free', '$'].includes(price) || hasAny(['free', 'budget', 'under $25', 'under $30', 'cheap']);
-      if (sub === 'indoor') return hasAny(['indoor', 'air-con', 'rainy', 'cinema', 'gallery', 'museum', 'arcade', 'pottery', 'bowling', 'planetarium', 'bathhouse']);
-      if (sub === 'late_night') return hasAny(['late night', 'after-dinner', 'speakeasy', 'dessert', 'stargazing', '10pm', '11pm', 'midnight', 'late']);
-      if (sub === 'stay_in') return hasAny(['stay-in', 'at-home', 'at home', 'cook together', 'living room']);
+      const isFreeBudget = this.isBudgetOrFreeEvent(ev);
+      const isIndoor = hasTag(['indoor', 'air conditioned', 'air-con', 'stay-in']) || ['comedy & shows', 'workshops & classes'].includes(cat);
+      const isLateNight = this.isLateNightEvent(ev);
+      const isStayIn = hasTag(['stay-in', 'at home', 'at-home']) || hasCore(['stay-in', 'at home']);
+      if (!(isFreeBudget || isIndoor || isLateNight || isStayIn)) return false;
+      if (sub === 'free_budget') return isFreeBudget;
+      if (sub === 'indoor') return isIndoor;
+      if (sub === 'late_night') return isLateNight;
+      if (sub === 'stay_in') return isStayIn;
       return true;
     }
 
@@ -627,9 +668,21 @@ const api = {
         }
       }
 
-      // Category filter (matches any of the selected categories)
-      if (selectedCats.length > 0 && !selectedCats.includes(ev.category)) {
-        continue;
+      // Category filter (matches exact card category badges & structured aliases)
+      if (selectedCats.length > 0) {
+        const evCat = String(ev.category || '').trim().toLowerCase();
+        const evTags = this.getEventTags(ev);
+        const matchesCat = selectedCats.some(sel => {
+          const s = String(sel || '').trim().toLowerCase();
+          if (evCat === s) return true;
+          if (s === 'outdoors & nature') return evCat === 'outdoor & adventure' || evCat === 'sightseeing & nature';
+          if (s === 'nightlife & bars') return evCat === 'nightlife & bars' || (evCat === 'date night specials' && this.matchWords(`${ev.title || ''} ${evTags.join(' ')}`, ['bar', 'bars', 'cocktail', 'cocktails', 'rooftop', 'speakeasy', 'whisky', 'whiskey', 'wine', 'saloon', 'lounge']));
+          if (s === 'workshops & classes') return evTags.includes('creative workshops');
+          return false;
+        });
+        if (!matchesCat) {
+          continue;
+        }
       }
 
       // Suburb / Region filter (matches structured area/location fields, never unrelated description prose)
@@ -659,24 +712,19 @@ const api = {
         }
       }
 
-      // Vibe filter (matches structured vibes/tags/price/time/title, avoiding false positives in long descriptions)
+      // Vibe filter (reuses structured tags, price & late-night checks)
       if (selectedVibes.length > 0) {
-        const evTags = (Array.isArray(ev.tags) ? ev.tags.join(' ') : '').toLowerCase();
-        const evStructured = `${ev.vibe || ''} ${ev.category || ''} ${ev.price_str || ''} ${ev.time_str || ''} ${evTags} ${ev.title || ''}`.toLowerCase();
-        const priceLower = String(ev.price_str || ev.price || '').toLowerCase();
-        const priceNumMatch = priceLower.match(/\$(\d+)/);
-        const minDollar = priceNumMatch ? parseInt(priceNumMatch[1], 10) : null;
+        const evTags = this.getEventTags(ev);
+        const evTagsStr = evTags.join(' ');
+        const evStructured = `${ev.vibe || ''} ${ev.category || ''} ${ev.price_str || ''} ${ev.time_str || ''} ${evTagsStr} ${ev.title || ''}`.toLowerCase();
 
         const matchesAnyVibe = selectedVibes.some(v => {
-          if (v === 'budget' || v === 'free') {
-            return priceLower.includes('free') || priceLower === '$' || (minDollar !== null && minDollar <= 30) || this.matchWords(evStructured, ['budget', 'free']);
-          }
-          if (v === 'late night') {
-            return this.matchWords(evStructured, ['late night', 'night', 'cocktail', 'rooftop', 'speakeasy', 'jazz', 'bar', 'bars', 'brewery']) || /\b(19|20|21|22|23):\d{2}\b|\b(7|8|9|10|11):\d{2}\s*pm\b/i.test(String(ev.time_str || ''));
-          }
-          if (v === 'stay-in') {
-            return this.matchWords(`${evStructured} ${ev.location || ''}`, ['stay-in', 'at home']);
-          }
+          if (v === 'budget' || v === 'free') return this.isBudgetOrFreeEvent(ev);
+          if (v === 'late night') return this.isLateNightEvent(ev);
+          if (v === 'stay-in') return evTags.includes('stay-in') || this.matchWords(`${evStructured} ${ev.location || ''}`, ['stay-in', 'at home']);
+          if (v === 'rooftop') return this.matchWords(evStructured, ['rooftop', 'rooftops', 'skyline', 'sky deck', 'overwater']);
+          if (v === 'bakery') return this.matchWords(evStructured, ['bakery', 'bakeries', 'croissant', 'pastry', 'pastries', 'patisserie', 'sourdough', 'brunch']);
+          if (v === 'pottery') return this.matchWords(evStructured, ['pottery', 'clay', 'ceramic', 'wheel', 'paint & sip', 'paint and sip', 'creative workshops', 'workshop', 'mosaic', 'tufting', 'candle']);
           return this.matchWords(evStructured, [v]) || evTags.includes(v);
         });
         if (!matchesAnyVibe) {
