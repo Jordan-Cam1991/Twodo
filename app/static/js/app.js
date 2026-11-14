@@ -69,51 +69,6 @@ const app = {
     if (v1Disp) v1Disp.textContent = u1;
     if (v2Disp) v2Disp.textContent = u2;
 
-    // 2. Mood filter chips: Solo vs. Couple
-    const matchesChip = document.getElementById('mood-chip-matches');
-    const emmaChip = document.getElementById('mood-chip-emma');
-    const emmaPassChip = document.getElementById('mood-chip-emma-passed');
-    const jordanChip = document.getElementById('mood-chip-jordan');
-    const jordanPassChip = document.getElementById('mood-chip-jordan-passed');
-
-    const emmaLabel = document.getElementById('mood-chip-emma-label');
-    const emmaPassLabel = document.getElementById('mood-chip-emma-passed-label');
-    const jordanLabel = document.getElementById('mood-chip-jordan-label');
-    const jordanPassLabel = document.getElementById('mood-chip-jordan-passed-label');
-
-    if (isSolo) {
-      if (matchesChip) matchesChip.classList.add('hidden');
-      if (jordanChip) jordanChip.classList.add('hidden');
-      if (jordanPassChip) jordanPassChip.classList.add('hidden');
-
-      if (emmaChip) emmaChip.classList.remove('hidden');
-      if (emmaPassChip) emmaPassChip.classList.remove('hidden');
-      if (emmaLabel) emmaLabel.textContent = 'My Loves';
-      if (emmaPassLabel) emmaPassLabel.textContent = 'My Passed';
-    } else {
-      if (matchesChip) matchesChip.classList.remove('hidden');
-      if (emmaChip) emmaChip.classList.remove('hidden');
-      if (emmaPassChip) emmaPassChip.classList.remove('hidden');
-      if (jordanChip) jordanChip.classList.remove('hidden');
-      if (jordanPassChip) jordanPassChip.classList.remove('hidden');
-
-      if (emmaLabel) emmaLabel.textContent = 'My Loves';
-      if (emmaPassLabel) emmaPassLabel.textContent = 'My Passed';
-      if (jordanLabel) jordanLabel.textContent = `${u2}'s Loves`;
-      if (jordanPassLabel) jordanPassLabel.textContent = `${u2}'s Passed`;
-    }
-
-    const chatTitle = document.getElementById('chat-header-title');
-    if (chatTitle) chatTitle.textContent = isSolo ? 'Couple Chat' : `${u1} & ${u2}'s Chat`;
-
-    // 3. Chat View: Locked state for solo users
-    const chatActive = document.getElementById('chat-active-container');
-    const chatLocked = document.getElementById('chat-solo-locked');
-    if (chatActive && chatLocked) {
-      chatActive.classList.toggle('hidden', isSolo);
-      chatLocked.classList.toggle('hidden', !isSolo);
-    }
-
     const locDisp = document.getElementById('current-location-display');
     if (locDisp) {
       locDisp.textContent = this.currentCity;
@@ -196,28 +151,23 @@ const app = {
     this.showToast(`Updated name to ${clean}! ✨`);
     if (window.discover && discover.renderEvents) {
       discover.renderEvents();
-      discover.updateMatchBanner();
-    }
-    if (window.swiper && swiper.renderDeck) {
-      swiper.renderDeck();
     }
   },
 
-  // Legacy: switching who you vote as is no longer possible — you always act as yourself.
   setVoter() {
     this.currentVoter = 1;
     discover.loadEvents(false);
-    swiper.initDeck();
   },
 
   navigate(tabName) {
-    this.activeTab = tabName;
+    const resolvedTab = tabName === 'planner' ? 'planner' : 'discover';
+    this.activeTab = resolvedTab;
     document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.toggle('active', b.dataset.tab === resolvedTab));
 
-    const targetView = document.getElementById(`view-${tabName}`);
-    const targetBtn = document.querySelector(`.nav-btn[data-tab="${tabName}"]`);
+    const targetView = document.getElementById(`view-${resolvedTab}`);
+    const targetBtn = document.querySelector(`.nav-btn[data-tab="${resolvedTab}"]`);
 
     if (targetView) targetView.classList.add('active');
     if (targetBtn) targetBtn.classList.add('active');
@@ -225,19 +175,11 @@ const app = {
     // Scroll back to top on navigation to make mobile vertical browsing natural
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Clear "new this week" badge when user explores discover or swiper
-    if (tabName === 'discover' || tabName === 'swiper') {
+    // Clear "new this week" badge when user explores discover
+    if (resolvedTab === 'discover') {
       this.clearThisWeekBadges();
-    }
-
-    if (tabName === 'swiper') {
-      swiper.initDeck();
-    } else if (tabName === 'chat') {
-      if (window.chatView) chatView.init();
-    } else if (tabName === 'planner') {
+    } else if (resolvedTab === 'planner') {
       planner.loadPlanner();
-    } else if (tabName === 'matches') {
-      if (window.matchesView) matchesView.render();
     }
   },
 
@@ -249,7 +191,7 @@ const app = {
     } catch (e) {
       count = 0;
     }
-    ['m-discover-badge', 'm-swiper-badge', 'discover-tab-badge', 'swiper-badge'].forEach(id => {
+    ['m-discover-badge', 'discover-tab-badge'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       el.textContent = count;
@@ -512,10 +454,6 @@ const app = {
 
       if (window.discover && discover.renderEvents) {
         discover.renderEvents();
-        discover.updateMatchBanner();
-      }
-      if (window.swiper && swiper.renderDeck) {
-        swiper.renderDeck();
       }
     } catch (err) {
       console.error(err);
@@ -538,54 +476,18 @@ const app = {
       toast.style.transition = 'all 0.25s ease';
       setTimeout(() => toast.remove(), 250);
     }, 2800);
-  },
-
-  playCelebrationSound() {
-    // Synthesize a joyful chime using Web Audio API
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
-
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 chord
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-
-        gain.gain.setValueAtTime(0, ctx.currentTime + idx * 0.08);
-        gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + idx * 0.08 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.6);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime + idx * 0.08);
-        osc.stop(ctx.currentTime + idx * 0.08 + 0.6);
-      });
-    } catch (e) {
-      // Audio not permitted or supported
-    }
   }
 };
 
-// Expose every module on `window`. Top-level `const` objects are NOT automatically
-// window properties, so checks like `if (window.discover)` were silently false —
-// which stopped live refreshes (votes, planner, swiper, chat) from running.
+// Expose every module on `window` so checks like `if (window.discover)` resolve reliably.
 (function exposeModules() {
   const mods = {
     api: typeof api !== 'undefined' ? api : undefined,
     app,
     authUI: typeof authUI !== 'undefined' ? authUI : undefined,
-    chatView: typeof chatView !== 'undefined' ? chatView : undefined,
-    collaborative: typeof collaborative !== 'undefined' ? collaborative : undefined,
     discover: typeof discover !== 'undefined' ? discover : undefined,
     firebaseService: typeof firebaseService !== 'undefined' ? firebaseService : undefined,
-    planner: typeof planner !== 'undefined' ? planner : undefined,
-    swiper: typeof swiper !== 'undefined' ? swiper : undefined,
-    matchesView: typeof matchesView !== 'undefined' ? matchesView : undefined
+    planner: typeof planner !== 'undefined' ? planner : undefined
   };
   Object.keys(mods).forEach(k => { if (mods[k]) window[k] = mods[k]; });
 })();

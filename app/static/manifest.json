@@ -1,7 +1,7 @@
 {
   "name": "TwoDo — Couple Adventure & Date Planner",
   "short_name": "TwoDo",
-  "description": "Plan dates, swipe together, and discover adventures in your city",
+  "description": "Discover local events & date ideas and plan together",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffd1dc",

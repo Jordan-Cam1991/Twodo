@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- App Styles -->
-  <link rel="stylesheet" href="css/style.css?v=5.1">
+  <link rel="stylesheet" href="css/style.css?v=7.1">
 
   <!-- Force Fresh Cache on Mobile & Safari -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -181,35 +181,21 @@
           </div>
         </div>
 
-        <!-- Desktop Navigation Tabs (4 Core Tabs) -->
+        <!-- Desktop Navigation Tabs (Discover & Planner) -->
         <nav class="nav-tabs">
           <button class="nav-btn active" data-tab="discover" onclick="app.navigate('discover')">
             <span class="nav-icon">✨</span>
             <span>Discover</span>
             <span class="planner-count hidden" id="discover-tab-badge">0</span>
           </button>
-          <button class="nav-btn" data-tab="swiper" onclick="app.navigate('swiper')">
-            <span class="nav-icon">🔥</span>
-            <span>Date Swiper</span>
-            <span class="planner-count hidden" id="swiper-badge">0</span>
-          </button>
-          <button class="nav-btn" data-tab="matches" onclick="app.navigate('matches')">
-            <span class="nav-icon">💖</span>
-            <span>Matches</span>
-            <span class="planner-count hidden" id="matches-tab-badge">0</span>
-          </button>
-          <button class="nav-btn" data-tab="chat" onclick="app.navigate('chat')">
-            <span class="nav-icon">💬</span>
-            <span>Couple Chat</span>
-          </button>
           <button class="nav-btn" data-tab="planner" onclick="app.navigate('planner')">
             <span class="nav-icon">📅</span>
-            <span>Shared Planner</span>
+            <span>Planner</span>
             <span class="planner-count" id="planner-count-badge">0</span>
           </button>
         </nav>
 
-        <!-- Header Actions: 🛠️ Creator (Jordan Only), 🔍 Search, ➕ Add Personal Plan, ⚙️ Settings, 🚪 Log Out -->
+        <!-- Header Actions: 🛠️ Creator (Jordan Only), 🔍 Search, ⚙️ Settings -->
         <div class="header-actions">
           <button type="button" class="btn-icon header-icon-btn hidden" id="btn-creator-dashboard" onclick="app.openCreatorModal()" title="Creator Dashboard (Jordan Only)" aria-label="Creator Dashboard">
             <span>🛠️</span>
@@ -217,18 +203,8 @@
           <button type="button" class="btn-icon header-icon-btn" id="btn-header-search" onclick="discover.toggleHeaderSearch()" title="Search" aria-label="Search">
             <span>🔍</span>
           </button>
-          <button type="button" class="btn-icon header-icon-btn" onclick="app.openAddModal()" title="Add Personal Plan to Planner" aria-label="Add Personal Plan">
-            <span>➕</span>
-          </button>
           <button type="button" class="btn-icon header-icon-btn btn-settings-corner" onclick="app.openSettingsModal()" title="Settings & Sync" aria-label="Couple Settings">
             <span>⚙️</span>
-          </button>
-          <button type="button" class="btn-icon header-icon-btn btn-logout-header" onclick="authUI.handleLogout()" title="Log Out" aria-label="Log Out">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
           </button>
         </div>
       </div>
@@ -332,25 +308,10 @@
             <span class="cat-tab-icon">🎪</span>
             <span class="cat-tab-label">Markets &amp; Pop-ups</span>
           </button>
-          <button type="button" class="cat-tab" data-intent="saved" onclick="discover.setIntent('saved')">
-            <span class="cat-tab-icon">❤️</span>
-            <span class="cat-tab-label">Loves &amp; Votes</span>
-          </button>
         </div>
 
         <!-- Contextual Sub-Filter Pills (Only shown when a category tab is active) -->
         <div id="discover-sub-intent-bar" class="sub-intent-bar hidden"></div>
-
-        <!-- Saved / Votes Filter Strip (Only shown when '❤️ Loves & Votes' tab is active) -->
-        <div id="discover-votes-bar" class="sub-intent-bar hidden">
-          <div class="sub-intent-scroll" id="mood-chips-scroll">
-            <button type="button" class="mood-chip" data-mood="emma-loves" id="mood-chip-emma" onclick="discover.setMoodFilter('emma-loves')">❤️ <span id="mood-chip-emma-label">Emma's Loves</span> <span class="mood-chip-badge" id="mood-emma-count">0</span></button>
-            <button type="button" class="mood-chip" data-mood="jordan-loves" id="mood-chip-jordan" onclick="discover.setMoodFilter('jordan-loves')">💜 <span id="mood-chip-jordan-label">Jordan's Loves</span> <span class="mood-chip-badge" id="mood-jordan-count">0</span></button>
-            <button type="button" class="mood-chip" data-mood="matches" id="mood-chip-matches" onclick="discover.setMoodFilter('matches')">💖 Matches <span class="mood-chip-badge" id="mood-matches-count">0</span></button>
-            <button type="button" class="mood-chip" data-mood="emma-passed" id="mood-chip-emma-passed" onclick="discover.setMoodFilter('emma-passed')">❌ <span id="mood-chip-emma-passed-label">Emma's Passed</span> <span class="mood-chip-badge" id="mood-emma-passed-count">0</span></button>
-            <button type="button" class="mood-chip" data-mood="jordan-passed" id="mood-chip-jordan-passed" onclick="discover.setMoodFilter('jordan-passed')">❌ <span id="mood-chip-jordan-passed-label">Jordan's Passed</span> <span class="mood-chip-badge" id="mood-jordan-passed-count">0</span></button>
-          </div>
-        </div>
       </div>
 
       <!-- Minimal Filter Status Bar (Only visible when filtered) -->
@@ -381,193 +342,7 @@
       </div>
     </section>
 
-    <!-- TAB 2: DATE SWIPER (TINDER STYLE) -->
-    <section id="view-swiper" class="view-panel">
-      <!-- Top-Level Mode Switcher: Special Dated Events vs. Anytime Places (Swapped, Special Default) -->
-      <div class="feed-mode-switcher" id="swiper-mode-switcher" role="tablist">
-        <button type="button" class="feed-mode-btn active" data-mode="special" onclick="discover.setFeedMode('special')">
-          <span class="feed-mode-icon">🎟️</span>
-          <span class="feed-mode-title">Special Events <span class="feed-mode-badge" id="swiper-special-count"></span></span>
-        </button>
-        <button type="button" class="feed-mode-btn" data-mode="anytime" onclick="discover.setFeedMode('anytime')">
-          <span class="feed-mode-icon">🌟</span>
-          <span class="feed-mode-title">Anytime Places <span class="feed-mode-badge" id="swiper-anytime-count"></span></span>
-        </button>
-      </div>
-
-      <!-- Identical Unified Top Controls as Discover -->
-      <div class="discover-unified-bar">
-        <div class="discover-quick-filters">
-          <button type="button" class="quick-context-pill" id="sw-date-pill" onclick="discover.onDateChipClick()" title="Filter special events by date">
-            📅 <span id="sw-date-pill-label">This Week</span> ▾
-          </button>
-          <button type="button" class="quick-context-pill" id="sw-suburb-pill" onclick="discover.openFilterModal('suburb')" title="Filter by Suburb">
-            📍 <span id="sw-suburb-pill-label">South East QLD</span> ▾
-          </button>
-          <button type="button" class="btn-concierge-pill" onclick="discover.openConcierge()" title="Get 3 hand-picked date ideas">
-            ✨ Pick For Us
-          </button>
-        </div>
-      </div>
-
-      <!-- Identical Single-Line Category Tabs as Discover -->
-      <div class="category-strip-wrap">
-        <div class="category-strip" id="swiper-intent-tiles">
-          <button type="button" class="cat-tab active" data-intent="all" onclick="discover.setIntent('all')">
-            <span class="cat-tab-icon">✨</span>
-            <span class="cat-tab-label">All Places</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="eat_drink" onclick="discover.setIntent('eat_drink')">
-            <span class="cat-tab-icon">🍽️</span>
-            <span class="cat-tab-label">Eat &amp; Drink</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="activity" onclick="discover.setIntent('activity')">
-            <span class="cat-tab-icon">🎯</span>
-            <span class="cat-tab-label">Activities</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="outdoors" onclick="discover.setIntent('outdoors')">
-            <span class="cat-tab-icon">🌿</span>
-            <span class="cat-tab-label">Outdoors</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="low_key" onclick="discover.setIntent('low_key')">
-            <span class="cat-tab-icon">🌙</span>
-            <span class="cat-tab-label">Low-Key</span>
-          </button>
-          <button type="button" class="cat-tab" data-intent="saved" onclick="app.navigate('discover'); discover.setIntent('saved')">
-            <span class="cat-tab-icon">❤️</span>
-            <span class="cat-tab-label">Loves &amp; Votes</span>
-          </button>
-        </div>
-        <div id="swiper-sub-intent-bar" class="sub-intent-bar hidden"></div>
-      </div>
-
-      <div class="swiper-container">
-        <div class="swiper-status-minimal">
-          <button type="button" class="btn-clear-filter-pill hidden" id="sw-btn-clear-filters" onclick="discover.resetFilters()">
-            ✕ Reset
-          </button>
-        </div>
-
-        <!-- The Card Stack -->
-        <div class="card-deck-wrapper">
-          <div id="card-deck" class="card-deck">
-            <!-- Dynamic swipe cards -->
-          </div>
-          
-          <div id="deck-empty" class="deck-empty-state hidden">
-            <span class="empty-emoji">🥳</span>
-            <h3>You've reviewed all activities!</h3>
-            <p id="deck-empty-msg">You've reviewed everything for now! Ideas you both love show up in Matches.</p>
-            <div class="deck-empty-actions">
-              <button class="btn btn-secondary" id="deck-empty-reset-filter" onclick="discover.resetFilters()">
-                Reset Active Filters
-              </button>
-              <button class="btn btn-primary" onclick="app.navigate('planner')">Go to Shared Planner</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Controls -->
-        <div class="swipe-controls">
-          <button class="swipe-btn btn-pass" onclick="swiper.handleSwipe('pass')" title="Pass">
-            <span>❌</span>
-          </button>
-          <button class="swipe-btn btn-maybe" onclick="swiper.handleSwipe('maybe')" title="Maybe / Save">
-            <span>🤔</span>
-          </button>
-          <button class="swipe-btn btn-love" onclick="swiper.handleSwipe('love')" title="Love it! Add to Planner">
-            <span>❤️</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 3: COUPLE CHAT -->
-    <section id="view-chat" class="view-panel">
-      <!-- Solo Locked Chat State (Shown when exploring solo) -->
-      <div id="chat-solo-locked" class="chat-solo-locked hidden" style="text-align:center; padding:4rem 1.5rem; background:white; border-radius:18px; border:1px solid var(--border); margin:1rem auto; max-width:440px; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
-        <span style="font-size:3.5rem; display:block; margin-bottom:1rem;">💌</span>
-        <h3 style="font-size:1.35rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-main);">Couple Chat is Locked</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin:0 auto 1.5rem auto; line-height:1.5;">
-          Link with your partner using your invite code to chat in real time, share date ideas, and plan together!
-        </p>
-        <button type="button" class="btn btn-primary" onclick="authUI.openPairModal()" style="border-radius:9999px; padding:0.65rem 1.5rem; font-weight:700;">
-          💑 Link with Partner
-        </button>
-      </div>
-
-      <div class="chat-container" id="chat-active-container">
-        <!-- Chat Header -->
-        <div class="chat-header-bar">
-          <div class="chat-header-info">
-            <span class="chat-header-avatar">💑</span>
-            <div>
-              <h2 class="chat-header-title" id="chat-header-title">Couple Chat</h2>
-              <span class="chat-header-status">🟢 Connected</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sharing Event Banner (Visible when sharing an activity) -->
-        <div id="chat-share-banner" class="chat-share-banner hidden">
-          <div class="chat-share-info">
-            <span class="chat-share-icon">📍</span>
-            <span id="chat-share-title" class="chat-share-text">Sharing Date Idea</span>
-          </div>
-          <button type="button" class="chat-share-cancel" onclick="chatView.hideShareBanner()" title="Cancel share">✕</button>
-        </div>
-
-        <!-- Messages Thread -->
-        <div id="chat-messages-container" class="chat-messages-container">
-          <!-- Messages rendered dynamically -->
-        </div>
-
-        <!-- Quick Idea Suggestion Chips -->
-        <div class="chat-quick-chips">
-          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Are you free this Saturday? ❤️')">📅 Free this Saturday?</button>
-          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Let\'s do this date! ✨')">✨ Let's do this date!</button>
-          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('What time suits you? ⏰')">⏰ What time suits you?</button>
-          <button type="button" class="quick-chip" onclick="chatView.sendQuickSuggestion('Dinner before or after? 🍷')">🍷 Dinner before/after?</button>
-        </div>
-
-        <!-- Message Composer Form -->
-        <form class="chat-composer-form" onsubmit="chatView.handleFormSubmit(event)">
-          <input type="text" id="chat-input-text" class="chat-input" placeholder="Message partner..." autocomplete="off" maxlength="500">
-          <button type="submit" class="chat-send-btn" aria-label="Send message">
-            <span>🚀</span>
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- TAB 4: SHARED PLANNER & ITINERARY -->
-    <!-- TAB: MATCHES (ideas you both loved, ready to plan) -->
-    <section id="view-matches" class="view-panel">
-      <div class="matches-page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
-        <div>
-          <h2 id="matches-page-title">💖 Your Matches</h2>
-        </div>
-        <button type="button" id="btn-pick-random-match" class="btn btn-primary btn-sm hidden" onclick="matchesView.pickRandomMatch()" style="border-radius:9999px; padding:0.55rem 1.1rem; font-weight:800; box-shadow:0 4px 12px rgba(244,63,94,0.25);">
-          🎲 Pick For Us
-        </button>
-      </div>
-
-      <div id="matches-grid" class="events-grid matches-grid">
-        <!-- Match cards injected by matches.js -->
-      </div>
-
-      <div id="matches-empty" class="empty-state hidden">
-        <span class="empty-emoji">💞</span>
-        <h3>No matches yet</h3>
-        <p id="matches-empty-msg">When you both ❤️ Love the same idea, it shows up here ready to plan.</p>
-        <button class="btn btn-primary" onclick="app.navigate('swiper')">🔥 Start Swiping</button>
-      </div>
-
-      <div id="matches-removed-wrap" class="matches-removed-wrap hidden">
-        <button type="button" id="matches-removed-toggle" class="btn-text-link" onclick="matchesView.toggleRemoved()">Show removed</button>
-      </div>
-    </section>
-
+    <!-- TAB 2: SHARED PLANNER & ITINERARY -->
     <section id="view-planner" class="view-panel gcal-planner-view">
       <!-- Google Calendar Sticky Top App Bar -->
       <header class="gcal-topbar">
@@ -681,8 +456,8 @@
         <div id="bucket-empty" class="empty-state hidden">
           <span class="empty-emoji">✨</span>
           <h4>Your bucket list is empty</h4>
-          <p>Swipe right ❤️ in Date Swiper or tap Love on activities to save dates here for later!</p>
-          <button class="btn btn-primary btn-sm" onclick="app.navigate('swiper')">Start Swiping 🔥</button>
+          <p>Tap <strong>Add to Planner</strong> on any activity in Discover to save dates here for later!</p>
+          <button class="btn btn-primary btn-sm" onclick="app.navigate('discover')">Browse Discover ✨</button>
         </div>
       </div>
 
@@ -753,26 +528,6 @@
     </section>
 
   </main>
-
-  <!-- MATCH CELEBRATION MODAL -->
-  <div id="match-modal" class="modal-overlay hidden">
-    <div class="modal-card match-card">
-      <div class="confetti-burst">🎉 💖 🍾 ✨</div>
-      <h2 class="match-title">It's a Match!</h2>
-      <p class="match-desc">Both you and <span id="match-partner-name">your partner</span> want to do this!</p>
-      
-      <div class="match-preview" id="match-preview-card">
-        <!-- Render event preview -->
-      </div>
-
-      <div class="match-actions">
-        <button class="btn btn-secondary" onclick="collaborative.closeMatchModal()">Keep Browsing</button>
-        <button class="btn btn-primary" id="btn-match-schedule" onclick="collaborative.scheduleMatchNow()">
-          📅 Schedule for this Weekend
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- SCHEDULE / CREATE EVENT MODAL -->
   <div id="schedule-modal" class="modal-overlay hidden" onclick="if(event.target===this) planner.closeScheduleModal()">
@@ -1106,7 +861,7 @@
           </button>
         </div>
         <p style="margin:0.25rem 0 0.5rem; font-size:0.76rem; color:#64748b; line-height:1.35;">
-          Alerts on mutual matches, partner chats &amp; new dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
+          Alerts when your partner adds or updates shared planner dates. On iPhone/iPad, add TwoDo to your Home Screen (Safari Share ➔ <em>Add to Home Screen</em>) for lock screen alerts.
         </p>
 
         <details style="margin-top:0.5rem; font-size:0.78rem;" open>
@@ -1284,67 +1039,12 @@
     </div>
   </div>
 
-  <!-- LOVE NOTE MODAL -->
-  <div id="love-note-modal" class="modal-overlay hidden" onclick="collaborative.closeLoveNoteModal()">
-    <div class="modal-card love-note-card" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-header-icon-wrap" style="background: rgba(244, 63, 94, 0.12); color: #f43f5e; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">💬</div>
-        <div>
-          <h3 style="margin:0; font-size:1.2rem;">Send a Note</h3>
-        </div>
-        <button type="button" class="close-btn" onclick="collaborative.closeLoveNoteModal()" title="Close">✕</button>
-      </div>
-
-      <div class="love-note-body" style="padding:1rem 0;">
-        <input type="hidden" id="love-note-event-id">
-        <div class="love-note-event-preview" style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:0.75rem 1rem; margin-bottom:1rem;">
-          <span class="preview-tag" style="display:block; font-size:0.72rem; font-weight:700; color:var(--primary); text-transform:uppercase;">📍 Date Idea</span>
-          <strong id="love-note-title" class="preview-title" style="font-size:0.95rem; color:var(--text-main);">Activity Title</strong>
-        </div>
-
-        <label class="love-note-label" for="love-note-text" style="display:block; font-size:0.88rem; font-weight:600; margin-bottom:0.4rem;">
-          <span>Note from <strong id="love-note-sender">Jordan</strong>:</span>
-        </label>
-        <textarea id="love-note-text" class="love-note-textarea" rows="3" placeholder="Tell your partner why you'd love to do this..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:0.75rem; font-family:inherit; font-size:0.92rem; box-sizing:border-box; outline:none; resize:vertical;"></textarea>
-
-        <!-- Quick Idea Chips for Notes -->
-        <div class="love-note-chips" style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem;">
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'You have been wanting to do this forever! 💕'">💕 You've wanted to do this!</button>
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Perfect for our next weekend date! ✨'">✨ Perfect weekend date!</button>
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Let\'s definitely dress up for this! 🥂'">🥂 Let's dress up for this!</button>
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'This would be so fun together! 🎉'">🎉 So fun together!</button>
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Maybe? Looks a bit pricey 🤔'">🤔 Maybe? Looks pricey</button>
-          <button type="button" class="quick-chip" onclick="document.getElementById('love-note-text').value = 'Could be fun when the weather cools down ☁️'">☁️ Maybe another time</button>
-        </div>
-      </div>
-
-      <div class="love-note-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">
-        <button type="button" class="btn btn-secondary" onclick="collaborative.saveNoteOnly()" title="Send the note but keep this idea in your feed">💬 Just send note</button>
-        <button type="button" class="btn btn-primary" onclick="collaborative.saveLoveNote()">❤️ Love &amp; send</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fixed Mobile Bottom Navigation Bar (4 Clean Core Tabs) -->
+  <!-- Fixed Mobile Bottom Navigation Bar (Discover & Planner) -->
   <nav class="mobile-bottom-bar" id="mobile-bottom-nav">
     <button class="mobile-nav-item active" data-tab="discover" onclick="app.navigate('discover')">
       <span class="m-icon">✨</span>
       <span class="m-label">Discover</span>
       <span class="m-badge count hidden" id="m-discover-badge">0</span>
-    </button>
-    <button class="mobile-nav-item" data-tab="swiper" onclick="app.navigate('swiper')">
-      <span class="m-icon">🔥</span>
-      <span class="m-label">Swiper</span>
-      <span class="m-badge count hidden" id="m-swiper-badge">0</span>
-    </button>
-    <button class="mobile-nav-item" data-tab="matches" onclick="app.navigate('matches')">
-      <span class="m-icon">💖</span>
-      <span class="m-label">Matches</span>
-      <span class="m-badge count hidden" id="m-matches-badge">0</span>
-    </button>
-    <button class="mobile-nav-item" data-tab="chat" onclick="app.navigate('chat')">
-      <span class="m-icon">💬</span>
-      <span class="m-label">Chat</span>
     </button>
     <button class="mobile-nav-item" data-tab="planner" onclick="app.navigate('planner')">
       <span class="m-icon">📅</span>
@@ -1368,17 +1068,13 @@
 
   <!-- App Scripts -->
   <script src="js/firebase-config.js?v=5.2"></script>
-  <script src="js/firebase-service.js?v=6.2"></script>
-  <script src="js/notifications.js?v=6.1"></script>
+  <script src="js/firebase-service.js?v=7.1"></script>
+  <script src="js/notifications.js?v=7.1"></script>
   <script src="js/auth-ui.js?v=6.1"></script>
   <script src="js/events_data.js?v=7.0"></script>
-  <script src="js/api.js?v=7.0"></script>
-  <script src="js/chat.js?v=6.1"></script>
-  <script src="js/collaborative.js?v=6.1"></script>
-  <script src="js/discover.js?v=6.1"></script>
-  <script src="js/swiper.js?v=6.1"></script>
-  <script src="js/planner.js?v=6.3"></script>
-  <script src="js/matches.js?v=6.1"></script>
-  <script src="js/app.js?v=6.1"></script>
+  <script src="js/api.js?v=7.1"></script>
+  <script src="js/discover.js?v=7.1"></script>
+  <script src="js/planner.js?v=7.1"></script>
+  <script src="js/app.js?v=7.1"></script>
 </body>
 </html>

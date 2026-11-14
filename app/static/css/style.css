@@ -5788,40 +5788,29 @@ html.device-authenticated #app-container {
   gap: 0.35rem;
 }
 
-.btn-spot-love,
-.btn-spot-pass,
 .btn-spot-plan {
+  width: 100%;
   border-radius: 9999px;
-  padding: 0.32rem 0.55rem;
-  font-size: 0.73rem;
+  padding: 0.42rem 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  border: 1px solid var(--border);
-  background: white;
+  border: 1px solid #f43f5e;
+  background: #fff1f2;
+  color: #e11d48;
   transition: all 0.15s ease;
 }
 
-.btn-spot-love {
-  flex: 1;
-  background: #fff1f2;
-  border-color: #fecdd3;
-  color: #e11d48;
-}
-
-.btn-spot-love:hover {
+.btn-spot-plan:hover {
   background: #f43f5e;
   color: white;
 }
 
-.btn-spot-pass {
-  color: #64748b;
-}
-
-.btn-spot-plan {
-  background: #0f172a;
-  border-color: #0f172a;
-  color: white;
+.btn-spot-plan.in-planner {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #15803d;
 }
 
 /* 15-Second Date Concierge Modal */
@@ -6231,11 +6220,51 @@ html.device-authenticated #app-container {
 
 .card-actions-clean {
   margin-top: auto;
-  padding-top: 0.55rem;
+  padding-top: 0.65rem;
   border-top: 1px solid #f1f5f9;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.btn-planner-card {
+  width: 100%;
+  height: 40px;
+  border-radius: 9999px;
+  border: 1.5px solid #f43f5e;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.22);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+
+.btn-planner-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(244, 63, 94, 0.3);
+}
+
+.btn-planner-card:active {
+  transform: scale(0.98);
+}
+
+.btn-planner-card.in-planner {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #15803d;
+  box-shadow: none;
+}
+
+.btn-planner-card.in-planner:hover {
+  background: #dcfce7;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.12);
 }
 
 .card-actions-clean .btn-vote-pill {

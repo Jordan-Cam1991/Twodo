@@ -33,8 +33,7 @@ const discover = {
       { intent: 'eat_drink', icon: '🍽️', label: 'Eat & Drink' },
       { intent: 'activity', icon: '🎯', label: 'Activities' },
       { intent: 'outdoors', icon: '🌿', label: 'Outdoors' },
-      { intent: 'low_key', icon: '🌙', label: 'Low-Key' },
-      { intent: 'saved', icon: '❤️', label: 'Loves & Votes' }
+      { intent: 'low_key', icon: '🌙', label: 'Low-Key' }
     ],
     special: [
       { intent: 'all', icon: '✨', label: 'All Events' },
@@ -43,8 +42,7 @@ const discover = {
       { intent: 'special_shows', icon: '🎭', label: 'Comedy & Shows' },
       { intent: 'special_festivals', icon: '🎨', label: 'Arts & Culture' },
       { intent: 'special_outdoors', icon: '🌿', label: 'Outdoor & Adventure' },
-      { intent: 'special_markets', icon: '🎪', label: 'Markets & Pop-ups' },
-      { intent: 'saved', icon: '❤️', label: 'Loves & Votes' }
+      { intent: 'special_markets', icon: '🎪', label: 'Markets & Pop-ups' }
     ]
   },
 
@@ -156,40 +154,12 @@ const discover = {
     this.activeSubIntent = 'all';
     this.currentPage = 1;
 
-    // Exit personal Loves/Passed view if active so the chosen mode is shown immediately
-    if (this.isSpecialMood()) {
-      this.currentMood = 'all';
-      this.activeFilter = 'all';
-      document.querySelectorAll('.mood-chip').forEach(c => {
-        c.classList.toggle('active', c.dataset.mood === 'all');
-      });
-    }
-
     this.syncIntentUI();
     this.updateFilterHeaderBadges();
     this.loadEvents(false);
   },
 
   setIntent(intent, subIntent = 'all') {
-    if (intent === 'saved') {
-      if (this.activeIntent === 'saved') {
-        this.activeIntent = 'all';
-        this.activeSubIntent = 'all';
-        this.currentMood = 'all';
-        this.activeFilter = 'all';
-        document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
-        this.syncIntentUI();
-        this.updateActiveFilterPillBar();
-        this.loadEvents(false);
-        return;
-      }
-      this.activeIntent = 'saved';
-      this.activeSubIntent = 'all';
-      this.syncIntentUI();
-      this.setMoodFilter('emma-loves');
-      return;
-    }
-
     // Tapping the already-active intent (when no sub-intent is narrowed) toggles back to 'all'
     if (this.activeIntent === intent && intent !== 'all' && subIntent === 'all' && this.activeSubIntent === 'all') {
       this.activeIntent = 'all';
@@ -197,14 +167,6 @@ const discover = {
     } else {
       this.activeIntent = intent || 'all';
       this.activeSubIntent = subIntent || 'all';
-    }
-    // If user was viewing a personal Loves/Passed list, switch back to live discovery
-    if (this.isSpecialMood()) {
-      this.currentMood = 'all';
-      this.activeFilter = 'all';
-      document.querySelectorAll('.mood-chip').forEach(c => {
-        c.classList.toggle('active', c.dataset.mood === 'all');
-      });
     }
     this.currentPage = 1;
     this.syncIntentUI();
@@ -222,31 +184,27 @@ const discover = {
 
   syncIntentUI() {
     const mode = this.activeFeedMode || 'anytime';
-    const effectiveTab = this.isSpecialMood() ? 'saved' : this.activeIntent;
+    const effectiveTab = this.activeIntent;
 
     // 1. Sync Mode Switcher buttons (Anytime Places vs Special Events)
-    document.querySelectorAll('#discover-mode-switcher .feed-mode-btn, #swiper-mode-switcher .feed-mode-btn').forEach(btn => {
+    document.querySelectorAll('#discover-mode-switcher .feed-mode-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
 
     // 2. Show 📅 Date pill ONLY in Special Events mode (hides it in Anytime Places!)
-    ['mood-chip-date', 'sw-date-pill'].forEach(id => {
-      const dateBtn = document.getElementById(id);
-      if (dateBtn) {
-        dateBtn.classList.toggle('hidden', mode !== 'special');
-      }
-    });
+    const dateBtn = document.getElementById('mood-chip-date');
+    if (dateBtn) {
+      dateBtn.classList.toggle('hidden', mode !== 'special');
+    }
 
     // 3. Update search placeholder to match active mode
     const placeholder = mode === 'special'
       ? 'Search concerts, live sports, comedy, shows...'
       : 'Search restaurants, bars, activities, walks...';
-    ['discover-search-input', 'swiper-search-input'].forEach(id => {
-      const inp = document.getElementById(id);
-      if (inp) inp.placeholder = placeholder;
-    });
+    const inp = document.getElementById('discover-search-input');
+    if (inp) inp.placeholder = placeholder;
 
-    // 4. Render mode-specific Category Tabs in both Discover and Swiper
+    // 4. Render mode-specific Category Tabs in Discover
     const tabs = this.modeCategoryTabs[mode] || this.modeCategoryTabs.anytime;
     const discoverStrip = document.getElementById('discover-intent-tiles');
     if (discoverStrip) {
@@ -257,29 +215,9 @@ const discover = {
         </button>
       `).join('');
     }
-    const swiperStrip = document.getElementById('swiper-intent-tiles');
-    if (swiperStrip) {
-      const swIntent = (effectiveTab === 'saved') ? 'all' : effectiveTab;
-      swiperStrip.innerHTML = tabs.map(t => {
-        const clickHandler = t.intent === 'saved'
-          ? "app.navigate('discover'); discover.setIntent('saved')"
-          : `discover.setIntent('${t.intent}')`;
-        return `
-          <button type="button" class="cat-tab ${t.intent === swIntent ? 'active' : ''}" data-intent="${t.intent}" onclick="${clickHandler}">
-            <span class="cat-tab-icon">${t.icon}</span>
-            <span class="cat-tab-label">${t.label}</span>
-          </button>
-        `;
-      }).join('');
-    }
 
-    // 5. Update unvoted counts on the two Mode Switcher buttons
+    // 5. Update counts on the two Mode Switcher buttons
     this.updateModeSwitcherCounts();
-
-    const votesBar = document.getElementById('discover-votes-bar');
-    if (votesBar) {
-      votesBar.classList.toggle('hidden', effectiveTab !== 'saved');
-    }
     this.renderSubIntentBars();
   },
 
@@ -292,35 +230,30 @@ const discover = {
       custom_start: null,
       custom_end: null,
       filter: 'all'
-    }, { forSwiper: true, includeVoted: false });
+    });
 
     const activeRange = this.activeDateRange || this.defaultDateRange || 'this_week';
     const specialCount = this.getDateRangePreviewCount(activeRange);
 
-    ['discover-anytime-count', 'swiper-anytime-count'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = anytimeCount;
-    });
-    ['discover-special-count', 'swiper-special-count'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = specialCount;
-    });
+    const anytimeEl = document.getElementById('discover-anytime-count');
+    if (anytimeEl) anytimeEl.textContent = anytimeCount;
+    const specialEl = document.getElementById('discover-special-count');
+    if (specialEl) specialEl.textContent = specialCount;
   },
 
   renderSubIntentBars() {
     const def = this.intentDefinitions[this.activeIntent];
-    const bars = [
-      document.getElementById('discover-sub-intent-bar'),
-      document.getElementById('swiper-sub-intent-bar')
-    ];
-    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all' || this.isSpecialMood() || this.activeIntent === 'saved') {
-      bars.forEach(b => { if (b) { b.classList.add('hidden'); b.innerHTML = ''; } });
+    const bar = document.getElementById('discover-sub-intent-bar');
+    if (!def || !def.subs || def.subs.length === 0 || this.activeIntent === 'all') {
+      if (bar) {
+        bar.classList.add('hidden');
+        bar.innerHTML = '';
+      }
       return;
     }
 
-    // Compute live count per sub-intent using the exact same active filters (Date, Suburb, Vibe, Category, Search, unvoted)
+    // Compute live count per sub-intent using the exact same active filters
     const mode = this.activeFeedMode || 'anytime';
-    const inSwiper = (typeof app !== 'undefined' && app.activeTab === 'swiper');
     const bounds = mode === 'special' ? this.getDateBounds() : null;
     const modePool = this.getMatchingEvents({
       feed_mode: mode,
@@ -329,7 +262,7 @@ const discover = {
       date_range: bounds ? 'custom' : 'all',
       custom_start: bounds ? this.toYMD(bounds.start) : null,
       custom_end: bounds ? this.toYMD(bounds.end) : null
-    }, { forSwiper: inSwiper, includeVoted: false });
+    });
 
     const html = def.subs.map(sub => {
       const count = (sub.id === 'all')
@@ -344,12 +277,10 @@ const discover = {
       `;
     }).join('');
 
-    bars.forEach(b => {
-      if (b) {
-        b.innerHTML = `<div class="sub-intent-scroll">${html}</div>`;
-        b.classList.remove('hidden');
-      }
-    });
+    if (bar) {
+      bar.innerHTML = `<div class="sub-intent-scroll">${html}</div>`;
+      bar.classList.remove('hidden');
+    }
   },
 
   toggleHeaderSearch() {
@@ -358,7 +289,7 @@ const discover = {
     const input = document.getElementById('discover-search-input');
     if (!drawer) return;
 
-    if (typeof app !== 'undefined' && app.activeTab && !['discover', 'swiper'].includes(app.activeTab)) {
+    if (typeof app !== 'undefined' && app.activeTab && app.activeTab !== 'discover') {
       app.navigate('discover');
     }
 
@@ -372,14 +303,10 @@ const discover = {
 
   handleSearchInput(val) {
     this.searchQuery = (val || '').trim();
-    ['discover-search-input', 'swiper-search-input'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && el.value !== val) el.value = val || '';
-    });
-    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
-      const btn = document.getElementById(id);
-      if (btn) btn.classList.toggle('hidden', !this.searchQuery);
-    });
+    const el = document.getElementById('discover-search-input');
+    if (el && el.value !== val) el.value = val || '';
+    const clearBtn = document.getElementById('discover-search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', !this.searchQuery);
     const hdrBtn = document.getElementById('btn-header-search');
     const drawer = document.getElementById('header-search-drawer');
     if (hdrBtn) hdrBtn.classList.toggle('filter-active', Boolean(this.searchQuery) || (drawer && !drawer.classList.contains('hidden')));
@@ -393,14 +320,10 @@ const discover = {
 
   clearSearch() {
     this.searchQuery = '';
-    ['discover-search-input', 'swiper-search-input'].forEach(id => {
-      const input = document.getElementById(id);
-      if (input) input.value = '';
-    });
-    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
-      const clearBtn = document.getElementById(id);
-      if (clearBtn) clearBtn.classList.add('hidden');
-    });
+    const input = document.getElementById('discover-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('discover-search-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
     const drawer = document.getElementById('header-search-drawer');
     if (drawer) drawer.classList.add('hidden');
     const hdrBtn = document.getElementById('btn-header-search');
@@ -658,29 +581,23 @@ const discover = {
     return !this.activeDateRange || this.activeDateRange === this.defaultDateRange;
   },
 
-  isSpecialMood(mood = this.currentMood) {
-    return ['matches', 'my-loves', 'my-passed', 'my_loves', 'my_passed', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(mood);
-  },
-
-  /** Single source of truth for filter params, shared by Discover & Swiper. */
-  getFilterParams({ forSwiper = false } = {}) {
-    const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || document.getElementById('swiper-search-input')?.value || '';
-    // Loves / Passed / Matches lists show everything you've voted on across both Anytime Places & Special Events
-    const isSavedList = !forSwiper && (this.isSpecialMood() || this.activeIntent === 'saved');
-    const mode = isSavedList ? 'all' : (this.activeFeedMode || 'anytime');
+  /** Single source of truth for filter params, shared across Discover controls. */
+  getFilterParams() {
+    const searchVal = this.searchQuery || document.getElementById('discover-search-input')?.value || '';
+    const mode = this.activeFeedMode || 'anytime';
     // Date filter applies ONLY when browsing Special Events!
-    const useDateFilter = (mode === 'special') && !isSavedList;
+    const useDateFilter = (mode === 'special');
     const bounds = useDateFilter ? this.getDateBounds() : null;
     return {
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
       feed_mode: mode,
-      intent: isSavedList ? 'all' : (this.activeIntent || 'all'),
-      sub_intent: isSavedList ? 'all' : (this.activeSubIntent || 'all'),
+      intent: this.activeIntent || 'all',
+      sub_intent: this.activeSubIntent || 'all',
       category: this.selectedCategories.length > 0 ? this.selectedCategories.join(',') : 'All',
       suburb: this.selectedSuburbs.length > 0 ? this.selectedSuburbs.join(',') : 'All',
       vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
       search: searchVal,
-      filter: forSwiper ? 'all' : this.activeFilter,
+      filter: this.activeFilter || 'all',
       date_range: bounds ? 'custom' : 'all',
       custom_start: bounds ? this.toYMD(bounds.start) : null,
       custom_end: bounds ? this.toYMD(bounds.end) : null
@@ -706,85 +623,44 @@ const discover = {
     });
   },
 
-  /** Applies client-side search & active-voter unvoted gating consistently across views and counts. */
-  applyClientVisibilityFilter(list, { includeVoted = false, searchQuery = this.searchQuery } = {}) {
+  /** Applies client-side search gating consistently across Discover views and counts. */
+  applyClientVisibilityFilter(list, { searchQuery = this.searchQuery } = {}) {
     if (!Array.isArray(list)) return [];
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : 'Emma';
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-    const isTogether = (typeof app !== 'undefined') && app.currentVoter === 'both';
     const q = String(searchQuery || '').trim().toLowerCase();
-
-    let votes = {};
-    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
-    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
-      votes = { ...votes, ...firebaseService.votesMap };
-    }
+    if (!q) return list;
 
     return list.filter(ev => {
-      if (q) {
-        const str = `${ev.title || ''} ${ev.description || ''} ${ev.location_name || ''} ${ev.location || ''} ${ev.insider_tip || ''} ${(ev.tags || []).join(' ')} ${ev.source || ''} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
-        if (!str.includes(q)) return false;
-      }
-
-      if (!includeVoted) {
-        const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
-        const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
-        if (isSolo) {
-          const vote = votes[`${ev.id}_${activeVoter}`] !== undefined
-            ? votes[`${ev.id}_${activeVoter}`]
-            : (ev.my_vote !== undefined ? ev.my_vote : (activeVoter === u1 ? v1 : v2));
-          if (vote === 'love' || vote === 'pass') return false;
-        } else if (isTogether) {
-          if (v1 === 'love' || v1 === 'pass' || v2 === 'love' || v2 === 'pass') return false;
-        } else {
-          const myVote = (activeVoter === u1) ? v1 : v2;
-          if (myVote === 'love' || myVote === 'pass') return false;
-        }
-      }
-
-      return true;
+      const str = `${ev.title || ''} ${ev.description || ''} ${ev.location_name || ''} ${ev.location || ''} ${ev.insider_tip || ''} ${(ev.tags || []).join(' ')} ${ev.source || ''} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
+      return str.includes(q);
     });
   },
 
   /** Single shared query + client-visibility + deduped pipeline used for mode counts, sub-pills, and modals. */
-  getMatchingEvents(paramOverrides = {}, { forSwiper = false, includeVoted = null } = {}) {
+  getMatchingEvents(paramOverrides = {}) {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return [];
-    const base = this.getFilterParams({ forSwiper });
+    const base = this.getFilterParams();
     const params = { ...base, ...paramOverrides };
     const rawList = api.getLocalEnrichedEvents(params).events || [];
-    const isSavedList = !forSwiper && (this.isSpecialMood() || this.activeIntent === 'saved');
-    const keepVoted = includeVoted !== null ? includeVoted : isSavedList;
     return this.dedupeEvents(this.applyClientVisibilityFilter(rawList, {
-      includeVoted: keepVoted,
       searchQuery: params.search
     }));
   },
 
-  getDedupedCount(paramOverrides = {}, opts = {}) {
-    return this.getMatchingEvents(paramOverrides, opts).length;
+  getDedupedCount(paramOverrides = {}) {
+    return this.getMatchingEvents(paramOverrides).length;
   },
 
   onDateChipClick() {
-    // From a Loves / Passed list, one tap takes you back to the feed and opens the calendar
-    if (this.isSpecialMood()) {
-      this.setMoodFilter('all');
-    }
     this.openFilterModal('date');
   },
 
   updateDateChipLabels() {
     const label = this.getDateChipLabel();
     const isDateFiltered = !this.isDefaultDate();
-    ['date-chip-label', 'sw-date-pill-label'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = label;
-    });
-    ['mood-chip-date', 'sw-date-pill'].forEach(id => {
-      const btn = document.getElementById(id);
-      if (btn) btn.classList.toggle('active', isDateFiltered);
-    });
+    const el = document.getElementById('date-chip-label');
+    if (el) el.textContent = label;
+    const btn = document.getElementById('mood-chip-date');
+    if (btn) btn.classList.toggle('active', isDateFiltered);
   },
 
   getCatalogRenderSignature(eventsList = app.events, paramsObj = null, pageOverride = null) {
@@ -845,7 +721,6 @@ const discover = {
     app.events = nextEvents;
 
     if (this._lastRenderSig && nextSig === this._lastRenderSig && this.hasStableRenderedGrid()) {
-      this.updateMatchBanner();
       this.updateFilterHeaderBadges();
       this.updateModeSwitcherCounts();
       this.renderSubIntentBars();
@@ -854,10 +729,7 @@ const discover = {
 
     this._lastRenderSig = nextSig;
     this.renderEvents();
-    this.updateMatchBanner();
     this.updateFilterHeaderBadges();
-    // Swiper uses the same date / suburb / vibe / category filters
-    if (typeof swiper !== 'undefined') swiper.initDeck();
   },
 
   renderEvents() {
@@ -869,17 +741,7 @@ const discover = {
 
     if (!grid) return;
 
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = app.getActiveVoterName();
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-    const isTogether = app.currentVoter === 'both';
-    const isSpecialMood = ['matches', 'my-loves', 'my-passed', 'my_loves', 'my_passed', 'emma-loves', 'emma-passed', 'jordan-loves', 'jordan-passed'].includes(this.currentMood);
-
-    // In normal feed browsing: only show items with no selection or thinking ('maybe')!
-    // Loved or passed items are excluded from the main feed & search results.
     let displayEvents = this.dedupeEvents(this.applyClientVisibilityFilter(app.events || [], {
-      includeVoted: isSpecialMood,
       searchQuery: this.searchQuery
     }));
 
@@ -887,11 +749,11 @@ const discover = {
     this.renderSpotlights(displayEvents);
 
     if (countText) {
-      const isSpecial = (this.activeFeedMode === 'special') && !this.isSpecialMood();
-      const itemNoun = isSpecial ? 'special events' : (this.isSpecialMood() ? 'saved ideas' : 'anytime places');
+      const isSpecial = (this.activeFeedMode === 'special');
+      const itemNoun = isSpecial ? 'special events' : 'anytime places';
       const dateLabel = isSpecial ? ` · 📅 ${this.getDateChipLabel()}` : '';
       const filterDetails = [];
-      if (this.activeIntent && this.activeIntent !== 'all' && !this.isSpecialMood()) {
+      if (this.activeIntent && this.activeIntent !== 'all') {
         const iDef = this.intentDefinitions[this.activeIntent];
         let iLabel = iDef ? iDef.label : this.activeIntent;
         if (this.activeSubIntent && this.activeSubIntent !== 'all' && iDef?.subs) {
@@ -934,70 +796,25 @@ const discover = {
     }
 
     grid.innerHTML = visibleEvents.map(ev => {
-      const isMatch = ev.is_match;
-      const v1 = ev.u1_vote;
-      const v2 = ev.u2_vote;
-
-      // Active voter's current vote & partner's vote
-      const currentVote = (activeVoter === u1) ? v1 : v2;
-      const partnerName = (activeVoter === u1) ? u2 : u1;
-      const partnerVote = (activeVoter === u1) ? v2 : v1;
-
-      const loveActive = currentVote === 'love' ? 'active-love' : '';
-      const passActive = currentVote === 'pass' ? 'active-pass' : '';
-
-      // Match or Partner-Loved Signal (Zero noise when nobody has voted yet!)
-      let signalBadgeHtml = '';
-      if (!isSolo && isMatch) {
-        signalBadgeHtml = `<div class="card-match-banner">🎉 Mutual Match! Both Love This</div>`;
-      } else if (!isSolo && partnerVote === 'love') {
-        signalBadgeHtml = `<div class="card-partner-loved-banner">💜 ${discover.escapeHtml(partnerName)} loves this — tap ❤️ to Match!</div>`;
-      }
-
       // Clean 1-line tip
       const tipHtml = ev.insider_tip 
         ? `<div class="card-tip-clean">💡 ${discover.escapeHtml(ev.insider_tip)}</div>`
         : '';
 
-      // Love Notes HTML (only shown if someone wrote a note)
-      let loveNotesHtml = '';
-      const notesList = [];
-      if (ev.u1_note) {
-        notesList.push(`
-          <div class="card-love-note u1-note">
-            <span class="note-author-pill u1">${ev.u1_vote === 'love' ? '❤️' : '💬'} ${u1}</span>
-            <span class="note-quote-text">"${discover.escapeHtml(ev.u1_note)}"</span>
-          </div>
-        `);
-      }
-      if (ev.u2_note) {
-        notesList.push(`
-          <div class="card-love-note u2-note">
-            <span class="note-author-pill u2">${ev.u2_vote === 'love' ? '💜' : '💬'} ${u2}</span>
-            <span class="note-quote-text">"${discover.escapeHtml(ev.u2_note)}"</span>
-          </div>
-        `);
-      }
-      if (notesList.length > 0) {
-        loveNotesHtml = `<div class="card-love-notes-box">${notesList.join('')}</div>`;
-      }
-
-      const myExistingNote = (activeVoter === u1) ? ev.u1_note : ev.u2_note;
       const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
       const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
       const linkInfo = discover.getEventLinkInfo(ev);
       const externalLinkHtml = linkInfo
         ? `<span class="meta-dot">•</span><a href="${discover.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" title="Visit ${discover.escapeHtml(ev.source || 'official website')}">${linkInfo.label}</a>`
         : '';
+      const inPlanner = Boolean(ev.planner_id);
 
       return `
-        <article class="event-card ${isMatch ? 'is-match-card' : ''}" data-event-id="${ev.id}">
-          <div class="card-media" ondblclick="discover.handleDoubleTap('${ev.id}')" title="Double-tap photo to Love ❤️">
+        <article class="event-card" data-event-id="${ev.id}">
+          <div class="card-media">
             <img class="card-img" src="${ev.image_url}" alt="${discover.escapeHtml(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
             <span class="card-source-badge">${discover.escapeHtml(ev.category || 'Date Idea')}</span>
             <span class="card-price-badge">${discover.escapeHtml(priceLabel)}</span>
-            ${signalBadgeHtml}
-            <div class="heart-burst-overlay" id="burst-${ev.id}">❤️</div>
           </div>
 
           <div class="card-body">
@@ -1013,27 +830,11 @@ const discover = {
             </div>
 
             ${tipHtml}
-            ${!isSolo ? loveNotesHtml : ''}
 
-            <!-- Single-Row Clean Action Bar -->
             <div class="card-actions-clean">
-              <button class="btn-vote-pill btn-vote-love ${loveActive}" onclick="collaborative.handleVote('${ev.id}', 'love')" title="Love it!">
-                <span>❤️ ${loveActive ? 'Loved' : 'Love'}</span>
+              <button type="button" class="btn-planner-card ${inPlanner ? 'in-planner' : ''}" onclick="planner.openScheduleModal('${ev.id}', null, ${ev.planner_id ? `'${ev.planner_id}'` : 'null'})" title="${inPlanner ? 'View or edit in Planner' : 'Add this activity to Planner'}">
+                <span>${inPlanner ? '✅ Added to Planner' : '📅 Add to Planner'}</span>
               </button>
-              <button class="btn-vote-pill btn-vote-pass ${passActive}" onclick="collaborative.handleVote('${ev.id}', 'pass')" title="Pass">
-                <span>✕ ${passActive ? 'Passed' : 'Pass'}</span>
-              </button>
-              <button type="button" class="btn-card-icon" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', ${ev.planner_id ? `'${ev.planner_id}'` : 'null'})" title="Schedule this activity">
-                📅
-              </button>
-              ${!isSolo ? `
-                <button type="button" class="btn-card-icon ${myExistingNote ? 'has-note' : ''}" onclick="collaborative.openNoteModal('${ev.id}')" title="${myExistingNote ? 'Edit your note' : 'Add a note for your partner'}">
-                  💬
-                </button>
-                <button type="button" class="btn-card-icon" onclick="chatView.shareEventToChat('${ev.id}')" title="Share to Couple Chat">
-                  ↗
-                </button>
-              ` : ''}
             </div>
           </div>
         </article>
@@ -1044,16 +845,6 @@ const discover = {
   },
 
   currentMood: 'all',
-
-  handleDoubleTap(eventId) {
-    collaborative.handleVote(eventId, 'love');
-    const burst = document.getElementById(`burst-${eventId}`);
-    if (burst) {
-      burst.classList.add('animate-burst');
-      setTimeout(() => burst.classList.remove('animate-burst'), 850);
-    }
-    app.showToast('❤️ Loved! Double-tap saved');
-  },
 
   setMoodFilter(mood) {
     const prevMood = this.currentMood;
@@ -1074,52 +865,29 @@ const discover = {
       this.customStart = null;
       this.customEnd = null;
     }
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
 
-    if (mood === 'all') {
-      this.activeFilter = 'all';
-    } else if (mood === 'matches') {
-      this.activeFilter = 'matches';
-    } else if (mood === 'my-loves' || mood === 'emma-loves') {
-      this.activeFilter = isSolo ? 'my_loves' : 'user1_likes';
-    } else if (mood === 'my-passed' || mood === 'emma-passed') {
-      this.activeFilter = isSolo ? 'my_passed' : 'user1_passed';
-    } else if (mood === 'jordan-loves') {
-      this.activeFilter = 'user2_likes';
-    } else if (mood === 'jordan-passed') {
-      this.activeFilter = 'user2_passed';
-    } else if (mood === 'weekend') {
-      this.activeFilter = 'all';
+    this.activeFilter = 'all';
+    if (mood === 'weekend') {
       this.activeDateRange = 'this_weekend';
     } else if (mood === 'tonight') {
-      this.activeFilter = 'all';
       this.activeDateRange = 'today';
     } else if (mood === 'dinner') {
-      this.activeFilter = 'all';
       this.selectedCategories = ['Food & Drink'];
     } else if (mood === 'drinks') {
-      this.activeFilter = 'all';
       this.selectedCategories = ['Nightlife & Bars', 'Date Night Specials'];
     } else if (mood === 'outdoor') {
-      this.activeFilter = 'all';
       this.selectedCategories = ['Outdoor & Adventure', 'Sightseeing & Nature'];
     } else if (mood === 'shows') {
-      this.activeFilter = 'all';
       this.selectedCategories = ['Comedy & Shows', 'Music & Concerts'];
     } else if (mood === 'sports') {
-      this.activeFilter = 'all';
       this.selectedCategories = ['Sports & Active'];
     } else if (mood === 'budget') {
-      this.activeFilter = 'all';
       this.selectedVibes = ['Budget', 'Free'];
     } else if (mood === 'late-night') {
-      this.activeFilter = 'all';
       this.selectedVibes = ['Late Night'];
     } else if (mood === 'indoor') {
-      this.activeFilter = 'all';
       this.selectedVibes = ['Indoor'];
     } else if (mood === 'stay-in') {
-      this.activeFilter = 'all';
       this.selectedVibes = ['Stay-In'];
     }
 
@@ -1132,16 +900,8 @@ const discover = {
     const summary = document.getElementById('active-filter-summary');
     if (!bar || !summary) return;
 
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
-      ? firebaseService.userProfile.name
-      : (localStorage.getItem('twodo_user_name') || 'You');
-
-    const u1 = isSolo ? activeSoloName : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-
     const parts = [];
-    if (this.activeIntent && this.activeIntent !== 'all' && !this.isSpecialMood()) {
+    if (this.activeIntent && this.activeIntent !== 'all') {
       const iDef = this.intentDefinitions[this.activeIntent];
       let iLabel = iDef ? iDef.label : this.activeIntent;
       if (this.activeSubIntent && this.activeSubIntent !== 'all' && iDef?.subs) {
@@ -1163,7 +923,7 @@ const discover = {
       parts.push(`📅 ${this.getDateChipLabel()}`);
     }
 
-    // Quick mood chips (Comedy & Shows, Tonight, Budget, etc.) — show them so they can be cleared
+    // Quick mood chips
     const moodLabels = {
       weekend: '🥂 This Weekend',
       tonight: '🔥 Tonight',
@@ -1179,22 +939,6 @@ const discover = {
     };
     if (moodLabels[this.currentMood]) {
       parts.push(moodLabels[this.currentMood]);
-    }
-
-    if (this.currentMood === 'my-loves' || (isSolo && this.currentMood === 'emma-loves')) {
-      parts.push(`❤️ My Loves`);
-    } else if (this.currentMood === 'my-passed' || (isSolo && this.currentMood === 'emma-passed')) {
-      parts.push(`❌ My Passed`);
-    } else if (this.currentMood === 'emma-loves') {
-      parts.push(`❤️ ${u1}'s Loves`);
-    } else if (this.currentMood === 'emma-passed') {
-      parts.push(`❌ ${u1}'s Passed`);
-    } else if (this.currentMood === 'jordan-loves') {
-      parts.push(`💜 ${u2}'s Loves`);
-    } else if (this.currentMood === 'jordan-passed') {
-      parts.push(`❌ ${u2}'s Passed`);
-    } else if (this.currentMood === 'matches') {
-      parts.push(`💖 Mutual Date Matches`);
     }
 
     if (parts.length > 0) {
@@ -1281,9 +1025,10 @@ const discover = {
             const extHtml = linkInfo
               ? `<a href="${this.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link" onclick="event.stopPropagation()">${linkInfo.label}</a>`
               : '';
+            const inPlanner = Boolean(ev.planner_id);
             return `
               <div class="spotlight-mini-card" data-event-id="${ev.id}">
-                <div class="spotlight-mini-media" ondblclick="discover.handleDoubleTap('${ev.id}')">
+                <div class="spotlight-mini-media">
                   <img src="${ev.image_url}" alt="${this.escapeHtml(ev.title)}" onerror="this.onerror=null;window.api?api.onImgError(this):this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'">
                   <span class="card-price-badge">${this.escapeHtml(priceLabel)}</span>
                 </div>
@@ -1296,9 +1041,9 @@ const discover = {
                   </div>
                   <div class="spotlight-mini-when">${this.formatWhen(ev)}</div>
                   <div class="spotlight-mini-actions">
-                    <button type="button" class="btn-spot-love" onclick="collaborative.handleVote('${ev.id}', 'love')">❤️ Love</button>
-                    <button type="button" class="btn-spot-pass" onclick="collaborative.handleVote('${ev.id}', 'pass')">✕ Pass</button>
-                    <button type="button" class="btn-spot-plan" onclick="planner.openScheduleModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}', null)" title="Pick Date & Plan">📅</button>
+                    <button type="button" class="btn-spot-plan ${inPlanner ? 'in-planner' : ''}" onclick="planner.openScheduleModal('${ev.id}', null, ${ev.planner_id ? `'${ev.planner_id}'` : 'null'})" title="${inPlanner ? 'View or edit in Planner' : 'Add to Planner'}">
+                      ${inPlanner ? '✅ Added to Planner' : '📅 Add to Planner'}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1379,21 +1124,13 @@ const discover = {
 
   getConciergeMatches() {
     const st = this.conciergeState;
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const activeVoter = app.getActiveVoterName();
-    const u1 = isSolo ? activeVoter : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-
     const enriched = api.getLocalEnrichedEvents({
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
       intent: st.intent === 'surprise' ? 'all' : st.intent,
       date_range: 'all'
     }).events || [];
 
-    // Filter out anything already passed or loved by active user
     const candidates = enriched.filter(ev => {
-      const myVote = isSolo ? ev.my_vote : (activeVoter === u1 ? ev.u1_vote : ev.u2_vote);
-      if (myVote === 'pass' || myVote === 'love') return false;
       const t = `${ev.title || ''} ${ev.description || ''} ${ev.time_str || ''} ${(ev.tags || []).join(' ')} ${ev.vibe || ''}`.toLowerCase();
       const price = String(ev.price || ev.price_str || '');
 
@@ -1410,11 +1147,10 @@ const discover = {
       return true;
     });
 
-    // Score candidates (partner already loved = huge boost, timing match = boost)
+    // Score candidates (timing & weekend special boost)
     const scored = candidates.map(ev => {
       let score = 0;
-      const partnerVote = !isSolo ? (activeVoter === u1 ? ev.u2_vote : ev.u1_vote) : null;
-      if (partnerVote === 'love') score += 50;
+      if (ev.planner_id) score += 10;
       const t = `${ev.title || ''} ${ev.description || ''} ${ev.time_str || ''} ${(ev.tags || []).join(' ')}`.toLowerCase();
       if (st.when === 'tonight' && ['evening', 'night', 'dinner', 'bar', 'pm', 'late'].some(k => t.includes(k))) score += 15;
       if (st.when === 'day' && ['morning', 'day', 'brunch', 'cafe', 'bakery', 'walk', 'picnic', 'market', 'am'].some(k => t.includes(k))) score += 15;
@@ -1501,14 +1237,11 @@ const discover = {
         ` : picks.map((ev, idx) => {
           const locLabel = ev.location || ev.location_name || ev.city || 'Brisbane';
           const priceLabel = ev.price || ev.price_str || ev.price_level || '$$';
-          const partnerVote = !isSolo ? (activeVoter === u1 ? ev.u2_vote : ev.u1_vote) : null;
-          const partnerBadge = partnerVote === 'love'
-            ? `<span class="concierge-partner-love-pill">💜 ${this.escapeHtml(partnerName)} already loves this!</span>`
-            : '';
           const linkInfo = this.getEventLinkInfo(ev);
           const extHtml = linkInfo
             ? `<a href="${this.escapeHtml(linkInfo.url)}" target="_blank" rel="noopener noreferrer" class="card-source-link">${linkInfo.label}</a>`
             : '';
+          const inPlanner = Boolean(ev.planner_id);
 
           return `
             <div class="concierge-pick-card" onclick="discover.goToEventCard('${ev.id}')" style="cursor:pointer;" title="Tap to view this event card">
@@ -1516,7 +1249,6 @@ const discover = {
               <div class="concierge-pick-info">
                 <div class="concierge-pick-top">
                   <span class="concierge-pick-rank">#${idx + 1} Pick · ${this.escapeHtml(priceLabel)}</span>
-                  ${partnerBadge}
                 </div>
                 <h4 class="concierge-pick-title">${this.escapeHtml(ev.title)}</h4>
                 <div class="concierge-pick-meta" onclick="event.stopPropagation()">
@@ -1525,8 +1257,8 @@ const discover = {
                   ${extHtml}
                 </div>
                 <div class="concierge-pick-actions" onclick="event.stopPropagation()">
-                  <button type="button" class="btn btn-sm btn-primary" onclick="discover.goToEventCard('${ev.id}')">✨ View Event Card →</button>
-                  <button type="button" class="btn btn-sm btn-secondary" onclick="collaborative.handleVote('${ev.id}', 'love'); discover.renderConcierge();">❤️ Love It</button>
+                  <button type="button" class="btn btn-sm btn-primary" onclick="discover.closeConcierge(); planner.openScheduleModal('${ev.id}', null, ${ev.planner_id ? `'${ev.planner_id}'` : 'null'})">${inPlanner ? '✅ Added to Planner' : '📅 Add to Planner'}</button>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="discover.goToEventCard('${ev.id}')">✨ View Event Card →</button>
                 </div>
               </div>
             </div>
@@ -1556,10 +1288,8 @@ const discover = {
     this.selectedVibes = [];
     this.selectedCategories = [];
     this.searchQuery = '';
-    ['discover-search-input', 'swiper-search-input'].forEach(id => {
-      const inp = document.getElementById(id);
-      if (inp) inp.value = '';
-    });
+    const inp = document.getElementById('discover-search-input');
+    if (inp) inp.value = '';
 
     if (typeof app !== 'undefined' && app.activeTab !== 'discover') {
       app.navigate('discover');
@@ -1632,131 +1362,9 @@ const discover = {
     });
   },
 
-  updateMatchBanner() {
-    const isSolo = (typeof firebaseService !== 'undefined') ? firebaseService.isSolo : false;
-    const banner = document.getElementById('matches-callout-banner');
-    const title = document.getElementById('matches-banner-title');
-    const moodBadge = document.getElementById('mood-matches-count');
-    const emmaBadge = document.getElementById('mood-emma-count');
-    const emmaPassBadge = document.getElementById('mood-emma-passed-count');
-    const jordanBadge = document.getElementById('mood-jordan-count');
-    const jordanPassBadge = document.getElementById('mood-jordan-passed-count');
-
-    let votes = {};
-    try { votes = JSON.parse(localStorage.getItem('twodo_votes') || '{}'); } catch (e) {}
-    if (typeof firebaseService !== 'undefined' && firebaseService.votesMap) {
-      votes = { ...votes, ...firebaseService.votesMap };
-    }
-
-    const activeSoloName = (typeof firebaseService !== 'undefined' && firebaseService.userProfile?.name)
-      ? firebaseService.userProfile.name
-      : (localStorage.getItem('twodo_user_name') || 'You');
-
-    const u1 = isSolo ? activeSoloName : (app.profile?.user1_name || 'Emma');
-    const u2 = isSolo ? 'Partner' : (app.profile?.user2_name || 'Jordan');
-
-    const pool = this.getAllEventsPool();
-    const seen = new Set();
-    let matchesCount = 0;
-    let emmaLoveCount = 0;
-    let emmaPassCount = 0;
-    let jordanLoveCount = 0;
-    let jordanPassCount = 0;
-
-    pool.forEach(ev => {
-      if (!ev || !ev.id || seen.has(ev.id)) return;
-      seen.add(ev.id);
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
-      const v2 = isSolo ? null : (votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote);
-      const myVote = isSolo ? (votes[`${ev.id}_${activeSoloName}`] || v1) : null;
-
-      if (isSolo) {
-        if (myVote === 'love') emmaLoveCount++;
-        if (myVote === 'pass') emmaPassCount++;
-      } else {
-        if (v1 === 'love') emmaLoveCount++;
-        if (v1 === 'pass') emmaPassCount++;
-        if (v2 === 'love') jordanLoveCount++;
-        if (v2 === 'pass') jordanPassCount++;
-        if (v1 === 'love' && v2 === 'love') matchesCount++;
-      }
-    });
-
-    if (typeof matchesView !== 'undefined') matchesView.refresh();
-
-    if (moodBadge) {
-      moodBadge.textContent = matchesCount;
-      moodBadge.classList.toggle('has-matches', matchesCount > 0);
-    }
-    if (emmaBadge) {
-      emmaBadge.textContent = emmaLoveCount;
-      emmaBadge.classList.toggle('has-matches', emmaLoveCount > 0);
-    }
-    if (emmaPassBadge) {
-      emmaPassBadge.textContent = emmaPassCount;
-      emmaPassBadge.classList.toggle('has-matches', emmaPassCount > 0);
-    }
-    if (jordanBadge) {
-      jordanBadge.textContent = jordanLoveCount;
-      jordanBadge.classList.toggle('has-matches', jordanLoveCount > 0);
-    }
-    if (jordanPassBadge) {
-      jordanPassBadge.textContent = jordanPassCount;
-      jordanPassBadge.classList.toggle('has-matches', jordanPassCount > 0);
-    }
-
-    if (!banner || !title) return;
-    if (!isSolo && matchesCount > 0) {
-      banner.classList.remove('hidden');
-      title.textContent = `${matchesCount} Mutual Date ${matchesCount === 1 ? 'Match' : 'Matches'}!`;
-    } else {
-      banner.classList.add('hidden');
-    }
-  },
-
   refreshWithLatestVotes() {
     if (!app.events || app.events.length === 0) return;
-
-    const u1 = app.profile?.user1_name || 'Partner 1';
-    const u2 = app.profile?.user2_name || 'Partner 2';
-    const votes = (typeof firebaseService !== 'undefined' && firebaseService.votesMap) ? firebaseService.votesMap : {};
-    const notes = (typeof firebaseService !== 'undefined' && firebaseService.notesMap) ? firebaseService.notesMap : {};
-
-    let newlyMatchedEvent = null;
-
-    app.events.forEach(ev => {
-      const prevMatch = ev.is_match;
-      const v1 = votes[`${ev.id}_${u1}`] !== undefined ? votes[`${ev.id}_${u1}`] : ev.u1_vote;
-      const v2 = votes[`${ev.id}_${u2}`] !== undefined ? votes[`${ev.id}_${u2}`] : ev.u2_vote;
-      ev.u1_vote = v1;
-      ev.u2_vote = v2;
-      if (notes[`${ev.id}_${u1}`] !== undefined) ev.u1_note = notes[`${ev.id}_${u1}`];
-      if (notes[`${ev.id}_${u2}`] !== undefined) ev.u2_note = notes[`${ev.id}_${u2}`];
-
-      const isMatch = Boolean(v1 === 'love' && v2 === 'love');
-      ev.is_match = isMatch;
-      ev.match_level = isMatch ? 'double_love' : 'none';
-
-      // Detect if an event just became a match from partner's real-time vote
-      if (!prevMatch && isMatch) {
-        newlyMatchedEvent = ev;
-      }
-    });
-
-    if (!app.events || app.events.length === 0) return;
-    const nextSig = this.getCatalogRenderSignature(app.events);
-    if (this._lastRenderSig && nextSig === this._lastRenderSig && this.hasStableRenderedGrid()) {
-      this.updateMatchBanner();
-      return;
-    }
-    this._lastRenderSig = nextSig;
-    this.renderEvents();
-    this.updateMatchBanner();
-    if (window.swiper) swiper.initDeck();
-
-    if (newlyMatchedEvent && collaborative.triggerMatchCelebration) {
-      collaborative.triggerMatchCelebration(newlyMatchedEvent);
-    }
+    this.syncRenderSignature();
   },
 
   loadMore() {
@@ -1768,8 +1376,7 @@ const discover = {
   // FILTER MODAL POPUP & MULTI-SELECT ENGINE (Airbnb / Fever Inspired v4.0)
   // ---------------------------------------------------------------------------
   openFilterModal(type) {
-    // Stay on Swiper if opened from there (filters apply to both views)
-    if (typeof app !== 'undefined' && app.activeTab && !['discover', 'swiper'].includes(app.activeTab)) {
+    if (typeof app !== 'undefined' && app.activeTab && app.activeTab !== 'discover') {
       app.navigate('discover');
     }
     this.currentModalType = type;
@@ -1831,7 +1438,7 @@ const discover = {
     }
   },
 
-  /** Computes live un-voted matching activity count for a specific date range id or the current modal selection */
+  /** Computes live matching activity count for a specific date range id or the current modal selection */
   getDateRangePreviewCount(rangeId) {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return 0;
     let bounds = this.getDateBounds(rangeId);
@@ -1848,7 +1455,7 @@ const discover = {
       date_range: bounds ? 'custom' : 'all',
       custom_start: bounds ? this.toYMD(bounds.start) : null,
       custom_end: bounds ? this.toYMD(bounds.end) : null
-    }, { forSwiper: true, includeVoted: false });
+    });
   },
 
   /** Computes live matching activity count for the current modal selection */
@@ -1858,14 +1465,13 @@ const discover = {
       const selDate = Array.from(this.modalSelectedSet)[0] || 'all';
       return this.getDateRangePreviewCount(selDate);
     }
-    const inSwiper = (typeof app !== 'undefined' && app.activeTab === 'swiper');
     const overrides = {};
     const selected = Array.from(this.modalSelectedSet).filter(s => s !== 'all' && s !== 'All');
     const selectedStr = selected.length > 0 ? selected.join(',') : 'All';
     if (this.currentModalType === 'suburb') overrides.suburb = selectedStr;
     else if (this.currentModalType === 'vibe') overrides.vibe = selectedStr;
     else if (this.currentModalType === 'category') overrides.category = selectedStr;
-    return this.getDedupedCount(overrides, { forSwiper: inSwiper });
+    return this.getDedupedCount(overrides);
   },
 
   renderModalOptions() {
@@ -1877,16 +1483,12 @@ const discover = {
     // Update live count on the footer CTA button
     const matchCount = this.getModalPreviewCount();
     if (applyBtn) {
-      const actionWord = (typeof app !== 'undefined' && app.activeTab === 'swiper') ? 'Swipe' : 'Show';
-      const isSavedList = (typeof app !== 'undefined' && app.activeTab !== 'swiper') && (this.isSpecialMood() || this.activeIntent === 'saved');
-      const isSpecial = !isSavedList && (this.currentModalType === 'date' || this.activeFeedMode === 'special');
-      const noun = isSavedList
-        ? (matchCount === 1 ? 'Saved Idea' : 'Saved Ideas')
-        : (isSpecial
-          ? (matchCount === 1 ? 'Special Event' : 'Special Events')
-          : (matchCount === 1 ? 'Place' : 'Places'));
+      const isSpecial = (this.currentModalType === 'date' || this.activeFeedMode === 'special');
+      const noun = isSpecial
+        ? (matchCount === 1 ? 'Special Event' : 'Special Events')
+        : (matchCount === 1 ? 'Place' : 'Places');
       if (matchCount !== null) {
-        applyBtn.textContent = `${actionWord} ${matchCount} ${noun} ✨`;
+        applyBtn.textContent = `Show ${matchCount} ${noun} ✨`;
       } else {
         applyBtn.textContent = 'Apply Filter ✨';
       }
@@ -2158,8 +1760,8 @@ const discover = {
       }
       this.activeDateRange = selected;
 
-      // Date ranges apply to the main feed — leave Loves/Passed lists or the Tonight/Weekend shortcuts
-      if (this.isSpecialMood() || ['weekend', 'tonight'].includes(this.currentMood)) {
+      // Date ranges apply to the main feed — clear Tonight/Weekend mood shortcuts if switching range
+      if (['weekend', 'tonight'].includes(this.currentMood)) {
         this.currentMood = 'all';
         this.activeFilter = 'all';
         document.querySelectorAll('.mood-chip').forEach(c => {
@@ -2232,16 +1834,12 @@ const discover = {
       const regMatch = (this.suburbRegions || []).find(r => r.suburbs.length === subCount && r.suburbs.every(s => this.selectedSuburbs.includes(s)));
       subLabel = regMatch ? regMatch.label.replace(/^[^\w]+/, '').trim() : `${subCount} Areas`;
     }
-    ['suburb-chip-label', 'sw-suburb-pill-label'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = subCount === 0 ? 'South East QLD' : subLabel;
-    });
-    ['mood-chip-suburb', 'sw-suburb-pill'].forEach(id => {
-      const btn = document.getElementById(id);
-      if (btn) btn.classList.toggle('active', subCount > 0);
-    });
+    const subLabelEl = document.getElementById('suburb-chip-label');
+    if (subLabelEl) subLabelEl.textContent = subCount === 0 ? 'South East QLD' : subLabel;
+    const subBtn = document.getElementById('mood-chip-suburb');
+    if (subBtn) subBtn.classList.toggle('active', subCount > 0);
 
-    ['f', 'sw-f', 'map-f'].forEach(prefix => {
+    ['f', 'map-f'].forEach(prefix => {
       const subVal = document.getElementById(`${prefix}-val-suburb`);
       const subBadge = document.getElementById(`${prefix}-badge-suburb`);
       const subCard = document.getElementById(`${prefix}-hdr-suburb`);
@@ -2265,7 +1863,7 @@ const discover = {
       vibeLabel = `${vibeCount} Vibes`;
     }
 
-    ['f', 'sw-f', 'map-f'].forEach(prefix => {
+    ['f', 'map-f'].forEach(prefix => {
       const vibeVal = document.getElementById(`${prefix}-val-vibe`);
       const vibeBadge = document.getElementById(`${prefix}-badge-vibe`);
       const vibeCard = document.getElementById(`${prefix}-hdr-vibe`);
@@ -2289,7 +1887,7 @@ const discover = {
       catLabel = `${catCount} Activities`;
     }
 
-    ['f', 'sw-f', 'map-f'].forEach(prefix => {
+    ['f', 'map-f'].forEach(prefix => {
       const catVal = document.getElementById(`${prefix}-val-category`);
       const catBadge = document.getElementById(`${prefix}-badge-category`);
       const catCard = document.getElementById(`${prefix}-hdr-category`);
@@ -2301,22 +1899,16 @@ const discover = {
       if (catCard) catCard.classList.toggle('filter-active', catCount > 0);
     });
 
-    // Show/hide clear all filters buttons on discover, swiper, and map views
+    // Show/hide clear all filters buttons on discover and map views
     const anyActive = isDateFiltered || subCount > 0 || vibeCount > 0 || catCount > 0 || this.activeFilter !== 'all' || this.activeIntent !== 'all';
     const clearBtn = document.getElementById('btn-clear-all-filters');
     if (clearBtn) clearBtn.classList.toggle('hidden', !anyActive);
-    const swClearBtn = document.getElementById('sw-btn-clear-filters');
-    if (swClearBtn) swClearBtn.classList.toggle('hidden', !anyActive);
     const mapClearBtn = document.getElementById('map-btn-clear-filters');
     if (mapClearBtn) mapClearBtn.classList.toggle('hidden', !anyActive);
 
     this.syncIntentUI();
     this.updateActiveFilterPillBar();
 
-    // Synchronize Swiper filter counter if available
-    if (typeof swiper !== 'undefined' && swiper.updateSwiperFilterStatus) {
-      swiper.updateSwiperFilterStatus();
-    }
     // Synchronize Map filter markers if map initialized
     if (typeof mapView !== 'undefined' && mapView.renderMarkers) {
       mapView.renderMarkers();
@@ -2330,8 +1922,6 @@ const discover = {
 
   setFilter(filter) {
     this.activeFilter = filter;
-    const sel = document.getElementById('vote-filter-select');
-    if (sel) sel.value = filter;
     this.updateFilterHeaderBadges();
     this.loadEvents(true);
   },
@@ -2353,16 +1943,10 @@ const discover = {
       c.classList.toggle('active', c.dataset.mood === 'all');
     });
 
-    ['discover-search-input', 'swiper-search-input'].forEach(id => {
-      const sInput = document.getElementById(id);
-      if (sInput) sInput.value = '';
-    });
-    ['discover-search-clear', 'swiper-search-clear'].forEach(id => {
-      const clearSearchBtn = document.getElementById(id);
-      if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
-    });
-    const sel = document.getElementById('vote-filter-select');
-    if (sel) sel.value = 'all';
+    const sInput = document.getElementById('discover-search-input');
+    if (sInput) sInput.value = '';
+    const clearSearchBtn = document.getElementById('discover-search-clear');
+    if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
 
     this.syncIntentUI();
     this.updateActiveFilterPillBar();

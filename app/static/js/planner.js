@@ -206,9 +206,6 @@ const planner = {
       this.syncHeaderChrome();
       this.renderPlanner();
       this.updateBadges();
-      if (typeof matchesView !== 'undefined' && matchesView.refresh) {
-        matchesView.refresh();
-      }
     } catch (e) {
       console.error('Failed to load planner:', e);
     }

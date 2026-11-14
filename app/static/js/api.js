@@ -800,47 +800,8 @@ const api = {
         ev.planner_id = null;
       }
 
-      // Match / Voter filter
-      if (filter === 'matches') {
-        if (!isMatch) continue;
-      } else if (['my_loves', 'my-loves', 'my_likes'].includes(filter) || (isSolo && ['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter))) {
-        if (myVote !== 'love') continue;
-      } else if (['my_passed', 'my-passed'].includes(filter) || (isSolo && ['user1_passed', 'emma_passed', 'emma-passed'].includes(filter))) {
-        if (myVote !== 'pass') continue;
-      } else if (['user1_likes', 'emma_likes', 'emma_loves', 'emma-loves'].includes(filter)) {
-        if (v1 !== 'love') continue;
-      } else if (['user1_passed', 'emma_passed', 'emma-passed'].includes(filter)) {
-        if (v1 !== 'pass') continue;
-      } else if (['user2_likes', 'jordan_likes', 'jordan_loves', 'jordan-loves'].includes(filter)) {
-        if (v2 !== 'love') continue;
-      } else if (['user2_passed', 'jordan_passed', 'jordan-passed'].includes(filter)) {
-        if (v2 !== 'pass') continue;
-      } else if (filter === 'in_planner') {
+      if (filter === 'in_planner') {
         if (!ev.planner_id) continue;
-      } else if (filter === 'unvoted') {
-        if (isSolo ? (myVote === 'love' || myVote === 'pass') : (v1 || v2)) continue;
-      } else {
-        // Standard feed browsing (all, lifestyle moods, suburbs, etc.):
-        // Only ones with no selection or thinking ('maybe') should be in discover!
-        // When active voter has already loved or passed, remove it from the feed!
-        if (isSolo) {
-          if (myVote === 'love' || myVote === 'pass') {
-            continue;
-          }
-        } else {
-          const activeVoter = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : u1;
-          const isTogether = (typeof app !== 'undefined' && app.currentVoter === 'both');
-          if (isTogether) {
-            if ((v1 === 'love' || v1 === 'pass') || (v2 === 'love' || v2 === 'pass')) {
-              continue;
-            }
-          } else {
-            const thisVoterVote = (activeVoter === u1) ? v1 : v2;
-            if (thisVoterVote === 'love' || thisVoterVote === 'pass') {
-              continue;
-            }
-          }
-        }
       }
 
       results.push(ev);

@@ -1,5 +1,5 @@
 // TwoDo Service Worker for Push Notifications & Lock Screen Alerts
-const CACHE_NAME = 'twodo-cache-v4.5';
+const CACHE_NAME = 'twodo-cache-v7.1';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -38,10 +38,11 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Handle Notification Click (Opens or focuses the app, then navigates to Matches, Chat, or Planner)
+// Handle Notification Click (Opens or focuses the app, then navigates to Discover or Planner)
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const targetTab = event.notification.data?.tab || 'discover';
+  const rawTab = event.notification.data?.tab;
+  const targetTab = rawTab === 'planner' ? 'planner' : 'discover';
   const urlToOpen = new URL('/?tab=' + targetTab, self.location.origin).href;
 
   event.waitUntil(

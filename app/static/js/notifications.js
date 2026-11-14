@@ -51,11 +51,11 @@ const notifications = {
     // 2. Initialize OneSignal Web SDK if configured
     this.initOneSignal();
 
-    // 3. Check if opened via notification url param (?tab=chat / ?tab=matches / ?tab=planner)
+    // 3. Check if opened via notification url param (?tab=discover / ?tab=planner)
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
-      if (tabParam && ['discover', 'swiper', 'matches', 'chat', 'planner'].includes(tabParam)) {
+      if (tabParam && ['discover', 'planner'].includes(tabParam)) {
         setTimeout(() => {
           if (window.app && app.navigate) app.navigate(tabParam);
         }, 300);
@@ -309,32 +309,7 @@ const notifications = {
     } catch (e) {}
   },
 
-  // 1. Notify Mutual Match
-  notifyMatch(eventTitle, partnerName = 'Your Partner') {
-    const cleanTitle = (eventTitle || 'Date Idea').trim();
-    this.sendNotification('💖 It\'s a Match!', {
-      body: `You and ${partnerName} both love "${cleanTitle}"! Tap to pick a date & plan it.`,
-      tag: `match_${cleanTitle}`,
-      data: { tab: 'matches' }
-    });
-
-    if (window.app && app.showToast) {
-      app.showToast(`💖 Match! You and ${partnerName} both love "${cleanTitle}"`);
-    }
-  },
-
-  // 2. Notify Couple Chat Message
-  notifyChat(senderName, messageText) {
-    const cleanSender = (senderName || 'Partner').trim();
-    const cleanText = (messageText || 'Sent a message').trim();
-    this.sendNotification(`💬 ${cleanSender}`, {
-      body: cleanText.length > 80 ? cleanText.slice(0, 77) + '...' : cleanText,
-      tag: 'twodo_chat_msg',
-      data: { tab: 'chat' }
-    });
-  },
-
-  // 3. Notify Event / Plan Added to Planner
+  // Notify Event / Plan Added to Planner
   notifyPlanner(eventTitle, dateStr, partnerName = 'Your Partner') {
     const cleanTitle = (eventTitle || 'Date Plan').trim();
     const dateDesc = dateStr ? ` for ${dateStr}` : '';

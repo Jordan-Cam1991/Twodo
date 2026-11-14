@@ -802,28 +802,9 @@ const firebaseService = {
         localStorage.setItem('twodo_dismissed_matches', JSON.stringify(Array.from(dismissed)));
       } catch (e) {}
 
-      // Trigger Mutual Match Alert on lock screen if partner vote created a new match
-      const currentMatchIds = new Set();
-      const allPool = (typeof discover !== 'undefined' && discover.getAllEventsPool) ? discover.getAllEventsPool() : [];
-      allPool.forEach(ev => {
-        const v1 = newVotes[`${ev.id}_${u1Name}`];
-        const v2 = newVotes[`${ev.id}_${u2Name}`];
-        if (v1 === 'love' && v2 === 'love') {
-          currentMatchIds.add(String(ev.id));
-          if (hasLoadedVotesOnce && !prevKnownMatches.has(String(ev.id))) {
-            if (window.notifications && notifications.notifyMatch) {
-              notifications.notifyMatch(ev.title, u2Name || 'Partner');
-            }
-          }
-        }
-      });
-      prevKnownMatches = currentMatchIds;
-      hasLoadedVotesOnce = true;
-
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
-      if (window.matchesView) matchesView.refresh();
     }, (err) => console.warn('Votes listener note:', err));
 
     // 2. Live Planner Listener
@@ -877,56 +858,7 @@ const firebaseService = {
       }
     }, (err) => console.warn('Planner listener note:', err));
 
-    // 3. Live Couple Chat Messages Listener
-    this.unsubMessages = coupleRef.collection('messages')
-      .orderBy('created_at', 'asc')
-      .onSnapshot((snapshot) => {
-        const msgs = [];
-        const u1Name = (this.profile?.user1_name || '').trim();
-        const myUid = this.currentUser?.uid;
-
-        snapshot.forEach((doc) => {
-          const d = doc.data();
-          msgs.push({
-            id: doc.id,
-            sender_name: d.sender_name || 'Partner',
-            sender_uid: d.sender_uid || null,
-            text: d.text || '',
-            activity_id: d.activity_id || null,
-            activity_title: d.activity_title || null,
-            activity_image: d.activity_image || null,
-            created_at: d.created_at ? (d.created_at.toDate?.()?.toISOString?.() || new Date().toISOString()) : new Date().toISOString()
-          });
-        });
-
-        this.messages = msgs;
-
-        // Trigger Chat Notification on lock screen when partner sends a message
-        if (hasLoadedMessagesOnce) {
-          msgs.forEach(m => {
-            if (!prevKnownMessageIds.has(String(m.id))) {
-              if (m.sender_uid && myUid && m.sender_uid !== myUid) {
-                if (window.notifications && notifications.notifyChat) {
-                  notifications.notifyChat(m.sender_name, m.text);
-                }
-              } else if (!m.sender_uid && m.sender_name && m.sender_name.toLowerCase() !== u1Name.toLowerCase()) {
-                if (window.notifications && notifications.notifyChat) {
-                  notifications.notifyChat(m.sender_name, m.text);
-                }
-              }
-            }
-          });
-        }
-        prevKnownMessageIds = new Set(msgs.map(m => String(m.id)));
-        hasLoadedMessagesOnce = true;
-
-        if (window.chatView) {
-          chatView.messages = msgs;
-          chatView.renderMessages();
-        }
-      }, (err) => console.warn('Messages listener note:', err));
-
-    // 4. Live Custom Events Listener
+    // 3. Live Custom Events Listener
     this.unsubCustomEvents = coupleRef.collection('custom_events').onSnapshot((snapshot) => {
       const custom = [];
       snapshot.forEach((doc) => {
@@ -1019,7 +951,6 @@ const firebaseService = {
       if (window.discover && discover.refreshWithLatestVotes) {
         discover.refreshWithLatestVotes();
       }
-      if (window.matchesView) matchesView.refresh();
     }, err => console.warn('Solo votes listener note:', err));
 
     // 2. Live Solo Planner Listener (Cloud Firestore -> Local Storage & Memory)
@@ -1201,28 +1132,6 @@ const firebaseService = {
       }
       try {
         await docRef.set(updatePayload, { merge: true });
-
-        // If this vote created a mutual match, send lock-screen push to partner
-        if (voteType === 'love') {
-          const myName = userName.trim();
-          const partnerName = this.getPartnerName();
-          const partnerVote = this.votesMap[`${eventId}_${partnerName}`];
-          if (partnerVote === 'love') {
-            if (window.notifications && notifications.sendRemotePush) {
-              let evTitle = 'Date Idea';
-              if (window.api && api.getEventById) {
-                const ev = api.getEventById(eventId);
-                if (ev && ev.title) evTitle = ev.title;
-              }
-              notifications.sendRemotePush({
-                targetPartnerName: partnerName,
-                title: "💖 It's a Match!",
-                message: `You and ${myName} both love "${evTitle}"!`,
-                tab: 'matches'
-              });
-            }
-          }
-        }
       } catch (e) {
         console.warn('Firestore couple vote sync note:', e);
       }
