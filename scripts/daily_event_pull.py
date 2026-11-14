@@ -15,6 +15,7 @@ TwoDo Automated Daily Multi-Area Event Pull & Catalog Normalizer
 """
 
 import json
+import html
 import os
 import re
 import sys
@@ -1306,7 +1307,7 @@ def canonical_venue_key(ev: dict) -> str:
         ("citycat", "citycat_sunset_cruise"),
         ("sunset 'mystery stop' citycat", "citycat_sunset_cruise"),
     ]
-    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-"):
+    if (ev.get("category") == "Sports & Active" and not ev.get("ongoing")) or any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-") or str(ev.get("id", "")).startswith("live-"):
         sd = (ev.get("start_date") or "")[:10]
         return f"dated_{tl}_{sd}"
     if tl.startswith("stay-in date:"):
@@ -1384,7 +1385,15 @@ def normalize_event_dates(ev: dict, today_ymd: str) -> dict | None:
     cat = ev.get("category", "")
 
     is_sports_fixture = (cat == "Sports & Active" and not ev.get("ongoing") and ev.get("start_date"))
-    is_true_dated_show = any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS) or str(ev.get("id", "")).startswith("special-") or str(ev.get("id", "")).startswith("movie-") or str(ev.get("id", "")).startswith("fb-") or "in cinemas" in tl
+    is_true_dated_show = (
+        any(pat in tl for pat in TRUE_DATED_TITLE_PATTERNS)
+        or str(ev.get("id", "")).startswith("special-")
+        or str(ev.get("id", "")).startswith("movie-")
+        or str(ev.get("id", "")).startswith("fb-")
+        or str(ev.get("id", "")).startswith("live-")
+        or "in cinemas" in tl
+        or (not ev.get("ongoing") and bool(ev.get("start_date")))
+    )
 
     # Apply explicit dates from SPECIAL_EVENT_DATES_MAP when matched
     for pat, (mapped_sd, mapped_ed, mapped_ts) in SPECIAL_EVENT_DATES_MAP.items():
@@ -1430,6 +1439,148 @@ def enrich_tags(ev: dict) -> list[str]:
         if "Stay-In" not in tags:
             tags.append("Stay-In")
     return tags
+
+
+def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
+    """
+    Pulls live, official upcoming events directly from Brisbane City Council's public Trumba calendar feed.
+    Filters for couple & date-worthy events (music, exhibitions, festivals, markets, creative workshops, active outdoors).
+    Drops mundane non-date entries (toddler sessions, playgroups, immunisations).
+    """
+    discovered = []
+    url = "https://www.trumba.com/calendars/brisbane-city-council.json"
+    req_headers = {"User-Agent": "TwoDoBrisbaneDateApp/3.6 (+https://twodoapp.web.app)"}
+    try:
+        req = urllib.request.Request(url, headers=req_headers)
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        print(f"[Council Feed] Network fetch failed or offline: {e}")
+        return []
+
+    EXCLUDE_KEYWORDS = {
+        "toddler", "babies", "baby", "rhyme time", "storytime", "playgroup", 
+        "under 5s", "first 5", "immunisation", "immunization", "kindergarten",
+        "story time", "children's story", "infant", "child restraint", "english conversation",
+        "citizenship test", "justice of the peace"
+    }
+
+    CATEGORY_MAP = {
+        "music": "Music & Concerts",
+        "band": "Music & Concerts",
+        "acoustic": "Music & Concerts",
+        "concert": "Music & Concerts",
+        "performing arts": "Comedy & Shows",
+        "theatre": "Comedy & Shows",
+        "comedy": "Comedy & Shows",
+        "exhibitions": "Arts & Culture",
+        "art": "Arts & Culture",
+        "creative": "Arts & Culture",
+        "culture": "Arts & Culture",
+        "markets": "Markets & Pop-ups",
+        "christmas": "Markets & Pop-ups",
+        "food": "Food & Drink",
+        "tours": "Outdoor & Adventure",
+        "green": "Outdoor & Adventure",
+        "move well brisbane": "Outdoor & Adventure",
+        "fitness & well-being": "Outdoor & Adventure",
+        "fitness": "Outdoor & Adventure",
+        "workshops": "Arts & Culture",
+    }
+
+    CATEGORY_IMAGES = {
+        "Music & Concerts": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80",
+        "Arts & Culture": "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&w=900&q=80",
+        "Markets & Pop-ups": "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=900&q=80",
+        "Comedy & Shows": "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
+        "Food & Drink": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80",
+        "Outdoor & Adventure": "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=900&q=80",
+    }
+
+    for ev in data:
+        title = (ev.get("title") or "").strip()
+        link = ev.get("permaLinkUrl") or ev.get("webLink")
+        if not title or not link or not is_valid_source_url(link):
+            continue
+
+        tl = title.lower()
+        if any(w in tl for w in EXCLUDE_KEYWORDS):
+            continue
+
+        end_dt = (ev.get("endDateTime") or "")[:10]
+        if end_dt and end_dt < today_ymd:
+            continue
+
+        start_dt = ev.get("startDateTime") or ""
+        time_formatted = ev.get("dateTimeFormatted") or "See official link for times"
+
+        desc_raw = ev.get("description") or ""
+        desc_clean = re.sub(r"<[^>]+>", "", desc_raw).strip()
+        desc_clean = html.unescape(desc_clean)
+        if any(w in desc_clean[:80].lower() for w in EXCLUDE_KEYWORDS):
+            continue
+
+        custom = {cf.get("label"): cf.get("value") for cf in ev.get("customFields", []) if isinstance(cf, dict)}
+        raw_type = (custom.get("Primary event type") or custom.get("Event type") or "").lower()
+        venue = custom.get("Venue") or ev.get("location") or "Brisbane, QLD"
+        cost = custom.get("Cost") or "Free"
+
+        # Determine Category
+        category = "Arts & Culture"
+        combined_type_str = f"{raw_type} {tl}"
+        for k_type, cat_val in CATEGORY_MAP.items():
+            if k_type in combined_type_str:
+                category = cat_val
+                break
+
+        # Extract image if available
+        image_url = None
+        for img_field in ["eventImage", "detailImage"]:
+            val = ev.get(img_field)
+            if isinstance(val, dict) and val.get("url"):
+                image_url = val.get("url")
+                break
+        if not image_url:
+            image_url = CATEGORY_IMAGES.get(category, CATEGORY_IMAGES["Arts & Culture"])
+
+        # Determine tags
+        tags = []
+        if "free" in cost.lower() or "free" in raw_type:
+            tags.append("Budget")
+        if any(w in tl or w in raw_type for w in ["music", "concert", "band", "acoustic"]):
+            tags.append("Live Music")
+        if any(w in tl or w in raw_type for w in ["market", "pop-up", "stall", "fair"]):
+            tags.append("Markets")
+        if any(w in tl or w in raw_type for w in ["walk", "tour", "trail", "kayak", "outdoor", "park", "garden"]):
+            tags.append("Outdoors")
+        if any(w in tl or w in raw_type for w in ["art", "exhibition", "gallery", "museum", "show", "hall", "library"]):
+            tags.append("Indoor")
+        if not tags:
+            tags.append("Romantic")
+
+        event_id = f"live-council-{ev.get('eventID', '') or re.sub(r'[^a-z0-9]+', '-', tl)[:30]}"
+
+        tip = f"Official Brisbane City Council event at {venue}. Check the official link for session bookings and accessibility."
+
+        discovered.append({
+            "id": event_id,
+            "title": title,
+            "description": desc_clean[:280] or f"Official Brisbane City Council event at {venue}.",
+            "insider_tip": tip,
+            "category": category,
+            "location": venue,
+            "time_str": time_formatted,
+            "start_date": start_dt[:16].replace("T", " ") if start_dt else None,
+            "end_date": end_dt[:16].replace("T", " ") if end_dt else None,
+            "ongoing": False if start_dt else True,
+            "price": cost,
+            "source": "Brisbane City Council",
+            "source_url": link,
+            "image_url": image_url,
+            "tags": tags
+        })
+
+    return discovered
 
 
 def fetch_live_public_feeds(today_ymd: str) -> list[dict]:
@@ -1727,6 +1878,7 @@ def build_clean_catalog(try_network: bool = False):
     # Merge boutique cinema experiences and curated special dated events first
     candidates = CURATED_CURRENT_CINEMA_EXPERIENCES + CURATED_SPECIAL_DATED_EVENTS + CURATED_STAY_IN_AND_REGIONAL_GEMS + list(raw_events)
     if try_network:
+        candidates.extend(fetch_brisbane_city_council_trumba(today_ymd))
         candidates.extend(fetch_live_public_feeds(today_ymd))
         candidates.extend(fetch_tmdb_now_playing())
         candidates.extend(fetch_facebook_events_apify())
@@ -1838,5 +1990,5 @@ def build_clean_catalog(try_network: bool = False):
 
 
 if __name__ == "__main__":
-    try_net = "--live-pull" in sys.argv
+    try_net = "--offline" not in sys.argv
     build_clean_catalog(try_network=try_net)
