@@ -469,64 +469,6 @@ const api = {
     const dateRange = params.date_range || 'all';
     const filter = params.filter || 'all';
 
-    // Helper: is event date within date range
-    const matchesDateRange = (evDateStr, range, customStart, customEnd, evEndStr = null) => {
-      if (!range || range === 'all') return true;
-      if (!evDateStr) return true;
-
-      // Parse YYYY-MM-DD as a LOCAL calendar date (avoids UTC off-by-one-day bugs)
-      const parseLocal = (s) => {
-        const mm = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
-        return mm ? new Date(Number(mm[1]), Number(mm[2]) - 1, Number(mm[3])) : null;
-      };
-
-      const target = parseLocal(evDateStr);
-      if (!target || isNaN(target.getTime())) return true; // Undated / ongoing activities always show
-      const targetEnd = parseLocal(evEndStr) || target;
-
-      if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
-        const bounds = window.discover.getDateBounds(range);
-        if (bounds && bounds.start && bounds.end) {
-          const bStart = new Date(bounds.start); bStart.setHours(0, 0, 0, 0);
-          const bEnd = new Date(bounds.end); bEnd.setHours(23, 59, 59, 999);
-          return target <= bEnd && targetEnd >= bStart;
-        }
-      }
-
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      const diffDays = Math.round((target - now) / (1000 * 60 * 60 * 24));
-
-      if (range === 'today') {
-        return diffDays === 0;
-      } else if (range === 'tomorrow') {
-        return diffDays === 1;
-      } else if (range === 'this_week' || range === 'next_7_days') {
-        return diffDays >= 0 && diffDays <= 6;
-      } else if (range === 'this_weekend') {
-        // Friday, Saturday, Sunday
-        const dayOfWeek = now.getDay(); // 0 is Sunday, 5 is Friday, 6 is Sat
-        const daysToFri = (5 - dayOfWeek + 7) % 7;
-        const fri = new Date(now);
-        fri.setDate(now.getDate() + daysToFri);
-        const sun = new Date(fri);
-        sun.setDate(fri.getDate() + 2);
-        return target >= fri && target <= sun;
-      } else if (range === 'this_month') {
-        return diffDays >= 0 && diffDays <= 30;
-      } else if (range === 'custom') {
-        const s = parseLocal(customStart);
-        const e = parseLocal(customEnd);
-        if (s && e) {
-          // Include events that overlap the chosen range (multi-day events count too)
-          return target <= e && targetEnd >= s;
-        }
-        return true;
-      }
-      return true;
-    };
-
     const results = [];
 
     for (const raw of allEvents) {
@@ -604,7 +546,7 @@ const api = {
       }
 
       // Date Range filter (ongoing venues are available any day)
-      if (!ev.ongoing && !matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
+      if (!ev.ongoing && !this.matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date)) {
         continue;
       }
 
@@ -726,10 +668,68 @@ const api = {
   },
 
   /**
+   * Check whether an event date string falls within a filter range.
+   * Uses local calendar date parsing to avoid UTC off-by-one-day issues.
+   */
+  matchesDateRange(evDateStr, range, customStart, customEnd, evEndStr = null) {
+    if (!range || range === 'all') return true;
+    if (!evDateStr) return true;
+
+    const parseLocal = (s) => {
+      const mm = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+      return mm ? new Date(Number(mm[1]), Number(mm[2]) - 1, Number(mm[3])) : null;
+    };
+
+    const target = parseLocal(evDateStr);
+    if (!target || isNaN(target.getTime())) return true; // Undated / ongoing activities always show
+    const targetEnd = parseLocal(evEndStr) || target;
+
+    if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
+      const bounds = window.discover.getDateBounds(range);
+      if (bounds && bounds.start && bounds.end) {
+        const bStart = new Date(bounds.start); bStart.setHours(0, 0, 0, 0);
+        const bEnd = new Date(bounds.end); bEnd.setHours(23, 59, 59, 999);
+        return target <= bEnd && targetEnd >= bStart;
+      }
+    }
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.round((target - now) / (1000 * 60 * 60 * 24));
+
+    if (range === 'today') {
+      return diffDays === 0;
+    } else if (range === 'tomorrow') {
+      return diffDays === 1;
+    } else if (range === 'this_week' || range === 'next_7_days') {
+      return diffDays >= 0 && diffDays <= 6;
+    } else if (range === 'this_weekend') {
+      const dayOfWeek = now.getDay();
+      const daysToFri = (5 - dayOfWeek + 7) % 7;
+      const fri = new Date(now);
+      fri.setDate(now.getDate() + daysToFri);
+      const sun = new Date(fri);
+      sun.setDate(fri.getDate() + 2);
+      return target >= fri && target <= sun;
+    } else if (range === 'this_month') {
+      return diffDays >= 0 && diffDays <= 30;
+    } else if (range === 'custom') {
+      const s = parseLocal(customStart);
+      const e = parseLocal(customEnd);
+      if (s && e) {
+        return target <= e && targetEnd >= s;
+      }
+      return true;
+    }
+    return true;
+  },
+
+  /**
    * Automatic Once-A-Day Multi-Area Event Pull Engine
    * Runs automatically in the background once per day (or when forced via Sync Now).
    * 1. Purges any legacy synthetic or search-link items.
-   * 2. Fetches `/data/live_events_feed.json?t=<today>` (updated daily by GitHub Actions across 15 Brisbane areas).
+   * 2. Fetches live daily cloud feed from GitHub Actions (`live_events_feed.json`), falling back to local `/data/live_events_feed.json`.
    * 3. Queries OpenStreetMap Overpass API across Greater Brisbane precincts for real venues/attractions
    *    that have an explicit official `website` or `contact:website` tag, deduplicating against the catalog.
    */
@@ -746,43 +746,50 @@ const api = {
     const norm = t => (t || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
     const existingKeys = new Set(
       ((typeof PRELOADED_EVENTS !== 'undefined' && Array.isArray(PRELOADED_EVENTS)) ? PRELOADED_EVENTS : [])
-        .map(e => norm((e.title || '').split(':')[0]))
+        .map(e => norm(e.title))
     );
 
     let livePool = [];
     try {
       livePool = JSON.parse(localStorage.getItem('twodo_daily_live_events') || '[]');
       livePool = livePool.filter(e => this.hasValidSourceUrl(e) && !this.isPastEvent(e));
-      livePool.forEach(e => existingKeys.add(norm((e.title || '').split(':')[0])));
+      livePool.forEach(e => existingKeys.add(norm(e.title)));
     } catch (e) {
       livePool = [];
     }
 
-    // 1. Fetch daily static/CI feed (bypassing browser cache with today's date stamp)
-    try {
-      const feedRes = await fetch(`data/live_events_feed.json?t=${today}`, { cache: 'no-store' });
-      if (feedRes.ok) {
-        const feedData = await feedRes.json();
-        if (feedData && Array.isArray(feedData.events)) {
-          if (feedData.meta) {
-            window.EVENTS_CATALOG_META = feedData.meta;
-          }
-          for (const ev of feedData.events) {
-            if (!ev || !ev.title || !this.hasValidSourceUrl(ev) || this.isPastEvent(ev)) continue;
-            const k = norm((ev.title || '').split(':')[0]);
-            if (!existingKeys.has(k)) {
-              existingKeys.add(k);
-              livePool.push(ev);
-              newlyDiscovered++;
-              if (!ev.ongoing && matchesDateRange(ev.start_date || ev.time_str, 'this_week', null, null, ev.end_date)) {
-                newlyDiscoveredThisWeek++;
+    // 1. Fetch daily CI-updated feed (try live GitHub raw feed first so nightly 4 AM updates appear without redeploy, fallback to local copy)
+    const feedUrls = [
+      `https://raw.githubusercontent.com/Jordan-Cam1991/Twodo/main/app/static/data/live_events_feed.json?t=${today}`,
+      `data/live_events_feed.json?t=${today}`
+    ];
+    for (const feedUrl of feedUrls) {
+      try {
+        const feedRes = await fetch(feedUrl, { cache: 'no-store' });
+        if (feedRes.ok) {
+          const feedData = await feedRes.json();
+          if (feedData && Array.isArray(feedData.events)) {
+            if (feedData.meta) {
+              window.EVENTS_CATALOG_META = feedData.meta;
+            }
+            for (const ev of feedData.events) {
+              if (!ev || !ev.title || !this.hasValidSourceUrl(ev) || this.isPastEvent(ev)) continue;
+              const k = norm(ev.title);
+              if (!existingKeys.has(k)) {
+                existingKeys.add(k);
+                livePool.push(ev);
+                newlyDiscovered++;
+                if (!ev.ongoing && this.matchesDateRange(ev.start_date || ev.time_str, 'this_week', null, null, ev.end_date)) {
+                  newlyDiscoveredThisWeek++;
+                }
               }
             }
+            break; // Successfully ingested live feed
           }
         }
+      } catch (e) {
+        // Try next fallback feed
       }
-    } catch (e) {
-      // Offline or feed unavailable — continue gracefully
     }
 
     // 2. Live Overpass multi-area Brisbane discovery (only keeps places with an official website URL)
@@ -848,7 +855,7 @@ const api = {
 
     window.LIVE_FEED_EVENTS = livePool;
     try {
-      localStorage.setItem('twodo_daily_live_events', JSON.stringify(livePool.slice(-60)));
+      localStorage.setItem('twodo_daily_live_events', JSON.stringify(livePool.slice(-150)));
       localStorage.setItem('twodo_last_daily_pull', today);
     } catch (e) {}
 

@@ -1,0 +1,60 @@
+name: Daily Multi-Area South East QLD Events Pull
+
+on:
+  schedule:
+    # Runs daily at 18:00 UTC (4:00 AM AEST / Brisbane time)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull-and-update-events:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Daily Multi-Area Event Pull & Deduplicator
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: python3 scripts/daily_event_pull.py --live-pull
+
+      - name: Commit & Push Updated Event Catalog
+        run: |
+          git config user.name "TwoDo Daily Event Bot"
+          git config user.email "bot@twodoapp.web.app"
+          git add app/static/js/events_data.js app/static/data/live_events_feed.json
+          if git diff --staged --quiet; then
+            echo "No event catalog changes today."
+          else
+            git commit -m "chore(events): automated daily South East QLD event pull ($(date -u +'%Y-%m-%d'))"
+            git push
+          fi
+
+      - name: Check Firebase Hosting Deploy Secret
+        id: check_fb
+        env:
+          FB_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TWODO_C07A8 }}
+        run: |
+          if [ -n "$FB_SA" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Firebase Hosting (if configured)
+        if: steps.check_fb.outputs.enabled == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TWODO_C07A8 }}
+          channelId: live
+          projectId: twodo-c07a8
