@@ -803,26 +803,15 @@
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="sched-date">Date</label>
-            <input type="date" id="sched-date" required>
-          </div>
-          <div class="form-group flex-1">
-            <label for="sched-slot">Time Slot</label>
-            <select id="sched-slot" onchange="planner.onSlotChange(this.value)">
-              <option value="morning">🌅 Morning (10:00 AM)</option>
-              <option value="afternoon">☀️ Afternoon (2:00 PM)</option>
-              <option value="evening" selected>🍷 Evening (6:30 PM)</option>
-              <option value="late_night">🌙 Late Night (8:30 PM+)</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="sched-date">Date</label>
+          <input type="date" id="sched-date" required>
         </div>
 
         <div class="form-row">
           <div class="form-group flex-1">
             <label for="sched-time">Start Time</label>
-            <input type="time" id="sched-time" value="18:30" onchange="planner.onTimeChange(this.value)">
+            <input type="time" id="sched-time" value="18:30">
           </div>
           <div class="form-group flex-1">
             <label for="sched-duration">Duration</label>
@@ -1388,7 +1377,7 @@
   <script src="js/collaborative.js?v=6.1"></script>
   <script src="js/discover.js?v=6.1"></script>
   <script src="js/swiper.js?v=6.1"></script>
-  <script src="js/planner.js?v=6.2"></script>
+  <script src="js/planner.js?v=6.3"></script>
   <script src="js/matches.js?v=6.1"></script>
   <script src="js/app.js?v=6.1"></script>
 </body>

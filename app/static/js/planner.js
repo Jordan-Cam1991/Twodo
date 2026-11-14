@@ -49,10 +49,84 @@ const planner = {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   },
 
-  /** Parse YYYY-MM-DD strictly as local midnight Date. */
+  /** Extract clean YYYY-MM-DD from YYYY-MM-DD, 'YYYY-MM-DD HH:MM', or ISO strings. */
+  extractYmd(val) {
+    if (!val) return '';
+    const m = String(val).trim().match(/^(\d{4}-\d{2}-\d{2})/);
+    return m ? m[1] : '';
+  },
+
+  /** Decode HTML entities (e.g. &nbsp;, &ndash;) from scraped event strings into plain text. */
+  decodeHtmlEntities(val) {
+    return String(val == null ? '' : val)
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&ndash;/gi, '–')
+      .replace(/&mdash;/gi, '—')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+      .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
+      .replace(/\s+/g, ' ')
+      .trim();
+  },
+
+  /** Parse natural-language date (e.g. "Fri, 20 Nov · 8:00 PM" or "20 November 2026") to YYYY-MM-DD. */
+  extractDateFromText(rawText) {
+    const text = this.decodeHtmlEntities(rawText);
+    if (!text) return '';
+
+    const isoMatch = text.match(/(\d{4}-\d{2}-\d{2})/);
+    if (isoMatch) return isoMatch[1];
+
+    const monthPattern = '(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+    const re = new RegExp(`\\b(\\d{1,2})\\s+${monthPattern}(?:\\s+(\\d{4}))?\\b`, 'i');
+    const m = text.match(re);
+    if (!m) return '';
+
+    const day = parseInt(m[1], 10);
+    const monPrefix = m[2].slice(0, 3).toLowerCase();
+    const monIdx = MONTHS_SHORT.findIndex(ms => ms.toLowerCase() === monPrefix);
+    if (monIdx < 0 || day < 1 || day > 31) return '';
+
+    const now = new Date();
+    let year = m[3] ? parseInt(m[3], 10) : now.getFullYear();
+    if (!m[3] && monIdx < now.getMonth() - 2) {
+      year += 1;
+    }
+    return `${year}-${String(monIdx + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  },
+
+  /** Resolve best default YYYY-MM-DD date when scheduling or editing an event. */
+  resolveEventDefaultDate(ev, existing) {
+    const existingYmd = this.extractYmd(existing?.scheduled_date);
+    if (existingYmd) return existingYmd;
+
+    const todayYmd = this.getTodayYmd();
+    const startYmd = this.extractYmd(ev?.start_date);
+    const endYmd = this.extractYmd(ev?.end_date);
+    const textYmd = this.extractDateFromText(ev?.time_str);
+
+    if (startYmd) {
+      const isOngoingStartInPast = Boolean(ev?.ongoing) || (startYmd < todayYmd && (!endYmd || endYmd >= todayYmd));
+      if (isOngoingStartInPast) {
+        if (textYmd && textYmd >= todayYmd) return textYmd;
+        return this.selectedMonthDay || todayYmd;
+      }
+      return startYmd;
+    }
+
+    if (textYmd && textYmd >= todayYmd) return textYmd;
+    return textYmd || this.selectedMonthDay || todayYmd;
+  },
+
+  /** Parse YYYY-MM-DD (or 'YYYY-MM-DD HH:MM') strictly as local midnight Date. */
   parseLocalDate(ymd) {
-    if (!ymd || !/^\d{4}-\d{2}-\d{2}$/.test(String(ymd))) return null;
-    const [y, m, d] = String(ymd).split('-').map(Number);
+    const cleanYmd = this.extractYmd(ymd);
+    if (!cleanYmd) return null;
+    const [y, m, d] = cleanYmd.split('-').map(Number);
     return new Date(y, m - 1, d);
   },
 
@@ -345,22 +419,60 @@ const planner = {
     }
   },
 
+  /** Parse clock string like '10am', '8:00 PM', or '14:30' into total minutes since midnight. */
+  parseClockToMinutes(hrStr, minStr, ampmStr) {
+    let hr = parseInt(hrStr, 10);
+    const min = minStr ? parseInt(minStr, 10) : 0;
+    const ap = (ampmStr || '').toLowerCase();
+    if (ap === 'pm' && hr < 12) hr += 12;
+    if (ap === 'am' && hr === 12) hr = 0;
+    return hr * 60 + min;
+  },
+
   /** Resolve canonical 24h start time string ("HH:MM") for sorting & display. */
   getStartTime24(item) {
     if (item && /^\d{2}:\d{2}$/.test(String(item.scheduled_time || ''))) {
       return String(item.scheduled_time);
     }
-    const tStr = String(item?.time_str || '');
+    const tStr = this.decodeHtmlEntities(item?.time_str || '');
     const m = tStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
     if (m) {
-      let hr = parseInt(m[1], 10);
-      const min = m[2] ? parseInt(m[2], 10) : 0;
-      const ap = m[3].toLowerCase();
-      if (ap === 'pm' && hr < 12) hr += 12;
-      if (ap === 'am' && hr === 12) hr = 0;
-      return `${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+      const total = this.parseClockToMinutes(m[1], m[2], m[3]);
+      return `${String(Math.floor(total / 60) % 24).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+    }
+    const dtMatch = String(item?.start_date || '').match(/\b(\d{2}:\d{2})\b/);
+    if (dtMatch && dtMatch[1] !== '00:00') {
+      return dtMatch[1];
     }
     return SLOT_DEFAULT_TIMES[item?.time_slot] || '18:30';
+  },
+
+  /** Infer closest duration select option ('30' | '60' | '90' | '120' | '180' | 'all_day'). */
+  resolveEventDurationValue(ev, existing) {
+    if (existing?.all_day || String(existing?.duration_mins) === 'all_day') return 'all_day';
+
+    let mins = parseInt(existing?.duration_mins, 10) || 0;
+    if (!mins) {
+      const tStr = this.decodeHtmlEntities(ev?.time_str || '');
+      const rangeMatch = tStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)\s*[–\-—to]+\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+      if (rangeMatch) {
+        const s = this.parseClockToMinutes(rangeMatch[1], rangeMatch[2], rangeMatch[3]);
+        let e = this.parseClockToMinutes(rangeMatch[4], rangeMatch[5], rangeMatch[6]);
+        if (e <= s) e += 12 * 60;
+        if (e > s) mins = e - s;
+      } else {
+        const sd = String(ev?.start_date || '').match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
+        const ed = String(ev?.end_date || '').match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
+        if (sd && ed && sd[1] === ed[1] && `${sd[2]}:${sd[3]}` !== '00:00') {
+          const diff = (parseInt(ed[2], 10) * 60 + parseInt(ed[3], 10)) - (parseInt(sd[2], 10) * 60 + parseInt(sd[3], 10));
+          if (diff >= 30 && diff <= 720) mins = diff;
+        }
+      }
+    }
+
+    if (!mins) return '120';
+    const options = [30, 60, 90, 120, 180];
+    return String(options.reduce((best, cur) => (Math.abs(cur - mins) < Math.abs(best - mins) ? cur : best), 120));
   },
 
   /** Derive slot bucket ('morning' | 'afternoon' | 'evening' | 'late_night') from HH:MM. */
@@ -918,30 +1030,13 @@ const planner = {
     });
   },
 
-  /** Keep time input synced when user switches time-slot dropdown. */
-  onSlotChange(slot) {
-    const timeEl = document.getElementById('sched-time');
-    if (timeEl && SLOT_DEFAULT_TIMES[slot]) {
-      timeEl.value = SLOT_DEFAULT_TIMES[slot];
-    }
-  },
-
-  /** Keep slot dropdown synced when user edits exact start time. */
-  onTimeChange(hhmm) {
-    const slotEl = document.getElementById('sched-slot');
-    if (slotEl && hhmm) {
-      slotEl.value = this.deriveSlotFromTime(hhmm);
-    }
-  },
-
   /** Open Schedule Modal directly in "+ New Personal Event" create mode. */
   openNewEventModal(defaultDateStr) {
     const modal = document.getElementById('schedule-modal');
     if (!modal) return;
 
-    const targetDate = (defaultDateStr && /^\d{4}-\d{2}-\d{2}$/.test(defaultDateStr))
-      ? defaultDateStr
-      : (this.selectedMonthDay || this.getTodayYmd());
+    const cleanDefault = this.extractYmd(defaultDateStr);
+    const targetDate = cleanDefault || this.selectedMonthDay || this.getTodayYmd();
 
     const headingEl = document.getElementById('sched-modal-heading');
     if (headingEl) headingEl.textContent = 'New Event';
@@ -960,7 +1055,6 @@ const planner = {
     if (locInp) locInp.value = '';
 
     document.getElementById('sched-date').value = targetDate;
-    document.getElementById('sched-slot').value = 'afternoon';
     const timeEl = document.getElementById('sched-time');
     const durEl = document.getElementById('sched-duration');
     if (timeEl) timeEl.value = '12:00';
@@ -1010,28 +1104,26 @@ const planner = {
       document.getElementById('sched-event-title').textContent = eventTitle || ev.title || 'Couple Plan';
     }
 
-    const defaultDate = existing?.scheduled_date || ev.start_date || this.selectedMonthDay || this.getTodayYmd();
+    const defaultDate = this.resolveEventDefaultDate(ev, existing);
     document.getElementById('sched-date').value = defaultDate;
 
-    const startTime = existing ? this.getStartTime24(existing) : this.getStartTime24(ev);
+    const startTime = existing?.scheduled_time
+      ? this.getStartTime24(existing)
+      : this.getStartTime24({ ...ev, ...existing });
     const timeEl = document.getElementById('sched-time');
     const durEl = document.getElementById('sched-duration');
     if (timeEl) timeEl.value = startTime;
-    if (durEl) {
-      durEl.value = (existing?.all_day || String(existing?.duration_mins) === 'all_day')
-        ? 'all_day'
-        : String(existing?.duration_mins || 120);
-    }
+    if (durEl) durEl.value = this.resolveEventDurationValue(ev, existing);
 
-    document.getElementById('sched-slot').value = existing?.time_slot || this.deriveSlotFromTime(startTime);
     document.getElementById('sched-notes').value = existing?.notes || '';
     document.getElementById('sched-budget').value = existing?.budget || '';
     this.selectScheduleColor(existing?.color || this.getEventColorTheme(ev).key || 'blueberry');
 
     const hintEl = document.getElementById('sched-event-when-hint');
     if (hintEl) {
-      if (ev.time_str) {
-        hintEl.textContent = `Official event schedule: ${ev.time_str}`;
+      const cleanWhen = this.decodeHtmlEntities(ev.time_str || '');
+      if (cleanWhen) {
+        hintEl.textContent = `Official event schedule: ${cleanWhen}`;
         hintEl.classList.remove('hidden');
       } else {
         hintEl.classList.add('hidden');
@@ -1057,9 +1149,9 @@ const planner = {
     const customFieldsVisible = !document.getElementById('sched-custom-fields')?.classList.contains('hidden');
     const customTitle = document.getElementById('sched-title-input')?.value?.trim() || '';
     const customLocation = document.getElementById('sched-location-input')?.value?.trim() || '';
-    const date = document.getElementById('sched-date')?.value || this.getTodayYmd();
-    const slot = document.getElementById('sched-slot')?.value || 'evening';
-    const timeVal = document.getElementById('sched-time')?.value || SLOT_DEFAULT_TIMES[slot] || '18:30';
+    const date = this.extractYmd(document.getElementById('sched-date')?.value) || this.getTodayYmd();
+    const timeVal = document.getElementById('sched-time')?.value || '18:30';
+    const slot = this.deriveSlotFromTime(timeVal);
     const durRaw = document.getElementById('sched-duration')?.value || '90';
     const isAllDay = durRaw === 'all_day';
     const durationMins = isAllDay ? null : (parseInt(durRaw, 10) || 90);
