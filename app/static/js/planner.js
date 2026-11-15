@@ -153,40 +153,58 @@ const planner = {
       .replace(/"/g, '&quot;');
   },
 
-  /** Compute start/end compact date & time components shared by Google Calendar URL and .ics export. */
-  computeEventDateTimeBounds(item) {
-    if (!item?.scheduled_date || !/^\d{4}-\d{2}-\d{2}$/.test(item.scheduled_date)) return null;
-    const compactDate = item.scheduled_date.replace(/-/g, '');
-    const dt = this.parseLocalDate(item.scheduled_date);
+  /** Resolve duration in minutes for timed events (matches displayed calendar span). */
+  getEffectiveDurationMins(item) {
+    if (!item || item.all_day || String(item.duration_mins) === 'all_day') return null;
+    return parseInt(item.duration_mins, 10) || (item.time_slot === 'morning' || item.time_slot === 'afternoon' ? 90 : 120);
+  },
+
+  /** Resolve local start and end Date objects for a scheduled item. */
+  getEventTimeWindow(item) {
+    const dt = this.parseLocalDate(item?.scheduled_date);
     if (!dt) return null;
 
     const isAllDay = Boolean(item.all_day || String(item.duration_mins) === 'all_day');
     if (isAllDay) {
-      const nextDt = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
       return {
         isAllDay: true,
-        dtStart: compactDate,
-        dtEnd: this.toYmd(nextDt).replace(/-/g, '')
+        start: new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 0, 0, 0, 0),
+        end: new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, 0, 0, 0, 0)
       };
     }
 
     const start24 = this.getStartTime24(item);
     const [sh, sm] = start24.split(':').map(Number);
-    const dur = parseInt(item.duration_mins, 10) || 120;
-    const endTotal = sh * 60 + sm + dur;
-    const endDt = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + Math.floor(endTotal / 1440));
-    const endM = endTotal % 1440;
-    const eh = Math.floor(endM / 60);
-    const em = endM % 60;
+    const durMins = this.getEffectiveDurationMins(item) || 120;
+    const start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), sh, sm, 0, 0);
+    const end = new Date(start.getTime() + durMins * 60000);
+    return { isAllDay: false, start, end };
+  },
 
+  /** Compute start/end compact date & time components shared by Google Calendar URL and .ics export. */
+  computeEventDateTimeBounds(item) {
+    const win = this.getEventTimeWindow(item);
+    if (!win) return null;
+
+    const fmtDate = (d) => this.toYmd(d).replace(/-/g, '');
+    if (win.isAllDay) {
+      return {
+        isAllDay: true,
+        dtStart: fmtDate(win.start),
+        dtEnd: fmtDate(win.end)
+      };
+    }
+
+    const fmtDateTime = (d) =>
+      `${fmtDate(d)}T${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}00`;
     return {
       isAllDay: false,
-      dtStart: `${compactDate}T${String(sh).padStart(2, '0')}${String(sm).padStart(2, '0')}00`,
-      dtEnd: `${this.toYmd(endDt).replace(/-/g, '')}T${String(eh).padStart(2, '0')}${String(em).padStart(2, '0')}00`
+      dtStart: fmtDateTime(win.start),
+      dtEnd: fmtDateTime(win.end)
     };
   },
 
-  /** Ensure internal calendar focus state is initialized. */
+  /** Ensure internal calendar focus state is initialized and time-sensitive views stay current. */
   ensureCalendarState() {
     const todayYmd = this.getTodayYmd();
     if (!this.activeMonthDate) {
@@ -194,6 +212,25 @@ const planner = {
     }
     if (!this.selectedMonthDay) {
       this.selectedMonthDay = todayYmd;
+    }
+    if (!this._clockRefreshBound && typeof document !== 'undefined') {
+      this._clockRefreshBound = true;
+      const refreshIfVisible = () => {
+        if (document.hidden) return;
+        const onPlannerTab = (typeof app === 'undefined') || app.activeTab === 'planner';
+        if (onPlannerTab && this.currentView === 'scheduled') {
+          this.renderPlanner();
+        }
+      };
+      if (typeof document.addEventListener === 'function') {
+        document.addEventListener('visibilitychange', refreshIfVisible);
+      }
+      if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+        window.addEventListener('focus', refreshIfVisible);
+      }
+      if (typeof setInterval === 'function') {
+        setInterval(refreshIfVisible, 60000);
+      }
     }
   },
 
@@ -494,7 +531,7 @@ const planner = {
 
     const start24 = this.getStartTime24(item);
     const [sh, sm] = start24.split(':').map(Number);
-    const dur = parseInt(item.duration_mins, 10) || (item.time_slot === 'morning' || item.time_slot === 'afternoon' ? 90 : 120);
+    const dur = this.getEffectiveDurationMins(item);
     const startTotal = sh * 60 + sm;
     const endTotal = (startTotal + dur) % (24 * 60);
     const eh = Math.floor(endTotal / 60);
@@ -714,8 +751,24 @@ const planner = {
     }
   },
 
+  /** Select the next active or upcoming scheduled event relative to `nowDate`. */
+  getNextDateCandidate(scheduledAll, nowDate = new Date()) {
+    if (!scheduledAll || scheduledAll.length === 0) return null;
+    const nowMs = nowDate.getTime();
+
+    for (const item of scheduledAll) {
+      const win = this.getEventTimeWindow(item);
+      if (!win) continue;
+      if (win.end.getTime() > nowMs) {
+        const isOngoingNow = !win.isAllDay && win.start.getTime() <= nowMs;
+        return { item, win, isOngoingNow };
+      }
+    }
+    return null;
+  },
+
   /** Render compact Google Calendar "Next up" strip above Schedule agenda. */
-  renderNextUpBanner(scheduledAll) {
+  renderNextUpBanner(scheduledAll, nowDate = new Date()) {
     const heroEl = document.getElementById('planner-hero-card');
     if (!heroEl) return;
 
@@ -725,27 +778,29 @@ const planner = {
       return;
     }
 
-    const todayYmd = this.getTodayYmd();
-    const nextDate = scheduledAll.find(it => (it.scheduled_date || '9999-12-31') >= todayYmd) || scheduledAll[0];
-    if (!nextDate) {
+    const candidate = this.getNextDateCandidate(scheduledAll, nowDate);
+    if (!candidate) {
       heroEl.classList.add('hidden');
       heroEl.innerHTML = '';
       return;
     }
 
+    const { item: nextDate, isOngoingNow } = candidate;
+    const todayYmd = this.toYmd(nowDate);
     const theme = this.getEventColorTheme(nextDate);
     const dt = this.parseLocalDate(nextDate.scheduled_date);
     const dateLabel = dt
       ? (nextDate.scheduled_date === todayYmd ? 'Today' : `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}`)
       : 'Upcoming';
     const timeLabel = this.formatGCalTimeRange(nextDate);
+    const prefixLabel = isOngoingNow ? 'Happening Now' : 'Next Date';
 
     heroEl.classList.remove('hidden');
     heroEl.innerHTML = `
       <div class="gcal-nextup-left" onclick="planner.openEventDetail('${this.escapeHtml(nextDate.id)}')">
         <span class="gcal-nextup-dot" style="background:${theme.bg}"></span>
         <div class="gcal-nextup-text">
-          <div class="gcal-nextup-label">Next Date · ${this.escapeHtml(dateLabel)} · ${this.escapeHtml(timeLabel)}</div>
+          <div class="gcal-nextup-label">${prefixLabel} · ${this.escapeHtml(dateLabel)} · ${this.escapeHtml(timeLabel)}</div>
           <div class="gcal-nextup-title">${this.escapeHtml(nextDate.title || 'Scheduled Plan')}</div>
         </div>
       </div>
@@ -813,7 +868,7 @@ const planner = {
   },
 
   /** Render Google Calendar Schedule Agenda view. */
-  renderScheduled(scheduled) {
+  renderScheduled(scheduled, nowDate = new Date()) {
     const container = document.getElementById('scheduled-timeline');
     const emptyEl = document.getElementById('scheduled-empty');
     if (!container) return;
@@ -827,7 +882,8 @@ const planner = {
     if (emptyEl) emptyEl.classList.add('hidden');
 
     const byDate = this.groupEventsByDate(scheduled);
-    const todayYmd = this.getTodayYmd();
+    const todayYmd = this.toYmd(nowDate);
+    const nowMs = nowDate.getTime();
 
     // Always include Today if search isn't hiding non-matching dates
     const allDates = new Set(Object.keys(byDate));
@@ -852,13 +908,29 @@ const planner = {
 
       const isToday = ymd === todayYmd;
       const dayItems = byDate[ymd] || [];
-      const cardsHtml = dayItems.map(item => this.buildScheduleCardHtml(item)).join('');
       const nowLineHtml = isToday
         ? `<div class="gcal-now-line" aria-hidden="true"><span class="gcal-now-dot"></span><span class="gcal-now-bar"></span></div>`
         : '';
       const emptyTodayGhost = (isToday && dayItems.length === 0)
         ? `<button type="button" class="gcal-today-ghost" onclick="planner.openNewEventModal('${todayYmd}')">+ Nothing planned for today — tap to add an event</button>`
         : '';
+
+      let dayBodyHtml = '';
+      if (isToday && dayItems.length > 0) {
+        const splitIdx = dayItems.findIndex(item => {
+          const win = this.getEventTimeWindow(item);
+          return win && !win.isAllDay && win.end.getTime() > nowMs;
+        });
+        const cardList = dayItems.map(item => this.buildScheduleCardHtml(item));
+        if (splitIdx === -1) {
+          dayBodyHtml = cardList.join('') + nowLineHtml;
+        } else {
+          dayBodyHtml = cardList.slice(0, splitIdx).join('') + nowLineHtml + cardList.slice(splitIdx).join('');
+        }
+      } else {
+        const cardsHtml = dayItems.map(item => this.buildScheduleCardHtml(item)).join('');
+        dayBodyHtml = `${nowLineHtml}${cardsHtml || emptyTodayGhost}`;
+      }
 
       htmlParts.push(`
         <div class="gcal-day-row" id="gcal-day-${ymd}">
@@ -867,8 +939,7 @@ const planner = {
             <div class="gcal-day-num">${dt.getDate()}</div>
           </div>
           <div class="gcal-events-col">
-            ${nowLineHtml}
-            ${cardsHtml || emptyTodayGhost}
+            ${dayBodyHtml}
           </div>
         </div>
       `);
