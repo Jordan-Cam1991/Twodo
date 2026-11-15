@@ -247,11 +247,17 @@ const planner = {
 
     const avatarEl = document.getElementById('gcal-avatar-btn');
     if (avatarEl) {
-      const profile = (typeof app !== 'undefined' && app.profile) ? app.profile : null;
-      const currentUser = (typeof api !== 'undefined' && api.currentUser) ? api.currentUser : 'user1';
-      const rawName = currentUser === 'user2'
-        ? (profile?.u2_name || profile?.user2_name || 'J')
-        : (profile?.u1_name || profile?.user1_name || 'E');
+      const isFbSignedIn = typeof firebaseService !== 'undefined' && Boolean(firebaseService.currentUser);
+      let rawName;
+      if (isFbSignedIn) {
+        rawName = this.resolvePeopleNames().selfName;
+      } else {
+        const profile = (typeof app !== 'undefined' && app.profile) ? app.profile : null;
+        const currentUser = (typeof api !== 'undefined' && api.currentUser) ? api.currentUser : 'user1';
+        rawName = currentUser === 'user2'
+          ? (profile?.u2_name || profile?.user2_name || 'J')
+          : (profile?.u1_name || profile?.user1_name || 'E');
+      }
       avatarEl.textContent = String(rawName).trim().charAt(0).toUpperCase() || 'E';
     }
 
@@ -544,15 +550,55 @@ const planner = {
     };
   },
 
+  /** Resolve display names for the signed-in user, their partner, and an item's creator. */
+  resolvePeopleNames(item = null) {
+    const profile = (typeof app !== 'undefined' && app.profile) ? app.profile : null;
+    const fbProfile = (typeof firebaseService !== 'undefined') ? firebaseService.profile : null;
+    const fbUser = (typeof firebaseService !== 'undefined') ? firebaseService.userProfile : null;
+    const lsName = (() => { try { return localStorage.getItem('twodo_user_name') || ''; } catch (e) { return ''; } })();
+
+    const rawSelf = fbProfile?.user1_name || fbUser?.name || profile?.user1_name || profile?.u1_name || lsName || '';
+    const selfTrimmed = String(rawSelf).trim();
+    const selfName = (selfTrimmed && !['you', 'partner'].includes(selfTrimmed.toLowerCase())) ? selfTrimmed : 'Emma';
+
+    const rawPartner = profile?.user2_name || profile?.u2_name || fbProfile?.user2_name || '';
+    const partnerTrimmed = String(rawPartner).trim();
+    const partnerName = (partnerTrimmed && !['you', 'partner'].includes(partnerTrimmed.toLowerCase())) ? partnerTrimmed : '';
+
+    const myUid = (typeof firebaseService !== 'undefined' && firebaseService.currentUser?.uid) ? firebaseService.currentUser.uid : '';
+    let creatorName = String(item?.created_by_name || '').trim();
+    if (!creatorName && item?.created_by_uid && myUid) {
+      if (item.created_by_uid === myUid) {
+        creatorName = selfName;
+      } else if (partnerName) {
+        creatorName = partnerName;
+      }
+    }
+    if (!creatorName || ['you', 'partner'].includes(creatorName.toLowerCase())) {
+      creatorName = selfName;
+    }
+
+    return { selfName, partnerName, creatorName };
+  },
+
   /** Render partner/couple initial badges shown on right side of event cards. */
   getPartnerAvatarHtml(item) {
-    const profile = (typeof app !== 'undefined' && app.profile) ? app.profile : null;
-    const u1 = String(profile?.u1_name || 'Emma').trim().charAt(0).toUpperCase() || 'E';
-    const u2 = String(profile?.u2_name || 'Jordan').trim().charAt(0).toUpperCase() || 'J';
+    const { selfName, partnerName, creatorName } = this.resolvePeopleNames(item);
+    const isPersonal = Boolean(
+      item?.is_personal ||
+      item?.category === 'Personal Plan' ||
+      item?.category === 'Personal' ||
+      String(item?.event_id || '').startsWith('personal_') ||
+      String(item?.event_id || '').startsWith('personal-')
+    );
     const isSolo = typeof firebaseService !== 'undefined' && firebaseService.isSolo;
-    if (isSolo || item?.is_personal) {
-      return `<div class="gcal-ev-avatars"><span class="gcal-ev-avatar">${this.escapeHtml(u1)}</span></div>`;
+    if (isSolo || isPersonal) {
+      const initial = creatorName.charAt(0).toUpperCase() || 'E';
+      return `<div class="gcal-ev-avatars"><span class="gcal-ev-avatar">${this.escapeHtml(initial)}</span></div>`;
     }
+    const u1 = selfName.charAt(0).toUpperCase() || 'E';
+    const u2Fallback = selfName.toLowerCase() === 'jordan' ? 'Emma' : 'Jordan';
+    const u2 = (partnerName || u2Fallback).charAt(0).toUpperCase() || 'J';
     return `<div class="gcal-ev-avatars"><span class="gcal-ev-avatar">${this.escapeHtml(u1)}</span><span class="gcal-ev-avatar">${this.escapeHtml(u2)}</span></div>`;
   },
 
@@ -1233,7 +1279,7 @@ const planner = {
           };
           const res = await api.addToPlanner(payload);
           if (typeof firebaseService !== 'undefined' && firebaseService.savePlannerItem && res?.item) {
-            await firebaseService.savePlannerItem(res.item).catch(() => {});
+            await firebaseService.savePlannerItem({ ...res.item, _isNew: true }).catch(() => {});
           }
         }
       }
@@ -1274,6 +1320,8 @@ const planner = {
     const cleanDate = scheduled_date || this.getTodayYmd();
     const resolvedTime = scheduled_time || SLOT_DEFAULT_TIMES[time_slot] || '18:30';
     const personalId = `personal-${Date.now()}`;
+    const { selfName } = this.resolvePeopleNames();
+    const myUid = (typeof firebaseService !== 'undefined' && firebaseService.currentUser?.uid) ? firebaseService.currentUser.uid : '';
     const itemPayload = {
       id: Date.now(),
       event_id: personalId,
@@ -1294,13 +1342,15 @@ const planner = {
       budget: budget || '',
       image_url: '',
       is_personal: true,
+      created_by_uid: myUid,
+      created_by_name: selfName,
       created_at: new Date().toISOString()
     };
 
     const res = await api.addToPlanner(itemPayload);
     const savedItem = res?.item || itemPayload;
     if (typeof firebaseService !== 'undefined' && firebaseService.savePlannerItem) {
-      await firebaseService.savePlannerItem(savedItem).catch(() => {});
+      await firebaseService.savePlannerItem({ ...savedItem, _isNew: true }).catch(() => {});
     }
     await this.loadPlanner();
     return savedItem;
@@ -1317,7 +1367,7 @@ const planner = {
       time_slot: timeSlot
     });
     if (typeof firebaseService !== 'undefined' && firebaseService.savePlannerItem && res?.item) {
-      await firebaseService.savePlannerItem(res.item).catch(() => {});
+      await firebaseService.savePlannerItem({ ...res.item, _isNew: true }).catch(() => {});
     }
     await this.loadPlanner();
     return res;

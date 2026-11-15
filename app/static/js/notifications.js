@@ -97,10 +97,14 @@ const notifications = {
   syncOneSignalUser() {
     if (typeof window === 'undefined' || !window.OneSignalDeferred) return;
     const coupleId = (typeof firebaseService !== 'undefined') ? firebaseService.coupleId : null;
-    const myName = (typeof app !== 'undefined' && app.getActiveVoterName) ? app.getActiveVoterName() : (localStorage.getItem('twodo_user_name') || 'Emma');
-    if (!coupleId || !myName) return;
+    const rawName = (typeof firebaseService !== 'undefined' && (firebaseService.profile?.user1_name || firebaseService.userProfile?.name))
+      || (typeof app !== 'undefined' && app.getActiveVoterName ? app.getActiveVoterName() : '')
+      || localStorage.getItem('twodo_user_name')
+      || '';
+    const myName = String(rawName).trim();
+    if (!coupleId || !myName || ['you', 'partner'].includes(myName.toLowerCase())) return;
 
-    const externalId = `twodo_${coupleId}_${myName.toLowerCase().trim()}`;
+    const externalId = `twodo_${coupleId}_${myName.toLowerCase()}`;
     window.OneSignalDeferred.push(async function(OneSignal) {
       try {
         await OneSignal.login(externalId);
@@ -111,6 +115,19 @@ const notifications = {
         console.log('OneSignal user alias registered:', externalId);
       } catch (e) {
         console.warn('OneSignal login error:', e);
+      }
+    });
+  },
+
+  clearOneSignalUser() {
+    if (typeof window === 'undefined' || !window.OneSignalDeferred) return;
+    window.OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        if (typeof OneSignal.logout === 'function') {
+          await OneSignal.logout();
+        }
+      } catch (e) {
+        console.warn('OneSignal logout error:', e);
       }
     });
   },
@@ -246,12 +263,24 @@ const notifications = {
     }
 
     const partnerName = (targetPartnerName || '').toLowerCase().trim();
-    if (!partnerName) return;
+    if (!partnerName || ['partner', 'you'].includes(partnerName)) {
+      console.log('OneSignal push skipped (no specific partner name).');
+      return;
+    }
 
-    // Send to partner's specific alias, plus lowercase and canonical fallback aliases
+    const rawSelf = (typeof firebaseService !== 'undefined' && (firebaseService.profile?.user1_name || firebaseService.userProfile?.name))
+      || (typeof app !== 'undefined' && app.getActiveVoterName ? app.getActiveVoterName() : '')
+      || localStorage.getItem('twodo_user_name')
+      || '';
+    const myName = String(rawSelf).toLowerCase().trim();
+    if (myName && partnerName === myName) {
+      console.log('OneSignal push skipped (refusing to push to own user alias).');
+      return;
+    }
+
+    // Send strictly to partner's specific alias (never fall back to _jordan)
     const targetAlias = `twodo_${coupleId}_${partnerName}`;
-    const fallbackAlias = (partnerName === 'emma') ? `twodo_${coupleId}_emma` : `twodo_${coupleId}_jordan`;
-    const aliases = Array.from(new Set([targetAlias, fallbackAlias]));
+    const aliases = [targetAlias];
 
     const payload = {
       app_id: cfg.appId,

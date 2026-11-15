@@ -23,6 +23,7 @@ const firebaseService = {
   notesMap: {},
   dismissedMatches: new Set(), // event ids removed from the Matches page
   plannerItems: [],
+  locallyCreatedPlannerIds: new Set(), // guard against firing self-notifications on local writes
   messages: [],
   customEvents: [],
 
@@ -309,6 +310,12 @@ const firebaseService = {
 
   async logout() {
     this.detachListeners();
+    this.locallyCreatedPlannerIds = new Set();
+    try {
+      if (window.notifications && notifications.clearOneSignalUser) {
+        notifications.clearOneSignalUser();
+      }
+    } catch (e) {}
     try {
       await this.auth.signOut();
     } catch (err) {
@@ -452,6 +459,10 @@ const firebaseService = {
         app.updateProfileUI();
         if (window.discover && discover.loadEvents) discover.loadEvents(true);
         if (window.planner && planner.loadPlanner) planner.loadPlanner();
+      }
+
+      if (window.notifications && notifications.syncOneSignalUser) {
+        notifications.syncOneSignalUser();
       }
 
       if (window.authUI) {
@@ -685,6 +696,10 @@ const firebaseService = {
         if (window.planner && planner.loadPlanner) planner.loadPlanner();
       }
 
+      if (window.notifications && notifications.syncOneSignalUser) {
+        notifications.syncOneSignalUser();
+      }
+
       if (window.authUI) {
         authUI.showApp();
         authUI.updatePairCodeUI(this.pairCode);
@@ -810,6 +825,9 @@ const firebaseService = {
     // 2. Live Planner Listener
     this.unsubPlanner = coupleRef.collection('planner').onSnapshot((snapshot) => {
       const items = [];
+      const myUid = this.currentUser?.uid || '';
+      const rawMyName = (this.profile?.user1_name || this.userProfile?.name || localStorage.getItem('twodo_user_name') || '').trim();
+      const myName = (rawMyName && !['you', 'partner'].includes(rawMyName.toLowerCase())) ? rawMyName : '';
       const u2Name = (this.profile?.user2_name || '').trim();
 
       snapshot.forEach((doc) => {
@@ -817,34 +835,65 @@ const firebaseService = {
         items.push({
           id: doc.id,
           event_id: data.event_id,
-          is_personal: Boolean(data.is_personal || data.category === 'Personal Plan' || String(data.event_id || '').startsWith('personal_')),
+          is_personal: Boolean(
+            data.is_personal ||
+            data.category === 'Personal Plan' ||
+            data.category === 'Personal' ||
+            String(data.event_id || '').startsWith('personal_') ||
+            String(data.event_id || '').startsWith('personal-')
+          ),
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
           scheduled_time: data.scheduled_time || null,
+          duration_mins: data.duration_mins ?? null,
+          all_day: Boolean(data.all_day),
+          color: data.color || 'blueberry',
+          style: data.style || 'solid',
           time_slot: data.time_slot || 'evening',
           notes: data.notes || '',
           budget: data.budget || 0,
           reservation_info: data.reservation_info || '',
           title: data.title || '',
+          description: data.description || '',
           category: data.category || '',
-          location_name: data.location_name || '',
+          location_name: data.location_name || data.location || '',
+          location: data.location || data.location_name || '',
+          source_url: data.source_url || '',
           city: data.city || '',
           image_url: data.image_url || '',
           price_str: data.price_str || '',
-          created_at: data.created_at ? data.created_at.toDate?.()?.toISOString?.() : new Date().toISOString()
+          created_by_uid: data.created_by_uid || '',
+          created_by_name: data.created_by_name || '',
+          created_at: data.created_at ? (data.created_at.toDate?.()?.toISOString?.() || new Date().toISOString()) : new Date().toISOString()
         });
       });
 
       this.plannerItems = items;
       try { localStorage.setItem('twodo_planner', JSON.stringify(items)); } catch (e) {}
 
-      // Trigger Planner Alert on lock screen if a new date was scheduled
+      // Trigger Planner Alert only for newly arrived items written remotely by partner
       if (hasLoadedPlannerOnce) {
-        items.forEach(item => {
-          if (!prevKnownPlannerIds.has(String(item.id))) {
-            if (window.notifications && notifications.notifyPlanner) {
-              notifications.notifyPlanner(item.title, item.scheduled_date, u2Name || 'Partner');
-            }
+        const addedChanges = typeof snapshot.docChanges === 'function'
+          ? snapshot.docChanges().filter(c => c.type === 'added').map(c => c.doc)
+          : [];
+        addedChanges.forEach((doc) => {
+          const docId = String(doc.id);
+          if (prevKnownPlannerIds.has(docId)) return;
+          if (doc.metadata && doc.metadata.hasPendingWrites) return;
+          if (this.locallyCreatedPlannerIds && this.locallyCreatedPlannerIds.has(docId)) return;
+
+          const data = doc.data ? (doc.data() || {}) : {};
+          if (myUid && data.created_by_uid && data.created_by_uid === myUid) return;
+
+          const creatorName = String(data.created_by_name || '').trim();
+          if (!data.created_by_uid && creatorName && myName && creatorName.toLowerCase() === myName.toLowerCase()) return;
+
+          const actorName = (creatorName && (!myName || creatorName.toLowerCase() !== myName.toLowerCase()))
+            ? creatorName
+            : (u2Name && (!myName || u2Name.toLowerCase() !== myName.toLowerCase()) ? u2Name : 'Partner');
+
+          if (window.notifications && notifications.notifyPlanner) {
+            notifications.notifyPlanner(data.title || 'Date Activity', data.scheduled_date || null, actorName);
           }
         });
       }
@@ -961,20 +1010,35 @@ const firebaseService = {
         items.push({
           id: doc.id,
           event_id: data.event_id,
-          is_personal: Boolean(data.is_personal || data.category === 'Personal Plan' || String(data.event_id || '').startsWith('personal_')),
+          is_personal: Boolean(
+            data.is_personal ||
+            data.category === 'Personal Plan' ||
+            data.category === 'Personal' ||
+            String(data.event_id || '').startsWith('personal_') ||
+            String(data.event_id || '').startsWith('personal-')
+          ),
           status: data.status || 'bucket_list',
           scheduled_date: data.scheduled_date || null,
           scheduled_time: data.scheduled_time || null,
+          duration_mins: data.duration_mins ?? null,
+          all_day: Boolean(data.all_day),
+          color: data.color || 'blueberry',
+          style: data.style || 'solid',
           time_slot: data.time_slot || 'evening',
           notes: data.notes || '',
           budget: data.budget || 0,
           reservation_info: data.reservation_info || '',
           title: data.title || '',
+          description: data.description || '',
           category: data.category || '',
-          location_name: data.location_name || '',
+          location_name: data.location_name || data.location || '',
+          location: data.location || data.location_name || '',
+          source_url: data.source_url || '',
           city: data.city || '',
           image_url: data.image_url || '',
           price_str: data.price_str || '',
+          created_by_uid: data.created_by_uid || '',
+          created_by_name: data.created_by_name || '',
           created_at: data.created_at ? (data.created_at.toDate?.()?.toISOString?.() || new Date().toISOString()) : new Date().toISOString()
         });
       });
@@ -1068,26 +1132,49 @@ const firebaseService = {
         localPlanner = JSON.parse(localStorage.getItem('twodo_planner') || '[]');
       } catch (e) {}
 
+      const knownIds = new Set((this.plannerItems || []).map(p => String(p.id)));
+      if (!this.locallyCreatedPlannerIds) this.locallyCreatedPlannerIds = new Set();
+
       for (const item of localPlanner) {
         if (!item || !item.event_id) continue;
+        const planDocId = String(item.id || item.event_id);
+        if (knownIds.has(planDocId)) continue;
+
+        this.locallyCreatedPlannerIds.add(planDocId);
         const targetColl = coupleId 
           ? this.db.collection('couples').doc(coupleId).collection('planner')
           : this.db.collection('users').doc(uid).collection('planner');
-        const planDocId = String(item.id || item.event_id);
-        targetColl.doc(planDocId).set({
+        const syncPayload = {
           event_id: item.event_id,
+          is_personal: Boolean(
+            item.is_personal ||
+            item.category === 'Personal Plan' ||
+            item.category === 'Personal' ||
+            String(item.event_id || '').startsWith('personal_') ||
+            String(item.event_id || '').startsWith('personal-')
+          ),
           title: item.title || 'Date Activity',
           status: item.status || 'bucket_list',
           scheduled_date: item.scheduled_date || null,
           scheduled_time: item.scheduled_time || null,
+          duration_mins: item.duration_mins ?? null,
+          all_day: Boolean(item.all_day),
+          color: item.color || 'blueberry',
+          style: item.style || 'solid',
           time_slot: item.time_slot || 'evening',
           notes: item.notes || '',
           budget: item.budget || '',
           category: item.category || '',
-          location_name: item.location_name || '',
+          description: item.description || '',
+          location_name: item.location_name || item.location || '',
+          location: item.location || item.location_name || '',
+          source_url: item.source_url || '',
           image_url: item.image_url || '',
           updated_at: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true }).catch(() => {});
+        };
+        if (item.created_by_uid) syncPayload.created_by_uid = item.created_by_uid;
+        if (item.created_by_name) syncPayload.created_by_name = item.created_by_name;
+        targetColl.doc(planDocId).set(syncPayload, { merge: true }).catch(() => {});
       }
     } catch (e) {
       console.warn('Local data to cloud backup note:', e);
@@ -1189,6 +1276,17 @@ const firebaseService = {
 
     if (!targetColl) return { success: true };
 
+    const myUid = this.currentUser?.uid || '';
+    const rawMyName = (this.profile?.user1_name || this.userProfile?.name || localStorage.getItem('twodo_user_name') || '').trim();
+    const myName = (rawMyName && !['you', 'partner'].includes(rawMyName.toLowerCase())) ? rawMyName : '';
+
+    const idStr = item.id != null ? String(item.id) : '';
+    const hasExplicitNew = typeof item._isNew === 'boolean';
+    const isAlreadyKnown = Boolean(idStr && (this.plannerItems || []).some(p => String(p.id) === idStr));
+    const isNewCreation = hasExplicitNew
+      ? item._isNew
+      : (!idStr || idStr.startsWith('temp_') || !isAlreadyKnown);
+
     const payload = {
       event_id: item.event_id,
       is_personal: Boolean(
@@ -1210,6 +1308,7 @@ const firebaseService = {
       budget: item.budget || 0,
       reservation_info: item.reservation_info || '',
       category: item.category || '',
+      description: item.description || '',
       location_name: item.location_name || item.location || '',
       location: item.location || item.location_name || '',
       source_url: item.source_url || '',
@@ -1220,30 +1319,44 @@ const firebaseService = {
       updated_at: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    const idStr = item.id != null ? String(item.id) : '';
-    if (idStr && !idStr.startsWith('temp_')) {
-      await targetColl.doc(idStr).set(payload, { merge: true });
-      return { success: true, id: idStr };
-    } else {
-      payload.created_at = firebase.firestore.FieldValue.serverTimestamp();
-      const ref = await targetColl.add(payload);
+    if (item.created_by_uid || isNewCreation) {
+      payload.created_by_uid = item.created_by_uid || myUid;
+    }
+    if (item.created_by_name || (isNewCreation && myName)) {
+      payload.created_by_name = item.created_by_name || myName;
+    }
 
-      if (this.coupleId && window.notifications && notifications.sendRemotePush) {
-        try {
-          const myName = (this.userProfile?.name || localStorage.getItem('twodo_user_name') || 'Partner').trim();
-          const partnerName = this.getPartnerName();
+    const docRef = (idStr && !idStr.startsWith('temp_')) ? targetColl.doc(idStr) : targetColl.doc();
+    if (!this.locallyCreatedPlannerIds) this.locallyCreatedPlannerIds = new Set();
+    this.locallyCreatedPlannerIds.add(String(docRef.id));
+
+    if (isNewCreation) {
+      payload.created_at = firebase.firestore.FieldValue.serverTimestamp();
+    }
+
+    await docRef.set(payload, { merge: true });
+
+    if (isNewCreation && this.coupleId && window.notifications && notifications.sendRemotePush) {
+      try {
+        const senderName = myName || 'Partner';
+        const partnerName = String(this.getPartnerName() || '').trim();
+        if (
+          partnerName &&
+          !['partner', 'you'].includes(partnerName.toLowerCase()) &&
+          partnerName.toLowerCase() !== senderName.toLowerCase()
+        ) {
           const dateStr = item.scheduled_date ? ` for ${item.scheduled_date}` : '';
           notifications.sendRemotePush({
             targetPartnerName: partnerName,
             title: `📅 New Date in Planner!`,
-            message: `${myName} scheduled "${item.title}"${dateStr}!`,
+            message: `${senderName} added "${item.title}"${dateStr} to your shared planner.`,
             tab: 'planner'
           });
-        } catch (e) {}
-      }
-
-      return { success: true, id: ref.id };
+        }
+      } catch (e) {}
     }
+
+    return { success: true, id: docRef.id };
   },
 
   // Aliases used by the planner module
@@ -1459,7 +1572,20 @@ const firebaseService = {
     }
 
     this.profile = { ...(this.profile || {}), ...(cleanName ? { user1_name: cleanName } : {}), ...(city ? { default_city: city } : {}) };
-    try { localStorage.setItem('twodo_profile', JSON.stringify(this.profile)); } catch (e) {}
+    if (cleanName && this.userProfile) {
+      this.userProfile = { ...this.userProfile, name: cleanName };
+    }
+    try {
+      localStorage.setItem('twodo_profile', JSON.stringify(this.profile));
+      if (cleanName) localStorage.setItem('twodo_user_name', cleanName);
+    } catch (e) {}
+    if (window.app) {
+      app.profile = this.profile;
+      if (app.updateProfileUI) app.updateProfileUI();
+    }
+    if (window.notifications && notifications.syncOneSignalUser) {
+      notifications.syncOneSignalUser();
+    }
     return { success: true, profile: this.profile };
   }
 };

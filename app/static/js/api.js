@@ -1325,6 +1325,15 @@ const api = {
     ];
     const ev = allKnown.find(e => e && String(e.id) === String(payload.event_id)) || {};
 
+    const fbUid = (typeof firebaseService !== 'undefined' && firebaseService.currentUser?.uid) ? firebaseService.currentUser.uid : '';
+    const rawCreatorName = (typeof firebaseService !== 'undefined' && (firebaseService.profile?.user1_name || firebaseService.userProfile?.name))
+      || (typeof app !== 'undefined' && app.profile?.user1_name)
+      || localStorage.getItem('twodo_user_name')
+      || '';
+    const cleanCreatorName = (String(rawCreatorName).trim() && !['you', 'partner'].includes(String(rawCreatorName).trim().toLowerCase()))
+      ? String(rawCreatorName).trim()
+      : '';
+
     const newItem = {
       id: Date.now(),
       event_id: payload.event_id,
@@ -1339,6 +1348,8 @@ const api = {
       is_personal: Boolean(payload.is_personal || ev.is_personal),
       notes: payload.notes || '',
       budget: payload.budget || '',
+      created_by_uid: payload.created_by_uid || fbUid,
+      created_by_name: payload.created_by_name || cleanCreatorName,
       title: ev.title || payload.title || 'Couple Activity',
       description: ev.description || payload.description || '',
       category: ev.category || payload.category || 'General',
