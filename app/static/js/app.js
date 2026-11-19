@@ -175,9 +175,12 @@ const app = {
     // Scroll back to top on navigation to make mobile vertical browsing natural
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Clear "new this week" badge when user explores discover
+    // Clear "new this week" badge and prune newly-expired events when returning to Discover
     if (resolvedTab === 'discover') {
       this.clearThisWeekBadges();
+      if (typeof discover !== 'undefined' && discover.loadEvents) {
+        discover.loadEvents(false);
+      }
     } else if (resolvedTab === 'planner') {
       planner.loadPlanner();
     }

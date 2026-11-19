@@ -1003,6 +1003,8 @@ def _parse_jsonld_page(
             end_date, end_ymd, _ = parse_aus_date_str(end_raw, today_ymd)
         if (end_ymd or ymd) < today_ymd:
             continue
+        if end_date and start_date and end_ymd == ymd and end_date < start_date:
+            end_date = start_date
 
         desc = clean_text(str(node.get("description") or ""))
         img = _image_from_jsonld(node.get("image"))

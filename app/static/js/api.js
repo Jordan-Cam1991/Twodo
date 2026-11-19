@@ -281,12 +281,117 @@ const api = {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   },
 
+  /** Parse 12h/24h clock token into total minutes since midnight (0..1439). */
+  parseClockToMinutes(hrStr, minStr, ampmStr) {
+    let hr = parseInt(hrStr, 10);
+    const min = minStr ? parseInt(minStr, 10) : 0;
+    const ap = String(ampmStr || '').toLowerCase();
+    if (isNaN(hr) || isNaN(min) || hr > 23 || min > 59) return null;
+    if (ap === 'pm' && hr < 12) hr += 12;
+    if (ap === 'am' && hr === 12) hr = 0;
+    return hr * 60 + min;
+  },
+
+  /** Extract explicit range end or latest session start minutes from free-form time_str. */
+  parseTimeStrEnding(timeStr) {
+    const raw = String(timeStr || '')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&ndash;/gi, '–')
+      .replace(/&mdash;/gi, '—')
+      .replace(/&amp;/gi, '&')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!raw) return null;
+
+    if (/[–—\-to]+\s*late\b/i.test(raw)) {
+      return { type: 'range_end', mins: 23 * 60 + 59 };
+    }
+
+    const rangeRe = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*(?:[–—\-]|\bto\b)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/ig;
+    let maxRangeEnd = null;
+    let m;
+    while ((m = rangeRe.exec(raw)) !== null) {
+      const endMins = this.parseClockToMinutes(m[4], m[5], m[6]);
+      if (endMins === null) continue;
+      const startAp = m[3] || m[6];
+      const startMins = this.parseClockToMinutes(m[1], m[2], startAp);
+      const crossesMidnight = startMins !== null && endMins < startMins && String(m[6]).toLowerCase() === 'am';
+      const adjustedEnd = crossesMidnight ? endMins + 1440 : endMins;
+      if (maxRangeEnd === null || adjustedEnd > maxRangeEnd) {
+        maxRangeEnd = adjustedEnd;
+      }
+    }
+    if (maxRangeEnd !== null) {
+      return { type: 'range_end', mins: maxRangeEnd };
+    }
+
+    const singleRe = /\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/ig;
+    let maxStart = null;
+    while ((m = singleRe.exec(raw)) !== null) {
+      const mins = this.parseClockToMinutes(m[1], m[2], m[3]);
+      if (mins !== null && (maxStart === null || mins > maxStart)) {
+        maxStart = mins;
+      }
+    }
+    if (maxStart !== null) {
+      return { type: 'latest_start', mins: maxStart };
+    }
+    return null;
+  },
+
+  /** Compute local epoch ms when a dated event finishes (null for ongoing/undated events). */
+  getEventEndTimestamp(ev) {
+    if (!ev || ev.ongoing) return null;
+    const sm = String(ev.start_date || '').match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+    const em = String(ev.end_date || '').match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+    if (!sm && !em) return null;
+
+    const startYmd = sm ? `${sm[1]}-${sm[2]}-${sm[3]}` : null;
+    const endYmd = em ? `${em[1]}-${em[2]}-${em[3]}` : startYmd;
+    const [ey, emon, eday] = endYmd.split('-').map(Number);
+    const endDayMidnight = new Date(ey, emon - 1, eday, 0, 0, 0, 0).getTime();
+
+    if (startYmd && endYmd > startYmd) {
+      if (em && em[4] && `${em[4]}:${em[5]}` !== '00:00') {
+        return endDayMidnight + (Number(em[4]) * 60 + Number(em[5])) * 60000;
+      }
+      return endDayMidnight + 23 * 3600000 + 59 * 60000 + 59000;
+    }
+
+    const parsedTime = this.parseTimeStrEnding(ev.time_str);
+    if (parsedTime && parsedTime.type === 'range_end') {
+      return endDayMidnight + parsedTime.mins * 60000;
+    }
+
+    const startMins = (sm && sm[4]) ? (Number(sm[4]) * 60 + Number(sm[5])) : null;
+    const endFieldMins = (em && em[4]) ? (Number(em[4]) * 60 + Number(em[5])) : null;
+
+    // Only trust end_date time if strictly after start_date (guards against Songkick 18:00 defaults)
+    if (endFieldMins !== null && (startMins === null || endFieldMins > startMins)) {
+      const effectiveMins = (parsedTime && parsedTime.type === 'latest_start')
+        ? Math.max(endFieldMins, Math.min(23 * 60 + 59, parsedTime.mins + 180))
+        : endFieldMins;
+      return endDayMidnight + effectiveMins * 60000;
+    }
+
+    if (parsedTime && parsedTime.type === 'latest_start') {
+      const graceEndMins = Math.min(23 * 60 + 59, parsedTime.mins + 180);
+      return endDayMidnight + graceEndMins * 60000;
+    }
+
+    if (startMins !== null && startMins > 0) {
+      const graceEndMins = Math.min(23 * 60 + 59, startMins + 180);
+      return endDayMidnight + graceEndMins * 60000;
+    }
+
+    return endDayMidnight + 23 * 3600000 + 59 * 60000 + 59000;
+  },
+
   /** True when a dated event has completely finished (ongoing venues never expire). */
-  isPastEvent(ev) {
-    if (!ev || ev.ongoing) return false;
-    const last = String(ev.end_date || ev.start_date || '').match(/\d{4}-\d{2}-\d{2}/);
-    if (!last) return false;
-    return last[0] < this.todayYMD();
+  isPastEvent(ev, nowDate = new Date()) {
+    const endTs = this.getEventEndTimestamp(ev);
+    if (endTs === null) return false;
+    return endTs <= nowDate.getTime();
   },
 
   /** Validates that an event has a genuine external website/ticket URL (never a generic Google/Reddit search query). */

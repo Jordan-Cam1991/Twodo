@@ -623,13 +623,16 @@ const discover = {
     });
   },
 
-  /** Applies client-side search gating consistently across Discover views and counts. */
+  /** Applies active expiry and client-side search gating consistently across Discover views and counts. */
   applyClientVisibilityFilter(list, { searchQuery = this.searchQuery } = {}) {
     if (!Array.isArray(list)) return [];
+    const active = (typeof api !== 'undefined' && api.isPastEvent)
+      ? list.filter(ev => !api.isPastEvent(ev))
+      : list;
     const q = String(searchQuery || '').trim().toLowerCase();
-    if (!q) return list;
+    if (!q) return active;
 
-    return list.filter(ev => {
+    return active.filter(ev => {
       const str = `${ev.title || ''} ${ev.description || ''} ${ev.location_name || ''} ${ev.location || ''} ${ev.insider_tip || ''} ${(ev.tags || []).join(' ')} ${ev.source || ''} ${ev.category || ''} ${ev.suburb || ''} ${ev.vibe || ''}`.toLowerCase();
       return str.includes(q);
     });
@@ -697,7 +700,30 @@ const discover = {
     return Boolean(grid && grid.children.length > 0 && !grid.querySelector('.spin-icon'));
   },
 
+  /** Re-filter Discover cards on resume/clock ticks so today's finished events drop off live. */
+  ensureClockRefresh() {
+    if (this._clockRefreshBound || typeof document === 'undefined') return;
+    this._clockRefreshBound = true;
+    const refreshIfVisible = () => {
+      if (document.hidden) return;
+      const onDiscoverTab = (typeof app === 'undefined') || !app.activeTab || app.activeTab === 'discover';
+      if (onDiscoverTab && typeof this.loadEvents === 'function') {
+        this.loadEvents(false);
+      }
+    };
+    if (typeof document.addEventListener === 'function') {
+      document.addEventListener('visibilitychange', refreshIfVisible);
+    }
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+      window.addEventListener('focus', refreshIfVisible);
+    }
+    if (typeof setInterval === 'function') {
+      setInterval(refreshIfVisible, 60000);
+    }
+  },
+
   async loadEvents(showLoading = false) {
+    this.ensureClockRefresh();
     const reqId = (this._loadEventsReqId = (this._loadEventsReqId || 0) + 1);
     const grid = document.getElementById('events-grid');
     if (showLoading && grid && (!app.events || app.events.length === 0)) {

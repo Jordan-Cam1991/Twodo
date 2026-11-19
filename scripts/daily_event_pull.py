@@ -1627,8 +1627,9 @@ def fetch_brisbane_city_council_trumba(today_ymd: str) -> list[dict]:
         if any(w in tl for w in EXCLUDE_KEYWORDS):
             continue
 
-        end_dt = (ev.get("endDateTime") or "")[:10]
-        if end_dt and end_dt < today_ymd:
+        end_dt = ev.get("endDateTime") or ""
+        end_ymd = end_dt[:10]
+        if end_ymd and end_ymd < today_ymd:
             continue
 
         start_dt = ev.get("startDateTime") or ""
