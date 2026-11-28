@@ -854,7 +854,7 @@ const api = {
       }
 
       // Date Range filter (ongoing venues are available any day)
-      if (!ev.ongoing && !this.matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date, false)) {
+      if (!ev.ongoing && !this.matchesDateRange(ev.start_date || ev.time_str, dateRange, params.custom_start, params.custom_end, ev.end_date, false, params.selected_dates)) {
         continue;
       }
 
@@ -912,8 +912,11 @@ const api = {
       results.push(ev);
     }
 
-    // Sort: in 'special' dated mode, sort chronologically by upcoming start_date (with mutual/partner love boost);
-    // in 'anytime' mode, sort by match & partner vote priority
+    const dateCtx = this.resolveDateFilterContext(params);
+    const prioritizeSpecificDates = params.feed_mode === 'special' && dateCtx.mode !== 'all';
+
+    // Sort: when specific day(s)/range are active in Special Events, put single-day & in-window events on top,
+    // followed by multi-day overlaps, then long-running seasons/cinemas; otherwise prioritize couple votes/matches.
     results.sort((a, b) => {
       const score = x => {
         let s = 0;
@@ -923,6 +926,13 @@ const api = {
         if (x.u1_vote === 'love' || x.u2_vote === 'love') s += 10;
         return s;
       };
+      if (prioritizeSpecificDates) {
+        const tierDiff = this.getDatePriorityTier(a, dateCtx) - this.getDatePriorityTier(b, dateCtx);
+        if (tierDiff !== 0) return tierDiff;
+        const dtDiff = this.getEffectiveSortKey(a, dateCtx).localeCompare(this.getEffectiveSortKey(b, dateCtx));
+        if (dtDiff !== 0) return dtDiff;
+        return score(b) - score(a);
+      }
       const diffScore = score(b) - score(a);
       if (diffScore !== 0) return diffScore;
       if (params.feed_mode === 'special') {
@@ -936,12 +946,161 @@ const api = {
     return { events: results, count: results.length, source: 'client-storage' };
   },
 
+  /** Normalize `selected_dates` param (Array or comma-separated YYYY-MM-DD) into sorted unique dates. */
+  parseSelectedDatesParam(val) {
+    if (!val) return [];
+    const arr = Array.isArray(val) ? val : String(val).split(',');
+    const valid = arr
+      .map(s => String(s || '').trim().slice(0, 10))
+      .filter(s => /^\d{4}-\d{2}-\d{2}$/.test(s));
+    return Array.from(new Set(valid)).sort();
+  },
+
+  /** UTC calendar-day difference between two YYYY-MM-DD strings (immune to DST). */
+  calendarDaysBetween(startYmd, endYmd) {
+    if (!startYmd || !endYmd) return 0;
+    const [sy, sm, sd] = startYmd.split('-').map(Number);
+    const [ey, em, ed] = endYmd.split('-').map(Number);
+    return Math.round((Date.UTC(ey, em - 1, ed) - Date.UTC(sy, sm - 1, sd)) / 86400000);
+  },
+
+  /** Resolve structured date filter window/set from query params or discover bounds. */
+  resolveDateFilterContext(params = {}) {
+    const selDates = this.parseSelectedDatesParam(params.selected_dates);
+    const range = params.date_range || 'all';
+    if (range === 'multi_days' || selDates.length > 0) {
+      return {
+        mode: selDates.length > 0 ? 'multi_days' : 'all',
+        selectedDates: selDates,
+        selectedSet: new Set(selDates),
+        startYmd: selDates[0] || null,
+        endYmd: selDates[selDates.length - 1] || null
+      };
+    }
+    if (!range || range === 'all') {
+      return { mode: 'all', selectedDates: [], selectedSet: new Set(), startYmd: null, endYmd: null };
+    }
+
+    const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const parseLocal = (s) => {
+      const mm = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+      return mm ? new Date(Number(mm[1]), Number(mm[2]) - 1, Number(mm[3])) : null;
+    };
+
+    if (range === 'custom' && params.custom_start && params.custom_end) {
+      const s = parseLocal(params.custom_start);
+      const e = parseLocal(params.custom_end);
+      if (s && e) {
+        const startYmd = s <= e ? fmt(s) : fmt(e);
+        const endYmd = s <= e ? fmt(e) : fmt(s);
+        return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd, endYmd };
+      }
+    }
+
+    if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
+      const bounds = window.discover.getDateBounds(range);
+      if (bounds && bounds.start && bounds.end) {
+        return {
+          mode: 'range',
+          selectedDates: [],
+          selectedSet: new Set(),
+          startYmd: fmt(bounds.start),
+          endYmd: fmt(bounds.end)
+        };
+      }
+    }
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const addDays = (n) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() + n);
+      return fmt(d);
+    };
+    const dayMatch = String(range).match(/^day_(\d+)$/);
+    if (range === 'today' || (dayMatch && Number(dayMatch[1]) === 0)) {
+      const ymd = addDays(0);
+      return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd: ymd, endYmd: ymd };
+    }
+    if (range === 'tomorrow' || dayMatch) {
+      const n = range === 'tomorrow' ? 1 : Number(dayMatch[1]);
+      const ymd = addDays(n);
+      return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd: ymd, endYmd: ymd };
+    }
+    if (range === 'this_week' || range === 'next_7_days') {
+      return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd: addDays(0), endYmd: addDays(6) };
+    }
+    if (range === 'this_weekend') {
+      const dow = now.getDay();
+      const startOff = dow === 6 || dow === 5 ? 0 : (5 - dow + 7) % 7;
+      const len = dow === 6 ? 1 : 2;
+      return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd: addDays(startOff), endYmd: addDays(startOff + len) };
+    }
+    if (range === 'this_month') {
+      return { mode: 'range', selectedDates: [], selectedSet: new Set(), startYmd: addDays(0), endYmd: addDays(30) };
+    }
+    return { mode: 'all', selectedDates: [], selectedSet: new Set(), startYmd: null, endYmd: null };
+  },
+
+  /** Rank events: Tier 0 = only on chosen day(s), Tier 1 = short overlapping runs, Tier 2 = long-running/cinemas. */
+  getDatePriorityTier(ev, dateCtx) {
+    if (!ev || ev.ongoing || !dateCtx || dateCtx.mode === 'all') return 0;
+    const startYmd = String(ev.start_date || '').slice(0, 10);
+    const endYmd = String(ev.end_date || startYmd).slice(0, 10);
+    if (!startYmd) return 2;
+
+    const isOngoingSeasonText = /daily screenings|daily sessions|ongoing through/i.test(String(ev.time_str || ''));
+    if (isOngoingSeasonText) return 2;
+
+    const spanDays = this.calendarDaysBetween(startYmd, endYmd);
+    if (spanDays <= 0) return 0; // Single-day event strictly on that day
+
+    // Short multi-day event completely contained within the chosen day(s) belongs in Tier 0
+    if (spanDays <= 3) {
+      if (dateCtx.mode === 'range' && dateCtx.startYmd && dateCtx.endYmd) {
+        if (startYmd >= dateCtx.startYmd && endYmd <= dateCtx.endYmd) return 0;
+      } else if (dateCtx.mode === 'multi_days' && dateCtx.selectedSet && dateCtx.selectedSet.size > 0) {
+        const [sy, sm, sd] = startYmd.split('-').map(Number);
+        let allDaysSelected = true;
+        for (let i = 0; i <= spanDays; i++) {
+          const dt = new Date(Date.UTC(sy, sm - 1, sd + i));
+          const ymd = dt.toISOString().slice(0, 10);
+          if (!dateCtx.selectedSet.has(ymd)) {
+            allDaysSelected = false;
+            break;
+          }
+        }
+        if (allDaysSelected) return 0;
+      }
+    }
+
+    return spanDays <= 14 ? 1 : 2;
+  },
+
+  /** Chronological sort key anchored to the earliest matching chosen day. */
+  getEffectiveSortKey(ev, dateCtx) {
+    const rawStart = String(ev.start_date || '9999-12-31');
+    const startYmd = rawStart.slice(0, 10);
+    const endYmd = String(ev.end_date || startYmd).slice(0, 10);
+    const startTime = /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(rawStart) ? rawStart.slice(11, 16) : '23:59';
+
+    if (dateCtx && dateCtx.mode === 'multi_days' && dateCtx.selectedDates.length > 0) {
+      const firstHit = dateCtx.selectedDates.find(d => d >= startYmd && d <= endYmd);
+      if (firstHit) return `${firstHit} ${startTime}`;
+    } else if (dateCtx && dateCtx.mode === 'range' && dateCtx.startYmd) {
+      const effYmd = startYmd >= dateCtx.startYmd ? startYmd : dateCtx.startYmd;
+      return `${effYmd} ${startTime}`;
+    }
+    return rawStart;
+  },
+
   /**
-   * Check whether an event date string falls within a filter range.
+   * Check whether an event date string falls within a filter range (or selected multi-day list).
    * Uses local calendar date parsing to avoid UTC off-by-one-day issues.
    */
-  matchesDateRange(evDateStr, range, customStart, customEnd, evEndStr = null, allowUndated = true) {
-    if (!range || range === 'all') return true;
+  matchesDateRange(evDateStr, range, customStart, customEnd, evEndStr = null, allowUndated = true, selectedDates = null) {
+    const selList = this.parseSelectedDatesParam(selectedDates);
+    if ((!range || range === 'all') && selList.length === 0) return true;
     if (!evDateStr) return allowUndated;
 
     const parseLocal = (s) => {
@@ -953,43 +1112,24 @@ const api = {
     if (!target || isNaN(target.getTime())) return allowUndated; // Undated items excluded from dated range filters when allowUndated=false
     const targetEnd = parseLocal(evEndStr) || target;
 
-    if (typeof window !== 'undefined' && window.discover && typeof window.discover.getDateBounds === 'function') {
-      const bounds = window.discover.getDateBounds(range);
-      if (bounds && bounds.start && bounds.end) {
-        const bStart = new Date(bounds.start); bStart.setHours(0, 0, 0, 0);
-        const bEnd = new Date(bounds.end); bEnd.setHours(23, 59, 59, 999);
-        return target <= bEnd && targetEnd >= bStart;
-      }
+    if (range === 'multi_days' || selList.length > 0) {
+      return selList.some(ymd => {
+        const d = parseLocal(ymd);
+        return d && target <= d && targetEnd >= d;
+      });
     }
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-
-    const diffDays = Math.round((target - now) / (1000 * 60 * 60 * 24));
-
-    if (range === 'today') {
-      return diffDays === 0;
-    } else if (range === 'tomorrow') {
-      return diffDays === 1;
-    } else if (range === 'this_week' || range === 'next_7_days') {
-      return diffDays >= 0 && diffDays <= 6;
-    } else if (range === 'this_weekend') {
-      const dayOfWeek = now.getDay();
-      const daysToFri = (5 - dayOfWeek + 7) % 7;
-      const fri = new Date(now);
-      fri.setDate(now.getDate() + daysToFri);
-      const sun = new Date(fri);
-      sun.setDate(fri.getDate() + 2);
-      return target >= fri && target <= sun;
-    } else if (range === 'this_month') {
-      return diffDays >= 0 && diffDays <= 30;
-    } else if (range === 'custom') {
-      const s = parseLocal(customStart);
-      const e = parseLocal(customEnd);
-      if (s && e) {
-        return target <= e && targetEnd >= s;
-      }
-      return true;
+    const ctx = this.resolveDateFilterContext({
+      date_range: range,
+      custom_start: customStart,
+      custom_end: customEnd,
+      selected_dates: selectedDates
+    });
+    if (ctx.mode === 'range' && ctx.startYmd && ctx.endYmd) {
+      const bStart = parseLocal(ctx.startYmd);
+      const bEnd = parseLocal(ctx.endYmd);
+      bEnd.setHours(23, 59, 59, 999);
+      return target <= bEnd && targetEnd >= bStart;
     }
     return true;
   },
@@ -1005,7 +1145,7 @@ const api = {
   async autoDailyPull(force = false) {
     this.purgeLegacySyntheticCustomEvents();
     const today = this.todayYMD();
-    const CATALOG_VERSION = '7.0';
+    const CATALOG_VERSION = '7.1';
     const lastPull = localStorage.getItem('twodo_last_daily_pull');
     const savedVer = localStorage.getItem('twodo_catalog_version');
     if (!force && lastPull === today && savedVer === CATALOG_VERSION) {

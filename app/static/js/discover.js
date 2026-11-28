@@ -13,6 +13,7 @@ const discover = {
   activeSubIntent: 'all', // Sub-refiner within the chosen intent
   activeDateRange: 'this_week', // Default in Special Events: show this week's events
   defaultDateRange: 'this_week',
+  selectedDates: [], // YYYY-MM-DD list when multiple specific days are picked in the Date modal
   activeFilter: 'all',
   customStart: null,
   customEnd: null,
@@ -254,14 +255,15 @@ const discover = {
 
     // Compute live count per sub-intent using the exact same active filters
     const mode = this.activeFeedMode || 'anytime';
-    const bounds = mode === 'special' ? this.getDateBounds() : null;
+    const baseFilter = this.getFilterParams();
     const modePool = this.getMatchingEvents({
       feed_mode: mode,
       intent: this.activeIntent,
       sub_intent: 'all',
-      date_range: bounds ? 'custom' : 'all',
-      custom_start: bounds ? this.toYMD(bounds.start) : null,
-      custom_end: bounds ? this.toYMD(bounds.end) : null
+      date_range: mode === 'special' ? baseFilter.date_range : 'all',
+      custom_start: mode === 'special' ? baseFilter.custom_start : null,
+      custom_end: mode === 'special' ? baseFilter.custom_end : null,
+      selected_dates: mode === 'special' ? baseFilter.selected_dates : null
     });
 
     const html = def.subs.map(sub => {
@@ -509,10 +511,30 @@ const discover = {
     return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
   },
 
+  /** Normalize a date picker token (e.g. 'today' -> 'day_0', 'tomorrow' -> 'day_1'). */
+  normalizeDateOptionId(id) {
+    if (id === 'today') return 'day_0';
+    if (id === 'tomorrow') return 'day_1';
+    return id;
+  },
+
+  /** Convert a 'day_N' option id into a YYYY-MM-DD local string (null for range presets). */
+  dayOptionToYmd(id) {
+    const norm = this.normalizeDateOptionId(id);
+    const m = String(norm || '').match(/^day_(\d+)$/);
+    if (!m) return null;
+    return this.toYMD(this.dayOffset(Number(m[1])));
+  },
+
   /** Returns { start: Date, end: Date } for a range id, or null for "any date". */
   getDateBounds(range = this.activeDateRange) {
     const span = (a, b) => ({ start: this.dayOffset(a), end: this.dayOffset(b) });
     if (!range || range === 'all') return null;
+    if (range === 'multi_days') {
+      const sorted = (this.selectedDates || []).filter(s => /^\d{4}-\d{2}-\d{2}$/.test(s)).sort();
+      if (sorted.length === 0) return null;
+      return { start: this.parseYMD(sorted[0]), end: this.parseYMD(sorted[sorted.length - 1]) };
+    }
     if (range === 'this_week' || range === 'next_7_days') return span(0, 6);
     if (range === 'today') return span(0, 0);
     if (range === 'tomorrow') return span(1, 1);
@@ -559,10 +581,23 @@ const discover = {
     return opts;
   },
 
-  /** Short label for the calendar chip / swiper pill, e.g. "All Upcoming", "This Week", "Today". */
+  /** Short label for the calendar chip / swiper pill, e.g. "All Upcoming", "This Week", "Today", "Sat 28, Sun 29". */
   getDateChipLabel() {
     const r = this.activeDateRange;
     if (!r || r === 'all') return 'All Upcoming';
+    if (r === 'multi_days') {
+      const days = (this.selectedDates || []).filter(s => /^\d{4}-\d{2}-\d{2}$/.test(s)).sort();
+      if (days.length === 0) return 'All Upcoming';
+      if (days.length === 1) return this.fmtShort(this.parseYMD(days[0]));
+      if (days.length <= 3) {
+        return days.map(ymd => {
+          const d = this.parseYMD(ymd);
+          const wk = d.toLocaleDateString('en-AU', { weekday: 'short' });
+          return `${wk} ${d.getDate()}`;
+        }).join(', ');
+      }
+      return `${days.length} Days`;
+    }
     if (r === 'this_week') return 'This Week';
     if (r === 'today' || r === 'day_0') return 'Today';
     if (r === 'tomorrow' || r === 'day_1') return 'Tomorrow';
@@ -587,7 +622,8 @@ const discover = {
     const mode = this.activeFeedMode || 'anytime';
     // Date filter applies ONLY when browsing Special Events!
     const useDateFilter = (mode === 'special');
-    const bounds = useDateFilter ? this.getDateBounds() : null;
+    const isMulti = useDateFilter && this.activeDateRange === 'multi_days' && (this.selectedDates || []).length > 0;
+    const bounds = (useDateFilter && !isMulti) ? this.getDateBounds() : null;
     return {
       city: (typeof app !== 'undefined' && app.currentCity) || 'Brisbane',
       feed_mode: mode,
@@ -598,9 +634,10 @@ const discover = {
       vibe: this.selectedVibes.length > 0 ? this.selectedVibes.join(',') : 'All',
       search: searchVal,
       filter: this.activeFilter || 'all',
-      date_range: bounds ? 'custom' : 'all',
+      date_range: isMulti ? 'multi_days' : (bounds ? 'custom' : 'all'),
       custom_start: bounds ? this.toYMD(bounds.start) : null,
-      custom_end: bounds ? this.toYMD(bounds.end) : null
+      custom_end: bounds ? this.toYMD(bounds.end) : null,
+      selected_dates: isMulti ? [...this.selectedDates] : null
     };
   },
 
@@ -888,6 +925,7 @@ const discover = {
     const dateMoods = ['weekend', 'tonight'];
     if (dateMoods.includes(prevMood) && !dateMoods.includes(mood)) {
       this.activeDateRange = this.defaultDateRange;
+      this.selectedDates = [];
       this.customStart = null;
       this.customEnd = null;
     }
@@ -895,8 +933,10 @@ const discover = {
     this.activeFilter = 'all';
     if (mood === 'weekend') {
       this.activeDateRange = 'this_weekend';
+      this.selectedDates = [];
     } else if (mood === 'tonight') {
       this.activeDateRange = 'today';
+      this.selectedDates = [];
     } else if (mood === 'dinner') {
       this.selectedCategories = ['Food & Drink'];
     } else if (mood === 'drinks') {
@@ -1128,6 +1168,7 @@ const discover = {
       this.activeIntent = st.intent === 'surprise' ? 'all' : st.intent;
     }
     this.activeSubIntent = 'all';
+    this.selectedDates = [];
     if (st.when === 'tonight') {
       this.activeDateRange = 'today';
     } else if (st.when === 'weekend') {
@@ -1430,8 +1471,20 @@ const discover = {
         this.activeSubIntent = 'all';
         this.syncIntentUI();
       }
-      const initDate = (this.activeDateRange === 'today') ? 'day_0' : ((this.activeDateRange === 'tomorrow') ? 'day_1' : (this.activeDateRange || this.defaultDateRange || 'this_week'));
-      this.modalSelectedSet.add(initDate);
+      if (this.activeDateRange === 'multi_days' && (this.selectedDates || []).length > 0) {
+        for (let i = 0; i <= 6; i++) {
+          const ymd = this.toYMD(this.dayOffset(i));
+          if (this.selectedDates.includes(ymd)) {
+            this.modalSelectedSet.add(`day_${i}`);
+          }
+        }
+        if (this.modalSelectedSet.size === 0) {
+          this.modalSelectedSet.add('this_week');
+        }
+      } else {
+        const initDate = this.normalizeDateOptionId(this.activeDateRange || this.defaultDateRange || 'this_week');
+        this.modalSelectedSet.add(initDate);
+      }
     } else if (type === 'suburb') {
       (this.selectedSuburbs || []).forEach(s => this.modalSelectedSet.add(s));
     } else if (type === 'vibe') {
@@ -1464,10 +1517,14 @@ const discover = {
     }
   },
 
-  /** Computes live matching activity count for a specific date range id or the current modal selection */
-  getDateRangePreviewCount(rangeId) {
+  /** Computes live matching activity count for a specific date range id or selected date list */
+  getDateRangePreviewCount(rangeId, selectedDatesOverride = null) {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return 0;
-    let bounds = this.getDateBounds(rangeId);
+    const isMulti = rangeId === 'multi_days';
+    const selList = isMulti
+      ? (selectedDatesOverride || this.selectedDates || [])
+      : null;
+    let bounds = (!isMulti) ? this.getDateBounds(rangeId) : null;
     if (rangeId === 'custom' && !bounds && typeof document !== 'undefined') {
       const s = this.parseYMD(document.getElementById('modal-date-start')?.value || this.toYMD(this.dayOffset(0)));
       const e = this.parseYMD(document.getElementById('modal-date-end')?.value || this.toYMD(this.dayOffset(13)));
@@ -1478,9 +1535,10 @@ const discover = {
       intent: 'all',
       sub_intent: 'all',
       filter: 'all',
-      date_range: bounds ? 'custom' : 'all',
+      date_range: isMulti ? 'multi_days' : (bounds ? 'custom' : 'all'),
       custom_start: bounds ? this.toYMD(bounds.start) : null,
-      custom_end: bounds ? this.toYMD(bounds.end) : null
+      custom_end: bounds ? this.toYMD(bounds.end) : null,
+      selected_dates: isMulti ? selList : null
     });
   },
 
@@ -1488,7 +1546,16 @@ const discover = {
   getModalPreviewCount() {
     if (typeof api === 'undefined' || !api.getLocalEnrichedEvents) return null;
     if (this.currentModalType === 'date') {
-      const selDate = Array.from(this.modalSelectedSet)[0] || 'all';
+      const selArr = Array.from(this.modalSelectedSet);
+      const dayYmds = selArr.map(id => this.dayOptionToYmd(id)).filter(Boolean).sort();
+      if (dayYmds.length > 1) {
+        return this.getDateRangePreviewCount('multi_days', dayYmds);
+      }
+      if (dayYmds.length === 1) {
+        const oneDayId = selArr.find(id => this.dayOptionToYmd(id)) || 'day_0';
+        return this.getDateRangePreviewCount(oneDayId);
+      }
+      const selDate = selArr[0] || 'all';
       return this.getDateRangePreviewCount(selDate);
     }
     const overrides = {};
@@ -1522,7 +1589,9 @@ const discover = {
 
     // 1. PURPOSE-BUILT DATE PICKER UX (Exclusively for Special Dated Events)
     if (def.type === 'date') {
-      const sel = Array.from(this.modalSelectedSet)[0] || this.defaultDateRange || 'this_week';
+      const selArr = Array.from(this.modalSelectedSet).map(id => this.normalizeDateOptionId(id));
+      const selSet = new Set(selArr.length > 0 ? selArr : [this.defaultDateRange || 'this_week']);
+      const selectedDayCount = Array.from(selSet).filter(id => /^day_\d+$/.test(id)).length;
       const presets = [
         { id: 'all', icon: '✨', title: 'All Upcoming' },
         { id: 'this_week', icon: '🗓️', title: 'This Week' },
@@ -1536,7 +1605,7 @@ const discover = {
       for (let i = 0; i <= 6; i++) {
         const d = this.dayOffset(i);
         const dayId = `day_${i}`;
-        const isDayActive = sel === dayId || (i === 0 && sel === 'today') || (i === 1 && sel === 'tomorrow');
+        const isDayActive = selSet.has(dayId);
         const wk = i === 0 ? 'Today' : (i === 1 ? 'Tmrw' : d.toLocaleDateString('en-AU', { weekday: 'short' }));
         const dayNum = d.getDate();
         const mon = d.toLocaleDateString('en-AU', { month: 'short' });
@@ -1559,7 +1628,9 @@ const discover = {
         <div class="date-modal-layout">
           <div class="date-presets-grid">
             ${presets.map(p => {
-              const active = sel === p.id || (p.id === 'day_0' && sel === 'today') || (p.id === 'day_1' && sel === 'tomorrow');
+              const active = (p.id === 'day_0' || p.id === 'day_1')
+                ? (selSet.has(p.id) && selectedDayCount === 1)
+                : selSet.has(p.id);
               const pCount = this.getDateRangePreviewCount(p.id);
               return `
                 <button type="button" class="date-preset-card ${active ? 'active' : ''}" onclick="discover.toggleModalOption('${p.id}')">
@@ -1576,20 +1647,23 @@ const discover = {
           <div class="cal-week-strip">
             ${daysHtml}
           </div>
+          <div style="font-size:0.74rem; color:#64748b; text-align:center; margin-top:-2px;">
+            Tap one or more days above — events specifically on your chosen day(s) appear at the top.
+          </div>
 
           <div class="date-further-row">
-            <button type="button" class="date-further-pill ${sel === 'week_2' ? 'active' : ''}" onclick="discover.toggleModalOption('week_2')">
+            <button type="button" class="date-further-pill ${selSet.has('week_2') ? 'active' : ''}" onclick="discover.toggleModalOption('week_2')">
               📆 In 2 Weeks (${this.fmtDayMonth(this.dayOffset(14))}–${this.fmtDayMonth(this.dayOffset(20))}) · ${this.getDateRangePreviewCount('week_2')}
             </button>
-            <button type="button" class="date-further-pill ${sel === 'this_month' ? 'active' : ''}" onclick="discover.toggleModalOption('this_month')">
+            <button type="button" class="date-further-pill ${selSet.has('this_month') ? 'active' : ''}" onclick="discover.toggleModalOption('this_month')">
               🗓️ Next 30 Days · ${this.getDateRangePreviewCount('this_month')}
             </button>
-            <button type="button" class="date-further-pill ${sel === 'custom' ? 'active' : ''}" onclick="discover.toggleModalOption('custom')">
+            <button type="button" class="date-further-pill ${selSet.has('custom') ? 'active' : ''}" onclick="discover.toggleModalOption('custom')">
               🎯 Custom Dates
             </button>
           </div>
 
-          <div id="modal-custom-date-section" class="custom-date-box-clean ${sel === 'custom' ? '' : 'hidden'}">
+          <div id="modal-custom-date-section" class="custom-date-box-clean ${selSet.has('custom') ? '' : 'hidden'}">
             <div class="custom-date-grid">
               <div class="custom-date-field">
                 <label for="modal-date-start">Start Date</label>
@@ -1701,11 +1775,29 @@ const discover = {
     if (!def) return;
 
     if (def.type === 'date') {
-      this.modalSelectedSet.clear();
-      this.modalSelectedSet.add(id);
-      if (id === 'custom') {
-        if (!this.customStart) this.customStart = this.toYMD(this.dayOffset(0));
-        if (!this.customEnd) this.customEnd = this.toYMD(this.dayOffset(13));
+      const normId = this.normalizeDateOptionId(id);
+      const isDayOpt = /^day_\d+$/.test(normId);
+      if (isDayOpt) {
+        // Strip non-day presets while keeping any already-selected individual day pills
+        for (const existing of Array.from(this.modalSelectedSet)) {
+          if (!/^day_\d+$/.test(this.normalizeDateOptionId(existing))) {
+            this.modalSelectedSet.delete(existing);
+          }
+        }
+        if (this.modalSelectedSet.has(normId)) {
+          if (this.modalSelectedSet.size > 1) {
+            this.modalSelectedSet.delete(normId);
+          }
+        } else {
+          this.modalSelectedSet.add(normId);
+        }
+      } else {
+        this.modalSelectedSet.clear();
+        this.modalSelectedSet.add(normId);
+        if (normId === 'custom') {
+          if (!this.customStart) this.customStart = this.toYMD(this.dayOffset(0));
+          if (!this.customEnd) this.customEnd = this.toYMD(this.dayOffset(13));
+        }
       }
     } else {
       if (this.modalSelectedSet.has('All') || this.modalSelectedSet.has('all')) {
@@ -1769,22 +1861,41 @@ const discover = {
     if (!def) return;
 
     if (type === 'date') {
-      let selected = Array.from(this.modalSelectedSet)[0] || this.defaultDateRange || 'this_week';
-      if (selected === 'custom') {
-        const s = document.getElementById('modal-date-start')?.value || null;
-        const e = document.getElementById('modal-date-end')?.value || null;
-        if (s && e) {
-          this.customStart = s <= e ? s : e;
-          this.customEnd = s <= e ? e : s;
-        } else {
-          if (typeof app !== 'undefined' && app.showToast) app.showToast('Pick both a start and end date 📅');
-          return;
-        }
-      } else {
+      const selArr = Array.from(this.modalSelectedSet).map(id => this.normalizeDateOptionId(id));
+      const dayEntries = selArr
+        .map(id => ({ id, ymd: this.dayOptionToYmd(id) }))
+        .filter(x => Boolean(x.ymd))
+        .sort((a, b) => a.ymd.localeCompare(b.ymd));
+
+      if (dayEntries.length > 1) {
+        this.activeDateRange = 'multi_days';
+        this.selectedDates = Array.from(new Set(dayEntries.map(x => x.ymd)));
         this.customStart = null;
         this.customEnd = null;
+      } else if (dayEntries.length === 1) {
+        this.activeDateRange = dayEntries[0].id;
+        this.selectedDates = [];
+        this.customStart = null;
+        this.customEnd = null;
+      } else {
+        const selected = selArr[0] || this.defaultDateRange || 'this_week';
+        this.selectedDates = [];
+        if (selected === 'custom') {
+          const s = document.getElementById('modal-date-start')?.value || null;
+          const e = document.getElementById('modal-date-end')?.value || null;
+          if (s && e) {
+            this.customStart = s <= e ? s : e;
+            this.customEnd = s <= e ? e : s;
+          } else {
+            if (typeof app !== 'undefined' && app.showToast) app.showToast('Pick both a start and end date 📅');
+            return;
+          }
+        } else {
+          this.customStart = null;
+          this.customEnd = null;
+        }
+        this.activeDateRange = selected;
       }
-      this.activeDateRange = selected;
 
       // Date ranges apply to the main feed — clear Tonight/Weekend mood shortcuts if switching range
       if (['weekend', 'tonight'].includes(this.currentMood)) {
@@ -1959,6 +2070,7 @@ const discover = {
     this.activeIntent = 'all';
     this.activeSubIntent = 'all';
     this.activeDateRange = this.defaultDateRange;
+    this.selectedDates = [];
     this.customStart = null;
     this.customEnd = null;
     this.activeFilter = 'all';

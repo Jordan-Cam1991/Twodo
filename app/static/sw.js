@@ -1,5 +1,5 @@
 // TwoDo Service Worker for Push Notifications & Lock Screen Alerts
-const CACHE_NAME = 'twodo-cache-v7.4';
+const CACHE_NAME = 'twodo-cache-v7.5';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();

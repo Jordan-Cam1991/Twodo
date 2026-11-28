@@ -95,6 +95,13 @@ VENUE_SUBURB_MAP = {
     "lefty's": "Lefty's Music Hall, Milton",
     "brooklyn standard": "Brooklyn Standard, Brisbane CBD",
     "brisbane jazz club": "Brisbane Jazz Club, Kangaroo Point",
+    "sit down comedy": "The Sit Down Comedy Club, Paddington",
+    "paddo tavern": "The Sit Down Comedy Club, Paddington",
+    "the paddo": "The Sit Down Comedy Club, Paddington",
+    "netherworld": "Netherworld Arcade, Fortitude Valley",
+    "gallery of modern art": "QAGOMA, South Brisbane",
+    "qagoma": "QAGOMA, South Brisbane",
+    "queensland art gallery": "QAGOMA, South Brisbane",
 }
 
 STADIUM_SITES = [
@@ -189,7 +196,12 @@ def pick_valid_image(raw_img: str, base_url: str, category: str) -> str:
     return img
 
 
-def fetch_text(url: str, timeout: int = 16) -> str:
+def fetch_text(
+    url: str,
+    timeout: int = 16,
+    post_data: bytes | None = None,
+    extra_headers: dict[str, str] | None = None,
+) -> str:
     """Fetch URL with standard-library urllib, gzip support, and one transient retry."""
     headers = {
         "User-Agent": USER_AGENT,
@@ -197,9 +209,11 @@ def fetch_text(url: str, timeout: int = 16) -> str:
         "Accept-Language": "en-AU,en;q=0.9",
         "Accept-Encoding": "gzip, identity",
     }
+    if extra_headers:
+        headers.update(extra_headers)
     ctx = ssl.create_default_context()
     for attempt in range(2):
-        req = urllib.request.Request(url, headers=headers)
+        req = urllib.request.Request(url, data=post_data, headers=headers)
         try:
             with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
                 raw = resp.read()
@@ -221,7 +235,7 @@ def _normalize_time_24(time_raw: str) -> tuple[str, str]:
     t = clean_text(time_raw).lower()
     if not t:
         return "19:00", ""
-    m = re.search(r"(\d{1,2})(?::(\d{2}))?\s*(am|pm)?", t)
+    m = re.search(r"(\d{1,2})(?:[.:](\d{2}))?\s*(am|pm)?", t)
     if not m:
         return "19:00", ""
     hr = int(m.group(1))
@@ -284,7 +298,7 @@ def parse_aus_date_str(
             return f"{iso_ymd} {hhmm}", iso_ymd, _format_display_date_time(iso_ymd, hhmm, True)
         return iso_full, iso_ymd, iso_disp
 
-    low = s.lower()
+    low = re.sub(r"\b(\d{1,2})(?:st|nd|rd|th)\b", r"\1", s.lower())
     today_dt = datetime.strptime(today_ymd, "%Y-%m-%d")
     found_dt = None
 
@@ -318,7 +332,7 @@ def parse_aus_date_str(
     ymd = found_dt.strftime("%Y-%m-%d")
     time_source = raw_time
     if not time_source:
-        mt = re.search(r"\b\d{1,2}(?::\d{2})?\s*(?:am|pm)\b", low)
+        mt = re.search(r"\b\d{1,2}(?:[.:]\d{2})?\s*(?:am|pm)\b", low)
         if mt:
             time_source = mt.group(0)
 
@@ -330,13 +344,11 @@ def parse_aus_date_str(
 
 def canonicalize_venue_location(venue_name: str, address_hint: str = "", fallback: str = "Brisbane") -> str:
     """Attach suburb/region clearly so TwoDo area & venue filters match accurately."""
-    v = clean_text(venue_name)
+    v = clean_text(venue_name).replace(" ,", ",")
     a = clean_text(address_hint)
     combined = f"{v} {a}".lower()
     for pat, label in VENUE_SUBURB_MAP.items():
         if re.search(rf"\b{re.escape(pat)}\b", combined):
-            if v and pat not in label.lower():
-                return f"{v}, {label}"
             return label
     if v and a and a.lower() not in v.lower():
         if len(a) <= 40:
@@ -457,6 +469,10 @@ def _build_event(
         ("entertainment centre", "Brisbane Entertainment Centre"),
         ("eatons hill", "Eatons Hill Hotel"),
         ("hota", "HOTA"),
+        ("sit down comedy", "Sit Down Comedy Club"),
+        ("netherworld", "Netherworld"),
+        ("qagoma", "QAGOMA"),
+        ("gallery of modern art", "QAGOMA"),
     ):
         if re.search(rf"\b{re.escape(pat)}\b", loc_low) and label not in tags:
             tags.append(label)
@@ -974,6 +990,7 @@ def _parse_jsonld_page(
     strip_songkick_at: bool = False,
     forced_cat: str = "",
     priority: int = 2,
+    require_loc_tokens: tuple[str, ...] | None = None,
 ) -> list[dict]:
     events = []
     for node in extract_json_ld_events(body):
@@ -1007,6 +1024,11 @@ def _parse_jsonld_page(
             end_date = start_date
 
         desc = clean_text(str(node.get("description") or ""))
+        if require_loc_tokens:
+            loc_hay = f"{loc} {raw_title} {desc}".lower()
+            if not any(tok in loc_hay for tok in require_loc_tokens):
+                continue
+
         img = _image_from_jsonld(node.get("image"))
         price = _price_from_jsonld(node.get("offers"))
         t_val = node.get("@type")
@@ -1039,7 +1061,12 @@ def _parse_jsonld_page(
 # 5. EVENTFINDA AUSTRALIA (h-event vevent microformats across SEQ)
 # ==============================================================================
 
-def _parse_eventfinda_page(body: str, default_loc: str, today_ymd: str) -> list[dict]:
+def _parse_eventfinda_page(
+    body: str,
+    default_loc: str,
+    today_ymd: str,
+    require_loc_tokens: tuple[str, ...] | None = None,
+) -> list[dict]:
     events = []
     origin = "https://www.eventfinda.com.au"
     blocks = re.split(r'<div[^>]+class=["\'][^"\']*\bh-event\s+vevent\b[^"\']*["\']', body, flags=re.I)
@@ -1047,9 +1074,9 @@ def _parse_eventfinda_page(body: str, default_loc: str, today_ymd: str) -> list[
         mu = re.search(r'<a[^>]+class=["\'][^"\']*card-image[^"\']*["\'][^>]+href=["\']([^"\']+)["\']', blk, re.I)
         if not mu:
             mu = re.search(r'<a[^>]+href=["\'](/[^"\']+)["\']', blk, re.I)
-        mt = re.search(r'class=["\'][^"\']*p-name\s+summary[^"\']*["\'][^>]*>(.*?)</', blk, re.S | re.I)
+        mt = re.search(r'<h2[^>]*>(.*?)</h2>', blk, re.S | re.I)
         if not mt:
-            mt = re.search(r'<h2[^>]*>(.*?)</h2>', blk, re.S | re.I)
+            mt = re.search(r'class=["\'][^"\']*p-name[^"\']*["\'][^>]*>(.*?)</', blk, re.S | re.I)
         md = re.search(r'title=["\'](20\d{2}-\d{2}-\d{2}T[^"\']+)["\']', blk, re.I)
         if not (mu and mt and md):
             continue
@@ -1060,8 +1087,21 @@ def _parse_eventfinda_page(body: str, default_loc: str, today_ymd: str) -> list[
         if not ymd or ymd < today_ymd:
             continue
 
-        ml = re.search(r'class=["\'][^"\']*p-location[^"\']*["\'][^>]*>(.*?)<', blk, re.S | re.I)
+        m_end = re.search(r'class=["\'][^"\']*dtend[^"\']*["\'][^>]*>.*?title=["\'](20\d{2}-\d{2}-\d{2}T[^"\']+)["\']', blk, re.S | re.I)
+        end_date = None
+        if m_end:
+            end_date, end_ymd, _ = parse_iso_datetime(m_end.group(1))
+            if end_ymd and end_ymd != ymd:
+                _, _, end_disp = parse_iso_datetime(m_end.group(1))
+                disp = f"{disp} – {end_disp.split(' · ')[0]}"
+
+        ml = re.search(r'class=["\'][^"\']*p-location[^"\']*["\'][^>]*>(.*?)</p>', blk, re.S | re.I)
         raw_loc = clean_text(ml.group(1)) if ml else ""
+        if require_loc_tokens:
+            loc_hay = f"{title} {raw_loc}".lower()
+            if not any(tok in loc_hay for tok in require_loc_tokens):
+                continue
+
         loc = canonicalize_venue_location(raw_loc, default_loc, default_loc)
         mc = re.search(r'class=["\'][^"\']*category[^"\']*["\'][^>]*>(.*?)<', blk, re.S | re.I)
         raw_cat = clean_text(mc.group(1)) if mc else ""
@@ -1076,6 +1116,7 @@ def _parse_eventfinda_page(body: str, default_loc: str, today_ymd: str) -> list[
             title=title,
             ymd=ymd,
             start_date=start_date,
+            end_date=end_date,
             time_str=disp,
             location=loc,
             source="Eventfinda Queensland",
@@ -1090,6 +1131,152 @@ def _parse_eventfinda_page(body: str, default_loc: str, today_ymd: str) -> list[
 
 
 # ==============================================================================
+# 6. THE SIT DOWN COMEDY CLUB & NETHERWORLD ARCADE
+# ==============================================================================
+
+def _parse_sitdown_page(body: str, today_ymd: str) -> list[dict]:
+    """Parse homepage cards and gig-guide AJAX HTML from standup.com.au."""
+    html = body
+    if body.lstrip().startswith("{"):
+        try:
+            html = json.loads(body).get("html", "") or ""
+        except Exception:
+            html = ""
+    if not html:
+        return []
+
+    events = []
+    seen = set()
+    origin = "https://www.standup.com.au"
+    blocks = re.split(r'<div[^>]+class=["\'][^"\']*\bevent-item\b[^"\']*["\']', html, flags=re.I)
+    for blk in blocks[1:]:
+        mn = re.search(
+            r'<span[^>]+class=["\'][^"\']*\bevent-name\b[^"\']*["\'][^>]*>.*?<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            blk,
+            re.S | re.I,
+        )
+        mw = re.search(r'<span[^>]+class=["\'][^"\']*\bevent-when\b[^"\']*["\'][^>]*>(.*?)</span>', blk, re.S | re.I)
+        if not (mn and mw):
+            continue
+
+        url = resolve_url(mn.group(1), origin)
+        raw_title = clean_text(mn.group(2))
+        if any(w in raw_title.lower() for w in ("cancelled", "canceled", "postponed")):
+            continue
+        title = re.sub(r'\s*@\s*The\s+Sit\s+Down\s+Comedy\s+Club\s*$', '', raw_title, flags=re.I).strip() or raw_title
+        when_raw = re.sub(r'^\s*When:\s*', '', clean_text(mw.group(1)), flags=re.I)
+        start_date, ymd, disp = parse_aus_date_str(when_raw, today_ymd)
+        if not ymd or ymd < today_ymd:
+            continue
+
+        dedup_key = f"{title.lower()}|{ymd}"
+        if dedup_key in seen:
+            continue
+        seen.add(dedup_key)
+
+        mloc = re.search(r'<span[^>]+class=["\'][^"\']*\bevent-where\b[^"\']*["\'][^>]*>(.*?)</span>', blk, re.S | re.I)
+        raw_where = re.sub(r'^\s*(?:Where|Venue):\s*', '', clean_text(mloc.group(1)), flags=re.I) if mloc else ""
+        is_paddo = not raw_where or any(k in raw_where.lower() for k in ("sit down", "paddo", "paddington"))
+        loc = canonicalize_venue_location(
+            raw_where or "The Sit Down Comedy Club",
+            "Paddington, Brisbane" if is_paddo else "Brisbane",
+            "The Sit Down Comedy Club, Paddington",
+        )
+
+        mcost = re.search(r'<span[^>]+class=["\'][^"\']*\bevent-cost\b[^"\']*["\'][^>]*>(.*?)</span>', blk, re.S | re.I)
+        cost_txt = clean_text(mcost.group(1)) if mcost else ""
+        mp = re.search(r'\$\d+(?:\.\d{2})?', cost_txt)
+        price = mp.group(0) if mp else "Official Tickets"
+
+        mimg = re.search(r'<img[^>]+(?:data-src|src)=["\']([^"\']+)["\']', blk, re.I)
+        img = mimg.group(1) if mimg else ""
+        if img.startswith("http://www.standup.com.au/"):
+            img = "https://" + img[len("http://"):]
+
+        if not is_clean_seq_event(title, loc, title, url):
+            continue
+
+        events.append(_build_event(
+            prefix="sdcc",
+            title=title,
+            ymd=ymd,
+            start_date=start_date,
+            time_str=disp,
+            location=loc,
+            source="The Sit Down Comedy Club Official",
+            source_url=url,
+            image_url=img,
+            base_url=origin,
+            description=f"{title} live at {loc} on {disp}.",
+            insider_tip="Grab pre-show pub bites & drinks downstairs at The Paddo before comedy kicks off.",
+            price=price,
+            raw_cat="ComedyEvent",
+            extra_tags=["Sit Down Comedy Club", "Comedy & Shows"],
+            priority=1,
+        ))
+    return events
+
+
+def _parse_netherworld_json(body: str, today_ymd: str) -> list[dict]:
+    """Parse official Tribe Events JSON API from netherworldarcade.com."""
+    try:
+        data = json.loads(body)
+    except Exception:
+        return []
+    raw_events = data.get("events") if isinstance(data, dict) else []
+    if not isinstance(raw_events, list):
+        return []
+
+    events = []
+    origin = "https://www.netherworldarcade.com"
+    loc = "Netherworld Arcade, Fortitude Valley"
+    for item in raw_events:
+        if not isinstance(item, dict):
+            continue
+        title = clean_text(item.get("title") or "")
+        url = resolve_url(str(item.get("url") or ""), origin)
+        start_raw = str(item.get("start_date") or "")
+        end_raw = str(item.get("end_date") or start_raw)
+        start_date, ymd, disp = parse_iso_datetime(start_raw)
+        end_date, end_ymd, _ = parse_iso_datetime(end_raw)
+        if not ymd or (end_ymd or ymd) < today_ymd:
+            continue
+        if end_date and start_date and end_ymd == ymd and end_date < start_date:
+            end_date = start_date
+
+        desc = clean_text(item.get("description") or "")
+        if not is_clean_seq_event(title, loc, desc, url):
+            continue
+
+        img_obj = item.get("image")
+        img = img_obj.get("url", "") if isinstance(img_obj, dict) else ""
+        cats = [clean_text(c.get("name") or "") for c in (item.get("categories") or []) if isinstance(c, dict)]
+        raw_cat = " ".join(cats) or "Nightlife"
+        cost = clean_text(str(item.get("cost") or "")) or "Free / Tickets"
+
+        events.append(_build_event(
+            prefix="nw",
+            title=title,
+            ymd=ymd,
+            start_date=start_date,
+            end_date=end_date,
+            time_str=disp,
+            location=loc,
+            source="Netherworld Arcade Official",
+            source_url=url,
+            image_url=img,
+            base_url=origin,
+            description=desc or f"{title} at Netherworld Arcade on {disp}.",
+            insider_tip="Arrive early for pinball, retro arcade machines & vegan/craft beers at the Hellmouth Diner.",
+            price=cost,
+            raw_cat=raw_cat,
+            extra_tags=["Netherworld", "Fortitude Valley", "Arcade"],
+            priority=1,
+        ))
+    return events
+
+
+# ==============================================================================
 # MASTER ORCHESTRATOR
 # ==============================================================================
 
@@ -1098,7 +1285,7 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
     Fetch and parse all live Brisbane & SEQ event sources concurrently.
     Returns normalized candidate event dicts ordered by source authority (_priority).
     """
-    jobs: list[tuple[str, str, callable]] = []
+    jobs: list[tuple] = []
 
     # 1. Stadiums QLD
     for site in STADIUM_SITES:
@@ -1121,6 +1308,23 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
     jobs.append(("Brisbane Powerhouse Official", "https://brisbanepowerhouse.org/?section=whats-on", lambda b: _parse_powerhouse_page(b, today_ymd)))
     jobs.append(("Brisbane Entertainment Centre Official", "https://www.brisent.com.au/events/", lambda b: _parse_brisent_page(b, today_ymd)))
     jobs.append(("Eatons Hill Hotel Official", "https://www.eatonshillhotel.com.au/entertainment/", lambda b: _parse_eatons_hill_page(b, today_ymd)))
+    jobs.append(("Sit Down Comedy Home", "https://www.standup.com.au/", lambda b: _parse_sitdown_page(b, today_ymd)))
+    jobs.append((
+        "Sit Down Comedy Gig Guide",
+        "https://www.standup.com.au/wp-admin/admin-ajax.php",
+        lambda b: _parse_sitdown_page(b, today_ymd),
+        b"action=call_my_ajax_handler_gigfilter&cat=all&paginationNum=1&totalVisPosts=100&searchWords=&locationSearch=&searchVenue=all&searchComedian=all&searchDate=&openMic=",
+        {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": "https://www.standup.com.au/gig-guide/",
+        },
+    ))
+    jobs.append((
+        "Netherworld Arcade Official",
+        "https://www.netherworldarcade.com/wp-json/tribe/events/v1/events?per_page=50",
+        lambda b: _parse_netherworld_json(b, today_ymd),
+    ))
 
     # 4. Editorial JSON-LD
     jobs.append((
@@ -1151,7 +1355,7 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
         ),
     ))
 
-    # 6. Moshtix SEQ
+    # 6. Moshtix SEQ & Direct Venue Searches (The Fortitude Music Hall, The Triffid)
     for q, dl in [
         ("brisbane", "Brisbane"),
         ("fortitude+valley", "Fortitude Valley, Brisbane"),
@@ -1166,6 +1370,24 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
                 default_loc=loc_d, priority=2,
             ),
         ))
+    jobs.append((
+        "Moshtix Fortitude Music Hall",
+        "https://www.moshtix.com.au/v2/search?query=fortitude+music+hall",
+        lambda b: _parse_jsonld_page(
+            b, today_ymd, prefix="mosh", source="The Fortitude Music Hall via Moshtix",
+            base_url="https://www.moshtix.com.au", default_loc="The Fortitude Music Hall, Fortitude Valley",
+            forced_cat="MusicEvent", priority=1, require_loc_tokens=("fortitude music hall",),
+        ),
+    ))
+    jobs.append((
+        "Moshtix The Triffid",
+        "https://www.moshtix.com.au/v2/search?query=the+triffid",
+        lambda b: _parse_jsonld_page(
+            b, today_ymd, prefix="mosh", source="The Triffid via Moshtix",
+            base_url="https://www.moshtix.com.au", default_loc="The Triffid, Newstead",
+            forced_cat="MusicEvent", priority=1, require_loc_tokens=("triffid",),
+        ),
+    ))
 
     # 7. Eventbrite Australia SEQ
     for slug, page, dl in [
@@ -1185,7 +1407,7 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
             ),
         ))
 
-    # 8. Eventfinda SEQ
+    # 8. Eventfinda SEQ + GOMA & Sit Down Comedy Club venue feeds
     for path, dl in [
         ("brisbane", "Brisbane"),
         ("brisbane/page/2", "Brisbane"),
@@ -1199,13 +1421,36 @@ def pull_all_seq_live_events(today_ymd: str) -> list[dict]:
             f"https://www.eventfinda.com.au/whatson/events/{path}",
             lambda b, loc_d=dl: _parse_eventfinda_page(b, loc_d, today_ymd),
         ))
+    jobs.append((
+        "Eventfinda QAGOMA Venue",
+        "https://www.eventfinda.com.au/venue/gallery-of-modern-art-south-brisbane",
+        lambda b: _parse_eventfinda_page(
+            b, "QAGOMA, South Brisbane", today_ymd, require_loc_tokens=("goma", "qagoma", "gallery of modern art")
+        ),
+    ))
+    jobs.append((
+        "Eventfinda QAGOMA Search",
+        "https://www.eventfinda.com.au/search?q=QAGOMA&f_region=40",
+        lambda b: _parse_eventfinda_page(
+            b, "QAGOMA, South Brisbane", today_ymd, require_loc_tokens=("goma", "qagoma", "gallery of modern art")
+        ),
+    ))
+    jobs.append((
+        "Eventfinda Sit Down Comedy Venue",
+        "https://www.eventfinda.com.au/venue/sit-down-comedy-club-australia",
+        lambda b: _parse_eventfinda_page(
+            b, "The Sit Down Comedy Club, Paddington", today_ymd, require_loc_tokens=("sit down comedy", "paddington")
+        ),
+    ))
 
     results: list[dict] = []
     source_stats: dict[str, int] = {}
 
-    def run_job(job: tuple[str, str, callable]):
-        name, url, parser = job
-        body = fetch_text(url)
+    def run_job(job: tuple):
+        name, url, parser = job[0], job[1], job[2]
+        post_data = job[3] if len(job) > 3 else None
+        extra_headers = job[4] if len(job) > 4 else None
+        body = fetch_text(url, post_data=post_data, extra_headers=extra_headers)
         if not body:
             return name, []
         try:
